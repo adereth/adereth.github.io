@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: mathematica | 1/n]]></title>
+  <link href="http://1overN.com/blog/categories/mathematica/atom.xml" rel="self"/>
+  <link href="http://1overN.com/"/>
+  <updated>2013-10-02T21:14:29-04:00</updated>
+  <id>http://1overN.com/</id>
+  <author>
+    <name><![CDATA[Matt Adereth]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Iterating on Font Pair Comparisons]]></title>
+    <link href="http://1overN.com/blog/2011/01/31/Iterating-on-Font-Pair-Comparisons/"/>
+    <updated>2011-01-31T20:58:00-05:00</updated>
+    <id>http://1overN.com/blog/2011/01/31/Iterating-on-Font-Pair-Comparisons</id>
+    <content type="html"><![CDATA[<p>The previous post generated some great suggestions in the <a href="http://news.ycombinator.com/item?id=2147834">Hacker News discussion</a>.  I&rsquo;ve incorporated some of the feedback and here’s a summary of the changes:</p>
+
+<ul>
+<li>Changed the colors to improve contrast</li>
+<li>Fixed the issue with the operator symbols (Thanks MMA_Pope!)</li>
+<li>Increased the size of the characters and reduced the horizontal spacing</li>
+<li>Added additional fonts</li>
+</ul>
+
+
+<p>Here’s the current list of fonts included in the comparison:</p>
+
+<p><img src="/images/fontlist2.png" alt="Full font list" /></p>
+
+<p>Take a look at the new version:</p>
+
+<p><a href="/images/dejavusansmonodroidsansmono1.png"><img src="/images/dejavusansmonodroidsansmono1.png" alt="dejavusansmonodroidsansmono1.png" /></a>
+(Click for full size version)</p>
+
+<p>If you’re interested in seeing the results for every pair, you can <a href="https://s3.amazonaws.com/1overBlog/programming_fonts/AllFontComparisonsV2.zip">download them all</a>.</p>
+
+<p>The updated Mathematica code is available for <a href="https://s3.amazonaws.com/1overBlog/programming_fonts/PairCompareV2.nb">download</a>.</p>
+
+<p>I’m open to suggestions for future investigations… thanks!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Comparing Programming Font Pairs]]></title>
+    <link href="http://1overN.com/blog/2011/01/26/Comparing-Programming-Font-Pairs/"/>
+    <updated>2011-01-26T22:46:00-05:00</updated>
+    <id>http://1overN.com/blog/2011/01/26/Comparing-Programming-Font-Pairs</id>
+    <content type="html"><![CDATA[<p>I really like this visualization of the difference between Deja Vu Sans Mono and Apple Menlo:</p>
+
+<p><img src="http://typophile.com/files/menlovsdejavusansmono_6131.png" alt="Menlo vs. Deja Vu Sans Mono" /></p>
+
+<p>(Credit to <a href="http://www.down10.com">Jesse Burgheimer</a>)</p>
+
+<p>I decided to take a stab at programmatically generating a similar comparison for all the fonts I’ve been looking at.  <a href="/assets/paircompare.nb">Here’s the Mathematica code</a>.</p>
+
+<p><a href="images/dejavusansmonodroidsansmono.png"><img src="images/dejavusansmonodroidsansmono.png" alt="Menlo vs. Deja Vu Sans Mono in Mathematica" /></a>
+(Click for full size version)</p>
+
+<p>It was then easy to generate this for every pair of fonts:</p>
+
+<p><img src="/images/MapCompareFontPair.png" alt="CompareFontPair /@ Subsets[monospacedFonts, {2}]" /></p>
+
+<p>I went through them all and picked out the ones I thought were most interesting:</p>
+
+<p><a href="/images/consolasinconsolata.png"><img src="/images/consolasinconsolata.png" alt="consolasinconsolata" /></a>
+<a href="/images/dejavusansmonodroidsansmono.png"><img src="/images/dejavusansmonodroidsansmono.png" alt="dejavusansmonodroidsansmono" /></a>
+<a href="/images/dejavusansmonopanicsans.png"><img src="/images/dejavusansmonopanicsans.png" alt="dejavusansmonopanicsans" /></a>
+<a href="/images/droidsansmonoinconsolata.png"><img src="/images/droidsansmonoinconsolata.png" alt="droidsansmonoinconsolata" /></a>
+<a href="/images/envycoderterminus.png"><img src="/images/envycoderterminus.png" alt="envycoderterminus" /></a>
+<a href="/images/inconsolatamonofur.png"><img src="/images/inconsolatamonofur.png" alt="inconsolatamonofur" /></a></p>
+
+<p>If you’re interested in seeing the results for every pair, you can <a href="https://s3.amazonaws.com/1overBlog/programming_fonts/AllFontPairComparisons.zip">download them all</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Comparing Troublesome Groups]]></title>
+    <link href="http://1overN.com/blog/2011/01/26/Comparing-Troublesome-Groups/"/>
+    <updated>2011-01-26T10:47:00-05:00</updated>
+    <id>http://1overN.com/blog/2011/01/26/Comparing-Troublesome-Groups</id>
+    <content type="html"><![CDATA[<p>One of the comments on the <a href="http://www.reddit.com/r/programming/comments/f8nzc/programmatic_programming_font_comparison_101_vs/">reddit discussion</a> of my first post suggested looking at groups of characters that might be troublesome:
+<code>
+1l|i!
+`',;:.
+oO0Q
+(){}[]
+5S
+</code>
+As a quick test, I wrote something to compare every pair of characters in a list:</p>
+
+<p><img src="/images/tallskinnycode.png" alt="Mathematica code for comparing groups" /></p>
+
+<p>Click to see the full-sized result:</p>
+
+<p><a href="/images/tallskinnycomparison.png"><img src="/images/tallskinnycomparison.png" alt="Comparison results" /></a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[101 vs. lol - More Fonts]]></title>
+    <link href="http://1overN.com/blog/2011/01/25/101-vs-lol%E2%80%93More-Fonts/"/>
+    <updated>2011-01-25T12:07:00-05:00</updated>
+    <id>http://1overN.com/blog/2011/01/25/101-vs-lol–More-Fonts</id>
+    <content type="html"><![CDATA[<p>As requested in the <a href="http://www.reddit.com/r/programming/comments/f8nzc/programmatic_programming_font_comparison_101_vs/">reddit discussion</a>, here are Envy Code R, Liberation Mono, and Terminus:</p>
+
+<p><img src="/images/envy-code-r.png" alt="Envy Code R" />
+<img src="/images/liberation-mono.png" alt="Liberation Mono" />
+<img src="/images/terminus.png" alt="Terminus" /></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[101 vs. lol]]></title>
+    <link href="http://1overN.com/blog/2011/01/24/101-vs-lol/"/>
+    <updated>2011-01-24T12:07:00-05:00</updated>
+    <id>http://1overN.com/blog/2011/01/24/101-vs-lol</id>
+    <content type="html"><![CDATA[<p>One of the subtle details of fonts that programmers often care about is how easy it is to distinguish between O’s, 0′s, l’s, and 1′s.  Using Mathematica, we can programmatically generate the comparison for several of the most popular programming fonts:</p>
+
+<p><img src="/images/101code.png" alt="101 Code" /></p>
+
+<p><img src="/images/1sand0s.png" alt="1s and 0s" /></p>
+]]></content>
+  </entry>
+  
+</feed>
