@@ -4,7 +4,7 @@
   <title><![CDATA[1/N]]></title>
   <link href="http://1overn.com/atom.xml" rel="self"/>
   <link href="http://1overn.com/"/>
-  <updated>2013-10-03T07:21:06-04:00</updated>
+  <updated>2013-10-03T07:31:49-04:00</updated>
   <id>http://1overn.com/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -37,6 +37,8 @@
 <p>Unlike most popular compositing window managers, tiling window managers really make an attempt at managing your windows for you. Instead of having you constantly reorganize the individual windows on your screen, you specify at a high level how you want windows to be placed and the window manager does it for you. New windows are intelligently placed based on the high-level directives you&rsquo;ve already given.</p>
 
 <p>Tiling also lends itself well to really efficient keyboard shortcuts. Because there&rsquo;s an unambiguous arrangement, you can quickly do things like switch focus to the window immediately to the left, right, top, or bottom, as opposed to most compositing window managers where the best keyboard option is Alt-Tabbing through a linear list of all your windows:</p>
+
+<p><a href="http://blogs.technet.com/b/drey/archive/2010/01/04/windows-7-what-happens-with-a-lot-of-windows-and-alt-tab.aspx"><img src="http://1overn.com/images/alt-tab.jpg" title="Windows Switcher" ></a></p>
 
 <h3>They scale</h3>
 
