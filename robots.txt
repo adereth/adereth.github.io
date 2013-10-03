@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: 
 
-Sitemap: http://1overN.com/sitemap.xml 
+Sitemap: http://adereth.github.io/sitemap.xml 

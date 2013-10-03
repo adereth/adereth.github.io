@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: mathematica | 1/n]]></title>
-  <link href="http://1overN.com/blog/categories/mathematica/atom.xml" rel="self"/>
-  <link href="http://1overN.com/"/>
-  <updated>2013-10-02T21:14:29-04:00</updated>
-  <id>http://1overN.com/</id>
+  <link href="http://adereth.github.io/blog/categories/mathematica/atom.xml" rel="self"/>
+  <link href="http://adereth.github.io/"/>
+  <updated>2013-10-02T21:42:58-04:00</updated>
+  <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Iterating on Font Pair Comparisons]]></title>
-    <link href="http://1overN.com/blog/2011/01/31/Iterating-on-Font-Pair-Comparisons/"/>
+    <link href="http://adereth.github.io/blog/2011/01/31/Iterating-on-Font-Pair-Comparisons/"/>
     <updated>2011-01-31T20:58:00-05:00</updated>
-    <id>http://1overN.com/blog/2011/01/31/Iterating-on-Font-Pair-Comparisons</id>
+    <id>http://adereth.github.io/blog/2011/01/31/Iterating-on-Font-Pair-Comparisons</id>
     <content type="html"><![CDATA[<p>The previous post generated some great suggestions in the <a href="http://news.ycombinator.com/item?id=2147834">Hacker News discussion</a>.  I&rsquo;ve incorporated some of the feedback and here’s a summary of the changes:</p>
 
 <ul>
@@ -47,9 +47,9 @@
   
   <entry>
     <title type="html"><![CDATA[Comparing Programming Font Pairs]]></title>
-    <link href="http://1overN.com/blog/2011/01/26/Comparing-Programming-Font-Pairs/"/>
+    <link href="http://adereth.github.io/blog/2011/01/26/Comparing-Programming-Font-Pairs/"/>
     <updated>2011-01-26T22:46:00-05:00</updated>
-    <id>http://1overN.com/blog/2011/01/26/Comparing-Programming-Font-Pairs</id>
+    <id>http://adereth.github.io/blog/2011/01/26/Comparing-Programming-Font-Pairs</id>
     <content type="html"><![CDATA[<p>I really like this visualization of the difference between Deja Vu Sans Mono and Apple Menlo:</p>
 
 <p><img src="http://typophile.com/files/menlovsdejavusansmono_6131.png" alt="Menlo vs. Deja Vu Sans Mono" /></p>
@@ -80,9 +80,9 @@
   
   <entry>
     <title type="html"><![CDATA[Comparing Troublesome Groups]]></title>
-    <link href="http://1overN.com/blog/2011/01/26/Comparing-Troublesome-Groups/"/>
+    <link href="http://adereth.github.io/blog/2011/01/26/Comparing-Troublesome-Groups/"/>
     <updated>2011-01-26T10:47:00-05:00</updated>
-    <id>http://1overN.com/blog/2011/01/26/Comparing-Troublesome-Groups</id>
+    <id>http://adereth.github.io/blog/2011/01/26/Comparing-Troublesome-Groups</id>
     <content type="html"><![CDATA[<p>One of the comments on the <a href="http://www.reddit.com/r/programming/comments/f8nzc/programmatic_programming_font_comparison_101_vs/">reddit discussion</a> of my first post suggested looking at groups of characters that might be troublesome:
 <code>
 1l|i!
@@ -103,9 +103,9 @@ As a quick test, I wrote something to compare every pair of characters in a list
   
   <entry>
     <title type="html"><![CDATA[101 vs. lol - More Fonts]]></title>
-    <link href="http://1overN.com/blog/2011/01/25/101-vs-lol%E2%80%93More-Fonts/"/>
+    <link href="http://adereth.github.io/blog/2011/01/25/101-vs-lol%E2%80%93More-Fonts/"/>
     <updated>2011-01-25T12:07:00-05:00</updated>
-    <id>http://1overN.com/blog/2011/01/25/101-vs-lol–More-Fonts</id>
+    <id>http://adereth.github.io/blog/2011/01/25/101-vs-lol–More-Fonts</id>
     <content type="html"><![CDATA[<p>As requested in the <a href="http://www.reddit.com/r/programming/comments/f8nzc/programmatic_programming_font_comparison_101_vs/">reddit discussion</a>, here are Envy Code R, Liberation Mono, and Terminus:</p>
 
 <p><img src="/images/envy-code-r.png" alt="Envy Code R" />
@@ -116,9 +116,9 @@ As a quick test, I wrote something to compare every pair of characters in a list
   
   <entry>
     <title type="html"><![CDATA[101 vs. lol]]></title>
-    <link href="http://1overN.com/blog/2011/01/24/101-vs-lol/"/>
+    <link href="http://adereth.github.io/blog/2011/01/24/101-vs-lol/"/>
     <updated>2011-01-24T12:07:00-05:00</updated>
-    <id>http://1overN.com/blog/2011/01/24/101-vs-lol</id>
+    <id>http://adereth.github.io/blog/2011/01/24/101-vs-lol</id>
     <content type="html"><![CDATA[<p>One of the subtle details of fonts that programmers often care about is how easy it is to distinguish between O’s, 0′s, l’s, and 1′s.  Using Mathematica, we can programmatically generate the comparison for several of the most popular programming fonts:</p>
 
 <p><img src="/images/101code.png" alt="101 Code" /></p>
