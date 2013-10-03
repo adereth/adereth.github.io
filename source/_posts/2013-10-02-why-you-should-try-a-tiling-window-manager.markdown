@@ -3,18 +3,17 @@ layout: post
 title: "Why you should try a tiling window manager"
 date: 2013-10-02 07:39
 comments: true
-published: false
 categories: 
 ---
 ## What is a tiling window manager?
 
 Window managers control the placement and appearance of programs on your screen.
 
-{% img left /images/desk.png Messy Desk %}
+{% img /images/desk.png Messy Desk %}
 
 Most popular window managers are what are called "[compositing window managers](http://en.wikipedia.org/wiki/Compositing_window_manager)," which is what you are using by default in Microsoft Windows, OSX, Gnome, and KDE. They use the desktop metaphor, where each program is treated like a re-sizable piece of paper. You can move them around freely, change their size, and cause them to overlap.
 
-{% img right /images/drawersopen.gif Organized Drawers %}
+{% img /images/drawersopen.gif Organized Drawers %}
 
 In contrast, a [tiling window manager](http://en.wikipedia.org/wiki/Tiling_window_manager) is more like a well-organized drawer than a desk. The entire surface is divided into non-overlapping buckets where windows are displayed. If you've used pretty much any IDE, like Eclipse or Visual Studio, or a terminal multiplexer, like screen or tmux, you're already familiar with this approach.
 ## Why should I use one?
@@ -35,7 +34,7 @@ Most tiling window managers are written by developers for developers. They tend 
 There are [a number popular tiling window managers to choose from](http://en.wikipedia.org/wiki/Tiling_window_manager#List_of_tiling_window_managers_for_X), but the most popular (based my totally unscientific polling) are:
 
 - [xmonad](http://xmonad.org/)
-- [notion](http://notion.sourceforge.net/), a fork of the controversial and now defunct [ion3](http://en.wikipedia.org/wiki/Ion_(window_manager))
+- [notion](http://notion.sourceforge.net/), a fork of the controversial and now defunct ion3
 - [awesome](http://awesome.naquadah.org/)
 - [dwm](http://dwm.suckless.org/)
 
