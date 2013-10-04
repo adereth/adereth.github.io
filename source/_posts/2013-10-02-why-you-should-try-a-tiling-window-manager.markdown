@@ -22,6 +22,9 @@ In contrast, a [tiling window manager](http://en.wikipedia.org/wiki/Tiling_windo
 Unlike most popular compositing window managers, tiling window managers really make an attempt at managing your windows for you. Instead of having you constantly reorganize the individual windows on your screen, you specify at a high level how you want windows to be placed and the window manager does it for you. New windows are intelligently placed based on the high-level directives you've already given.
 
 Tiling also lends itself well to really efficient keyboard shortcuts. Because there's an unambiguous arrangement, you can quickly do things like switch focus to the window immediately to the left, right, top, or bottom, as opposed to most compositing window managers where the best keyboard option is Alt-Tabbing through a linear list of all your windows:
+
+[{% img /images/alt-tab.jpg Windows Switcher %}](http://blogs.technet.com/b/drey/archive/2010/01/04/windows-7-what-happens-with-a-lot-of-windows-and-alt-tab.aspx)
+
 ### They scale
 
 With innovative features like tags (Awesome) and nested workspaces (ion3/notion), it's possible to sanely deal with huge numbers of windows and workflows. You're able to group and manipulate windows together in more sophisticated ways than you can in traditional window managers that limit operations to all instances of a single application or everything on a virtual desktop.
