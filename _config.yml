@@ -2,9 +2,9 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://1overn.com
-title: 1/N
-#subtitle: A blogging framework for hackers.
+url: http://adereth.github.io
+title: adereth
+subtitle: "[:tweak :trick :experiment]"
 author: Matt Adereth
 simple_search: http://google.com/search
 description:
