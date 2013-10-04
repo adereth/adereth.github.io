@@ -51,4 +51,4 @@ My preferred window manager is notion and it's what I recommend for anyone wanti
 
 As of Ubuntu 12.10, you can simply `apt-get install notion` to install it. It's also available in the repositories of a number of other distributions.
 
-In some follow-up posts, I'm going to detail the tweaks that I've made to my notion configuration to improve my workflow.
+In some follow-up posts, I'm going to detail the tweaks that I've made to [my notion configuration](https://github.com/adereth/notion-config) to improve my workflow.
