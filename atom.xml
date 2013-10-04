@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[1/N]]></title>
-  <link href="http://1overn.com/atom.xml" rel="self"/>
-  <link href="http://1overn.com/"/>
-  <updated>2013-10-03T20:06:31-04:00</updated>
-  <id>http://1overn.com/</id>
+  <title><![CDATA[adereth]]></title>
+  <link href="http://adereth.github.io/atom.xml" rel="self"/>
+  <link href="http://adereth.github.io/"/>
+  <updated>2013-10-03T20:09:31-04:00</updated>
+  <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
     
@@ -15,18 +15,18 @@
   
   <entry>
     <title type="html"><![CDATA[Why you should try a tiling window manager]]></title>
-    <link href="http://1overn.com/blog/2013/10/02/why-you-should-try-a-tiling-window-manager/"/>
+    <link href="http://adereth.github.io/blog/2013/10/02/why-you-should-try-a-tiling-window-manager/"/>
     <updated>2013-10-02T07:39:00-04:00</updated>
-    <id>http://1overn.com/blog/2013/10/02/why-you-should-try-a-tiling-window-manager</id>
+    <id>http://adereth.github.io/blog/2013/10/02/why-you-should-try-a-tiling-window-manager</id>
     <content type="html"><![CDATA[<h2>What is a tiling window manager?</h2>
 
 <p>Window managers control the placement and appearance of programs on your screen.</p>
 
-<p><img src="http://1overn.com/images/desk.png" title="Messy Desk" ></p>
+<p><img src="http://adereth.github.io/images/desk.png" title="Messy Desk" ></p>
 
 <p>Most popular window managers are what are called &ldquo;<a href="http://en.wikipedia.org/wiki/Compositing_window_manager">compositing window managers</a>,&rdquo; which is what you are using by default in Microsoft Windows, OSX, Gnome, and KDE. They use the desktop metaphor, where each program is treated like a re-sizable piece of paper. You can move them around freely, change their size, and cause them to overlap.</p>
 
-<p><img src="http://1overn.com/images/drawersopen.gif" title="Organized Drawers" ></p>
+<p><img src="http://adereth.github.io/images/drawersopen.gif" title="Organized Drawers" ></p>
 
 <p>In contrast, a <a href="http://en.wikipedia.org/wiki/Tiling_window_manager">tiling window manager</a> is more like a well-organized drawer than a desk. The entire surface is divided into non-overlapping buckets where windows are displayed. If you&rsquo;ve used pretty much any IDE, like Eclipse or Visual Studio, or a terminal multiplexer, like screen or tmux, you&rsquo;re already familiar with this approach.</p>
 
@@ -38,7 +38,7 @@
 
 <p>Tiling also lends itself well to really efficient keyboard shortcuts. Because there&rsquo;s an unambiguous arrangement, you can quickly do things like switch focus to the window immediately to the left, right, top, or bottom, as opposed to most compositing window managers where the best keyboard option is Alt-Tabbing through a linear list of all your windows:</p>
 
-<p><a href="http://blogs.technet.com/b/drey/archive/2010/01/04/windows-7-what-happens-with-a-lot-of-windows-and-alt-tab.aspx"><img src="http://1overn.com/images/alt-tab.jpg" title="Windows Switcher" ></a></p>
+<p><a href="http://blogs.technet.com/b/drey/archive/2010/01/04/windows-7-what-happens-with-a-lot-of-windows-and-alt-tab.aspx"><img src="http://adereth.github.io/images/alt-tab.jpg" title="Windows Switcher" ></a></p>
 
 <h3>They scale</h3>
 
@@ -77,16 +77,16 @@
   
   <entry>
     <title type="html"><![CDATA[Tweaking my favorite programming font]]></title>
-    <link href="http://1overn.com/blog/2011/02/02/tweaking-my-favorite-programming-font/"/>
+    <link href="http://adereth.github.io/blog/2011/02/02/tweaking-my-favorite-programming-font/"/>
     <updated>2011-02-02T07:47:00-05:00</updated>
-    <id>http://1overn.com/blog/2011/02/02/tweaking-my-favorite-programming-font</id>
+    <id>http://adereth.github.io/blog/2011/02/02/tweaking-my-favorite-programming-font</id>
     <content type="html"><![CDATA[<p>After trying out every monospaced font I could get my hands on, I decided that <a href="http://www.ms-studio.com/index.html">Mark Simonson</a>‘s <a href="http://www.ms-studio.com/FontSales/anonymouspro.html">Anonymous Pro</a> is the one for me:</p>
 
 <p><a href="http://www.ms-studio.com/FontSales/anonymouspro.html"><img src="http://www.marksimonson.com/assets/content/fonts/anonymouspro_banner.png" alt="Anonymous Pro Sample" /></a></p>
 
 <p>After using it in my IDE for months, I decided to start using it in my terminals. Unfortunately, this revealed a subtle flaw in the font.  Take a look:</p>
 
-<p><img src="http://1overn.com/images/anonymous12.png" alt="terminal sample" /></p>
+<p><img src="http://adereth.github.io/images/anonymous12.png" alt="terminal sample" /></p>
 
 <p>Notice anything?  Those forward slashes seem a bit too far to the right. While this wasn&rsquo;t a problem when writing code, it became a major eye sore when working with lots of paths in a terminal.</p>
 
@@ -94,15 +94,15 @@
 
 <p>Armed with this knowledge and a font editor (like <a href="http://fontforge.sourceforge.net/">FontForge</a>), we can crack open the .ttf and see exactly what&rsquo;s going on with the forward slash:</p>
 
-<p><img src="http://1overn.com/images/slashbitmaporiginal.png" alt="original" /></p>
+<p><img src="http://adereth.github.io/images/slashbitmaporiginal.png" alt="original" /></p>
 
 <p>The green outline shows the vector representation of the character, while the dark squares show the pixels used in the bitmapped version. I think that the pixels should be shifted to the left by 1, so I went ahead and did it:</p>
 
-<p><img src="http://1overn.com/images/slashbitmapmodified.png" alt="modified" /></p>
+<p><img src="http://adereth.github.io/images/slashbitmapmodified.png" alt="modified" /></p>
 
 <p>Now everything looks good in my terminal:</p>
 
-<p><img src="http://1overn.com/images/anonymous12slashfixed.png" alt="fixed terminal" /></p>
+<p><img src="http://adereth.github.io/images/anonymous12slashfixed.png" alt="fixed terminal" /></p>
 
 <p>I&rsquo;ve informed Mark Simonson of this and it looks like this fix may be available in the next version of Anonymous Pro.</p>
 
@@ -116,9 +116,9 @@
   
   <entry>
     <title type="html"><![CDATA[Iterating on Font Pair Comparisons]]></title>
-    <link href="http://1overn.com/blog/2011/01/31/Iterating-on-Font-Pair-Comparisons/"/>
+    <link href="http://adereth.github.io/blog/2011/01/31/Iterating-on-Font-Pair-Comparisons/"/>
     <updated>2011-01-31T20:58:00-05:00</updated>
-    <id>http://1overn.com/blog/2011/01/31/Iterating-on-Font-Pair-Comparisons</id>
+    <id>http://adereth.github.io/blog/2011/01/31/Iterating-on-Font-Pair-Comparisons</id>
     <content type="html"><![CDATA[<p>The previous post generated some great suggestions in the <a href="http://news.ycombinator.com/item?id=2147834">Hacker News discussion</a>.  I&rsquo;ve incorporated some of the feedback and here’s a summary of the changes:</p>
 
 <ul>
@@ -131,11 +131,11 @@
 
 <p>Here’s the current list of fonts included in the comparison:</p>
 
-<p><img src="http://1overn.com/images/fontlist2.png" alt="Full font list" /></p>
+<p><img src="http://adereth.github.io/images/fontlist2.png" alt="Full font list" /></p>
 
 <p>Take a look at the new version:</p>
 
-<p><a href="http://1overn.com/images/dejavusansmonodroidsansmono1.png"><img src="http://1overn.com/images/dejavusansmonodroidsansmono1.png" alt="dejavusansmonodroidsansmono1.png" /></a>
+<p><a href="http://adereth.github.io/images/dejavusansmonodroidsansmono1.png"><img src="http://adereth.github.io/images/dejavusansmonodroidsansmono1.png" alt="dejavusansmonodroidsansmono1.png" /></a>
 (Click for full size version)</p>
 
 <p>If you’re interested in seeing the results for every pair, you can <a href="https://s3.amazonaws.com/1overBlog/programming_fonts/AllFontComparisonsV2.zip">download them all</a>.</p>
@@ -148,32 +148,32 @@
   
   <entry>
     <title type="html"><![CDATA[Comparing Programming Font Pairs]]></title>
-    <link href="http://1overn.com/blog/2011/01/26/Comparing-Programming-Font-Pairs/"/>
+    <link href="http://adereth.github.io/blog/2011/01/26/Comparing-Programming-Font-Pairs/"/>
     <updated>2011-01-26T22:46:00-05:00</updated>
-    <id>http://1overn.com/blog/2011/01/26/Comparing-Programming-Font-Pairs</id>
+    <id>http://adereth.github.io/blog/2011/01/26/Comparing-Programming-Font-Pairs</id>
     <content type="html"><![CDATA[<p>I really like this visualization of the difference between Deja Vu Sans Mono and Apple Menlo:</p>
 
 <p><img src="http://typophile.com/files/menlovsdejavusansmono_6131.png" alt="Menlo vs. Deja Vu Sans Mono" /></p>
 
 <p>(Credit to <a href="http://www.down10.com">Jesse Burgheimer</a>)</p>
 
-<p>I decided to take a stab at programmatically generating a similar comparison for all the fonts I’ve been looking at.  <a href="http://1overn.com/assets/paircompare.nb">Here’s the Mathematica code</a>.</p>
+<p>I decided to take a stab at programmatically generating a similar comparison for all the fonts I’ve been looking at.  <a href="http://adereth.github.io/assets/paircompare.nb">Here’s the Mathematica code</a>.</p>
 
 <p><a href="images/dejavusansmonodroidsansmono.png"><img src="images/dejavusansmonodroidsansmono.png" alt="Menlo vs. Deja Vu Sans Mono in Mathematica" /></a>
 (Click for full size version)</p>
 
 <p>It was then easy to generate this for every pair of fonts:</p>
 
-<p><img src="http://1overn.com/images/MapCompareFontPair.png" alt="CompareFontPair /@ Subsets[monospacedFonts, {2}]" /></p>
+<p><img src="http://adereth.github.io/images/MapCompareFontPair.png" alt="CompareFontPair /@ Subsets[monospacedFonts, {2}]" /></p>
 
 <p>I went through them all and picked out the ones I thought were most interesting:</p>
 
-<p><a href="http://1overn.com/images/consolasinconsolata.png"><img src="http://1overn.com/images/consolasinconsolata.png" alt="consolasinconsolata" /></a>
-<a href="http://1overn.com/images/dejavusansmonodroidsansmono.png"><img src="http://1overn.com/images/dejavusansmonodroidsansmono.png" alt="dejavusansmonodroidsansmono" /></a>
-<a href="http://1overn.com/images/dejavusansmonopanicsans.png"><img src="http://1overn.com/images/dejavusansmonopanicsans.png" alt="dejavusansmonopanicsans" /></a>
-<a href="http://1overn.com/images/droidsansmonoinconsolata.png"><img src="http://1overn.com/images/droidsansmonoinconsolata.png" alt="droidsansmonoinconsolata" /></a>
-<a href="http://1overn.com/images/envycoderterminus.png"><img src="http://1overn.com/images/envycoderterminus.png" alt="envycoderterminus" /></a>
-<a href="http://1overn.com/images/inconsolatamonofur.png"><img src="http://1overn.com/images/inconsolatamonofur.png" alt="inconsolatamonofur" /></a></p>
+<p><a href="http://adereth.github.io/images/consolasinconsolata.png"><img src="http://adereth.github.io/images/consolasinconsolata.png" alt="consolasinconsolata" /></a>
+<a href="http://adereth.github.io/images/dejavusansmonodroidsansmono.png"><img src="http://adereth.github.io/images/dejavusansmonodroidsansmono.png" alt="dejavusansmonodroidsansmono" /></a>
+<a href="http://adereth.github.io/images/dejavusansmonopanicsans.png"><img src="http://adereth.github.io/images/dejavusansmonopanicsans.png" alt="dejavusansmonopanicsans" /></a>
+<a href="http://adereth.github.io/images/droidsansmonoinconsolata.png"><img src="http://adereth.github.io/images/droidsansmonoinconsolata.png" alt="droidsansmonoinconsolata" /></a>
+<a href="http://adereth.github.io/images/envycoderterminus.png"><img src="http://adereth.github.io/images/envycoderterminus.png" alt="envycoderterminus" /></a>
+<a href="http://adereth.github.io/images/inconsolatamonofur.png"><img src="http://adereth.github.io/images/inconsolatamonofur.png" alt="inconsolatamonofur" /></a></p>
 
 <p>If you’re interested in seeing the results for every pair, you can <a href="https://s3.amazonaws.com/1overBlog/programming_fonts/AllFontPairComparisons.zip">download them all</a>.</p>
 ]]></content>
@@ -181,9 +181,9 @@
   
   <entry>
     <title type="html"><![CDATA[Comparing Troublesome Groups]]></title>
-    <link href="http://1overn.com/blog/2011/01/26/Comparing-Troublesome-Groups/"/>
+    <link href="http://adereth.github.io/blog/2011/01/26/Comparing-Troublesome-Groups/"/>
     <updated>2011-01-26T10:47:00-05:00</updated>
-    <id>http://1overn.com/blog/2011/01/26/Comparing-Troublesome-Groups</id>
+    <id>http://adereth.github.io/blog/2011/01/26/Comparing-Troublesome-Groups</id>
     <content type="html"><![CDATA[<p>One of the comments on the <a href="http://www.reddit.com/r/programming/comments/f8nzc/programmatic_programming_font_comparison_101_vs/">reddit discussion</a> of my first post suggested looking at groups of characters that might be troublesome:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -200,37 +200,37 @@
 
 <p>As a quick test, I wrote something to compare every pair of characters in a list:</p>
 
-<p><img src="http://1overn.com/images/tallskinnycode.png" alt="Mathematica code for comparing groups" /></p>
+<p><img src="http://adereth.github.io/images/tallskinnycode.png" alt="Mathematica code for comparing groups" /></p>
 
 <p>Click to see the full-sized result:</p>
 
-<p><a href="http://1overn.com/images/tallskinnycomparison.png"><img src="http://1overn.com/images/tallskinnycomparison.png" alt="Comparison results" /></a></p>
+<p><a href="http://adereth.github.io/images/tallskinnycomparison.png"><img src="http://adereth.github.io/images/tallskinnycomparison.png" alt="Comparison results" /></a></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[101 vs. lol - More Fonts]]></title>
-    <link href="http://1overn.com/blog/2011/01/25/101-vs-lol%E2%80%93More-Fonts/"/>
+    <link href="http://adereth.github.io/blog/2011/01/25/101-vs-lol%E2%80%93More-Fonts/"/>
     <updated>2011-01-25T12:07:00-05:00</updated>
-    <id>http://1overn.com/blog/2011/01/25/101-vs-lol–More-Fonts</id>
+    <id>http://adereth.github.io/blog/2011/01/25/101-vs-lol–More-Fonts</id>
     <content type="html"><![CDATA[<p>As requested in the <a href="http://www.reddit.com/r/programming/comments/f8nzc/programmatic_programming_font_comparison_101_vs/">reddit discussion</a>, here are Envy Code R, Liberation Mono, and Terminus:</p>
 
-<p><img src="http://1overn.com/images/envy-code-r.png" alt="Envy Code R" />
-<img src="http://1overn.com/images/liberation-mono.png" alt="Liberation Mono" />
-<img src="http://1overn.com/images/terminus.png" alt="Terminus" /></p>
+<p><img src="http://adereth.github.io/images/envy-code-r.png" alt="Envy Code R" />
+<img src="http://adereth.github.io/images/liberation-mono.png" alt="Liberation Mono" />
+<img src="http://adereth.github.io/images/terminus.png" alt="Terminus" /></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[101 vs. lol]]></title>
-    <link href="http://1overn.com/blog/2011/01/24/101-vs-lol/"/>
+    <link href="http://adereth.github.io/blog/2011/01/24/101-vs-lol/"/>
     <updated>2011-01-24T12:07:00-05:00</updated>
-    <id>http://1overn.com/blog/2011/01/24/101-vs-lol</id>
+    <id>http://adereth.github.io/blog/2011/01/24/101-vs-lol</id>
     <content type="html"><![CDATA[<p>One of the subtle details of fonts that programmers often care about is how easy it is to distinguish between O’s, 0′s, l’s, and 1′s.  Using Mathematica, we can programmatically generate the comparison for several of the most popular programming fonts:</p>
 
-<p><img src="http://1overn.com/images/101code.png" alt="101 Code" /></p>
+<p><img src="http://adereth.github.io/images/101code.png" alt="101 Code" /></p>
 
-<p><img src="http://1overn.com/images/1sand0s.png" alt="1s and 0s" /></p>
+<p><img src="http://adereth.github.io/images/1sand0s.png" alt="1s and 0s" /></p>
 ]]></content>
   </entry>
   
