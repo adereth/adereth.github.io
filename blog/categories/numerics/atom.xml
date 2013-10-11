@@ -4,7 +4,7 @@
   <title><![CDATA[Category: numerics | adereth]]></title>
   <link href="http://adereth.github.io/blog/categories/numerics/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2013-10-10T22:23:56-04:00</updated>
+  <updated>2013-10-11T09:25:50-04:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -34,8 +34,6 @@
 <p><img class="<a" src="href="http://upload.wikimedia.org/math/9/4/0/9402cf0c5599afa1a47d12d4a704e3de.png">http://upload.wikimedia.org/math/9/4/0/9402cf0c5599afa1a47d12d4a704e3de.png</a>" title="\sum_{n=1}^\infty\,\frac{1}{n} \;\;=\;\; 1 \,+\, \frac{1}{2} \,+\, \frac{1}{3} \,+\, \frac{1}{4} \,+\, \frac{1}{5} \,+\, \cdots.\" ></p>
 
 <p>It&rsquo;s another nice example because it contains terms that can&rsquo;t be represented precisely in floating point and the true sum diverges.</p>
-
-<p>We&rsquo;ll use Clojure for its elegant representation of sequences and its nice <a href="https://github.com/clojure/clojure/blob/229bf8fe9a751e4f48bb2b7ea57e27ebc43d26ae/src/jvm/clojure/lang/Ratio.java"><code>Ratio</code></a> class, which uses <a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html"><code>BigInteger</code></a> for the numerator and denominator.  Whenever we finish summing, we&rsquo;ll look at the result as a floating point double.</p>
 
 <p>Let&rsquo;s start by computing the sum with infinite precision.  Clojure&rsquo;s <a href="https://github.com/clojure/clojure/blob/229bf8fe9a751e4f48bb2b7ea57e27ebc43d26ae/src/jvm/clojure/lang/Ratio.java"><code>Ratio</code></a> class represents values internally using <a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html"><code>BigInteger</code></a> to separately store the numerator and denominator.  The summation happens using the grade-school style of making the denominators match and summing the numerators, so we have the exact running sum throughout.  At the very end, we convert the number to a floating point double:</p>
 
