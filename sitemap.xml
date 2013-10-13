@@ -35,8 +35,12 @@
         <lastmod>2013-10-11T09:25:31-04:00</lastmod>
     </url>
     <url>
+        <loc>http://adereth.github.io/blog/2013/10/13/unicode-math-0-dot-2-0-released/</loc>
+        <lastmod>2013-10-13T14:38:39-04:00</lastmod>
+    </url>
+    <url>
         <loc>http://adereth.github.io/blog/archives/</loc>
-        <lastmod>2013-10-11T09:25:31-04:00</lastmod>
+        <lastmod>2013-10-13T14:38:39-04:00</lastmod>
     </url>
     <url>
         <loc>http://adereth.github.io/clojure.xml</loc>
@@ -44,7 +48,7 @@
     </url>
     <url>
         <loc>http://adereth.github.io/</loc>
-        <lastmod>2013-10-11T09:25:31-04:00</lastmod>
+        <lastmod>2013-10-13T14:38:39-04:00</lastmod>
     </url>
     <url>
         <loc>http://adereth.github.io/robots.txt</loc>

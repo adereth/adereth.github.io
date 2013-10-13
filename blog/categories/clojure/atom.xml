@@ -4,7 +4,7 @@
   <title><![CDATA[Category: clojure | adereth]]></title>
   <link href="http://adereth.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2013-10-11T09:25:50-04:00</updated>
+  <updated>2013-10-13T14:38:48-04:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -12,6 +12,47 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[unicode-math 0.2.0 released]]></title>
+    <link href="http://adereth.github.io/blog/2013/10/13/unicode-math-0-dot-2-0-released/"/>
+    <updated>2013-10-13T14:28:00-04:00</updated>
+    <id>http://adereth.github.io/blog/2013/10/13/unicode-math-0-dot-2-0-released</id>
+    <content type="html"><![CDATA[<p>I just deployed a new version of <a href="https://github.com/adereth/unicode-math">unicode-math</a> to Clojars.  It&rsquo;s a silly toy project that implements as many of <a href="http://symbolcodes.tlt.psu.edu/bylanguage/mathchart.html">Unicode&rsquo;s math symbols</a> as possible in Clojure.  If you <code>use</code> it, you can write things like:</p>
+
+<p><a href="http://mathworld.wolfram.com/BinetsFibonacciNumberFormula.html">Binet&rsquo;s Fibonacci Number Formula</a>:
+```clojure
+(defn binet-fib [n]
+  (/ (&ndash; (ⁿ φ n)</p>
+
+<pre><code>    (ⁿ (- φ) (- n)))
+ (√ 5)))
+</code></pre>
+
+<p><code>
+[de Morgan's Laws](http://mathworld.wolfram.com/deMorgansLaws.html):
+</code>clojure
+(assert (∀ [p [true false] q [true false]]</p>
+
+<pre><code>         (= (¬ (∧ p q))
+            (∨ (¬ p) (¬ q)))))
+</code></pre>
+
+<p>```</p>
+
+<p><a href="http://mathworld.wolfram.com/Inclusion-ExclusionPrinciple.html">Inclusion-Exclusion Principle</a>:
+```clojure
+(assert (= (count (∪ A B))</p>
+
+<pre><code>       (+ (count A)
+          (count B)
+          (- (count (∩ A B))))))
+</code></pre>
+
+<p>```
+Instructions for use are on the <a href="https://github.com/adereth/unicode-math">project&rsquo;s Github page</a>.  The full list of implemented symbols is in <a href="https://github.com/adereth/unicode-math/blob/master/src/unicode_math/core.clj">src/unicode_math/core.clj</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Add it up (properly)]]></title>

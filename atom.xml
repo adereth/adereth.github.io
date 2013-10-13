@@ -4,7 +4,7 @@
   <title><![CDATA[adereth]]></title>
   <link href="http://adereth.github.io/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2013-10-11T09:25:50-04:00</updated>
+  <updated>2013-10-13T14:38:48-04:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -12,6 +12,54 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[unicode-math 0.2.0 released]]></title>
+    <link href="http://adereth.github.io/blog/2013/10/13/unicode-math-0-dot-2-0-released/"/>
+    <updated>2013-10-13T14:28:00-04:00</updated>
+    <id>http://adereth.github.io/blog/2013/10/13/unicode-math-0-dot-2-0-released</id>
+    <content type="html"><![CDATA[<p>I just deployed a new version of <a href="https://github.com/adereth/unicode-math">unicode-math</a> to Clojars.  It&rsquo;s a silly toy project that implements as many of <a href="http://symbolcodes.tlt.psu.edu/bylanguage/mathchart.html">Unicode&rsquo;s math symbols</a> as possible in Clojure.  If you <code>use</code> it, you can write things like:</p>
+
+<p><a href="http://mathworld.wolfram.com/BinetsFibonacciNumberFormula.html">Binet&rsquo;s Fibonacci Number Formula</a>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">binet-fib</span> <span class="p">[</span><span class="nv">n</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nb">- </span><span class="p">(</span><span class="err">ⁿ</span> <span class="err">φ</span> <span class="nv">n</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">(</span><span class="err">ⁿ</span> <span class="p">(</span><span class="nb">- </span><span class="err">φ</span><span class="p">)</span> <span class="p">(</span><span class="nb">- </span><span class="nv">n</span><span class="p">)))</span>
+</span><span class='line'>     <span class="p">(</span><span class="err">√</span> <span class="mi">5</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="http://mathworld.wolfram.com/deMorgansLaws.html">de Morgan&rsquo;s Laws</a>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">assert </span><span class="p">(</span><span class="err">∀</span> <span class="p">[</span><span class="nv">p</span> <span class="p">[</span><span class="nv">true</span> <span class="nv">false</span><span class="p">]</span> <span class="nv">q</span> <span class="p">[</span><span class="nv">true</span> <span class="nv">false</span><span class="p">]]</span>
+</span><span class='line'>             <span class="p">(</span><span class="nb">= </span><span class="p">(</span><span class="err">¬</span> <span class="p">(</span><span class="err">∧</span> <span class="nv">p</span> <span class="nv">q</span><span class="p">))</span>
+</span><span class='line'>                <span class="p">(</span><span class="err">∨</span> <span class="p">(</span><span class="err">¬</span> <span class="nv">p</span><span class="p">)</span> <span class="p">(</span><span class="err">¬</span> <span class="nv">q</span><span class="p">)))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="http://mathworld.wolfram.com/Inclusion-ExclusionPrinciple.html">Inclusion-Exclusion Principle</a>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nb">assert </span><span class="p">(</span><span class="nb">= </span><span class="p">(</span><span class="nb">count </span><span class="p">(</span><span class="err">∪</span> <span class="nv">A</span> <span class="nv">B</span><span class="p">))</span>
+</span><span class='line'>           <span class="p">(</span><span class="nb">+ </span><span class="p">(</span><span class="nb">count </span><span class="nv">A</span><span class="p">)</span>
+</span><span class='line'>              <span class="p">(</span><span class="nb">count </span><span class="nv">B</span><span class="p">)</span>
+</span><span class='line'>              <span class="p">(</span><span class="nb">- </span><span class="p">(</span><span class="nb">count </span><span class="p">(</span><span class="err">∩</span> <span class="nv">A</span> <span class="nv">B</span><span class="p">))))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Instructions for use are on the <a href="https://github.com/adereth/unicode-math">project&rsquo;s Github page</a>.  The full list of implemented symbols is in <a href="https://github.com/adereth/unicode-math/blob/master/src/unicode_math/core.clj">src/unicode_math/core.clj</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Add it up (properly)]]></title>
