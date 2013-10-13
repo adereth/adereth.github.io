@@ -3,7 +3,7 @@ layout: post
 title: "Why you should try a tiling window manager"
 date: 2013-10-02 07:39
 comments: true
-categories: 
+categories: wm notion
 ---
 ## What is a tiling window manager?
 
