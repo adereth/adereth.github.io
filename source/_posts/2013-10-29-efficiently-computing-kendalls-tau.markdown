@@ -35,8 +35,8 @@ $$\tau_B = \frac{n_c-n_d}{\sqrt{(n_0-n_1)(n_0-n_2)}}$$
 ...where:
 
 $$n_0 = n(n-1)/2$$
-$$n_1 = \text{Number of pairs tied values in } X$$
-$$n_2 = \text{Number of pairs tied values in } Y$$
+$$n_1 = \text{Number of pairs with tied values in } X$$
+$$n_2 = \text{Number of pairs with tied values in } Y$$
 
 ## Computing Naively
 We can compute $\tau_B$ in $O(n^{2})$ by looking at every pair of observations and tallying the number of concordant, discordant, and tied pairs.  Once we have the tallies, we'll apply the formula:
