@@ -4,7 +4,7 @@
   <title><![CDATA[adereth]]></title>
   <link href="http://adereth.github.io/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2013-10-30T21:48:55-04:00</updated>
+  <updated>2013-10-30T22:04:03-04:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -48,8 +48,8 @@ There&rsquo;s a perfectly positive linear relationship between X and Y, but only
 <p>&hellip;where:</p>
 
 <p>$$n_0 = n(n-1)/2$$
-$$n_1 = \text{Number of pairs tied values in } X$$
-$$n_2 = \text{Number of pairs tied values in } Y$$</p>
+$$n_1 = \text{Number of pairs with tied values in } X$$
+$$n_2 = \text{Number of pairs with tied values in } Y$$</p>
 
 <h2>Computing Naively</h2>
 
