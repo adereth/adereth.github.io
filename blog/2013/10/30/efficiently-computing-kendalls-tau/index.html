@@ -255,7 +255,9 @@ $$n_2 = \text{Number of pairs with tied values in } Y$$</p>
 
 <blockquote><p>The problem of calculating Kendall&rsquo;s tau arose while attempting to evaluate species associations in catches by the Canadian east coast offshore fishery.  Sample sizes ranging up to 400 were common, making manual calculations out of the question; indeed, an initial program using an asymptotically inefficient method proved expensively slow.</p></blockquote>
 
-<p>Necessity is the mother of invention, and he came up with a clever algorithm for computing Kendall&rsquo;s Tau in $O(n \log{n})$.  First, sort the observations by their $x$ values using your favorite $O(n \log{n})$ algorithm.  Next, sort <em>that</em> sorted list by the $y$ values using a slightly modified <a href="http://en.wikipedia.org/wiki/Merge_sort">merge sort</a> that keeps track of the size of the swaps it had to perform.</p>
+<p>Necessity is the mother of invention, so he came up with a clever algorithm for computing Kendall&rsquo;s Tau in $O(n \log{n})$ which he published in his paper entitled &ldquo;<a href="http://www.jstor.org/stable/2282833">A Computer Method for Calculating Kendall&rsquo;s Tau with Ungrouped Data</a>&rdquo;.</p>
+
+<p>First, sort the observations by their $x$ values using your favorite $O(n \log{n})$ algorithm.  Next, sort <em>that</em> sorted list by the $y$ values using a slightly modified <a href="http://en.wikipedia.org/wiki/Merge_sort">merge sort</a> that keeps track of the size of the swaps it had to perform.</p>
 
 <p>Recall that merge sort works as follows:</p>
 
