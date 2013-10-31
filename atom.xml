@@ -4,7 +4,7 @@
   <title><![CDATA[adereth]]></title>
   <link href="http://adereth.github.io/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2013-10-30T22:04:03-04:00</updated>
+  <updated>2013-10-30T22:14:08-04:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -60,7 +60,7 @@ $$n_2 = \text{Number of pairs with tied values in } Y$$</p>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">tallies-&gt;kendalls-tau</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">kendalls-tau-from-tallies</span>
 </span><span class='line'>  <span class="p">[{</span><span class="ss">:keys</span> <span class="p">[</span><span class="nv">concordant</span> <span class="nv">discordant</span> <span class="nv">pairs</span> <span class="nv">x-ties</span> <span class="nv">y-ties</span><span class="p">]}]</span>
 </span><span class='line'>  <span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nb">- </span><span class="nv">concordant</span> <span class="nv">discordant</span><span class="p">)</span>
 </span><span class='line'>     <span class="p">(</span><span class="nf">Math/sqrt</span> <span class="p">(</span><span class="nb">* </span><span class="p">(</span><span class="nb">- </span><span class="nv">pairs</span> <span class="nv">x-ties</span><span class="p">)</span>
@@ -127,7 +127,7 @@ $$n_2 = \text{Number of pairs with tied values in } Y$$</p>
 </span><span class='line'>                        <span class="p">{</span><span class="ss">:concordant</span> <span class="mi">0</span> <span class="ss">:discordant</span> <span class="mi">0</span>
 </span><span class='line'>                         <span class="ss">:x-ties</span> <span class="mi">0</span> <span class="ss">:y-ties</span> <span class="mi">0</span> <span class="ss">:pairs</span> <span class="mi">0</span><span class="p">}</span>
 </span><span class='line'>                        <span class="nv">relations</span><span class="p">)]</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">tallies-&gt;kendalls-tau</span> <span class="nv">tallies</span><span class="p">)))</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">kendalls-tau-from-tallies</span> <span class="nv">tallies</span><span class="p">)))</span>
 </span></code></pre></td></tr></table></div></figure>
 
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: clojure | adereth]]></title>
   <link href="http://adereth.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2013-10-30T22:04:03-04:00</updated>
+  <updated>2013-10-30T22:14:08-04:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -55,7 +55,7 @@ $$n_2 = \text{Number of pairs with tied values in } Y$$</p>
 
 <p>We can compute $\tau_B$ in $O(n^{2})$ by looking at every pair of observations and tallying the number of concordant, discordant, and tied pairs.  Once we have the tallies, we&rsquo;ll apply the formula:
 ```clojure
-(defn tallies->kendalls-tau
+(defn kendalls-tau-from-tallies
   [{:keys [concordant discordant pairs x-ties y-ties]}]
   (/ (&ndash; concordant discordant)</p>
 
@@ -103,7 +103,7 @@ Finally, we put it all together by computing the relations tally for each pair a
                     {:concordant 0 :discordant 0
                      :x-ties 0 :y-ties 0 :pairs 0}
                     relations)]
-(tallies-&gt;kendalls-tau tallies)))
+(kendalls-tau-from-tallies tallies)))
 </code></pre>
 
 <p>```</p>
