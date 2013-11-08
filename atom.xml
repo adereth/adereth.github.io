@@ -4,7 +4,7 @@
   <title><![CDATA[adereth]]></title>
   <link href="http://adereth.github.io/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2013-10-31T05:53:56-04:00</updated>
+  <updated>2013-11-08T08:08:56-05:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -12,6 +12,131 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[core.matrix + Apache Commons Math]]></title>
+    <link href="http://adereth.github.io/blog/2013/11/08/core-dot-matrix-plus-apache-commons-math/"/>
+    <updated>2013-11-08T08:08:00-05:00</updated>
+    <id>http://adereth.github.io/blog/2013/11/08/core-dot-matrix-plus-apache-commons-math</id>
+    <content type="html"><![CDATA[<p>I&rsquo;d like to share a little project I did to make it more convenient to use Apache Commons Math&rsquo;s linear algebra classes with Clojure.</p>
+
+<h2>Apache Commons Math</h2>
+
+<p><a href="http://commons.apache.org/proper/commons-math/index.html">Apache Commons Math</a> is a Java library of mathematics and statistics components.  It&rsquo;s loaded with useful things including:</p>
+
+<ul>
+<li>Statistics</li>
+<li>Data Generation</li>
+<li>Probability Distributions</li>
+<li>Machine Learning</li>
+<li>Optimization</li>
+<li>Numerical Analysis</li>
+<li>Curve Fitting</li>
+<li>Linear Algebra</li>
+<li>Complex Numbers</li>
+<li>Ordinary Differential Equations</li>
+</ul>
+
+
+<p>I highly recommend at least skimming the <a href="http://commons.apache.org/proper/commons-math/userguide/index.html">User Guide</a>.  It&rsquo;s useful to know what&rsquo;s already available and you may even discover a branch of mathematics that you find interesting.</p>
+
+<p>As with most Java libraries, it&rsquo;s generally pleasant to use from Clojure via interop.  Of course, there are a few places where there&rsquo;s unnecessary object constructiion just to get at methods that could easily be static and there are a few others where <em>mutation</em> rears its ugly head.  For the non-static cases, it&rsquo;s trivial enough to create a <code>fn</code> that creates the object and calls the method you need.</p>
+
+<p>Many of the methods in the library either accept or return matrices and vectors, using the <a href="http://commons.apache.org/proper/commons-math/apidocs/org/apache/commons/math3/linear/RealMatrix.html">RealMatrix</a> and <a href="http://commons.apache.org/proper/commons-math/apidocs/org/apache/commons/math3/linear/RealVector.html">RealVector</a> interfaces.  While we could use interop to create and use these, it&rsquo;s nice to be able to use them in idiomatic Clojure and even nicer to be able to seamlessly use them with pure Clojure data structures.</p>
+
+<h2>core.matrix</h2>
+
+<p><a href="https://github.com/mikera/core.matrix">core.matrix</a> is a library and API that aims to make matrix and array programming idiomatic, elegant and fast in Clojure.  It features pluggable support for different underlying matrix library implementations.</p>
+
+<p>For all my examples, I&rsquo;ve included core.matrix as <code>m</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">require</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">clojure.core.matrix</span> <span class="ss">:as</span> <span class="nv">m</span><span class="p">])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>apache-commons-matrix</h2>
+
+<p>After implementing a few protocols, I was able to get full support for Apache Commons Math&rsquo;s matrices and vectors into the core.matrix API, which I&rsquo;ve released as <a href="https://github.com/adereth/apache-commons-matrix">adereth/apache-commons-matrix</a>.</p>
+
+<p>Once you&rsquo;ve loaded <code>apache-commons-matrix.core</code>, you can begin using the <code>core.matrix</code> functions on any combination of Apache Commons Math matrices and vectors and any other implementation of matrix and vectors, including Clojure&rsquo;s built-in persistent vectors.</p>
+
+<p>Without this, you have to write some pretty cumbersome array manipulation code to get the interop to work.  For instance:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">org.apache.commons.math3.linear.Array2DRowRealMatrix.</span>
+</span><span class='line'> <span class="p">(</span><span class="nb">into-array </span><span class="p">[(</span><span class="nf">double-array</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">1</span><span class="p">])</span>
+</span><span class='line'>              <span class="p">(</span><span class="nf">double-array</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span><span class="p">])]))</span>
+</span><span class='line'><span class="c1">;; #&lt;Array2DRowRealMatrix Array2DRowRealMatrix{ {1.0,1.0}, {1.0,0.0} }&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>&hellip;versus:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">m/with-implementation</span> <span class="ss">:apache-commons</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">m/matrix</span> <span class="p">[[</span><span class="mi">1</span> <span class="mi">1</span><span class="p">]</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span><span class="p">]]))</span>
+</span><span class='line'><span class="c1">;; #&lt;Array2DRowRealMatrix Array2DRowRealMatrix{ {1.0,1.0}, {1.0,0.0} }&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you&rsquo;re working from the REPL or otherwise don&rsquo;t care about indirectly changing the behavior of your code, you could even avoid <code>with-implementation</code> and just make <code>:apache-commons</code> the default by evaluating:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">m/set-current-implementation</span> <span class="ss">:apache-commons</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Things become really convenient when you start combining Apache Commons Math data structures with Clojure&rsquo;s.  For example, we can multiply a <code>RealMatrix</code> and a vector:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">fib-matrix</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">m/with-implementation</span> <span class="ss">:apache-commons</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">m/matrix</span> <span class="p">[[</span><span class="mi">1</span> <span class="mi">1</span><span class="p">]</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span><span class="p">]])))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">m/transform</span> <span class="nv">fib-matrix</span> <span class="p">[</span><span class="mi">5</span> <span class="mi">3</span><span class="p">])</span>
+</span><span class='line'><span class="c1">;; #&lt;ArrayRealVector {8; 5}&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note that the type of the result depends on the implementation of the first parameter:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">fib-vector</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">m/with-implementation</span> <span class="ss">:apache-commons</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">m/array</span> <span class="p">[</span><span class="mi">5</span> <span class="mi">3</span><span class="p">])))</span>
+</span><span class='line'><span class="c1">;; #&lt;ArrayRealVector {5; 3}&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">m/transform</span> <span class="p">[[</span><span class="mi">1</span> <span class="mi">1</span><span class="p">]</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span><span class="p">]]</span> <span class="nv">fib-vector</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;; [8.0 5.0]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Implementation Experience</h2>
+
+<p>It was really easy to follow the <a href="https://github.com/mikera/core.matrix/wiki/Implementation-Guide">Implementation Guide for core.matrix</a> that Mike Anderson wrote.  There were just a handful of protocols that I needed to implement and I magically got all the functionality of core.matrix.  The test framework is incredibly thorough and it immediately revealed a number of subtle bugs in my initial implementation.  Overall, it was a great experience and I wish that all interfaces provided such nice documentation and testing.</p>
+
+<h2>Conclusion</h2>
+
+<p>If you&rsquo;re doing any math on the JVM, you should at least check out what Apache Commons Math has to offer.  If you&rsquo;re using it in Clojure, I recommend using core.matrix instead of interop whenever possible.  If you do try this out, please let me know if there&rsquo;s anything missing or just send me a pull request!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Efficiently Computing Kendall's Tau]]></title>
