@@ -88,7 +88,7 @@ In 1966, William R. Knight was a visiting statistician at the Fisheries Research
 
 > The problem of calculating Kendall's tau arose while attempting to evaluate species associations in catches by the Canadian east coast offshore fishery.  Sample sizes ranging up to 400 were common, making manual calculations out of the question; indeed, an initial program using an asymptotically inefficient method proved expensively slow.
 
-Necessity is the mother of invention, and he came up with a clever algorithm for computing Kendall's Tau in $O(n \log{n})$ which he published in his paper entitled "[A Computer Method for Calculating Kendall's Tau with Ungrouped Data](http://www.jstor.org/stable/2282833)".
+Necessity is the mother of invention, so he came up with a clever algorithm for computing Kendall's Tau in $O(n \log{n})$ which he published in his paper entitled "[A Computer Method for Calculating Kendall's Tau with Ungrouped Data](http://www.jstor.org/stable/2282833)".
 
 First, sort the observations by their $x$ values using your favorite $O(n \log{n})$ algorithm.  Next, sort *that* sorted list by the $y$ values using a slightly modified [merge sort](http://en.wikipedia.org/wiki/Merge_sort) that keeps track of the size of the swaps it had to perform.
 
