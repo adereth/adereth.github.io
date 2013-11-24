@@ -2,65 +2,69 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://adereth.github.io/blog/2011/01/24/101-vs-lol/</loc>
-        <lastmod>2013-11-17T16:17:45-05:00</lastmod>
+        <lastmod>2013-11-23T18:25:36-05:00</lastmod>
     </url>
     <url>
         <loc>http://adereth.github.io/blog/2011/01/25/101-vs-lol%E2%80%93More-Fonts/</loc>
-        <lastmod>2013-11-17T16:17:45-05:00</lastmod>
+        <lastmod>2013-11-23T18:25:36-05:00</lastmod>
     </url>
     <url>
         <loc>http://adereth.github.io/blog/2011/01/26/Comparing-Troublesome-Groups/</loc>
-        <lastmod>2013-11-17T16:17:45-05:00</lastmod>
+        <lastmod>2013-11-23T18:25:36-05:00</lastmod>
     </url>
     <url>
         <loc>http://adereth.github.io/blog/2011/01/26/Comparing-Programming-Font-Pairs/</loc>
-        <lastmod>2013-11-17T16:17:45-05:00</lastmod>
+        <lastmod>2013-11-23T18:25:36-05:00</lastmod>
     </url>
     <url>
         <loc>http://adereth.github.io/blog/2011/01/31/Iterating-on-Font-Pair-Comparisons/</loc>
-        <lastmod>2013-11-17T16:17:45-05:00</lastmod>
+        <lastmod>2013-11-23T18:25:36-05:00</lastmod>
     </url>
     <url>
         <loc>http://adereth.github.io/blog/2011/02/02/tweaking-my-favorite-programming-font/</loc>
-        <lastmod>2013-11-17T16:17:45-05:00</lastmod>
+        <lastmod>2013-11-23T18:25:36-05:00</lastmod>
     </url>
     <url>
         <loc>
             http://adereth.github.io/blog/2013/10/02/why-you-should-try-a-tiling-window-manager/
         </loc>
-        <lastmod>2013-11-17T16:17:45-05:00</lastmod>
+        <lastmod>2013-11-23T18:25:36-05:00</lastmod>
     </url>
     <url>
         <loc>http://adereth.github.io/blog/2013/10/10/add-it-up/</loc>
-        <lastmod>2013-11-17T16:17:45-05:00</lastmod>
+        <lastmod>2013-11-23T18:25:36-05:00</lastmod>
     </url>
     <url>
         <loc>http://adereth.github.io/blog/2013/10/13/unicode-math-0-dot-2-0-released/</loc>
-        <lastmod>2013-11-17T16:17:45-05:00</lastmod>
+        <lastmod>2013-11-23T18:25:36-05:00</lastmod>
     </url>
     <url>
         <loc>http://adereth.github.io/blog/2013/10/30/efficiently-computing-kendalls-tau/</loc>
-        <lastmod>2013-11-17T16:17:45-05:00</lastmod>
+        <lastmod>2013-11-23T18:25:36-05:00</lastmod>
     </url>
     <url>
         <loc>
             http://adereth.github.io/blog/2013/11/08/core-dot-matrix-plus-apache-commons-math/
         </loc>
-        <lastmod>2013-11-17T16:17:45-05:00</lastmod>
+        <lastmod>2013-11-23T18:25:36-05:00</lastmod>
     </url>
     <url>
         <loc>
             http://adereth.github.io/blog/2013/11/22/a-few-interesting-clojure-microbenchmarks/
         </loc>
-        <lastmod>2013-11-22T07:50:10-05:00</lastmod>
+        <lastmod>2013-11-23T18:25:36-05:00</lastmod>
     </url>
     <url>
         <loc>http://adereth.github.io/about/</loc>
-        <lastmod>2013-11-17T16:17:45-05:00</lastmod>
+        <lastmod>2013-11-23T18:25:36-05:00</lastmod>
+    </url>
+    <url>
+        <loc>http://adereth.github.io/archives/</loc>
+        <lastmod>2013-11-23T18:25:36-05:00</lastmod>
     </url>
     <url>
         <loc>http://adereth.github.io/blog/archives/</loc>
-        <lastmod>2013-11-22T07:50:10-05:00</lastmod>
+        <lastmod>2013-11-23T18:25:36-05:00</lastmod>
     </url>
     <url>
         <loc>http://adereth.github.io/clojure.xml</loc>
@@ -68,7 +72,7 @@
     </url>
     <url>
         <loc>http://adereth.github.io/</loc>
-        <lastmod>2013-11-22T07:50:10-05:00</lastmod>
+        <lastmod>2013-11-23T18:25:36-05:00</lastmod>
     </url>
     <url>
         <loc>http://adereth.github.io/robots.txt</loc>
