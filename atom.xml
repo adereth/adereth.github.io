@@ -4,7 +4,7 @@
   <title><![CDATA[adereth]]></title>
   <link href="http://adereth.github.io/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2013-11-24T12:17:44-05:00</updated>
+  <updated>2013-11-24T13:24:47-05:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -378,6 +378,8 @@
     <content type="html"><![CDATA[<p>I&rsquo;d like to share a little project I did to make it more convenient to use Apache Commons Math&rsquo;s linear algebra classes with Clojure.</p>
 
 <h2>Apache Commons Math</h2>
+
+<p><img src="http://adereth.github.io/images/acm.gif" alt="Apache Commons Math Logo" /></p>
 
 <p><a href="http://commons.apache.org/proper/commons-math/index.html">Apache Commons Math</a> is a Java library of mathematics and statistics components.  It&rsquo;s loaded with useful things including:</p>
 
