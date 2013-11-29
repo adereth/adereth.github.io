@@ -1,0 +1,442 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Colorful Equations with MathJax - adereth</title>
+  <meta name="author" content="Matt Adereth">
+
+  
+  <meta name="description" content="Stuart Riffle wrote up a great explanation of the Fourier transform. There are a number of great visualizations in his post, but the climax is his &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://adereth.github.io/blog/2013/11/29/colorful-equations/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+   <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="adereth" type="application/atom+xml">
+  <!--These are fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ TeX: { extensions: ["color.js"] }});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript"
+   src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-44572622-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <!-- <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:adereth.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav> -->
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Colorful Equations With MathJax</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-29T09:18:00-05:00" pubdate data-updated="true">Nov 29<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><a href="http://www.altdevblogaday.com/author/stuart-riffle/">Stuart Riffle</a> wrote up <a href="http://www.altdevblogaday.com/2011/05/17/understanding-the-fourier-transform/">a great explanation of the Fourier transform</a>.  There are a number of great visualizations in his post, but the climax is his explanation of the inverse discrete Fourier transform formula:</p>
+
+<p><img class="center" src="/images/DerivedDFT.png"></p>
+
+<p>What a brilliant representation!  My first thought was that more equations should have such elegant explanations that focus on the comprehension of the reader.  I&rsquo;d love to be able to produce such clear explanations in this style, so I did a little experimenting with Octopress and <a href="http://www.mathjax.org/">MathJax</a> to see how easy it would be.</p>
+
+<p>It turns out to only require a few minor yak trimmings to get something nice:</p>
+
+<div style="font-size: 150%;">
+$$
+\definecolor{energy}{RGB}{114,0,172}
+\definecolor{freq}{RGB}{45,177,93}
+\definecolor{spin}{RGB}{251,0,29}
+\definecolor{signal}{RGB}{18,110,213}
+\definecolor{circle}{RGB}{217,86,16}
+\definecolor{average}{RGB}{203,23,206}
+\color{energy} X_{\color{freq} k} \color{black} =
+\color{average} \frac{1}{N} \sum_{n=0}^{N-1} 
+\color{signal}x_n \color{spin} 
+e^{\mathrm{i} \color{circle} 2\pi \color{freq}k \color{average} \frac{n}{N}}
+$$
+</div>
+
+
+<blockquote><p>To find <font color="#7200AC">the energy</font> <font color="2DB15D">at a particular frequency</font>, <font color="#FB001D">spin</font> <font color="#126ED5">your signal</font> <font color="#D04400">around a circle</font> <font color="2DB15D">at that frequency</font>, and <font color="#CB17CE">average a bunch of points along that path</font>.</p></blockquote>
+
+<p>By using MathJax instead of including a .png we get some nice benefits:</p>
+
+<ol>
+<li>Accessibility via screen readers</li>
+<li>Scalable renderings that look awesome on Retina displays</li>
+<li>$\LaTeX$ source that is accessible by the audience (right click on the formula)</li>
+<li>Simplified page-build process and source management</li>
+</ol>
+
+
+<p>There are <a href="http://www.google.com/search?q=octopress%20mathjax">a bunch of guides on setting up MathJax with Octopress</a>, but I didn&rsquo;t mess with any of them because the <a href="https://github.com/bijumon/oct2">oct2 theme</a> ships with an alternative <code>head.html</code> that is preconfigured to support it.</p>
+
+<p>The only tweak I made was to load the <a href="http://docs.mathjax.org/en/latest/tex.html#color">Color extension for MathJax</a>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/x-mathjax-config&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">Config</span><span class="p">({</span> <span class="nx">TeX</span><span class="o">:</span> <span class="p">{</span> <span class="nx">extensions</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;color.js&quot;</span><span class="p">]</span> <span class="p">}});</span>
+</span><span class='line'><span class="nt">&lt;/script&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After adding that, I was able to use the <code>\definecolor</code> and <code>\color</code> directives just like I would in a paper:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='latex'><span class='line'><span class="k">\definecolor</span><span class="nb">{</span>energy<span class="nb">}{</span>RGB<span class="nb">}{</span>114,0,172<span class="nb">}</span>
+</span><span class='line'><span class="k">\definecolor</span><span class="nb">{</span>freq<span class="nb">}{</span>RGB<span class="nb">}{</span>45,177,93<span class="nb">}</span>
+</span><span class='line'><span class="k">\definecolor</span><span class="nb">{</span>spin<span class="nb">}{</span>RGB<span class="nb">}{</span>251,0,29<span class="nb">}</span>
+</span><span class='line'><span class="k">\definecolor</span><span class="nb">{</span>signal<span class="nb">}{</span>RGB<span class="nb">}{</span>18,110,213<span class="nb">}</span>
+</span><span class='line'><span class="k">\definecolor</span><span class="nb">{</span>circle<span class="nb">}{</span>RGB<span class="nb">}{</span>217,86,16<span class="nb">}</span>
+</span><span class='line'><span class="k">\definecolor</span><span class="nb">{</span>average<span class="nb">}{</span>RGB<span class="nb">}{</span>203,23,206<span class="nb">}</span>
+</span><span class='line'><span class="k">\color</span><span class="nb">{</span>energy<span class="nb">}</span> X<span class="nb">_{</span><span class="k">\color</span><span class="nb">{</span>freq<span class="nb">}</span> k<span class="nb">}</span> <span class="k">\color</span><span class="nb">{</span>black<span class="nb">}</span> =
+</span><span class='line'><span class="k">\color</span><span class="nb">{</span>average<span class="nb">}</span> <span class="k">\frac</span><span class="nb">{</span>1<span class="nb">}{</span>N<span class="nb">}</span> <span class="k">\sum</span><span class="nb">_{</span>n=0<span class="nb">}^{</span>N-1<span class="nb">}</span>
+</span><span class='line'><span class="k">\color</span><span class="nb">{</span>signal<span class="nb">}</span>x<span class="nb">_</span>n <span class="k">\color</span><span class="nb">{</span>spin<span class="nb">}</span>
+</span><span class='line'>e<span class="nb">^{</span><span class="k">\mathrm</span><span class="nb">{</span>i<span class="nb">}</span> <span class="k">\color</span><span class="nb">{</span>circle<span class="nb">}</span> 2<span class="k">\pi</span> <span class="k">\color</span><span class="nb">{</span>freq<span class="nb">}</span>k
+</span><span class='line'><span class="k">\color</span><span class="nb">{</span>average<span class="nb">}</span> <span class="k">\frac</span><span class="nb">{</span>n<span class="nb">}{</span>N<span class="nb">}}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There were a couple issues:</p>
+
+<ol>
+<li>As mentioned in several of the guides, the default markdown processor for Octopress will interfere with the <code>_</code> and <code>^</code> in your TeX.  I had originally worked around this by escaping them.  At the end, I wrapped the whole expression in a <code>&lt;div&gt;</code> to make the font larger, which had the side-effect of eliminating the need for escaping.</li>
+<li>MathJax&rsquo;s <code>\definecolor</code> doesn&rsquo;t seem to support the <code>HTML</code> color space, which lets you specify colors in hex codes.  I ended up manually converting the colors back and forth between decimal and hexidecimal for the prose below the equation:</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>To find <span class="nt">&lt;font</span> <span class="na">color=</span><span class="s">&quot;#7200AC&quot;</span><span class="nt">&gt;</span>the energy<span class="nt">&lt;/font&gt;</span>
+</span><span class='line'><span class="nt">&lt;font</span> <span class="na">color=</span><span class="s">&quot;2DB15D&quot;</span><span class="nt">&gt;</span>at a particular frequency<span class="nt">&lt;/font&gt;</span>,
+</span><span class='line'><span class="nt">&lt;font</span> <span class="na">color=</span><span class="s">&quot;#FB001D&quot;</span><span class="nt">&gt;</span>spin<span class="nt">&lt;/font&gt;</span> <span class="nt">&lt;font</span> <span class="na">color=</span><span class="s">&quot;#126ED5&quot;</span><span class="nt">&gt;</span>your
+</span><span class='line'>signal<span class="nt">&lt;/font&gt;</span> <span class="nt">&lt;font</span> <span class="na">color=</span><span class="s">&quot;#D04400&quot;</span><span class="nt">&gt;</span>around a circle<span class="nt">&lt;/font&gt;</span>
+</span><span class='line'><span class="nt">&lt;font</span> <span class="na">color=</span><span class="s">&quot;2DB15D&quot;</span><span class="nt">&gt;</span>at that frequency<span class="nt">&lt;/font&gt;</span>, and
+</span><span class='line'><span class="nt">&lt;font</span> <span class="na">color=</span><span class="s">&quot;#CB17CE&quot;</span><span class="nt">&gt;</span>average a bunch of points along that
+</span><span class='line'>path<span class="nt">&lt;/font&gt;</span>.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now I just need a formula to explain&hellip;</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Matt Adereth</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-29T09:18:00-05:00" pubdate data-updated="true">Nov 29<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/latex/'>latex</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://adereth.github.io/blog/2013/11/29/colorful-equations/" data-via="adereth" data-counturl="http://adereth.github.io/blog/2013/11/29/colorful-equations/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/11/22/a-few-interesting-clojure-microbenchmarks/" title="Previous Post: A few interesting Clojure microbenchmarks">&laquo; A few interesting Clojure microbenchmarks</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <a href="http://adereth.github.io" alt="Home"><h1>Adereth's Blog<h2></a>
+  <ul id="recent_posts">
+      <li class="post">
+      <a href="http://adereth.github.io" alt="Home"><img src="/images/home-wc.png" height="56" width="56"></a>
+      <a href="http://adereth.github.io/archives/" alt="Archives"><img src="/images/calendar.png" height="56" width="56"></a>
+      <a href="http://adereth.github.io/about/" alt="Archives"><img src="/images/user.png" height="56" width="56"></a>
+      <a href="http://adereth.github.io/atom.xml" alt="subscribe feed"><img src="/images/rss.png" height="56" width="56"></a>
+      </li>
+  </ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/11/29/colorful-equations/">Colorful Equations with MathJax</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/22/a-few-interesting-clojure-microbenchmarks/">A few interesting Clojure microbenchmarks</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/08/core-dot-matrix-plus-apache-commons-math/">core.matrix + Apache Commons Math</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/30/efficiently-computing-kendalls-tau/">Efficiently Computing Kendall's Tau</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/13/unicode-math-0-dot-2-0-released/">unicode-math 0.2.0 released</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/adereth">@adereth</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'adereth',
+            count: 10,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Matt Adereth -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = '1overn';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://adereth.github.io/blog/2013/11/29/colorful-equations/';
+        var disqus_url = 'http://adereth.github.io/blog/2013/11/29/colorful-equations/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

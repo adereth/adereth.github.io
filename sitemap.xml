@@ -55,16 +55,20 @@
         <lastmod>2013-11-23T18:25:36-05:00</lastmod>
     </url>
     <url>
+        <loc>http://adereth.github.io/blog/2013/11/29/colorful-equations/</loc>
+        <lastmod>2013-11-29T09:18:18-05:00</lastmod>
+    </url>
+    <url>
         <loc>http://adereth.github.io/about/</loc>
         <lastmod>2013-11-24T12:17:27-05:00</lastmod>
     </url>
     <url>
         <loc>http://adereth.github.io/archives/</loc>
-        <lastmod>2013-11-24T13:22:56-05:00</lastmod>
+        <lastmod>2013-11-29T09:18:18-05:00</lastmod>
     </url>
     <url>
         <loc>http://adereth.github.io/blog/archives/</loc>
-        <lastmod>2013-11-24T13:22:56-05:00</lastmod>
+        <lastmod>2013-11-29T09:18:18-05:00</lastmod>
     </url>
     <url>
         <loc>http://adereth.github.io/clojure.xml</loc>
@@ -72,7 +76,7 @@
     </url>
     <url>
         <loc>http://adereth.github.io/</loc>
-        <lastmod>2013-11-24T13:22:56-05:00</lastmod>
+        <lastmod>2013-11-29T09:18:18-05:00</lastmod>
     </url>
     <url>
         <loc>http://adereth.github.io/robots.txt</loc>

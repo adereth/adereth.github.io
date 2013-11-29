@@ -4,7 +4,7 @@
   <title><![CDATA[adereth]]></title>
   <link href="http://adereth.github.io/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2013-11-24T13:24:47-05:00</updated>
+  <updated>2013-11-29T09:18:21-05:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -12,6 +12,116 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Colorful Equations with MathJax]]></title>
+    <link href="http://adereth.github.io/blog/2013/11/29/colorful-equations/"/>
+    <updated>2013-11-29T09:18:00-05:00</updated>
+    <id>http://adereth.github.io/blog/2013/11/29/colorful-equations</id>
+    <content type="html"><![CDATA[<p><a href="http://www.altdevblogaday.com/author/stuart-riffle/">Stuart Riffle</a> wrote up <a href="http://www.altdevblogaday.com/2011/05/17/understanding-the-fourier-transform/">a great explanation of the Fourier transform</a>.  There are a number of great visualizations in his post, but the climax is his explanation of the inverse discrete Fourier transform formula:</p>
+
+<p><img class="center" src="http://adereth.github.io/images/DerivedDFT.png"></p>
+
+<p>What a brilliant representation!  My first thought was that more equations should have such elegant explanations that focus on the comprehension of the reader.  I&rsquo;d love to be able to produce such clear explanations in this style, so I did a little experimenting with Octopress and <a href="http://www.mathjax.org/">MathJax</a> to see how easy it would be.</p>
+
+<p>It turns out to only require a few minor yak trimmings to get something nice:</p>
+
+<div style="font-size: 150%;">
+$$
+\definecolor{energy}{RGB}{114,0,172}
+\definecolor{freq}{RGB}{45,177,93}
+\definecolor{spin}{RGB}{251,0,29}
+\definecolor{signal}{RGB}{18,110,213}
+\definecolor{circle}{RGB}{217,86,16}
+\definecolor{average}{RGB}{203,23,206}
+\color{energy} X_{\color{freq} k} \color{black} =
+\color{average} \frac{1}{N} \sum_{n=0}^{N-1} 
+\color{signal}x_n \color{spin} 
+e^{\mathrm{i} \color{circle} 2\pi \color{freq}k \color{average} \frac{n}{N}}
+$$
+</div>
+
+
+<blockquote><p>To find <font color="#7200AC">the energy</font> <font color="2DB15D">at a particular frequency</font>, <font color="#FB001D">spin</font> <font color="#126ED5">your signal</font> <font color="#D04400">around a circle</font> <font color="2DB15D">at that frequency</font>, and <font color="#CB17CE">average a bunch of points along that path</font>.</p></blockquote>
+
+<p>By using MathJax instead of including a .png we get some nice benefits:</p>
+
+<ol>
+<li>Accessibility via screen readers</li>
+<li>Scalable renderings that look awesome on Retina displays</li>
+<li>$\LaTeX$ source that is accessible by the audience (right click on the formula)</li>
+<li>Simplified page-build process and source management</li>
+</ol>
+
+
+<p>There are <a href="http://www.google.com/search?q=octopress%20mathjax">a bunch of guides on setting up MathJax with Octopress</a>, but I didn&rsquo;t mess with any of them because the <a href="https://github.com/bijumon/oct2">oct2 theme</a> ships with an alternative <code>head.html</code> that is preconfigured to support it.</p>
+
+<p>The only tweak I made was to load the <a href="http://docs.mathjax.org/en/latest/tex.html#color">Color extension for MathJax</a>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/x-mathjax-config&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">Config</span><span class="p">({</span> <span class="nx">TeX</span><span class="o">:</span> <span class="p">{</span> <span class="nx">extensions</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;color.js&quot;</span><span class="p">]</span> <span class="p">}});</span>
+</span><span class='line'><span class="nt">&lt;/script&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After adding that, I was able to use the <code>\definecolor</code> and <code>\color</code> directives just like I would in a paper:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='latex'><span class='line'><span class="k">\definecolor</span><span class="nb">{</span>energy<span class="nb">}{</span>RGB<span class="nb">}{</span>114,0,172<span class="nb">}</span>
+</span><span class='line'><span class="k">\definecolor</span><span class="nb">{</span>freq<span class="nb">}{</span>RGB<span class="nb">}{</span>45,177,93<span class="nb">}</span>
+</span><span class='line'><span class="k">\definecolor</span><span class="nb">{</span>spin<span class="nb">}{</span>RGB<span class="nb">}{</span>251,0,29<span class="nb">}</span>
+</span><span class='line'><span class="k">\definecolor</span><span class="nb">{</span>signal<span class="nb">}{</span>RGB<span class="nb">}{</span>18,110,213<span class="nb">}</span>
+</span><span class='line'><span class="k">\definecolor</span><span class="nb">{</span>circle<span class="nb">}{</span>RGB<span class="nb">}{</span>217,86,16<span class="nb">}</span>
+</span><span class='line'><span class="k">\definecolor</span><span class="nb">{</span>average<span class="nb">}{</span>RGB<span class="nb">}{</span>203,23,206<span class="nb">}</span>
+</span><span class='line'><span class="k">\color</span><span class="nb">{</span>energy<span class="nb">}</span> X<span class="nb">_{</span><span class="k">\color</span><span class="nb">{</span>freq<span class="nb">}</span> k<span class="nb">}</span> <span class="k">\color</span><span class="nb">{</span>black<span class="nb">}</span> =
+</span><span class='line'><span class="k">\color</span><span class="nb">{</span>average<span class="nb">}</span> <span class="k">\frac</span><span class="nb">{</span>1<span class="nb">}{</span>N<span class="nb">}</span> <span class="k">\sum</span><span class="nb">_{</span>n=0<span class="nb">}^{</span>N-1<span class="nb">}</span>
+</span><span class='line'><span class="k">\color</span><span class="nb">{</span>signal<span class="nb">}</span>x<span class="nb">_</span>n <span class="k">\color</span><span class="nb">{</span>spin<span class="nb">}</span>
+</span><span class='line'>e<span class="nb">^{</span><span class="k">\mathrm</span><span class="nb">{</span>i<span class="nb">}</span> <span class="k">\color</span><span class="nb">{</span>circle<span class="nb">}</span> 2<span class="k">\pi</span> <span class="k">\color</span><span class="nb">{</span>freq<span class="nb">}</span>k
+</span><span class='line'><span class="k">\color</span><span class="nb">{</span>average<span class="nb">}</span> <span class="k">\frac</span><span class="nb">{</span>n<span class="nb">}{</span>N<span class="nb">}}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There were a couple issues:</p>
+
+<ol>
+<li>As mentioned in several of the guides, the default markdown processor for Octopress will interfere with the <code>_</code> and <code>^</code> in your TeX.  I had originally worked around this by escaping them.  At the end, I wrapped the whole expression in a <code>&lt;div&gt;</code> to make the font larger, which had the side-effect of eliminating the need for escaping.</li>
+<li>MathJax&rsquo;s <code>\definecolor</code> doesn&rsquo;t seem to support the <code>HTML</code> color space, which lets you specify colors in hex codes.  I ended up manually converting the colors back and forth between decimal and hexidecimal for the prose below the equation:</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>To find <span class="nt">&lt;font</span> <span class="na">color=</span><span class="s">&quot;#7200AC&quot;</span><span class="nt">&gt;</span>the energy<span class="nt">&lt;/font&gt;</span>
+</span><span class='line'><span class="nt">&lt;font</span> <span class="na">color=</span><span class="s">&quot;2DB15D&quot;</span><span class="nt">&gt;</span>at a particular frequency<span class="nt">&lt;/font&gt;</span>,
+</span><span class='line'><span class="nt">&lt;font</span> <span class="na">color=</span><span class="s">&quot;#FB001D&quot;</span><span class="nt">&gt;</span>spin<span class="nt">&lt;/font&gt;</span> <span class="nt">&lt;font</span> <span class="na">color=</span><span class="s">&quot;#126ED5&quot;</span><span class="nt">&gt;</span>your
+</span><span class='line'>signal<span class="nt">&lt;/font&gt;</span> <span class="nt">&lt;font</span> <span class="na">color=</span><span class="s">&quot;#D04400&quot;</span><span class="nt">&gt;</span>around a circle<span class="nt">&lt;/font&gt;</span>
+</span><span class='line'><span class="nt">&lt;font</span> <span class="na">color=</span><span class="s">&quot;2DB15D&quot;</span><span class="nt">&gt;</span>at that frequency<span class="nt">&lt;/font&gt;</span>, and
+</span><span class='line'><span class="nt">&lt;font</span> <span class="na">color=</span><span class="s">&quot;#CB17CE&quot;</span><span class="nt">&gt;</span>average a bunch of points along that
+</span><span class='line'>path<span class="nt">&lt;/font&gt;</span>.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now I just need a formula to explain&hellip;</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[A few interesting Clojure microbenchmarks]]></title>
