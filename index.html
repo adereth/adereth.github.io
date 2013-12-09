@@ -9,7 +9,7 @@
   <meta name="author" content="Matt Adereth">
 
   
-  <meta name="description" content="Stuart Riffle wrote up a great explanation of the Fourier transform. There are a number of great visualizations in his post, but the climax is his &hellip;">
+  <meta name="description" content="As part of the Emacs-24.4 release, emacs-devel is conducting a survey to find out which vanilla GnuEmacs packages/modes people enable by default. The &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -106,6 +106,62 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/12/08/most-frequently-enabled-emacs-packages/">Most Frequently Enabled Emacs Packages</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-08T20:38:00-05:00" pubdate data-updated="true">Dec 8<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>As part of the Emacs-24.4 release, emacs-devel is conducting <a href="http://www.emacswiki.org/emacs/FrequentlyEnabledPackages_Emacs244_Survey">a survey</a> to find out which vanilla GnuEmacs packages/modes people enable by default.  The responses are in one big plain-text alphabetical list which isn&rsquo;t really conducive to browsing.</p>
+
+<p>I&rsquo;ve gone through the most frequently enabled ones to see what they do.  I figured others might be interested, so I&rsquo;ve put the top ones in order of popularity, along with brief descriptions and links to the related pages if one exists.  Enjoy!</p>
+
+<ul>
+<li><p><code>uniquify</code> &ndash; <a href="http://www.emacswiki.org/emacs/uniquify">Uniquify</a> overrides the default mechanism for making buffer names unique (using suffixes like <code>&lt;2&gt;</code>, <code>&lt;3&gt;</code> etc.) with a more sensible behaviour which use parts of the file names to make the buffer names distinguishable.</p></li>
+<li><p><code>column-number-mode</code> &ndash; Displays which column the cursor is currently on in the mode line.</p></li>
+<li><p><code>show-paren-mode</code> &ndash; <a href="http://www.emacswiki.org/emacs/ShowParenMode">show-paren-mode</a> allows you to see matching pairs of parentheses and other characters. When the cursor is on one of the paired characters, the other is highlighted.</p></li>
+<li><p><code>ido-mode</code> &ndash; <a href="http://www.emacswiki.org/emacs/InteractivelyDoThings">Ido</a> lets you interactively do things with buffers and files.  The <a href="http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/">Introduction to Ido Mode</a> on <a href="http://www.masteringemacs.org/">Mastering Emacs</a> does a much better job of explaining why and how you should use it.</p></li>
+<li><p><code>transient-mark-mode</code> &ndash; <a href="http://www.emacswiki.org/emacs/TransientMarkMode">Transient Mark mode</a> gives you much of the standard selection-highlighting behavior of other editors.</p></li>
+<li><p><code>ibuffer</code> &ndash; <a href="http://www.emacswiki.org/emacs/IbufferMode">Ibuffer</a> is an advanced replacement for BufferMenu, which lets you operate on buffers much in the same manner as Dired.</p></li>
+<li><p><code>blink-cursor-mode</code> &ndash; Toggle cursor blinking.</p></li>
+<li><p><code>flyspell-mode</code> &ndash; <a href="http://www.emacswiki.org/emacs/FlySpell">Flyspell</a> enables on-the-fly spell checking in Emacs by the means of a minor mode.</p></li>
+<li><p><code>recentf-mode</code> &ndash; <a href="http://www.emacswiki.org/emacs/RecentFiles">Recentf</a> is a minor mode that builds a list of recently opened files. This list is is automatically saved across Emacs sessions. You can then access this list through a menu.</p></li>
+<li><p><code>eldoc-mode</code> &ndash; <a href="http://www.emacswiki.org/emacs/ElDoc">Eldoc-mode</a> is a MinorMode which shows you, in the echo area, the argument list of the function call you are currently writing.</p></li>
+<li><p><code>dired-x</code> &ndash; <a href="http://www.emacswiki.org/emacs/DiredExtra">Dired X</a> provides extra functionality for DiredMode.</p></li>
+<li><p><code>windmove</code> &ndash; <a href="http://www.emacswiki.org/emacs/WindMove">Wind Move</a> lets you move point from window to window using Shift and the arrow keys.</p></li>
+<li><p><code>line-number-mode</code> &ndash; <a href="http://www.emacswiki.org/emacs/LineNumbers">Line Numbers</a> displays line numbers in a buffer, or otherwise indicates line numbers, without actually changing the buffer content.</p></li>
+<li><p><code>winner-mode</code> &ndash; <a href="http://www.emacswiki.org/emacs/WinnerMode">Winner Mode</a> allows you to undo and redo changes in the window configuration with the key commands <code>C-c left</code> and <code>C-c right</code>.</p></li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1592,66 +1648,6 @@ $$n_2 = \text{Number of pairs with tied values in } Y$$</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/01/26/Comparing-Programming-Font-Pairs/">Comparing Programming Font Pairs</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-01-26T22:46:00-05:00" pubdate data-updated="true">Jan 26<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I really like this visualization of the difference between Deja Vu Sans Mono and Apple Menlo:</p>
-
-<p><img src="http://typophile.com/files/menlovsdejavusansmono_6131.png" alt="Menlo vs. Deja Vu Sans Mono" /></p>
-
-<p>(Credit to <a href="http://www.down10.com">Jesse Burgheimer</a>)</p>
-
-<p>I decided to take a stab at programmatically generating a similar comparison for all the fonts I’ve been looking at.  <a href="/assets/paircompare.nb">Here’s the Mathematica code</a>.</p>
-
-<p><a href="images/dejavusansmonodroidsansmono.png"><img src="images/dejavusansmonodroidsansmono.png" alt="Menlo vs. Deja Vu Sans Mono in Mathematica" /></a>
-(Click for full size version)</p>
-
-<p>It was then easy to generate this for every pair of fonts:</p>
-
-<p><img src="/images/MapCompareFontPair.png" alt="CompareFontPair /@ Subsets[monospacedFonts, {2}]" /></p>
-
-<p>I went through them all and picked out the ones I thought were most interesting:</p>
-
-<p><a href="/images/consolasinconsolata.png"><img src="/images/consolasinconsolata.png" alt="consolasinconsolata" /></a>
-<a href="/images/dejavusansmonodroidsansmono.png"><img src="/images/dejavusansmonodroidsansmono.png" alt="dejavusansmonodroidsansmono" /></a>
-<a href="/images/dejavusansmonopanicsans.png"><img src="/images/dejavusansmonopanicsans.png" alt="dejavusansmonopanicsans" /></a>
-<a href="/images/droidsansmonoinconsolata.png"><img src="/images/droidsansmonoinconsolata.png" alt="droidsansmonoinconsolata" /></a>
-<a href="/images/envycoderterminus.png"><img src="/images/envycoderterminus.png" alt="envycoderterminus" /></a>
-<a href="/images/inconsolatamonofur.png"><img src="/images/inconsolatamonofur.png" alt="inconsolatamonofur" /></a></p>
-
-<p>If you’re interested in seeing the results for every pair, you can <a href="https://s3.amazonaws.com/1overBlog/programming_fonts/AllFontPairComparisons.zip">download them all</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1663,6 +1659,8 @@ $$n_2 = \text{Number of pairs with tied values in } Y$$</p>
 <aside class="sidebar">
   
     <section>
+  <p>
+  <center><img src="/images/aleph.png"/></center>
   <a href="http://adereth.github.io" alt="Home"><h1>Adereth&#8217;s Blog<h2></a>
   <ul id="recent_posts">
       <li class="post">
@@ -1684,6 +1682,10 @@ $$n_2 = \text{Number of pairs with tied values in } Y$$</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/12/08/most-frequently-enabled-emacs-packages/">Most frequently enabled Emacs packages</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/11/29/colorful-equations/">Colorful Equations with MathJax</a>
       </li>
     
@@ -1697,10 +1699,6 @@ $$n_2 = \text{Number of pairs with tied values in } Y$$</p>
     
       <li class="post">
         <a href="/blog/2013/10/30/efficiently-computing-kendalls-tau/">Efficiently Computing Kendall&#8217;s Tau</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/13/unicode-math-0-dot-2-0-released/">unicode-math 0.2.0 released</a>
       </li>
     
   </ul>
