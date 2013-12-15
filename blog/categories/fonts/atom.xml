@@ -4,7 +4,7 @@
   <title><![CDATA[Category: fonts | adereth]]></title>
   <link href="http://adereth.github.io/blog/categories/fonts/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2013-12-09T07:32:19-05:00</updated>
+  <updated>2013-12-15T13:23:16-05:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -12,6 +12,27 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Font Awesome Easter Egg]]></title>
+    <link href="http://adereth.github.io/blog/2013/12/15/font-awesome-easter-egg/"/>
+    <updated>2013-12-15T12:45:00-05:00</updated>
+    <id>http://adereth.github.io/blog/2013/12/15/font-awesome-easter-egg</id>
+    <content type="html"><![CDATA[<p><link href="http://adereth.github.io//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet"></p>
+
+<p><a href="http://fontawesome.io/">Font Awesome</a> is a gorgeous icon font designed to play nicely with Bootstrap.  I was playing around with it today and noticed the highly detailed <a href="http://fontawesome.io/icon/barcode/">fa-barcode</a> character:</p>
+
+<p><i class="fa fa-barcode"></i></p>
+
+<p>If we make it a little larger, we can see that it really looks like a legit barcode:</p>
+
+<p><i class="fa fa-barcode fa-5x"></i></p>
+
+<p>I scanned it with a barcode reader and it&rsquo;s the code for <code>fa</code>.</p>
+
+<p><i class="fa fa-trophy"></i> Font Awesome wins at detail.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Tweaking my favorite programming font]]></title>
@@ -137,19 +158,6 @@ As a quick test, I wrote something to compare every pair of characters in a list
 <p>Click to see the full-sized result:</p>
 
 <p><a href="/images/tallskinnycomparison.png"><img src="/images/tallskinnycomparison.png" alt="Comparison results" /></a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[101 vs. lol - More Fonts]]></title>
-    <link href="http://adereth.github.io/blog/2011/01/25/101-vs-lol%E2%80%93More-Fonts/"/>
-    <updated>2011-01-25T12:07:00-05:00</updated>
-    <id>http://adereth.github.io/blog/2011/01/25/101-vs-lol–More-Fonts</id>
-    <content type="html"><![CDATA[<p>As requested in the <a href="http://www.reddit.com/r/programming/comments/f8nzc/programmatic_programming_font_comparison_101_vs/">reddit discussion</a>, here are Envy Code R, Liberation Mono, and Terminus:</p>
-
-<p><img src="/images/envy-code-r.png" alt="Envy Code R" />
-<img src="/images/liberation-mono.png" alt="Liberation Mono" />
-<img src="/images/terminus.png" alt="Terminus" /></p>
 ]]></content>
   </entry>
   
