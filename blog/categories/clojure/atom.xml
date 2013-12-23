@@ -4,7 +4,7 @@
   <title><![CDATA[Category: clojure | adereth]]></title>
   <link href="http://adereth.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2013-12-16T21:16:03-05:00</updated>
+  <updated>2013-12-23T08:11:21-05:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -12,6 +12,816 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Counting Stars on GitHub]]></title>
+    <link href="http://adereth.github.io/blog/2013/12/23/counting-stars-on-github/"/>
+    <updated>2013-12-23T08:10:00-05:00</updated>
+    <id>http://adereth.github.io/blog/2013/12/23/counting-stars-on-github</id>
+    <content type="html"><![CDATA[<script type="text/javascript" src="http://mbostock.github.com/d3/d3.min.js"></script>
+
+
+<p>I&rsquo;ve been working on a nerd ethnography project with the <a href="http://developer.github.com/v3/">GitHub API</a>.  There&rsquo;s so much fun data to play with there that it&rsquo;s inevitable that I&rsquo;ll get a little distracted&hellip;</p>
+
+<p>One distraction was the realization that I could use the search API to get a massive list of the top repos ordered by star count.  Once I started looking at the results, I realized that star data is an interesting alternative metric for evaluating language popularity.  Instead of looking at which languages people are actually writing new projects using, we can see which languages are used for the most popular projects.</p>
+
+<h2>What are stars?</h2>
+
+<p>In August 2012, GitHub <a href="https://github.com/blog/1204-notifications-stars">announced</a> a new version of their notification system that allowed users to easily mark a repository as interesting by &ldquo;starring&rdquo; it:</p>
+
+<p><img src="/images/github-star-ui.png" alt="GitHub star UI" /></p>
+
+<p>Stars are essentially lightweight bookmarks that are publicly visible.  Even though they were introduced just over a year ago, all &ldquo;watches&rdquo; were converted to stars so there&rsquo;s plenty of data.</p>
+
+<h2>Which are the most starred repos?</h2>
+
+<p>Let&rsquo;s start by looking at the top 20:</p>
+
+<table>
+<thead>
+<tr>
+<th> Rank </th>
+<th> Repository </th>
+<th> Language </th>
+<th> Stars</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> 1 </td>
+<td> <a href="http://github.com/twbs/bootstrap">twbs/bootstrap</a> </td>
+<td> JavaScript </td>
+<td> 62111</td>
+</tr>
+<tr>
+<td> 2 </td>
+<td> <a href="http://github.com/jquery/jquery">jquery/jquery</a> </td>
+<td> JavaScript </td>
+<td> 27082</td>
+</tr>
+<tr>
+<td> 3 </td>
+<td> <a href="http://github.com/joyent/node">joyent/node</a> </td>
+<td> JavaScript </td>
+<td> 26352</td>
+</tr>
+<tr>
+<td> 4 </td>
+<td> <a href="http://github.com/h5bp/html5-boilerplate">h5bp/html5-boilerplate</a> </td>
+<td> CSS </td>
+<td> 23355</td>
+</tr>
+<tr>
+<td> 5 </td>
+<td> <a href="http://github.com/mbostock/d3">mbostock/d3</a> </td>
+<td> JavaScript </td>
+<td> 20715</td>
+</tr>
+<tr>
+<td> 6 </td>
+<td> <a href="http://github.com/rails/rails">rails/rails</a> </td>
+<td> Ruby </td>
+<td> 20284</td>
+</tr>
+<tr>
+<td> 7 </td>
+<td> <a href="http://github.com/FortAwesome/Font-Awesome">FortAwesome/Font-Awesome</a> </td>
+<td> CSS </td>
+<td> 19506</td>
+</tr>
+<tr>
+<td> 8 </td>
+<td> <a href="http://github.com/bartaz/impress.js">bartaz/impress.js</a> </td>
+<td> JavaScript </td>
+<td> 18637</td>
+</tr>
+<tr>
+<td> 9 </td>
+<td> <a href="http://github.com/angular/angular.js">angular/angular.js</a> </td>
+<td> JavaScript </td>
+<td> 17994</td>
+</tr>
+<tr>
+<td> 10 </td>
+<td> <a href="http://github.com/jashkenas/backbone">jashkenas/backbone</a> </td>
+<td> JavaScript </td>
+<td> 16502</td>
+</tr>
+<tr>
+<td> 11 </td>
+<td> <a href="http://github.com/Homebrew/homebrew">Homebrew/homebrew</a> </td>
+<td> Ruby </td>
+<td> 15065</td>
+</tr>
+<tr>
+<td> 12 </td>
+<td> <a href="http://github.com/zurb/foundation">zurb/foundation</a> </td>
+<td> JavaScript </td>
+<td> 14944</td>
+</tr>
+<tr>
+<td> 13 </td>
+<td> <a href="http://github.com/blueimp/jQuery-File-Upload">blueimp/jQuery-File-Upload</a> </td>
+<td> JavaScript </td>
+<td> 14312</td>
+</tr>
+<tr>
+<td> 14 </td>
+<td> <a href="http://github.com/harvesthq/chosen">harvesthq/chosen</a> </td>
+<td> JavaScript </td>
+<td> 14232</td>
+</tr>
+<tr>
+<td> 15 </td>
+<td> <a href="http://github.com/mrdoob/three.js">mrdoob/three.js</a> </td>
+<td> JavaScript </td>
+<td> 13686</td>
+</tr>
+<tr>
+<td> 16 </td>
+<td> <a href="http://github.com/vhf/free-programming-books">vhf/free-programming-books</a> </td>
+<td> <em>Unknown</em> </td>
+<td> 13658</td>
+</tr>
+<tr>
+<td> 17 </td>
+<td> <a href="http://github.com/adobe/brackets">adobe/brackets</a> </td>
+<td> JavaScript </td>
+<td> 13557</td>
+</tr>
+<tr>
+<td> 18 </td>
+<td> <a href="http://github.com/robbyrussell/oh-my-zsh">robbyrussell/oh-my-zsh</a> </td>
+<td> Shell </td>
+<td> 13337</td>
+</tr>
+<tr>
+<td> 19 </td>
+<td> <a href="http://github.com/jekyll/jekyll">jekyll/jekyll</a> </td>
+<td> Ruby </td>
+<td> 13283</td>
+</tr>
+<tr>
+<td> 20 </td>
+<td> <a href="http://github.com/github/gitignore">github/gitignore</a> </td>
+<td> <em>Unknown</em> </td>
+<td> 13128</td>
+</tr>
+</tbody>
+</table>
+
+
+<br/>
+
+
+<p>If you want to play with the data yourself, I&rsquo;ve put a cache of the top 5000 repositories <a href="/data/top-5000-repos.20131219.csv">here</a>.  I&rsquo;ve also posted the Clojure code I wrote to collect the data at <a href="https://github.com/adereth/counting-stars">adereth/counting-stars</a>.</p>
+
+<h2>Which languages have the top spots?</h2>
+
+<p>In <a href="http://adambard.com/blog/top-github-languages-for-2013-so-far/">Adam Bard&rsquo;s Top Github Languages for 2013 (so far)</a>, he counted repo creation and found that JavaScript and Ruby were pretty close.  The top star counts tell a very different story, with JavaScript dominating 7 of the top 10 spots.  CSS was in 11th place in his analysis, but it&rsquo;s 2 of the top 10 spots.</p>
+
+<p>Observing that 7 of the top 10 spots are JavaScript gives a sense for both the volume and the relative ranking of JavaScript in that range of the leaderboard, but just seeing that another language is 50 of the top 5000 spots doesn&rsquo;t give nearly as much color.</p>
+
+<p>One approach is to look at the number of repos in different ranges for each language:</p>
+
+<table>
+<thead>
+<tr>
+<th>Language </th>
+<th> 1-10 </th>
+<th> 1-100 </th>
+<th> 1-1000 </th>
+<th> 1-5000 </th>
+<th> Top Repository</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JavaScript </td>
+<td> 7 </td>
+<td> 54 </td>
+<td> 385 </td>
+<td> 1605 </td>
+<td> <a href="http://github.com/twbs/bootstrap">twbs/bootstrap</a> (1)</td>
+</tr>
+<tr>
+<td>CSS </td>
+<td> 2 </td>
+<td> 8 </td>
+<td> 41 </td>
+<td> 174 </td>
+<td> <a href="http://github.com/h5bp/html5-boilerplate">h5bp/html5-boilerplate</a> (4)</td>
+</tr>
+<tr>
+<td>Ruby </td>
+<td> 1 </td>
+<td> 9 </td>
+<td> 153 </td>
+<td> 786 </td>
+<td> <a href="http://github.com/rails/rails">rails/rails</a> (6)</td>
+</tr>
+<tr>
+<td>Python </td>
+<td>  </td>
+<td> 5 </td>
+<td> 64 </td>
+<td> 420 </td>
+<td> <a href="http://github.com/django/django">django/django</a> (44)</td>
+</tr>
+<tr>
+<td><em>Unknown</em> </td>
+<td>  </td>
+<td> 5 </td>
+<td> 30 </td>
+<td> 138 </td>
+<td> <a href="http://github.com/vhf/free-programming-books">vhf/free-programming-books</a> (15)</td>
+</tr>
+<tr>
+<td>C++ </td>
+<td>  </td>
+<td> 4 </td>
+<td> 22 </td>
+<td> 108 </td>
+<td> <a href="http://github.com/textmate/textmate">textmate/textmate</a> (35)</td>
+</tr>
+<tr>
+<td>PHP </td>
+<td>  </td>
+<td> 3 </td>
+<td> 38 </td>
+<td> 248 </td>
+<td> <a href="http://github.com/symfony/symfony">symfony/symfony</a> (58)</td>
+</tr>
+<tr>
+<td>Shell </td>
+<td>  </td>
+<td> 3 </td>
+<td> 19 </td>
+<td> 89 </td>
+<td> <a href="http://github.com/robbyrussell/oh-my-zsh">robbyrussell/oh-my-zsh</a> (18)</td>
+</tr>
+<tr>
+<td>Objective-C </td>
+<td>  </td>
+<td> 2 </td>
+<td> 89 </td>
+<td> 495 </td>
+<td> <a href="http://github.com/AFNetworking/AFNetworking">AFNetworking/AFNetworking</a> (30)</td>
+</tr>
+<tr>
+<td>C </td>
+<td>  </td>
+<td> 2 </td>
+<td> 31 </td>
+<td> 185 </td>
+<td> <a href="http://github.com/torvalds/linux">torvalds/linux</a> (25)</td>
+</tr>
+<tr>
+<td>Go </td>
+<td>  </td>
+<td> 2 </td>
+<td> 13 </td>
+<td> 61 </td>
+<td> <a href="http://github.com/dotcloud/docker">dotcloud/docker</a> (45)</td>
+</tr>
+<tr>
+<td>Java </td>
+<td>  </td>
+<td> 1 </td>
+<td> 32 </td>
+<td> 255 </td>
+<td> <a href="http://github.com/nathanmarz/storm">nathanmarz/storm</a> (56)</td>
+</tr>
+<tr>
+<td>VimL </td>
+<td>  </td>
+<td> 1 </td>
+<td> 23 </td>
+<td> 66 </td>
+<td> <a href="http://github.com/mathiasbynens/dotfiles">mathiasbynens/dotfiles</a> (57)</td>
+</tr>
+<tr>
+<td>CoffeeScript </td>
+<td>  </td>
+<td> 1 </td>
+<td> 22 </td>
+<td> 80 </td>
+<td> <a href="http://github.com/jashkenas/coffee-script">jashkenas/coffee-script</a> (43)</td>
+</tr>
+<tr>
+<td>Scala </td>
+<td>  </td>
+<td>  </td>
+<td> 13 </td>
+<td> 46 </td>
+<td> <a href="http://github.com/playframework/playframework">playframework/playframework</a> (178)</td>
+</tr>
+<tr>
+<td>C# </td>
+<td>  </td>
+<td>  </td>
+<td> 8 </td>
+<td> 65 </td>
+<td> <a href="http://github.com/SignalR/SignalR">SignalR/SignalR</a> (205)</td>
+</tr>
+<tr>
+<td>Clojure </td>
+<td>  </td>
+<td>  </td>
+<td> 2 </td>
+<td> 37 </td>
+<td> <a href="http://github.com/technomancy/leiningen">technomancy/leiningen</a> (361)</td>
+</tr>
+<tr>
+<td>Perl </td>
+<td>  </td>
+<td>  </td>
+<td> 2 </td>
+<td> 26 </td>
+<td> <a href="http://github.com/sitaramc/gitolite">sitaramc/gitolite</a> (138)</td>
+</tr>
+<tr>
+<td>ActionScript </td>
+<td>  </td>
+<td>  </td>
+<td> 2 </td>
+<td> 10 </td>
+<td> <a href="http://github.com/mozilla/shumway">mozilla/shumway</a> (606)</td>
+</tr>
+<tr>
+<td>Emacs Lisp </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 20 </td>
+<td> <a href="http://github.com/technomancy/emacs-starter-kit">technomancy/emacs-starter-kit</a> (477)</td>
+</tr>
+<tr>
+<td>Erlang </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 15 </td>
+<td> <a href="http://github.com/erlang/otp">erlang/otp</a> (568)</td>
+</tr>
+<tr>
+<td>Haskell </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 12 </td>
+<td> <a href="http://github.com/jgm/pandoc">jgm/pandoc</a> (740)</td>
+</tr>
+<tr>
+<td>TypeScript </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 4 </td>
+<td> <a href="http://github.com/bitcoin/bitcoin">bitcoin/bitcoin</a> (161)</td>
+</tr>
+<tr>
+<td>Assembly </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 3 </td>
+<td> <a href="http://github.com/jmechner/Prince-of-Persia-Apple-II">jmechner/Prince-of-Persia-Apple-II</a> (269)</td>
+</tr>
+<tr>
+<td>Elixir </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 2 </td>
+<td> <a href="http://github.com/elixir-lang/elixir">elixir-lang/elixir</a> (666)</td>
+</tr>
+<tr>
+<td>Objective-J </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 2 </td>
+<td> <a href="http://github.com/cappuccino/cappuccino">cappuccino/cappuccino</a> (667)</td>
+</tr>
+<tr>
+<td>Rust </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> <a href="http://github.com/mozilla/rust">mozilla/rust</a> (225)</td>
+</tr>
+<tr>
+<td>Vala </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> <a href="http://github.com/p-e-w/finalterm">p-e-w/finalterm</a> (282)</td>
+</tr>
+<tr>
+<td>Julia </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> <a href="http://github.com/JuliaLang/julia">JuliaLang/julia</a> (356)</td>
+</tr>
+<tr>
+<td>Visual Basic </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> <a href="http://github.com/bmatzelle/gow">bmatzelle/gow</a> (800)</td>
+</tr>
+<tr>
+<td>TeX </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 6 </td>
+<td> <a href="http://github.com/ieure/sicp">ieure/sicp</a> (2441)</td>
+</tr>
+<tr>
+<td>R </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 5 </td>
+<td> <a href="http://github.com/johnmyleswhite/ML_for_Hackers">johnmyleswhite/ML_for_Hackers</a> (2125)</td>
+</tr>
+<tr>
+<td>Lua </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 4 </td>
+<td> <a href="http://github.com/leafo/moonscript">leafo/moonscript</a> (3351)</td>
+</tr>
+<tr>
+<td>PowerShell </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 3 </td>
+<td> <a href="http://github.com/chocolatey/chocolatey">chocolatey/chocolatey</a> (1580)</td>
+</tr>
+<tr>
+<td>Prolog </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 3 </td>
+<td> <a href="http://github.com/onyxfish/csvkit">onyxfish/csvkit</a> (3498)</td>
+</tr>
+<tr>
+<td>XSLT </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 2 </td>
+<td> <a href="http://github.com/wakaleo/game-of-life">wakaleo/game-of-life</a> (1093)</td>
+</tr>
+<tr>
+<td>Matlab </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 2 </td>
+<td> <a href="http://github.com/zk00006/OpenTLD">zk00006/OpenTLD</a> (1292)</td>
+</tr>
+<tr>
+<td>OCaml </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 2 </td>
+<td> <a href="http://github.com/MLstate/opalang">MLstate/opalang</a> (1380)</td>
+</tr>
+<tr>
+<td>Dart </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 2 </td>
+<td> <a href="http://github.com/dart-lang/spark">dart-lang/spark</a> (1463)</td>
+</tr>
+<tr>
+<td>Groovy </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 2 </td>
+<td> <a href="http://github.com/Netflix/asgard">Netflix/asgard</a> (1489)</td>
+</tr>
+<tr>
+<td>Lasso </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/symfony/symfony-docs">symfony/symfony-docs</a> (2047)</td>
+</tr>
+<tr>
+<td>LiveScript </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/gkz/LiveScript">gkz/LiveScript</a> (2226)</td>
+</tr>
+<tr>
+<td>Scheme </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/eholk/harlan">eholk/harlan</a> (2648)</td>
+</tr>
+<tr>
+<td>Common Lisp </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/google/lisp-koans">google/lisp-koans</a> (2889)</td>
+</tr>
+<tr>
+<td>XML </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/kswedberg/jquery-tmbundle">kswedberg/jquery-tmbundle</a> (2972)</td>
+</tr>
+<tr>
+<td>Mirah </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/mirah/mirah">mirah/mirah</a> (2985)</td>
+</tr>
+<tr>
+<td>Arc </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/arclanguage/anarki">arclanguage/anarki</a> (3389)</td>
+</tr>
+<tr>
+<td>DOT </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/cplusplus/draft">cplusplus/draft</a> (3583)</td>
+</tr>
+<tr>
+<td>Racket </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/plt/racket">plt/racket</a> (3761)</td>
+</tr>
+<tr>
+<td>F# </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/fsharp/fsharp">fsharp/fsharp</a> (4518)</td>
+</tr>
+<tr>
+<td>D </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/D-Programming-Language/phobos">D-Programming-Language/phobos</a> (4719)</td>
+</tr>
+<tr>
+<td>Ragel in Ruby Host </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/jgarber/redcloth">jgarber/redcloth</a> (4829)</td>
+</tr>
+<tr>
+<td>Puppet </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/ansible/ansible-examples">ansible/ansible-examples</a> (4979)</td>
+</tr>
+</tbody>
+</table>
+
+
+<br/>
+
+
+<p>The table is interesting, but it still doesn&rsquo;t give us a good sense for how the middle languages (C#, Scala, Clojure, Go) compare.  It also reveals that there are different star distributions within the languages.  For instance, CSS makes a showing in the top 10 but it has way fewer representatives (174) in the top 5000 than PHP (248), Objective C (495), or Java (255).</p>
+
+<p>Looking at the top repo for each language also exposes a weakness in the methodology: GitHub&rsquo;s language identification isn&rsquo;t perfect and there are number of polyglot projects.  The top Java repo is <a href="http://github.com/nathanmarz/storm">Storm</a>, which uses enough Clojure (20.1% by GitHub&rsquo;s measure) to make this identification questionable when you take into account Clojure&rsquo;s conciseness over Java&rsquo;s.</p>
+
+<h2>What about star counts?</h2>
+
+<p>Looking at the results after ranking obscures the actual distribution of stars.  Using a <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.36.6685&amp;rep=rep1&amp;type=pdf">squarified treemap</a> with star count for the size and no hierarchy is a compact way of visualizing the ranking while exposing details about the absolute popularity of each repo.  The squarified treemap algorithm roughly maintains the order going from one corner to the other.</p>
+
+<p>Here are the top 1000 repos, using stars for the size and language for the color:</p>
+
+<p><em>(Language and repository name shown on mouseover, click to visit repository.  A bit of a fail on touch devices right now.)</em></p>
+
+<div id='tm'></div>
+
+
+
+
+<!-- CSS Styles: -->
+
+
+<div>
+  <style type="text/css">
+.node {
+  border: solid 1px white;
+  font: 8px Lato;
+  line-height: 12px;
+  overflow: hidden;
+  position: absolute;
+  text-indent: 2px;
+}
+
+.tooltip{
+    display: inline;
+    position: relative;
+}
+
+.tooltip:hover:after{
+    background: #333;
+    background: rgba(0,0,0,.8);
+    border-radius: 5px;
+    bottom: 26px;
+    color: #fff;
+    content: attr(title);
+    left: 20%;
+    padding: 5px 15px;
+    position: absolute;
+    z-index: 98;
+    width: 220px;
+}
+
+.tooltip:hover:before{
+    border: solid;
+    border-color: #333 transparent;
+    border-width: 6px 6px 0 6px;
+    bottom: 20px;
+    content: "";
+    left: 50%;
+    position: absolute;
+    z-index: 99;
+}
+
+  </style>
+</div>
+
+
+
+
+<script type="text/javascript">
+
+var color = d3.scale.category20();
+
+var margin = {top: 10, right: 0, bottom: 10, left: 0},
+    width = $('.entry-content').width(),
+    height = 500;
+
+var treemap = d3.layout.treemap()
+    .size([width, height])
+    .sticky(true)
+    .value(function(d) { return d.Stars; });
+
+var div = d3.select("#tm").append("div")
+    .style("position", "relative")
+    .style("width", (width + margin.left + margin.right) + "px")
+    .style("height", (height + margin.top + margin.bottom) + "px")
+    .style("left", margin.left + "px")
+    .style("top", margin.top + "px");
+
+d3.csv("/data/top-1000-repos.20131219.csv", function(repos) {
+  treemap.nodes({"children": repos});
+
+  var node = div.datum(repos).selectAll(".node")
+    .data(treemap.nodes)
+    .enter()
+      .append("a")
+      .attr("href", function(d) { return d.children ? null : ("http://github.com/" + d.Repository); })
+      .attr("class", function(d) { return d.children ? null : "tooltip"; })
+      .attr("title", function(d) { return d.children ? null : "Repository: " + d.Repository + "\nLanguage: " + d.Language + "\nStars: " + d.Stars; })
+      .append("div")
+    .attr("class", "node")
+    .call(position)
+    .style("background", function(d) { return d.children ? null : color(d.Language); });
+});
+
+function position() {
+  this.style("left", function(d) { return d.x + "px"; })
+      .style("top", function(d) { return d.y + "px"; })
+      .style("width", function(d) { return Math.max(0, d.dx - 1) + "px"; })
+      .style("height", function(d) { return Math.max(0, d.dy - 1) + "px"; });
+};
+
+</script>
+
+
+<p>Despite being a little chaotic, we can start to see some of the details of the distributions.  It still suffers from being difficult to glean information about the middling languages.  The comparisons become a little easier if we group the boxes by language.  That&rsquo;s pretty easy, since that&rsquo;s really the intended usage of treemaps.</p>
+
+<p>Here are the top 5000 grouped by language:</p>
+
+<div id='tm2'></div>
+
+
+
+
+<script type="text/javascript">
+
+
+
+var treemap2 = d3.layout.treemap()
+    .size([width, height])
+    .sticky(true)
+    .value(function(d) {return d.children ? null : d.stargazers_count; });
+
+var div2 = d3.select("#tm2").append("div")
+    .style("position", "relative")
+    .style("width", (width + margin.left + margin.right) + "px")
+    .style("height", (height + margin.top + margin.bottom) + "px")
+    .style("left", margin.left + "px")
+    .style("top", margin.top + "px");
+
+d3.json("/data/lang-map.json", function(root) {
+  var node = div2.datum(root).selectAll(".node")
+      .data(treemap2.nodes)
+      .enter()
+      .append("a")
+      .attr("href", function(d) { return d.children ? null : ("http://github.com/" + d.user + "/" + d.name); })
+      .attr("class", function(d) { return d.children ? null : "tooltip"; })
+      .attr("title", function(d) { return d.children ? null : "Repository: " + d.user + "/" + d.name + "\nLanguage: " + d.language + "\nStars: " + d.stargazers_count; })
+
+      .append("div")
+      .attr("class", "node")
+      .call(position)
+      .style("background", function(d) { return d.children ? color(d.name) : null; });
+
+  d3.selectAll("input").on("change", function change() {
+    var value = this.value === "count"
+        ? function() { return 1; }
+        : function(d) { return d.size; };
+
+    node
+        .data(treemap.value(value).nodes)
+      .transition()
+        .duration(1500)
+        .call(position);
+  });
+});
+
+
+function position() {
+  this.style("left", function(d) { return d.x + "px"; })
+      .style("top", function(d) { return d.y + "px"; })
+      .style("width", function(d) { return Math.max(0, d.dx - 1) + "px"; })
+      .style("height", function(d) { return Math.max(0, d.dy - 1) + "px"; });
+};
+
+</script>
+
+
+<p>Honestly, I&rsquo;m not really in love with this visualization, but it was a fun experiment.  I have some ideas for more effective representations, but I need to work on my d3.js-fu.  Hopefully it serves as an inspirational starting point for someone else&hellip;</p>
+
+<h2>Conclusion</h2>
+
+<p>Firstly, GitHub&rsquo;s API is really cool and can give you some insights that aren&rsquo;t exposed through their UI.  Like I said at the start of this post, I have another project that caused me to look at this API in the first place and I&rsquo;m really excited for the possibilities with this data.</p>
+
+<p>GitHub&rsquo;s current UI is really focused on using stars to expose what&rsquo;s trending and doesn&rsquo;t really make it easy to see the all-time greatest hits.  Perhaps the expectation is that everyone already knows these repos, but I certainly didn&rsquo;t and I&rsquo;ve discovered or rediscovered a few gems.  My <a href="/blog/2013/12/15/font-awesome-easter-egg/">previous post</a> came about because of my discovery of <a href="http://fontawesome.io/">Font Awesome</a> through this investigation.</p>
+
+<p>I&rsquo;ll close out with a couple questions (with no question marks) for the audience:</p>
+
+<ol>
+<li><p>Through this lens, JavaScript is <em>way</em> more popular than other metrics seem to indicate.  One hypothesis is that we all end up exposing things through the browser, so you end up doing something in JavaScript no matter what your language of choice is.  I&rsquo;m interested in other ideas and would also appreciate thoughts on how to validate them.</p></li>
+<li><p>It&rsquo;s not obvious to me how to best aggregate ranking data.  I&rsquo;d love to see someone else take this data and expose something more interesting.  Even if you&rsquo;re not going to do anything with the data, any ideas are appreciated.</p></li>
+</ol>
+
+
+<p><i class="fa fa-star fa-2x"></i></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[A few interesting Clojure microbenchmarks]]></title>
@@ -701,166 +1511,6 @@ collection.&rdquo;
 
 <p>```
 Instructions for use are on the <a href="https://github.com/adereth/unicode-math">project&rsquo;s Github page</a>.  The full list of implemented symbols is in <a href="https://github.com/adereth/unicode-math/blob/master/src/unicode_math/core.clj">src/unicode_math/core.clj</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Add it up (properly)]]></title>
-    <link href="http://adereth.github.io/blog/2013/10/10/add-it-up/"/>
-    <updated>2013-10-10T22:14:00-04:00</updated>
-    <id>http://adereth.github.io/blog/2013/10/10/add-it-up</id>
-    <content type="html"><![CDATA[<p>Floating point arithmetic can sometimes be frustratingly <a href="https://en.wikipedia.org/wiki/Numerical_stability">unstable</a>, particularly when applied to large datasets.  Even though the classic <a href="http://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html">What Every Computer Scientist Should Know About Floating-Point Arithmetic</a> seems to make the front page of of Hacker News on a yearly basis (<a href="https://news.ycombinator.com/item?id=4815399">1</a>, <a href="https://news.ycombinator.com/item?id=1982332">2</a>, <a href="http://news.ycombinator.com/item?id=1937182">3</a>, <a href="http://news.ycombinator.com/item?id=1746797">4</a>, <a href="http://news.ycombinator.com/item?id=687604">5</a>,
-<a href="http://news.ycombinator.com/item?id=453396">6</a>), I have never seen any big data package actually apply one of the simplest and cheapest recommendations from it.</p>
-
-<p>I&rsquo;m talking about the <a href="https://en.wikipedia.org/wiki/Kahan_summation_algorithm">Kahan Summation algorithm</a>.  Maybe it gets ignored because it&rsquo;s covered <a href="http://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html#1076">half-way through the paper</a>.  Despite being buried, you can tell it&rsquo;s important because the author uses uncharacteristally strong language at the end of the section on the algorithm:</p>
-
-<blockquote><p>Since these bounds hold for almost all commercial hardware, it would be foolish for numerical programmers to ignore such algorithms, and it would be irresponsible for compiler writers to destroy these algorithms by pretending that floating-point variables have real number semantics.</p></blockquote>
-
-<p>Whoa.  Let&rsquo;s not be foolish!</p>
-
-<h2>Example: The Harmonic Series in Clojure</h2>
-
-<p>We&rsquo;re going to be computing a partial sum of the <a href="https://en.wikipedia.org/wiki/Harmonic_series_(mathematics)">Harmonic Series</a>:</p>
-
-<p><img class="<a" src="href="http://upload.wikimedia.org/math/9/4/0/9402cf0c5599afa1a47d12d4a704e3de.png">http://upload.wikimedia.org/math/9/4/0/9402cf0c5599afa1a47d12d4a704e3de.png</a>" title="\sum_{n=1}^\infty\,\frac{1}{n} \;\;=\;\; 1 \,+\, \frac{1}{2} \,+\, \frac{1}{3} \,+\, \frac{1}{4} \,+\, \frac{1}{5} \,+\, \cdots.\" ></p>
-
-<p>It&rsquo;s another nice example because it contains terms that can&rsquo;t be represented precisely in floating point and the true sum diverges.</p>
-
-<p>Let&rsquo;s start by computing the sum with infinite precision.  Clojure&rsquo;s <a href="https://github.com/clojure/clojure/blob/229bf8fe9a751e4f48bb2b7ea57e27ebc43d26ae/src/jvm/clojure/lang/Ratio.java"><code>Ratio</code></a> class represents values internally using <a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html"><code>BigInteger</code></a> to separately store the numerator and denominator.  The summation happens using the grade-school style of making the denominators match and summing the numerators, so we have the exact running sum throughout.  At the very end, we convert the number to a floating point double:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Infinite Precision </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">harmonic-ratios</span> <span class="p">(</span><span class="nb">map / </span><span class="p">(</span><span class="nb">rest </span><span class="p">(</span><span class="nf">range</span><span class="p">))))</span><span class="nv">&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">&lt;p&gt;</span><span class="p">(</span><span class="nb">take </span><span class="mi">6</span> <span class="nv">harmonic-ratios</span><span class="p">)</span>
-</span><span class='line'><span class="c1">;; (1 &amp;frac12; 1/3 &amp;frac14; 1/5 1/6)&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">&lt;p&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="nv">ndash</span><span class="c1">;&gt;&gt; harmonic-ratios (take 10000) (reduce +) double)</span>
-</span><span class='line'><span class="c1">;; 9.787606036044382</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>For the first 10,000 elements, we&rsquo;ll see numerical differences starting at the 14th decimal place, so just focus on the <em>last two digits</em> in the results.</p>
-
-<p>As expected, we see a slightly different result if we compute the sum of doubles:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Double Precision </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">harmonic-doubles</span> <span class="p">(</span><span class="nb">map double </span><span class="nv">harmonic-ratios</span><span class="p">))</span><span class="nv">&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">&lt;p&gt;</span><span class="p">(</span><span class="nb">take </span><span class="mi">6</span> <span class="nv">harmonic-doubles</span><span class="p">)</span>
-</span><span class='line'><span class="c1">;; (1.0 0.5 0.3333333333333333 0.25 0.2 0.1666666666666667)&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">&lt;p&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="nv">ndash</span><span class="c1">;&gt;&gt; harmonic-doubles (take 10000) (reduce +))</span>
-</span><span class='line'><span class="c1">;; 9.787606036044348 (48 vs. 82 with infinite precision)</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>One approach that will get more accurate results is to use an arbitrary precision representation of the numbers, like <a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigDecimal.html"><code>BigDecimal</code></a>.  If we naively try to convert <code>harmonic-ratios</code> to <code>BigDecimal</code>, we get an <code>ArithmeticException</code> as soon as we hit 1/3:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Converting Fractions to BigDecimals </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">bigdec</span> <span class="mi">1</span><span class="p">)</span>
-</span><span class='line'><span class="c1">;; 1M&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">&lt;p&gt;</span><span class="p">(</span><span class="nf">bigdec</span> <span class="o">&amp;</span><span class="nv">frac12</span><span class="c1">;)</span>
-</span><span class='line'><span class="c1">;; 0.5M&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">&lt;p&gt;</span><span class="p">(</span><span class="nf">bigdec</span> <span class="mi">1</span><span class="nv">/3</span><span class="p">)</span>
-</span><span class='line'><span class="c1">;; java.lang.ArithmeticException: Non-terminating decimal expansion; no exact representable decimal result.</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>We need to explicitly set the precision that we want using a <a href="http://docs.oracle.com/javase/7/docs/api/java/math/MathContext.html"><code>MathContext</code></a>.  Let&rsquo;s use 32 decimal places for good measure:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>32 Decimal Place Precision </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">inverse-bigdec</span> <span class="p">[</span><span class="nv">n</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">context</span> <span class="p">(</span><span class="nf">java.math.MathContext.</span> <span class="mi">32</span><span class="p">)]</span><span class="nv">&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">&lt;pre&gt;&lt;code&gt;</span><span class="p">(</span><span class="nf">.divide</span> <span class="p">(</span><span class="nf">bigdec</span> <span class="mi">1</span><span class="p">)</span> <span class="p">(</span><span class="nf">bigdec</span> <span class="nv">n</span><span class="p">)</span> <span class="nv">context</span><span class="p">)))</span>
-</span><span class='line'><span class="nv">&lt;/code&gt;&lt;/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">&lt;p&gt;</span><span class="p">(</span><span class="k">def </span><span class="nv">harmonic-bigdecs</span> <span class="p">(</span><span class="nb">map </span><span class="nv">inverse-bigdec</span> <span class="p">(</span><span class="nb">rest </span><span class="p">(</span><span class="nf">range</span><span class="p">))))</span><span class="nv">&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">&lt;p&gt;</span><span class="p">(</span><span class="nb">take </span><span class="mi">6</span> <span class="nv">harmonic-bigdecs</span><span class="p">)</span>
-</span><span class='line'><span class="c1">;; (1M 0.5M 0.33333333333333333333333333333333M 0.25M 0.2M 0.16666666666666666666666666666667M)&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">&lt;p&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="nv">ndash</span><span class="c1">;&gt;&gt; harmonic-bigdecs (take 10000) (reduce +) double)</span>
-</span><span class='line'><span class="c1">;; 9.787606036044382 (perfectly matches infinite precision result)</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Now, let&rsquo;s see how <a href="https://en.wikipedia.org/wiki/Kahan_summation_algorithm">Kahan Summation algorithm</a> performs on doubles:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Double Precision with Kahan Summation </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">kahan-sum</span> <span class="p">[</span><span class="nv">coll</span><span class="p">]</span>
-</span><span class='line'>  <span class="p">(</span><span class="k">loop </span><span class="p">[[</span><span class="nv">x</span> <span class="o">&amp;</span><span class="nv">amp</span><span class="c1">; xs] coll sum 0.0 carry 0.0]&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">&lt;pre&gt;&lt;code&gt;</span><span class="p">(</span><span class="nb">if-not </span><span class="nv">x</span> <span class="nv">sum</span>
-</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">y</span> <span class="p">(</span><span class="nb">- </span><span class="nv">x</span> <span class="nv">carry</span><span class="p">)</span> <span class="nv">t</span> <span class="p">(</span><span class="nb">+ </span><span class="nv">y</span> <span class="nv">sum</span><span class="p">)]</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">recur</span> <span class="nv">xs</span> <span class="nv">t</span> <span class="p">(</span><span class="nb">- </span><span class="nv">t</span> <span class="nv">sum</span> <span class="nv">y</span><span class="p">))))))</span>
-</span><span class='line'><span class="nv">&lt;/code&gt;&lt;/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">&lt;p&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="nv">ndash</span><span class="c1">;&gt;&gt; harmonic-doubles (take 10000) kahan-sum)</span>
-</span><span class='line'><span class="c1">;; 9.787606036044382 (perfectly matches infinite precision result)</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Everything but vanilla summation of doubles has given us the same answer!</p>
-
-<p>To be fair to doubles, we are summing them in what intuitively is a poor order.  The smallest values are being added to the largest intermediate sums, preventing their low-order bits from accumulating.  We can try to remedy this by reversing the order:</p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Double Precision Reversed </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="o">&amp;</span><span class="nv">ndash</span><span class="c1">;&gt;&gt; harmonic-doubles (take 10000) reverse (reduce +))</span>
-</span><span class='line'><span class="c1">;; 9.787606036044386</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Well, that&rsquo;s different.  This is the first time we&rsquo;re seeing the floating point noise lead to something larger than the infinite precision answer.</p>
-
-<h2>Conclusion</h2>
-
-<p>For just a couple additional floating point operations per element, we get a result that competes with the more expensive arbitrary precision solutions.  It also does better than the naive approach of pre-sorting, which is both more expensive and eliminates the ability to deal with the data in a streaming fashion.</p>
-
-<p>In a subsequent post, I plan on covering how Kahan Summation can be used effectively in a map-reduce framework.</p>
 ]]></content>
   </entry>
   

@@ -8,13 +8,13 @@
   border-style:dashed;
   border-width:1px;
   border-color:#e7e3e7;
-  padding: 10px;
+  padding: 3px;
 }
 
 * + table th {
   border-style:solid;
   font-weight:bold;
-  background: url("/images/noise.png?1330434582") repeat scroll left top #F7F3F7;
+  background: url("/images/noise.png?1330434582") repeat scroll left top #F3F7F7;
 }
 
 * + table th[align="left"], * + table td[align="left"] {
