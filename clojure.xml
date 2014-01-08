@@ -4,7 +4,7 @@
   <title><![CDATA[adereth]]></title>
   <link href="http://adereth.github.io/clojure.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2014-01-06T07:22:50-05:00</updated>
+  <updated>2014-01-08T07:51:10-05:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -12,6 +12,74 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Quine Tweet Challenge]]></title>
+    <link href="http://adereth.github.io/blog/2014/01/08/quine-tweet-challenge/"/>
+    <updated>2014-01-08T07:49:00-05:00</updated>
+    <id>http://adereth.github.io/blog/2014/01/08/quine-tweet-challenge</id>
+    <content type="html"><![CDATA[<p>A <a href="http://en.wikipedia.org/wiki/Quine_(computing)">quine</a> is a program which takes no input and outputs a copy of its own source code.  There&rsquo;s a history of making challenges out of variants on the idea (shortest quine, <a href="http://en.wikipedia.org/wiki/Quine_(computing)#Ouroboros_Programs">Ouroboros Programs</a>, <a href="http://en.wikipedia.org/wiki/Quine_(computing)#Multiquines">Multiquines</a>).  I&rsquo;d like to propose a new variant for our modern social age: the Quine Tweet.</p>
+
+<h2>Inspiration</h2>
+
+<p>Last year I was working through <a href="http://www.4clojure.com/">4Clojure</a> and I had to reacquaint myself with how to implement one for <a href="http://www.4clojure.com/problem/125">Problem #125: Gus&rsquo;s Quinundrum</a>.</p>
+
+<p>A few months later, I saw this tweet from <a href="https://twitter.com/gtrakGT">Gary Trakhman</a>:</p>
+
+<blockquote class="twitter-tweet" lang="en"><p>So simple!&#10;(defn send-tweet&#10;  [tweet]&#10;  (api/statuses-update :oauth-creds my-creds&#10;                       :params {:status tweet}))</p>&mdash; Gary Trakhman (@gtrakGT) <a href="https://twitter.com/gtrakGT/statuses/403227496352862208">November 20, 2013</a></blockquote>
+
+
+<script async src="http://adereth.github.io//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<p>Seeing him tweet source code that tweets got me thinking about code that tweets its own source code.  Could a Quine Tweet be written?  I took a stab at adapting my Clojure code for Gus&rsquo;s Quinundrum, but I just couldn&rsquo;t make it fit in 140 characters.</p>
+
+<h2>Enter Wolfram</h2>
+
+<p>The next day, this came across my dash:</p>
+
+<blockquote class="twitter-tweet" data-partner="tweetdeck"><p>Hello world! &#8211; tweeting with <a href="https://twitter.com/search?q=%23wolframlang&amp;src=hash">#wolframlang</a> on <a href="https://twitter.com/Raspberry_Pi">@Raspberry_Pi</a> using Send[&quot;Twitter&quot;,&quot;Hello world!&quot; &#8230;]</p>&mdash; Stephen Wolfram (@stephen_wolfram) <a href="https://twitter.com/stephen_wolfram/statuses/403600114247565312">November 21, 2013</a></blockquote>
+
+
+<script async src="http://adereth.github.io//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<p>Maybe this will enable my impossible dream of a Quine Tweet&hellip;</p>
+
+<p>I finally got a Raspberry Pi running with the Wolfram Language and I made it happen:</p>
+
+<blockquote class="twitter-tweet" data-partner="tweetdeck"><p>\{o, c\} = FromCharacterCode\[\{\{92, 40\}, \{92, 41\}\}\] ; SendMessage\[&quot;Twitter&quot;, StringReplace\[InString\[$Line\], \{o -&gt; &quot;&quot;, c -&gt; &quot;&quot;\}\]\]</p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/statuses/420778395988135936">January 8, 2014</a></blockquote>
+
+
+<script async src="http://adereth.github.io//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<p>If you paste it into a notebook and evaluate, you&rsquo;ll get prompted for authorization and it&rsquo;ll post itself.  Here&rsquo;s a brief explanation of what it does:</p>
+
+<ol>
+<li><a href="http://reference.wolfram.com/mathematica/ref/$Line.html"><code>$Line</code></a> is the count of input expressions that have been evaluated.</li>
+<li><a href="http://reference.wolfram.com/mathematica/ref/InString.html"><code>InString</code></a> is a function that gets the input for the i<sup>th</sup> input expression.  It returns a string that has some extra escaped parentheses.</li>
+<li>92 is the ASCII code for <code>\\</code>. 40 and 41 are the codes for <code>(</code> and <code>)</code>.  <a href="http://reference.wolfram.com/mathematica/ref/FromCharacterCode.html"><code>FromCharacterCode</code></a> can take a list of lists of ASCII codes and return a list of strings.  The list is destructured into the variables <code>o</code> (open) and <code>c</code> (close).</li>
+<li><a href="http://reference.wolfram.com/mathematica/ref/StringReplace.html"><code>StringReplace</code></a> is then used to clean up the extra parentheses.</li>
+<li><code>SendMessage</code> is the new function in the Wolfram language that does all the hard work of posting.</li>
+</ol>
+
+
+<p>I don&rsquo;t think this is really in the true nature of a quine, as having something like <code>InString</code> makes it a bit trivial, but you do what you must when you only have 140 characters!</p>
+
+<h2>The Challenge</h2>
+
+<p>So, can it be done in any other languages?  Here&rsquo;s what I think are fair restrictions:</p>
+
+<ol>
+<li>Any standard Twitter client library for your language can be linked using the language&rsquo;s normal methods (pom.xml, project.clj, etc.)</li>
+<li>The authorization token can be supplied outside of source, either interactively or through a text file.  I don&rsquo;t imagine anyone wants to be sharing that&hellip;</li>
+</ol>
+
+
+<p>Bonus points if you manage to make the tweet and source include <code>#quine</code>!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Counting Stars on GitHub]]></title>
