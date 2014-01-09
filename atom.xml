@@ -4,7 +4,7 @@
   <title><![CDATA[adereth]]></title>
   <link href="http://adereth.github.io/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2014-01-08T07:51:10-05:00</updated>
+  <updated>2014-01-08T21:48:39-05:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -65,7 +65,7 @@
 </ol>
 
 
-<p>I don&rsquo;t think this is really in the true nature of a quine, as having something like <code>InString</code> makes it a bit trivial, but you do what you must when you only have 140 characters!</p>
+<p>I don&rsquo;t think this is really in the true spirit of a quine, as having something like <code>InString</code> makes it a bit trivial, but you do what you must when you only have 140 characters!</p>
 
 <h2>The Challenge</h2>
 
