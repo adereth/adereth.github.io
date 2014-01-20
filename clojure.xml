@@ -4,7 +4,7 @@
   <title><![CDATA[adereth]]></title>
   <link href="http://adereth.github.io/clojure.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2014-01-20T17:28:19-05:00</updated>
+  <updated>2014-01-20T17:32:23-05:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Every project.clj]]></title>
     <link href="http://adereth.github.io/blog/2014/01/20/every-project-dot-clj/"/>
-    <updated>2014-01-20T15:33:00-05:00</updated>
+    <updated>2014-01-20T17:33:00-05:00</updated>
     <id>http://adereth.github.io/blog/2014/01/20/every-project-dot-clj</id>
     <content type="html"><![CDATA[<p>I was recently looking for an interesting relational dataset for another project and the idea of using the dependencies for every Clojure project on GitHub came up.  It turns out that it&rsquo;s possible to download almost every project.clj using <a href="https://github.com/Raynes/tentacles">Tentacles</a>, so I decided to&hellip;</p>
 
