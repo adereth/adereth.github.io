@@ -4,7 +4,7 @@
   <title><![CDATA[Category: automata | adereth]]></title>
   <link href="http://adereth.github.io/blog/categories/automata/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2014-02-03T07:29:10-05:00</updated>
+  <updated>2014-02-03T10:25:57-05:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -75,6 +75,8 @@ Turing Machines <i class="fa fa-arrows-h"></i> ?
 <p>If you track back the imperative/functional divide to Turing Machines and Chomsky&rsquo;s forms, some of the roots are showing.  Turing Machines are conducive to a couple things that are considered harmful in larger systems: GOTO-based<sup><a href="http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html">1</a></sup> and mutation-centric<sup><a href="https://www.google.com/search?q=mutable+state+considered+harmful">2</a></sup> thinking.  In a lot of cases, we&rsquo;re finding that the languages influenced by the language-side are better suited for our problems.  Paul Graham <a href="http://www.paulgraham.com/diff.html">argues</a> that the popular languages have been steadily evolving towards the LISPy side.</p>
 
 <p>Anyway, this is a connection that I wish I had been shown at the peak of my interest in automata theory because it would have gotten me a lot more excited about LISP sooner.  I think it&rsquo;s interesting to look at LISP as something that has the same theoretical underpinnings as these other tools (RegEx and CFG) that we already acknowledged as vital.</p>
+
+<p><em>Thanks to <a href="http://jliszka.github.io/">Jason Liszka</a> and my colleagues at <a href="http://www.twosigma.com">Two Sigma</a> for help with this post!</em></p>
 ]]></content>
   </entry>
   
