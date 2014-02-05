@@ -8,6 +8,8 @@ categories: clojure
 I'd like to share a little project I did to make it more convenient to use Apache Commons Math's linear algebra classes with Clojure.
 
 ## Apache Commons Math
+![Apache Commons Math Logo](/images/acm.gif)
+
 [Apache Commons Math](http://commons.apache.org/proper/commons-math/index.html) is a Java library of mathematics and statistics components.  It's loaded with useful things including:
 
 - Statistics
