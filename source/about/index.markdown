@@ -5,12 +5,12 @@ comments: false
 sharing: false
 footer: true
 ---
-{% img /images/adereth.jpg Me Geeking %}
+{% img /images/me.png Selfie taken with my drone %}
 
 > "when you don't create things, you become defined by your tastes rather than ability. your tastes only narrow & exclude people. so create."
 - [_why](http://en.wikipedia.org/wiki/Why_the_lucky_stiff)
 
-This is my attempt at doing a bit more public creating.  I'm particularly interested in technical communication and so far this blog is primarily focused on exercising my skills and writing about techniques.
+This is my attempt at doing a bit more public creating.  I'm particularly interested in technical communication and so far this blog is primarily focused on exercising my skills.
 
 I work at [Two Sigma Investments](http://www.twosigma.com/) on a variety of projects that let me practice the computer science and math that I love.
 
