@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: keyboards | adereth]]></title>
+  <link href="http://adereth.github.io/blog/categories/keyboards/atom.xml" rel="self"/>
+  <link href="http://adereth.github.io/"/>
+  <updated>2014-02-12T07:24:42-05:00</updated>
+  <id>http://adereth.github.io/</id>
+  <author>
+    <name><![CDATA[Matt Adereth]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Sourcing and Building an ErgoDox Keyboard]]></title>
+    <link href="http://adereth.github.io/blog/2014/02/12/building-an-ergodox/"/>
+    <updated>2014-02-12T07:25:00-05:00</updated>
+    <id>http://adereth.github.io/blog/2014/02/12/building-an-ergodox</id>
+    <content type="html"><![CDATA[<p>The <a href="http://ergodox.org/">ErgoDox</a> is a split ergonomic keyboard project.  One of the most notable things about it is that you can&rsquo;t buy this keyboard &mdash; you have to build it yourself!  The <a href="http://ergodox.org/Hardware.aspx">parts list</a> is available on the site, along with the <a href="http://ergodox.org/Downloads.aspx">designs for the PCB and case</a>.</p>
+
+<p>I recently built one, sourcing the parts myself, and I&rsquo;d like to share what I&rsquo;ve learned.</p>
+
+<h2>Reference Build</h2>
+
+<p>The easiest way to build one is to get in on one of the <a href="https://www.massdrop.com/buy/ergodox">group-buys of full kits organized by Massdrop</a>.  Their kits have become the most common build, with options for different style <a href="http://www.keyboardco.com/blog/index.php/2012/12/an-introduction-to-cherry-mx-mechanical-switches/">Cherry keyswitches</a> and either a classic case or one with wrist rests.</p>
+
+<p><a href="https://www.massdrop.com/buy/ergodox"><img src="/images/massdrop-ergo.jpg" alt="Massdrop's ErgoDox" /></a></p>
+
+<p>After some investigation, I decided I could build something very similar without the kit.</p>
+
+<h2>Ordering the Parts</h2>
+
+<p>There are a few major things that you need to build an ErgoDox:</p>
+
+<ul>
+<li>Printed circuit boards (PCB)</li>
+<li>Teensy controller</li>
+<li>Keyswitches</li>
+<li>Key caps</li>
+<li>A bunch of little electronic components</li>
+<li>A case</li>
+</ul>
+
+
+<p>I obtained the PCB, Teensy, and keyswitches from <a href="http://mechanicalkeyboards.com/">Mechanical Keyboards</a>.</p>
+
+<p>I managed to pick up <a href="http://ergodox.org/Hardware.aspx">all the little electronic components</a> from <a href="http://www.digikey.com/">DigiKey</a>, except for the <a href="http://www.digikey.com/product-detail/en/SJ-43514/CP-43514-ND/368146">TRRS connectors</a> which are currently unavailable.  The TRRS connectors are the headphone-style jacks that are used to connect the two halves.  I decided to not use TRRS and to just solder basic wires directly onto the board.</p>
+
+<p>The PCBs were \$38, the keyswitches were \$49, the Teensy was \$22 (but can be bought for less), and the rest of the components came out to about \$20.  This \$129 covers everything needed except for the case and the keycaps.  For reference, the Massdrop group buy is \$199 for everything excluding the keycaps, so I had roughly $70 to spend on the case before it would have made financial sense to wait for another group buy opportunity.</p>
+
+<h2>Making the Case</h2>
+
+<p>There are really two options for making a case:</p>
+
+<ol>
+<li>3-D printing</li>
+<li>Laser cut acrylic</li>
+</ol>
+
+
+<p><a href="http://www.shapeways.com/shops/Dox">The designs for the case are available on Shapeways</a>, but it comes out to almost \$200, even when choosing the least expensive options for everything!  I considered printing it myself on the Makerbots at my office, but I was skeptical that the older models we have would result in acceptable quality.</p>
+
+<p>Laser cutting the acrylic seemed like the way to go, so I picked up 5 12"x12" sheets of 3mm opaque white acrylic from <a href="http://canalplastic.com/">Canal Plastics</a> for \$7 a sheet.  They can be ordered from Amazon for basically the same price.  The design used in Massdrop&rsquo;s kit uses 3mm sheets for the top and bottom and 5mm sheets for the middle 3 layers, but I believed (hoped!) that I could make it all fit in a slimmer case.</p>
+
+<p>I had never laser cut anything before, but my coworker <a href="http://trmm.net/Main_Page">Trammell</a> has a ton of experience with it and helped me out.  He&rsquo;s a member at <a href="http://www.nycresistor.com/">NYC Resistor</a> and they have a <a href="http://www.nycresistor.com/laser/">laser</a>!  We used Inkscape to generate PDFs and then used his <a href="http://trmm.net/Category:Laser_cutter#Command_line_laser_cutting">command line laser cutting tool</a> to send them over to the Epilog laser cutter.  We were able to get 2 layers out of each sheet, as you can see in these action shots:</p>
+
+<p><img src="/images/laser1.jpg" alt="Laser action shot 1" />
+<img src="/images/laser3.jpg" alt="Laser action shot 3" />
+<img src="/images/laser2.jpg" alt="Laser action shot 2" /></p>
+
+<p>And the final result:</p>
+
+<p><img src="/images/case.jpg" alt="Final cut" /></p>
+
+<p>It took just under 27 minutes of actual laser time, which at \$0.75/min came out to \$20.  \$55 for the case was a lot more than I expected, but it still kept the cost below \$199.  It seems like this is the part that would offer the most savings if done as part of a group buy.</p>
+
+<h2>Keycaps</h2>
+
+<p>Massdrop usually offers <a href="https://www.massdrop.com/buy/ergodox-keycap/talk">a separate group buy of PBT DCS keycaps</a> when they offer the full kit.  I decided to try using standard keycaps and to buy the missing ones separately.  This was a big mistake.  A proper set of keycaps for the ErgoDox requires 12 1.5x keycaps, which are way too expensive when bought separately.  Only later did I discover that the <a href="http://keyshop.pimpmykeyboard.com/product/dsa-pbt-blank-sets">Pimp My Keyboard shop has PBT DCA blank sets for the ErgoDox</a> for $43.</p>
+
+<p>I got my keycaps from <a href="http://www.wasdkeyboards.com/index.php/">WASD Keyboards</a>.  They have a <a href="http://www.wasdkeyboards.com/index.php/products/keycap-set/87-key-cherry-mx-keycap-set.html">pretty slick keycap designer</a>.  I used it with my kids and we came up with a design they were happy with (my 3 year-old is currently obsessed with rainbows):</p>
+
+<p><img src="/images/keys.jpeg" alt="Rainbow keys" /></p>
+
+<p>I decided to take advantage of their ability to print whichever letters I want on each key to make this be the <a href="http://colemak.com/">Colemak layout</a>.  I&rsquo;ve got the layout commited to muscle memory, but sometimes my kids want to type on my keyboard and it&rsquo;s annoying to switch to QWERTY so the keys match the letters printed on them.</p>
+
+<h2>Putting It Together</h2>
+
+<p>I did the actual soldering and assembly in the Hackerlab at <a href="http://www.twosigma.com">my office</a>:</p>
+
+<p><img src="/images/hackerspace.jpg" alt="TS Hackerspace" /></p>
+
+<p>To put it together, I mostly followed <a href="https://www.massdrop.com/ext/ergodox/assembly">Massdrop&rsquo;s assembly instructions</a>.  I did a decent job soldering (it&rsquo;s almost 400 solder points), but I wish that I had watched the <a href="http://t.co/jIltwbHDhQ">EEVblog videos on soldering</a> beforehand.  That guy knows what he&rsquo;s talking about.</p>
+
+<p>Because I used 3mm sheets instead of the recommended 5mm, there wasn&rsquo;t a lot of clearance and I had to get creative.  The keyswitches stuck out a little too far on the bottom of the PCBs, so I used flush cutters to trim the leads and the plastic nubs:</p>
+
+<p><img src="/images/flush-pcb.jpg" alt="flush pcb" /></p>
+
+<p>Originally, I used the recommended header pins to connect the Teensy to the PCB, but that brought the USB connector too high and prevented the top layer from fitting.  Instead, Trammell suggested I mount it directly on the PCB.  Desoldering the Teensy was really, really hard.  The throughholes are tiny and there are so many of them!  I ended up using the Dremel to clear some space around it and then used the cutting wheel to slice the header pins.  Unfortunately, I got the angle wrong one time and took out a nice chunk of the Teensy&rsquo;s bottom:</p>
+
+<p><img src="/images/busted-teensy.jpg" alt="Busted teensy" /></p>
+
+<p>I got a replacement Teensy.  With some electrical tape on the bottom, I put it directly on the PCB which got me the clearance I needed:</p>
+
+<p><img src="/images/sm-teensy.jpg" alt="Surface mounted teensy" /></p>
+
+<p>The mini-USB port on the back is about 5mm tall, so it also prevented the layers from fitting together nicely.  I remedied that by dremeling a little into the 4th layer.  It&rsquo;s not beautiful, but it&rsquo;s in the back and it&rsquo;s good enough.</p>
+
+<p><img src="/images/mini-usb.jpg" alt="Mini USB" /></p>
+
+<p>The Massdrop kit includes metal screws and nuts that are seriously sharp and will gouge the surface you put the ErgoDox on:</p>
+
+<p><img src="/images/massdrop-screws.jpg" alt="Massdrop screws" /></p>
+
+<p>I decided to go with <a href="http://www.amazon.com/gp/product/B000NHTPKQ/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B000NHTPKQ&amp;linkCode=as2&amp;tag=adereth-20">white nylon flat-head screws</a> and <a href="http://www.amazon.com/gp/product/B00FLM2WBC/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B00FLM2WBC&amp;linkCode=as2&amp;tag=adereth-20">nuts</a> for both aesthetics and the safety of my desk:</p>
+
+<p><a href="http://www.amazon.com/gp/product/B000NHTPKQ/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B000NHTPKQ&amp;linkCode=as2&amp;tag=adereth-20"><img src="/images/screw.jpg" alt="Flat-head screw" /></a>
+<a href="http://www.amazon.com/gp/product/B00FLM2WBC/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B00FLM2WBC&amp;linkCode=as2&amp;tag=adereth-20"><img src="/images/nut.jpg" alt="White nylon nut" /></a></p>
+
+<p>The Dremel came in handy again for making countersinks and for shortening the screws:</p>
+
+<p><img src="/images/countersink.jpg" alt="Countersink" /></p>
+
+<p><img src="/images/countersink-with-screw.jpg" alt="with screw" /></p>
+
+<p><img src="/images/trimmed-nut.jpeg" alt="trimmed nut" /></p>
+
+<p>The only other deviation from the original design was that I didn&rsquo;t use the audio jack style connector.  This was motivated by the fact that Digikey didn&rsquo;t have it in stock and that the jack would be too tall for the 3mm sheets.  I just soldered the wires directly onto the PCB:</p>
+
+<p><img src="/images/wires-on-pcb.jpg" alt="wires on pcb" /></p>
+
+<p><img src="/images/wires-out-back.jpg" alt="wires out the back" /></p>
+
+<h2>Programming the Teensy</h2>
+
+<p>I used the most excellent <a href="https://www.massdrop.com/ext/ergodox">ErgoDox Layout Configurator provided by Massdrop</a> to make my own modified layout that matches what I use on my Kinesis Advantage.  It was pretty straightforward.  I made one of the inner 1.5x keys switch to a QWERTY layer as a courtesy to anyone else who wants to try it out.</p>
+
+<h2>Final Product</h2>
+
+<p>Here&rsquo;s how it came out:</p>
+
+<p><img src="/images/final-build.jpeg" alt="Final build" /></p>
+
+<p><img src="/images/right-zoom.jpeg" alt="Next to Massdrop's" /></p>
+
+<p>Side-by-side comparison with one of my coworkers' build of Massdrop&rsquo;s kit with the palm rest:</p>
+
+<p><img src="/images/side-by-side.jpeg" alt="Next to Massdrop's" /></p>
+
+<p>And here you can see just how much thinner the case is with all 3mm sheets:</p>
+
+<p><img src="/images/height-comparison.jpg" alt="Next to Massdrop's" /></p>
+
+<p>The keycaps I used were taller than the <a href="https://www.massdrop.com/buy/ergodox-keycap/talk">PBT DCS ones sold by Massdrop</a>, so it ended up being close to the same height.</p>
+
+<h2>Review and Next Steps</h2>
+
+<p>The design and build were fun, but the real test is actually typing on it.  Like the Kinesis Advantage and Truly Ergonomic, the ErgoDox features a columnar layout with staggered keys, which is much more comfortable for me than the traditional layout.  Unfortunately, the PCB is flat and I find it to be less comfortable than the Kinesis&rsquo;s bowl shape.  It&rsquo;s hard to manufacture curved or flexible PCBs, so it&rsquo;s understandable that this DIY project wouldn&rsquo;t require it.</p>
+
+<p>A common complaint about the ErgoDox is that the thumb clusters are too close to the other keys.  This turned out to be a real problem for me as it requires a serious contortion for me to his the top keys of the thumb cluster.  On the Kinesis, I have these mapped to the oft used <code>Ctrl</code> and <code>Alt</code> keys.  It was so bad that I ended up having to remap the bottom corner keys to <code>Ctrl</code> and <code>Alt</code> and relegate the top 2 keys to less used ones.  I&rsquo;m not the only one who has struggled with this and the best solution I&rsquo;ve seen so far is <a href="http://geekhack.org/index.php?topic=44940.0">AcidFire&rsquo;s Grand Piano design</a>:</p>
+
+<p><a href="http://geekhack.org/index.php?topic=44940.0"><img src="/images/grand-ergo.jpg" alt="Grand Ergo" /></a></p>
+
+<p>Another issue is that I chose the wrong keyswitches.  My primary keyboard is the <a href="http://www.amazon.com/gp/product/B00IA6RDVK/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B00IA6RDVK&amp;linkCode=as2&amp;tag=adereth-20">Kinesis Advantage LF</a>, which uses Cherry MX reds.  I love them, but they are really hard to find at a reasonable price.  I wasn&rsquo;t about to spend $160 on the keyswitches, so I opted for Cherry MX blacks.  They are linear feel like the reds, but much stiffer, with an activation force of 60cN instead of 45cN.  This didn&rsquo;t seem like a big deal when I tried it out with individual switches from a sampler set, but it was a whole other experience when trying to type on a full set.  It&rsquo;s much harder to type on and I could feel my fingers straining very quickly.</p>
+
+<p>The last issue is that the ErgoDox really need to be tented at an angle for maximum comfort.  My plan was to use this as an ergonomic solution while traveling and I have some designs that would make it easy to attach to my laptop in a tented position.  Something like this:</p>
+
+<p><img src="/images/tented-laptop.jpg" alt="tented on laptop" /></p>
+
+<p>I decided to hold off on this until I have a solution for the other issues I listed.</p>
+
+<h2>Conclusion</h2>
+
+<p>Overall, this was an incredibly fun project and I learned a ton about how keyboards are made.  For anyone who&rsquo;s waiting for the next Massdrop group buy of a kit, you should know that it can be done by yourself for about the same price if you can get access to a laser cutter or CNC mill to make the case.  I&rsquo;m sure someone can be more creative and come up with an even more accessible solution.</p>
+
+<p>Unfortunately, I&rsquo;m not thrilled with the actual typing experience, so I can&rsquo;t recommend it over the Kinesis Advantage.  Some people love it, so try it out for yourself if you can or at least print out a stencil of it before committing.</p>
+
+<p>My plan is to take what I&rsquo;ve learned and to try and build something that&rsquo;s an even better fit for my travel usage.  Hopefully I can procure some Cherry reds for a reasonable price in the future&hellip;</p>
+]]></content>
+  </entry>
+  
+</feed>
