@@ -4,7 +4,7 @@
   <title><![CDATA[adereth]]></title>
   <link href="http://adereth.github.io/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2014-02-27T22:44:10-05:00</updated>
+  <updated>2014-02-28T06:17:56-05:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -22,7 +22,7 @@
 
 <h2>PBT DSA Keycaps</h2>
 
-<p>The biggest improvement was switching the keycaps.  Originally I had used keycaps from <a href="http://www.wasdkeyboards.com/index.php/">WASD Keyboards</a> that were designed to be used with a normal keyboard.  Normal keyboards use what are called DCS profile caps, which have different profiles for different rows:</p>
+<p>The biggest improvement was switching the keycaps.  Originally I had used keycaps from <a href="http://www.wasdkeyboards.com/index.php/">WASD Keyboards</a> that were designed to be used with a normal keyboard.  Typical keyboards use keycaps that are very similar to DCS profile caps, which have different profiles for different rows:</p>
 
 <p><img src="http://adereth.github.io/images/dcs.jpg" alt="DCS Keycap Profile" /></p>
 
