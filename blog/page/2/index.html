@@ -9,7 +9,7 @@
   <meta name="author" content="Matt Adereth">
 
   
-  <meta name="description" content="I&rsquo;d like to share a little project I did to make it more convenient to use Apache Commons Math&rsquo;s linear algebra classes with Clojure. &hellip;">
+  <meta name="description" content=".chart { font-family: monospace; font-size: 10px; margin-top: -40px; } .bar { fill: grey; } .axis path, .axis line { fill: none; stroke: #000; shape &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -107,6 +107,390 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/11/22/a-few-interesting-clojure-microbenchmarks/">A Few Interesting Clojure Microbenchmarks</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-22T07:50:00-05:00" pubdate data-updated="true">Nov 22<span>nd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><script src="http://d3js.org/d3.v2.js"></script>
+
+
+<p></p>
+
+<!--       font-family: Arial, sans-serif; "Menlo","Monaco","Andale Mono","lucida console","Courier New",monospace;-->
+
+
+<!-- CSS Styles: -->
+
+
+<div>
+  <style type="text/css">
+
+    .chart {
+      font-family: monospace;
+      font-size: 10px;
+      margin-top: -40px;
+    }
+
+    .bar {
+      fill: grey;
+    }
+
+    .axis path, .axis line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+    }
+
+  </style>
+</div>
+
+
+
+
+<!-- Global Variables and Handlers: -->
+
+
+<script type="text/javascript">
+
+  var margin = {top: 40, right: 40, bottom: 60, left: 110},
+      width = $('.entry-content').width();
+
+  $(window).resize(function() {
+    width = $('.entry-content').width();
+  });
+
+  function draw(data, chart, height) {
+    
+    $(chart).empty();
+
+    var x = d3.scale.linear()
+        .domain([0, d3.max(data, function(d) { return d.mean})])
+        .range([0, width - margin.left - margin.right]);
+
+    var y = d3.scale.ordinal()
+        .domain(d3.range(data.length))
+        .rangeRoundBands([height - margin.top - margin.bottom, 0], 0.2);
+
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient('bottom')
+        .tickPadding(8)
+    .ticks(8);
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient('left')
+        .tickPadding(8)
+        .tickSize(0);
+
+    var svg = d3.select(chart).append('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .attr('class', 'chart')
+          .append('g')
+        .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+    svg.selectAll('.chart')
+        .data(data)
+    .enter().append('rect')
+        .attr('class', 'bar')
+        .attr('y', function(d, i) { return y(i) })
+        .attr('width', function(d) { return x(d.mean) })
+        .attr('height', y.rangeBand());
+
+    svg.append('g')
+        .attr('class', 'x axis')
+        .attr('transform', 'translate(0, ' + y.rangeExtent()[1] + ')')
+        .call(xAxis);
+
+    svg.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "end")
+        .attr("x", width / 2 - 45)
+        .attr("y", height - 60)
+        .text("nanoseconds");
+
+    svg.append('g')
+        .attr('class', 'y axis')
+        .call(yAxis)
+      .selectAll('text')
+        .text(function(d) { return data[d].code; });
+    
+  }
+  
+  function drawWithResize(data, chart, height) {
+    draw(data, chart, height);
+    $(window).resize(function() {draw(data, chart, height); })
+  }
+;
+
+
+</script>
+
+
+<p><a href="http://ideolalia.com/">Zach Tellman</a> delivered a really informative and practical unsession at <a href="http://clojure-conj.org/">Clojure Conj 2013</a> entitled &ldquo;Predictably Fast Clojure.&rdquo;  It was described as:</p>
+
+<blockquote><p>An exploration of some of the underlying mechanisms in Clojure, and how to build an intuition for how fast your code should run. Time permitting, we&rsquo;ll also explore how to work around these mechanisms, and exploit the full power of the JVM.</p></blockquote>
+
+<p>I&rsquo;d like to share a few interesting things that I learned from this talk and that I subsequently verified and explored.</p>
+
+<h2>How to benchmark</h2>
+
+<p>It turns out that benchmarking is hard and benchmarking on the JVM is even harder.  Fortunately, the folks at the Elliptic Group have thought long and hard about how to do it right and have written <a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=robust+java+benchmarking">a couple of great articles</a> on the matter.  Hugo Duncan&rsquo;s <a href="https://github.com/hugoduncan/criterium">Criterium library</a> makes it super easy to use these robust techniques.</p>
+
+<p>All the benchmarks in this post were run on my dual-core 2.6 GHz Intel Core i5 laptop.  The JVM was started with <code>lein with-profile production repl</code>, which enables more aggressive JIT action at the cost of slower start times.  If you try to use Criterium without this, you&rsquo;ll get warnings spewed for every benchmark you run.</p>
+
+<h2>Surprising operations on lists, vectors, and tuples</h2>
+
+<p>The first thing that he discussed was the relatively poor performance of <code>first</code> on vectors.</p>
+
+<p>For the tests, I made the some simple collections:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">ve</span> <span class="p">[</span><span class="mi">0</span> <span class="mi">1</span> <span class="mi">2</span><span class="p">])</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">li</span> <span class="o">&#39;</span><span class="p">(</span><span class="mi">0</span> <span class="mi">1</span> <span class="mi">2</span><span class="p">))</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">tu</span> <span class="p">(</span><span class="nf">clj-tuple/tuple</span> <span class="mi">0</span> <span class="mi">1</span> <span class="mi">2</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And then I timed them each with <code>first</code> and <code>(nth coll 0)</code>:</p>
+
+<div id='chart-1'></div>
+
+
+<script type='text/javascript'>
+  var data = [
+      {code: "(first ve)", mean: 59.387551, lower: 56.557346, upper: 75.434730},
+      {code: "(first li)", mean: 11.814687, lower: 9.933760, upper: 17.651180},
+      {code: "(first tu)", mean: 12.026005, lower: 11.096498, upper: 17.716830},
+      {code: "(nth ve 0)", mean: 14.507457, lower: 13.379794, upper: 19.732508},
+      {code: "(nth li 0)", mean: 132.042247, lower: 123.849601, upper: 173.395438},
+      {code: "(nth tu 0)", mean: 11.240653, lower: 10.739338, upper: 12.333350},
+      ];
+  data.reverse();
+  drawWithResize(data, '#chart-1', 275);
+</script>
+
+
+<p>The <a href="http://clojuredocs.org/clojure_core/clojure.core/first">documentation</a> says that <code>first</code> &ldquo;calls seq on its argument.&rdquo;  This is effectively true, but if you look at the <a href="https://github.com/clojure/clojure/blob/1.5.x/src/jvm/clojure/lang/RT.java#L575">source</a> you&rsquo;ll see that if the collection implements <code>ISeq</code>, <code>seq</code> doesn&rsquo;t need to be called.  As a result, the performance of <code>first</code> on lists, which do implement <code>ISeq</code>, is much better than on vectors, which don&rsquo;t.  Zach took advantage of this observation in his <a href="https://github.com/ztellman/clj-tuple">clj-tuple</a> library and made sure that tuples implement <code>ISeq</code>.</p>
+
+<p>What&rsquo;s really interesting is that you can use <code>(nth coll 0)</code> to get the first element of a vector faster that you can with <code>first</code>.  Unfortunately, this only does well with vectors.  The performance is abysmal when applied to lists, so you should stick to <code>first</code> if you don&rsquo;t know the data structure you are operating on.</p>
+
+<p>The apparent slowness of <code>seq</code> on a vector made me wonder about the <code>empty?</code> function, which uses <code>seq</code> under the hood:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nf">source</span> <span class="nv">empty?</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">empty?</span>
+</span><span class='line'>  <span class="s">&quot;Returns true if coll has no items - same as (not (seq coll)).</span>
+</span><span class='line'><span class="s">  Please use the idiom (seq x) rather than (not (empty? x))&quot;</span>
+</span><span class='line'>  <span class="p">{</span><span class="ss">:added</span> <span class="s">&quot;1.0&quot;</span>
+</span><span class='line'>   <span class="ss">:static</span> <span class="nv">true</span><span class="p">}</span>
+</span><span class='line'>  <span class="p">[</span><span class="nv">coll</span><span class="p">]</span> <span class="p">(</span><span class="nb">not </span><span class="p">(</span><span class="nb">seq </span><span class="nv">coll</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If using <code>seq</code> is so slow, perhaps we can get better performance by just getting the count of elements and testing if it&rsquo;s zero:</p>
+
+<div id='chart-empty'></div>
+
+
+<script type='text/javascript'>
+  var dataE = [
+{code: "(empty? ve)", mean: 22.436542, lower: 22.052842, upper: 23.003189},
+{code: "(empty? li)", mean: 12.293540, lower: 11.680523, upper: 15.369996},
+{code: "(empty? tu)", mean: 18.512765, lower: 17.351246, upper: 22.757244},
+{code: "(= 0 (count ve))", mean: 11.209652, lower: 10.451370, upper: 15.123089},
+{code: "(= 0 (count li))", mean: 10.710336, lower: 10.417919, upper: 11.667121},
+{code: "(= 0 (count tu))", mean: 10.741061, lower: 10.396224, upper: 13.246183},
+      ];
+  dataE.reverse();
+  drawWithResize(dataE, '#chart-empty', 275);
+</script>
+
+
+<p>Of course, this is a bad idea for lazy sequences and should probably be avoided, as we&rsquo;ll incur a cost that is linear in the size of the sequence just to get the count.</p>
+
+<p>I don&rsquo;t think this will affect my day to day code, but it certainly is interesting and surfaced a bit more about how things actually work in Clojure.</p>
+
+<h2>Inconsistent protocol timings</h2>
+
+<p>This was a surprising one that also peeled back a layer on Clojure&rsquo;s implementation.  In Fogus&rsquo;s <a href="http://blog.fogus.me/2011/10/14/why-clojure-doesnt-need-invokedynamic-but-it-might-be-nice/">Why Clojure might not need invokedynamic, but it might be nice</a>, he explained:</p>
+
+<blockquote><p>Clojure&rsquo;s protocols are polymorphic on the type of the first argument. The protocol functions are call-site cached (with no per-call lookup cost if the target class remains stable). In other words, the implementation of Clojure&rsquo;s protocols are built on polymorphic inline caches.</p></blockquote>
+
+<p>The consequence of this is that we will see worse performance if the type of the first argument to a protocol&rsquo;s method keeps changing.  I made a simple test to see how significant this is:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defprotocol </span><span class="nv">P</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">f</span> <span class="p">[</span><span class="nv">x</span><span class="p">]))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">extend-protocol</span> <span class="nv">P</span>
+</span><span class='line'>  <span class="nv">String</span> <span class="p">(</span><span class="nf">f</span> <span class="p">[</span><span class="nv">_</span><span class="p">]</span> <span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>  <span class="nv">Long</span> <span class="p">(</span><span class="nf">f</span> <span class="p">[</span><span class="nv">_</span><span class="p">]</span> <span class="mi">2</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">g</span> <span class="p">[</span><span class="nv">x</span> <span class="nv">y</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">+ </span><span class="p">(</span><span class="nf">f</span> <span class="nv">x</span><span class="p">)</span> <span class="p">(</span><span class="nf">f</span> <span class="nv">y</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">s0</span> <span class="s">&quot;foo&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">s1</span> <span class="s">&quot;bar&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">n0</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">n1</span> <span class="mi">1</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>g</code> calls <code>f</code> on both its arguments and we expect <code>f</code> to perform best when it&rsquo;s consistently called on a single type:</p>
+
+<div id='chart-2'></div>
+
+
+<script type='text/javascript'>
+  var data2 = [
+{code: "(g n0 n1)", mean: 21.597699},
+{code: "(g s0 s1)", mean: 22.550262},
+{code: "(g n0 s0)", mean: 37.527409}
+      ];
+  data2.reverse();
+  drawWithResize(data2, '#chart-2', 190);
+</script>
+
+
+<p>The expectation was correct.  There was some subsequent talk about whether the penalty of this cache miss was predictable.  Theoretically, the cost could be unbounded if you extend the protocol with enough types and have horrible luck with the hash codes of those types colliding, but my understanding of the caching logic is that it will usually be the small constant that we observed here.</p>
+
+<p>You can see why by taking a look at how the cache works in <a href="https://github.com/clojure/clojure/blob/1.5.x/src/jvm/clojure/lang/MethodImplCache.java#L76">MethodImplCache.java</a>.  The hash code of the class is shifted and masked by values that form a simple perfect hash, which is determined by the <a href="https://github.com/clojure/clojure/blob/1.5.x/src/clj/clojure/core.clj#L5971"><code>maybe-min-hash</code> function</a>.  The use of a perfect hash means that we should see consistent lookup times for even moderately large caches.</p>
+
+<p>In the rare case that a perfect hash can&rsquo;t be found by <code>maybe-min-hash</code>, the cache falls back to using a <code>PersistentArrayMap</code>, which can have slightly worse performance.  In any case, I don&rsquo;t think there&rsquo;s much to worry about here.</p>
+
+<p>One neat thing I discovered while testing all of this is that you don&rsquo;t suffer this cache-miss penalty if you declare that you support a protocol in your <code>deftype</code> or if you <code>reify</code>, but you do if you use <code>extend-protocol</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">deftype </span><span class="nv">X</span> <span class="p">[]</span>
+</span><span class='line'>  <span class="nv">P</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">f</span> <span class="p">[</span><span class="nv">_</span><span class="p">]</span> <span class="mi">3</span><span class="p">))</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">dt</span> <span class="p">(</span><span class="nf">X.</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">re</span> <span class="p">(</span><span class="nf">reify</span> <span class="nv">P</span> <span class="p">(</span><span class="nf">f</span> <span class="p">[</span><span class="nv">_</span><span class="p">]</span> <span class="mi">4</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">deftype </span><span class="nv">Y</span> <span class="p">[])</span>
+</span><span class='line'><span class="p">(</span><span class="nf">extend-protocol</span> <span class="nv">P</span>
+</span><span class='line'>  <span class="nv">Y</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">f</span> <span class="p">[</span><span class="nv">_</span><span class="p">]</span> <span class="mi">5</span><span class="p">))</span>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">ep</span> <span class="p">(</span><span class="nf">Y.</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<div id='chart-3'></div>
+
+
+<script type='text/javascript'>
+  var data3 = [
+      {code: "(g s0 dt)", mean: 19.389459},
+      {code: "(g s0 re)", mean: 19.747690},
+      {code: "(g s0 ep)", mean: 76.890915},
+      ];
+  data3.reverse();
+  drawWithResize(data3, '#chart-3', 190);
+</script>
+
+
+<p>My understanding is that the declaration of a protocol results in the creation of function objects and in a corresponding interface.  When the function is called, the first thing it does when trying to dispatch is see if the first argument implements the interface for the protocol that declared the function in the first place.  If it did, the corresponding method on the object is called.  If it doesn&rsquo;t implement the interface, it next uses the MethodImplCache and has the potential to suffer from the cache miss.  What&rsquo;s great is that if the object does implement the interface, the most recent entry in the cache is unaffected.</p>
+
+<p>We can verify that the reified object and the instance of the type that was deftyped with the protocol both implement the interface and the other one doesn&rsquo;t:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nf">supers</span> <span class="p">(</span><span class="nf">type</span> <span class="nv">dt</span><span class="p">))</span>
+</span><span class='line'><span class="o">#</span><span class="p">{</span><span class="nv">user.P</span> <span class="nv">clojure.lang.IType</span> <span class="nv">java.lang.Object</span><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nf">supers</span> <span class="p">(</span><span class="nf">type</span> <span class="nv">re</span><span class="p">))</span>
+</span><span class='line'><span class="o">#</span><span class="p">{</span><span class="nv">clojure.lang.IObj</span> <span class="nv">user.P</span> <span class="nv">java.lang.Object</span> <span class="nv">clojure.lang.IMeta</span><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nf">supers</span> <span class="p">(</span><span class="nf">type</span> <span class="nv">ep</span><span class="p">))</span>
+</span><span class='line'><span class="o">#</span><span class="p">{</span><span class="nv">clojure.lang.IType</span> <span class="nv">java.lang.Object</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Determining if your type hints worked</h2>
+
+<p>Often when we want to squeeze every last bit of performance, we use type hints to avoid reflection and to force the use of primitives.  Zach demonstrated how to use Gary Trakhman&rsquo;s <a href="https://github.com/gtrak/no.disassemble">no.disassemble</a> to inspect the byte code of a function directly from the REPL.</p>
+
+<p>I haven&rsquo;t gotten to play with it yet, but the ability to quickly compare the byte code between two implementations in the REPL looked amazing.</p>
+
+<h2>Thanks</h2>
+
+<p>Thanks to Zach Tellman for the informative presentation that motivated this and to David Greenberg for help investigating the protocol performance issues.</p>
+
+<p>If there&rsquo;s anything I got wrong, please let me know in the comments&hellip; thanks!</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1188,46 +1572,6 @@ $$n_2 = \text{Number of pairs with tied values in } Y$$</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/01/25/101-vs-lol%E2%80%93More-Fonts/">101 vs. Lol - More Fonts</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-01-25T12:07:00-05:00" pubdate data-updated="true">Jan 25<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>As requested in the <a href="http://www.reddit.com/r/programming/comments/f8nzc/programmatic_programming_font_comparison_101_vs/">reddit discussion</a>, here are Envy Code R, Liberation Mono, and Terminus:</p>
-
-<p><img src="/images/envy-code-r.png" alt="Envy Code R" />
-<img src="/images/liberation-mono.png" alt="Liberation Mono" />
-<img src="/images/terminus.png" alt="Terminus" /></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -1284,6 +1628,10 @@ $$n_2 = \text{Number of pairs with tied values in } Y$$</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/02/27/finishing-up-the-ergodox/">Finishing up the ErgoDox</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/02/12/building-an-ergodox/">Sourcing and Building an ErgoDox Keyboard</a>
       </li>
     
@@ -1317,10 +1665,6 @@ $$n_2 = \text{Number of pairs with tied values in } Y$$</p>
     
       <li class="post">
         <a href="/blog/2013/11/29/colorful-equations/">Colorful Equations with MathJax</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/11/22/a-few-interesting-clojure-microbenchmarks/">A few interesting Clojure microbenchmarks</a>
       </li>
     
   </ul>
