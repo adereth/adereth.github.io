@@ -5,7 +5,7 @@ comments: false
 sharing: false
 footer: true
 ---
-{% img /images/me.png Selfie taken with my drone %}
+{% img /images/adereth.jpg %}
 
 > "when you don't create things, you become defined by your tastes rather than ability. your tastes only narrow & exclude people. so create."
 - [_why](http://en.wikipedia.org/wiki/Why_the_lucky_stiff)
@@ -22,3 +22,7 @@ I work at [Two Sigma Investments](http://www.twosigma.com/) on a variety of proj
 
 ## Colophon
 This site was generated using [Octopress](http://octopress.org/) and is hosted on [GitHub pages](http://pages.github.com/).  The theme is a tweaked version of [Oct2](https://github.com/bijumon/oct2).
+
+## Disclaimer
+
+Opinions expressed are solely my own and do not express the views or opinions of my employer.
