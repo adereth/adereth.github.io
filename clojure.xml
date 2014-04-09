@@ -4,7 +4,7 @@
   <title><![CDATA[adereth]]></title>
   <link href="http://adereth.github.io/clojure.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2014-02-28T06:17:56-05:00</updated>
+  <updated>2014-04-09T07:03:17-04:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -12,6 +12,102 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[3D Printing with Clojure]]></title>
+    <link href="http://adereth.github.io/blog/2014/04/09/3d-printing-with-clojure/"/>
+    <updated>2014-04-09T07:02:00-04:00</updated>
+    <id>http://adereth.github.io/blog/2014/04/09/3d-printing-with-clojure</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve been doing some 3D printing for <a href="https://twitter.com/adereth/status/444145229109555200/photo/1">my next keyboard project</a> and I&rsquo;ve got a workflow that I&rsquo;m pretty happy with that I&rsquo;d like to share.</p>
+
+<p>When I first started trying to make models a month ago, I tried <a href="http://www.blender.org/">Blender</a>.  It&rsquo;s an amazing beast, but after a few hours of tutorials it was clear that it would take a while to get proficient with it.  Also, it is really designed for interactive modeling and I need something that I can programmatically tweak.</p>
+
+<h2>OpenSCAD</h2>
+
+<p><img src="http://adereth.github.io/images/openscad.gif" alt="OpenSCAD Screenshot" /></p>
+
+<p>A couple of friends suggested <a href="http://www.openscad.org/">OpenSCAD</a>, which is touted as &ldquo;the programmers&#8217; solid 3D CAD modeler.&rdquo;  It provides a power set of primitive shapes and operations, but the language itself leaves a bit to be desired.  This isn&rsquo;t a beat-up-on-SCAD post, but a few of the things that irked me were:</p>
+
+<ul>
+<li>Strange function application syntax (parameters in parens after the function name with an expression or block following the closing paren)</li>
+<li>Unclear variable binding rules (multiple passes are made over the code and the results of changing a variable may affect things earlier in the code unexpectedly)</li>
+<li>No package/namespace management</li>
+<li>Multiple looping constructs that depend on what you are going to do with the results, not on how you want to loop</li>
+</ul>
+
+
+<h2>scad-clj</h2>
+
+<p>Fortunately, <a href="https://github.com/farrellm">Matt Farrell</a> has written <a href="https://github.com/farrellm/scad-clj">scad-clj</a>, an OpenSCAD DSL in Clojure.  It addresses every issue I had with OpenSCAD and lends itself to a really nice workflow with the Clojure REPL.</p>
+
+<p>To get started using it, add the dependency on <a href="https://clojars.org/scad-clj"><code>[scad-clj "0.1.0"]</code></a> to your <code>project.clj</code> and fire up your REPL.</p>
+
+<p>All of the functions for creating 3D models live in the <code>scad-clj.model</code> namespace.  There&rsquo;s no documentation yet, so in the beginning you&rsquo;ll have to look at the <a href="https://github.com/farrellm/scad-clj/blob/master/src/scad_clj/model.clj">source for <code>model.clj</code></a> and occassionally the <a href="http://www.openscad.org/documentation.html">OpenSCAD documentation</a>.  Fortunately, there really isn&rsquo;t much to learn and it&rsquo;s quite a revelation to discover that almost everything you&rsquo;ll want to do can be done with a handful of functions.</p>
+
+<p>Here&rsquo;s a simple model that showcases each of the primitive shapes:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">primitives</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">union</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">cube</span> <span class="mi">100</span> <span class="mi">100</span> <span class="mi">100</span><span class="p">)</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">sphere</span> <span class="mi">110</span><span class="p">)</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">cylinder</span> <span class="mi">10</span> <span class="mi">150</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Evaluating this gives us a data structure that can be converted into an .scad file using <code>scad-clj.scad/write-scad</code> to generate a string and <code>spit</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">spit</span> <span class="s">&quot;post-demo.scad&quot;</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">write-scad</span> <span class="nv">primitives</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We&rsquo;re going to use OpenSCAD to view the results.  One feature of OpenSCAD that is super useful for this workflow is that it watches opened files and automatically refreshes the rendering when the file is updated.  This means that we can just re-evaluate our Clojure code and see the results immediately in another window:</p>
+
+<p><img src="http://adereth.github.io/images/scad-primitives.png" alt="Primitives Screenshot" /></p>
+
+<p>scad-clj makes all new primitive shapes centered at the origin.  We can use the shape operator functions to move them around and deform them:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">primitives</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">union</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="p">(</span><span class="nf">cube</span> <span class="mi">100</span> <span class="mi">100</span> <span class="mi">100</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">(</span><span class="nf">rotate</span> <span class="p">(</span><span class="nb">/ </span><span class="nv">Math/PI</span> <span class="mi">4</span><span class="p">)</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span><span class="p">])</span>
+</span><span class='line'>        <span class="p">(</span><span class="nf">translate</span> <span class="p">[</span><span class="mi">150</span> <span class="mi">0</span> <span class="mi">0</span><span class="p">]))</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="p">(</span><span class="nf">sphere</span> <span class="mi">70</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">(</span><span class="nf">scale</span> <span class="p">[</span><span class="mi">1</span><span class="nv">/2</span> <span class="mi">1</span><span class="nv">/2</span> <span class="mi">2</span><span class="p">])</span>
+</span><span class='line'>        <span class="p">(</span><span class="nf">translate</span> <span class="p">[</span><span class="mi">-150</span> <span class="mi">0</span> <span class="mi">0</span><span class="p">]))</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">cylinder</span> <span class="mi">10</span> <span class="mi">160</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="http://adereth.github.io/images/scad-operators.png" alt="Operator Screenshot" /></p>
+
+<p>I snuck <code>union</code> into those examples.  Shapes can also be combined using <code>intersection</code>, <code>difference</code>, and <code>hull</code>.  It&rsquo;s pretty incredible how much can be done with just these.  For example, here&rsquo;s the latest iteration of my keyboard design built using clj-scad:</p>
+
+<p><img src="http://adereth.github.io/images/scad-keyboard.png" alt="Keyboard" /></p>
+
+<h2>3D Printing</h2>
+
+<p>Once your design is complete, you can use OpenSCAD to export it as an STL file which can then be imported to software like <a href="http://replicat.org/">ReplicatorG</a> or <a href="https://www.makerbot.com/makerware/">Makerware</a> for processing into an .x3g file that can be printed:</p>
+
+<p><img src="http://adereth.github.io/images/printed.JPG" alt="Keyboard" /></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Where LISP Fits]]></title>
