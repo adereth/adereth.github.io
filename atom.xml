@@ -4,7 +4,7 @@
   <title><![CDATA[adereth]]></title>
   <link href="http://adereth.github.io/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2014-04-30T21:40:39-04:00</updated>
+  <updated>2014-04-30T21:41:07-04:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[java.awt.Shape's Insidious Insideness]]></title>
-    <link href="http://adereth.github.io/blog/2014/04/21/java-dot-awt-dot-shapes-insidious-insideness/"/>
-    <updated>2014-04-21T20:11:00-04:00</updated>
-    <id>http://adereth.github.io/blog/2014/04/21/java-dot-awt-dot-shapes-insidious-insideness</id>
+    <link href="http://adereth.github.io/blog/2014/04/30/java-dot-awt-dot-shapes-insidious-insideness/"/>
+    <updated>2014-04-30T11:41:00-04:00</updated>
+    <id>http://adereth.github.io/blog/2014/04/30/java-dot-awt-dot-shapes-insidious-insideness</id>
     <content type="html"><![CDATA[<p>I recently added text support to the <a href="https://github.com/farrellm/scad-clj">scad-clj</a> 3D modeling library and encountered an interesting bug:</p>
 
 <p><img src="http://adereth.github.io/images/bad4.png" alt="Poorly rendered 4" /></p>
