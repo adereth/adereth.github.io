@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mathematica | adereth]]></title>
   <link href="http://adereth.github.io/blog/categories/mathematica/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2014-08-14T18:41:30-07:00</updated>
+  <updated>2014-08-15T06:23:41-07:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -68,9 +68,9 @@ KeyGraph[dvorak, qwerty]
 <p>We can get these groups programmatically using the <a href="http://reference.wolfram.com/mathematica/ref/ConnectedComponents.html">ConnectedComponents function</a>:</p>
 
 <p><code>clojure
-TableForm@
- Sort@
-  ConnectedComponents@
+TableForm @
+ Sort @
+  ConnectedComponents @
    KeyGraph[dvorak, qwerty]
 </code></p>
 
@@ -96,7 +96,7 @@ TableForm@
 <p><code>clojure
 LCM @@
  Length /@
-  ConnectedComponents@
+  ConnectedComponents @
    KeyGraph[dvorak, qwerty]
 </code>
 <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Output </span></figcaption>
@@ -124,7 +124,7 @@ colemak =
 <p><code>clojure
 LCM @@
  Length /@
-  ConnectedComponents@
+  ConnectedComponents @
    KeyGraph[colemak, qwerty]
 </code>
 <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Output </span></figcaption>
