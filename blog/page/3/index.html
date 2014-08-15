@@ -9,7 +9,7 @@
   <meta name="author" content="Matt Adereth">
 
   
-  <meta name="description" content="The previous post generated some great suggestions in the Hacker News discussion. I&rsquo;ve incorporated some of the feedback and here’s a summary &hellip;">
+  <meta name="description" content="After trying out every monospaced font I could get my hands on, I decided that Mark Simonson‘s Anonymous Pro is the one for me: After using it in my &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -113,6 +113,72 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2011/02/02/tweaking-my-favorite-programming-font/">Tweaking My Favorite Programming Font</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-02T07:47:00-08:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>After trying out every monospaced font I could get my hands on, I decided that <a href="http://www.ms-studio.com/index.html">Mark Simonson</a>‘s <a href="http://www.ms-studio.com/FontSales/anonymouspro.html">Anonymous Pro</a> is the one for me:</p>
+
+<p><a href="http://www.ms-studio.com/FontSales/anonymouspro.html"><img src="http://www.marksimonson.com/assets/content/fonts/anonymouspro_banner.png" alt="Anonymous Pro Sample" /></a></p>
+
+<p>After using it in my IDE for months, I decided to start using it in my terminals. Unfortunately, this revealed a subtle flaw in the font.  Take a look:</p>
+
+<p><img src="/images/anonymous12.png" alt="terminal sample" /></p>
+
+<p>Notice anything?  Those forward slashes seem a bit too far to the right. While this wasn&rsquo;t a problem when writing code, it became a major eye sore when working with lots of paths in a terminal.</p>
+
+<p>One interesting thing is that this issue only shows up when using the font at 12pt without anti-aliasing. This is because Anonymous Pro is a <a href="http://en.wikipedia.org/wiki/TrueType">TrueType font</a>. TrueType is an <a href="http://en.wikipedia.org/wiki/Outline_font#Outline_fonts">outline font</a>, which means the designer draws each character by specifying vectors that define the shape.  By using vectors, the font can be scaled cleanly to any size. At smaller sizes, the scaling of the vector outline may result in an image that isn&rsquo;t as clear as desired. To give the font designer complete control of the display, TrueType fonts can also have bitmapped versions of each character for specific point sizes.</p>
+
+<p>Armed with this knowledge and a font editor (like <a href="http://fontforge.sourceforge.net/">FontForge</a>), we can crack open the .ttf and see exactly what&rsquo;s going on with the forward slash:</p>
+
+<p><img src="/images/slashbitmaporiginal.png" alt="original" /></p>
+
+<p>The green outline shows the vector representation of the character, while the dark squares show the pixels used in the bitmapped version. I think that the pixels should be shifted to the left by 1, so I went ahead and did it:</p>
+
+<p><img src="/images/slashbitmapmodified.png" alt="modified" /></p>
+
+<p>Now everything looks good in my terminal:</p>
+
+<p><img src="/images/anonymous12slashfixed.png" alt="fixed terminal" /></p>
+
+<p>I&rsquo;ve informed Mark Simonson of this and it looks like this fix may be available in the next version of Anonymous Pro.</p>
+
+<p>When you consider how many characters there are to define and the various point sizes, it&rsquo;s clear that designing a font is a monumental task. We should all be grateful that such talented designers are out there and that some of them are generous enough to provide such useful, beautiful fonts for free.</p>
+
+<p>On top of giving it away free, Mark Simonson has released Anonymous Pro under the <a href="http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&amp;id=OFL">SIL Open Font License</a>. This means that you can enjoy my trivial tweak with minimal effort, because I&rsquo;m allowed to redistribute my modified version. I&rsquo;d prefer to call it something like “Anonymous Pro with Shifted Slash” or something equally descriptive, but condition 3 of the OFL says that I need to use a different name.</p>
+
+<p>So, without further ado, I present <a href="https://s3.amazonaws.com/1overBlog/programming_fonts/NamelessAmateur.zip">Nameless Amateur</a>! As soon as the update of Anonymous Pro is available, I&rsquo;ll remove this link and direct people to the new version.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2011/01/31/Iterating-on-Font-Pair-Comparisons/">Iterating on Font Pair Comparisons</a></h1>
     
     
@@ -129,7 +195,7 @@
   
 
 
-<time datetime="2011-01-31T20:58:00-05:00" pubdate data-updated="true">Jan 31<span>st</span>, 2011</time>
+<time datetime="2011-01-31T20:58:00-08:00" pubdate data-updated="true">Jan 31<span>st</span>, 2011</time>
         
       </p>
     
@@ -188,7 +254,7 @@
   
 
 
-<time datetime="2011-01-26T22:46:00-05:00" pubdate data-updated="true">Jan 26<span>th</span>, 2011</time>
+<time datetime="2011-01-26T22:46:00-08:00" pubdate data-updated="true">Jan 26<span>th</span>, 2011</time>
         
       </p>
     
@@ -248,7 +314,7 @@
   
 
 
-<time datetime="2011-01-26T10:47:00-05:00" pubdate data-updated="true">Jan 26<span>th</span>, 2011</time>
+<time datetime="2011-01-26T10:47:00-08:00" pubdate data-updated="true">Jan 26<span>th</span>, 2011</time>
         
       </p>
     
@@ -304,7 +370,7 @@
   
 
 
-<time datetime="2011-01-25T12:07:00-05:00" pubdate data-updated="true">Jan 25<span>th</span>, 2011</time>
+<time datetime="2011-01-25T12:07:00-08:00" pubdate data-updated="true">Jan 25<span>th</span>, 2011</time>
         
       </p>
     
@@ -344,7 +410,7 @@
   
 
 
-<time datetime="2011-01-24T12:07:00-05:00" pubdate data-updated="true">Jan 24<span>th</span>, 2011</time>
+<time datetime="2011-01-24T12:07:00-08:00" pubdate data-updated="true">Jan 24<span>th</span>, 2011</time>
         
       </p>
     
@@ -414,6 +480,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/08/14/typing-qwerty-on-a-dvorak-keyboard/">Typing Qwerty on a Dvorak Keyboard</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/05/29/custom-clojure-evaluation-keybindings-in-emacs/">Custom Clojure Evaluation Keybindings in Emacs</a>
       </li>
     
@@ -447,10 +517,6 @@
     
       <li class="post">
         <a href="/blog/2014/01/06/benchmarking-mathematica-on-the-raspberry-pi/">Benchmarking Mathematica on the Raspberry Pi</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/12/23/counting-stars-on-github/">Counting Stars on GitHub</a>
       </li>
     
   </ul>

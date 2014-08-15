@@ -4,7 +4,7 @@
   <title><![CDATA[Category: emacs | adereth]]></title>
   <link href="http://adereth.github.io/blog/categories/emacs/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2014-06-02T06:31:37-04:00</updated>
+  <updated>2014-08-14T18:41:30-07:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Custom Clojure Evaluation Keybindings in Emacs]]></title>
     <link href="http://adereth.github.io/blog/2014/05/29/custom-clojure-evaluation-keybindings-in-emacs/"/>
-    <updated>2014-05-29T06:28:00-04:00</updated>
+    <updated>2014-05-29T06:28:00-07:00</updated>
     <id>http://adereth.github.io/blog/2014/05/29/custom-clojure-evaluation-keybindings-in-emacs</id>
     <content type="html"><![CDATA[<p>I love <a href="http://blog.jayfields.com/2014/01/repl-driven-development.html">REPL Driven Development</a>.  My style is to write expressions directly in the file that I&rsquo;m working on and to use <code>C-x C-e</code> to view the value of the last command in the minibuffer.</p>
 
@@ -170,7 +170,7 @@ If invoked with a PREFIX argument, print the result in the current buffer.&rdquo
   <entry>
     <title type="html"><![CDATA[Most frequently enabled Emacs packages]]></title>
     <link href="http://adereth.github.io/blog/2013/12/08/most-frequently-enabled-emacs-packages/"/>
-    <updated>2013-12-08T20:38:00-05:00</updated>
+    <updated>2013-12-08T20:38:00-08:00</updated>
     <id>http://adereth.github.io/blog/2013/12/08/most-frequently-enabled-emacs-packages</id>
     <content type="html"><![CDATA[<p>As part of the Emacs-24.4 release, emacs-devel is conducting <a href="http://www.emacswiki.org/emacs/FrequentlyEnabledPackages_Emacs244_Survey">a survey</a> to find out which vanilla GnuEmacs packages/modes people enable by default.  The responses are in one big plain-text alphabetical list which isn&rsquo;t really conducive to browsing.</p>
 

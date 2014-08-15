@@ -4,7 +4,7 @@
   <title><![CDATA[Category: clojure | adereth]]></title>
   <link href="http://adereth.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2014-06-02T06:31:37-04:00</updated>
+  <updated>2014-08-14T18:41:30-07:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Custom Clojure Evaluation Keybindings in Emacs]]></title>
     <link href="http://adereth.github.io/blog/2014/05/29/custom-clojure-evaluation-keybindings-in-emacs/"/>
-    <updated>2014-05-29T06:28:00-04:00</updated>
+    <updated>2014-05-29T06:28:00-07:00</updated>
     <id>http://adereth.github.io/blog/2014/05/29/custom-clojure-evaluation-keybindings-in-emacs</id>
     <content type="html"><![CDATA[<p>I love <a href="http://blog.jayfields.com/2014/01/repl-driven-development.html">REPL Driven Development</a>.  My style is to write expressions directly in the file that I&rsquo;m working on and to use <code>C-x C-e</code> to view the value of the last command in the minibuffer.</p>
 
@@ -170,7 +170,7 @@ If invoked with a PREFIX argument, print the result in the current buffer.&rdquo
   <entry>
     <title type="html"><![CDATA[3D Printing with Clojure]]></title>
     <link href="http://adereth.github.io/blog/2014/04/09/3d-printing-with-clojure/"/>
-    <updated>2014-04-09T07:02:00-04:00</updated>
+    <updated>2014-04-09T07:02:00-07:00</updated>
     <id>http://adereth.github.io/blog/2014/04/09/3d-printing-with-clojure</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve been doing some 3D printing for <a href="https://twitter.com/adereth/status/444145229109555200/photo/1">my next keyboard project</a> and I&rsquo;ve got a workflow that I&rsquo;m pretty happy with that I&rsquo;d like to share.</p>
 
@@ -259,7 +259,7 @@ If invoked with a PREFIX argument, print the result in the current buffer.&rdquo
   <entry>
     <title type="html"><![CDATA[Where LISP Fits]]></title>
     <link href="http://adereth.github.io/blog/2014/02/03/where-lisp-fits/"/>
-    <updated>2014-02-03T07:19:00-05:00</updated>
+    <updated>2014-02-03T07:19:00-08:00</updated>
     <id>http://adereth.github.io/blog/2014/02/03/where-lisp-fits</id>
     <content type="html"><![CDATA[<p>There are a lot of great essays about the power and joy of LISP.  I had read a bunch of them, but none convinced me to actually put the energy in to make it over those parentheses-shaped speed bumps.  A part of me always wanted to, mostly because I&rsquo;m convinced that our inevitable robot overlords will have to be programs that write programs and everything I had heard made me think that this would likely be done in a LISP.  It just makes sense to be prepared.</p>
 
@@ -326,7 +326,7 @@ Turing Machines <i class="fa fa-arrows-h"></i> ?
   <entry>
     <title type="html"><![CDATA[Every project.clj]]></title>
     <link href="http://adereth.github.io/blog/2014/01/20/every-project-dot-clj/"/>
-    <updated>2014-01-20T17:33:00-05:00</updated>
+    <updated>2014-01-20T17:33:00-08:00</updated>
     <id>http://adereth.github.io/blog/2014/01/20/every-project-dot-clj</id>
     <content type="html"><![CDATA[<p>I was recently looking for an interesting relational dataset for another project and the idea of using the dependencies for every Clojure project on GitHub came up.  It turns out that it&rsquo;s possible to download almost every project.clj using <a href="https://github.com/Raynes/tentacles">Tentacles</a>, so I decided to&hellip;</p>
 
@@ -663,7 +663,7 @@ Turing Machines <i class="fa fa-arrows-h"></i> ?
   <entry>
     <title type="html"><![CDATA[Quine Tweet Challenge]]></title>
     <link href="http://adereth.github.io/blog/2014/01/08/quine-tweet-challenge/"/>
-    <updated>2014-01-08T07:49:00-05:00</updated>
+    <updated>2014-01-08T07:49:00-08:00</updated>
     <id>http://adereth.github.io/blog/2014/01/08/quine-tweet-challenge</id>
     <content type="html"><![CDATA[<p>A <a href="http://en.wikipedia.org/wiki/Quine_(computing)">quine</a> is a program which takes no input and outputs a copy of its own source code.  There&rsquo;s a history of making challenges out of variants on the idea (shortest quine, <a href="http://en.wikipedia.org/wiki/Quine_(computing)#Ouroboros_Programs">Ouroboros Programs</a>, <a href="http://en.wikipedia.org/wiki/Quine_(computing)#Multiquines">Multiquines</a>).  I&rsquo;d like to propose a new variant for our modern social age: the Quine Tweet.</p>
 

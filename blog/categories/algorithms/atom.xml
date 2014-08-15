@@ -4,7 +4,7 @@
   <title><![CDATA[Category: algorithms | adereth]]></title>
   <link href="http://adereth.github.io/blog/categories/algorithms/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2014-06-02T06:31:37-04:00</updated>
+  <updated>2014-08-14T18:41:30-07:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Efficiently Computing Kendall's Tau]]></title>
     <link href="http://adereth.github.io/blog/2013/10/30/efficiently-computing-kendalls-tau/"/>
-    <updated>2013-10-30T21:45:00-04:00</updated>
+    <updated>2013-10-30T21:45:00-07:00</updated>
     <id>http://adereth.github.io/blog/2013/10/30/efficiently-computing-kendalls-tau</id>
     <content type="html"><![CDATA[<p>Typically when people talk about correlation they are referring to the <a href="http://en.wikipedia.org/wiki/Pearson_product-moment_correlation_coefficient">Pearson&rsquo;s product-moment coefficient</a>:</p>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: benchmarks | adereth]]></title>
   <link href="http://adereth.github.io/blog/categories/benchmarks/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2014-06-02T06:31:37-04:00</updated>
+  <updated>2014-08-14T18:41:30-07:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Benchmarking Mathematica on the Raspberry Pi]]></title>
     <link href="http://adereth.github.io/blog/2014/01/06/benchmarking-mathematica-on-the-raspberry-pi/"/>
-    <updated>2014-01-06T07:23:00-05:00</updated>
+    <updated>2014-01-06T07:23:00-08:00</updated>
     <id>http://adereth.github.io/blog/2014/01/06/benchmarking-mathematica-on-the-raspberry-pi</id>
     <content type="html"><![CDATA[<p>I&rsquo;m really excited about <a href="http://blog.wolfram.com/2013/11/21/putting-the-wolfram-language-and-mathematica-on-every-raspberry-pi/">Wolfram Research&rsquo;s announcement</a> that Mathematica and the Wolfram language are now available for free on the Raspberry Pi.</p>
 
@@ -252,7 +252,7 @@ Module[{m1, m2},
   <entry>
     <title type="html"><![CDATA[A few interesting Clojure microbenchmarks]]></title>
     <link href="http://adereth.github.io/blog/2013/11/22/a-few-interesting-clojure-microbenchmarks/"/>
-    <updated>2013-11-22T07:50:00-05:00</updated>
+    <updated>2013-11-22T07:50:00-08:00</updated>
     <id>http://adereth.github.io/blog/2013/11/22/a-few-interesting-clojure-microbenchmarks</id>
     <content type="html"><![CDATA[<script src="http://d3js.org/d3.v2.js"></script>
 

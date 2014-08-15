@@ -4,7 +4,7 @@
   <title><![CDATA[adereth]]></title>
   <link href="http://adereth.github.io/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2014-06-02T06:31:37-04:00</updated>
+  <updated>2014-08-14T18:41:30-07:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -14,9 +14,181 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Typing Qwerty on a Dvorak Keyboard]]></title>
+    <link href="http://adereth.github.io/blog/2014/08/14/typing-qwerty-on-a-dvorak-keyboard/"/>
+    <updated>2014-08-14T18:40:00-07:00</updated>
+    <id>http://adereth.github.io/blog/2014/08/14/typing-qwerty-on-a-dvorak-keyboard</id>
+    <content type="html"><![CDATA[<p><a href="https://twitter.com/thattommyhall">@thattommyhall</a> posted a fun question on Twitter:</p>
+
+<blockquote class="twitter-tweet" data-partner="tweetdeck"><p>If you type your name on a keyboard marked as qwerty but set to Dvorak and keep reinputting what comes out, will it ever say your name?</p>&mdash; !!!!!11111oneoneone (@thattommyhall) <a href="https://twitter.com/thattommyhall/statuses/494916131598393344">July 31, 2014</a></blockquote>
+
+
+<script async src="http://adereth.github.io//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<p>The best answer was &ldquo;yes because group theory&rdquo; and <a href="https://twitter.com/AnnaPawlicka">@AnnaPawlicka</a> demonstrated it was true for her name:</p>
+
+<blockquote class="twitter-tweet" lang="en"><p><a href="https://twitter.com/thattommyhall">@thattommyhall</a> Yes. I can confirm that. :) <a href="http://t.co/Vubkf1ltoK">pic.twitter.com/Vubkf1ltoK</a></p>&mdash; Anna Pawlicka (@AnnaPawlicka) <a href="https://twitter.com/AnnaPawlicka/statuses/494918999747350529">July 31, 2014</a></blockquote>
+
+
+<script async src="http://adereth.github.io//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<p>But is it really true?  And if so, how many iterations will it take to get the target string?  I turned to Mathematica&hellip;</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">qwerty</span> <span class="nv">=</span>
+</span><span class='line'>  <span class="p">{</span><span class="s">&quot;-&quot;</span>, <span class="s">&quot;=&quot;</span>,
+</span><span class='line'>   <span class="s">&quot;q&quot;</span>, <span class="s">&quot;w&quot;</span>, <span class="s">&quot;e&quot;</span>, <span class="s">&quot;r&quot;</span>, <span class="s">&quot;t&quot;</span>, <span class="s">&quot;y&quot;</span>, <span class="s">&quot;u&quot;</span>, <span class="s">&quot;i&quot;</span>, <span class="s">&quot;o&quot;</span>, <span class="s">&quot;p&quot;</span>, <span class="s">&quot;[&quot;</span>, <span class="s">&quot;]&quot;</span>, <span class="s">&quot;\\&quot;</span>,
+</span><span class='line'>   <span class="s">&quot;a&quot;</span>, <span class="s">&quot;s&quot;</span>, <span class="s">&quot;d&quot;</span>, <span class="s">&quot;f&quot;</span>, <span class="s">&quot;g&quot;</span>, <span class="s">&quot;h&quot;</span>, <span class="s">&quot;j&quot;</span>, <span class="s">&quot;k&quot;</span>, <span class="s">&quot;l&quot;</span>, <span class="s">&quot;;&quot;</span>, <span class="s">&quot;&#39;&quot;</span>,
+</span><span class='line'>   <span class="s">&quot;z&quot;</span>, <span class="s">&quot;x&quot;</span>, <span class="s">&quot;c&quot;</span>, <span class="s">&quot;v&quot;</span>, <span class="s">&quot;b&quot;</span>, <span class="s">&quot;n&quot;</span>, <span class="s">&quot;m&quot;</span>, <span class="s">&quot;,&quot;</span>, <span class="s">&quot;.&quot;</span>, <span class="s">&quot;/&quot;</span><span class="p">}</span><span class="c1">;</span>
+</span><span class='line'><span class="nv">dvorak</span> <span class="nv">=</span>
+</span><span class='line'>  <span class="p">{</span><span class="s">&quot;[&quot;</span>, <span class="s">&quot;]&quot;</span>,
+</span><span class='line'>   <span class="s">&quot;&#39;&quot;</span>, <span class="s">&quot;,&quot;</span>, <span class="s">&quot;.&quot;</span>, <span class="s">&quot;p&quot;</span>, <span class="s">&quot;y&quot;</span>, <span class="s">&quot;f&quot;</span>, <span class="s">&quot;g&quot;</span>, <span class="s">&quot;c&quot;</span>, <span class="s">&quot;r&quot;</span>, <span class="s">&quot;l&quot;</span>, <span class="s">&quot;/&quot;</span>, <span class="s">&quot;=&quot;</span>, <span class="s">&quot;\\&quot;</span>,
+</span><span class='line'>   <span class="s">&quot;a&quot;</span>, <span class="s">&quot;o&quot;</span>, <span class="s">&quot;e&quot;</span>, <span class="s">&quot;u&quot;</span>, <span class="s">&quot;i&quot;</span>, <span class="s">&quot;d&quot;</span>, <span class="s">&quot;h&quot;</span>, <span class="s">&quot;t&quot;</span>, <span class="s">&quot;n&quot;</span>, <span class="s">&quot;s&quot;</span>, <span class="s">&quot;-&quot;</span>,
+</span><span class='line'>   <span class="s">&quot;;&quot;</span>, <span class="s">&quot;q&quot;</span>, <span class="s">&quot;j&quot;</span>, <span class="s">&quot;k&quot;</span>, <span class="s">&quot;x&quot;</span>, <span class="s">&quot;b&quot;</span>, <span class="s">&quot;m&quot;</span>, <span class="s">&quot;w&quot;</span>, <span class="s">&quot;v&quot;</span>, <span class="s">&quot;z&quot;</span><span class="p">}</span><span class="c1">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">KeyGraph</span><span class="p">[</span><span class="nv">from_</span>, <span class="nv">to_</span><span class="p">]</span> <span class="ss">:=</span>
+</span><span class='line'> <span class="nv">Graph</span><span class="p">[</span>
+</span><span class='line'>  <span class="nv">MapThread</span><span class="p">[</span><span class="o">#</span><span class="mi">1</span> <span class="nb">-&gt; </span><span class="o">#</span><span class="mi">2</span> <span class="o">&amp;</span>, <span class="p">{</span><span class="nv">from</span>, <span class="nv">to</span><span class="p">}]</span>,
+</span><span class='line'>  <span class="nv">VertexLabels</span> <span class="nb">-&gt; </span><span class="s">&quot;Name&quot;</span>, <span class="nv">DirectedEdges</span> <span class="nb">-&gt; </span><span class="nv">True</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This allows us to visualize the mapping of keys from one layout to another:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">KeyGraph</span><span class="p">[</span><span class="nv">dvorak</span>, <span class="nv">qwerty</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="http://adereth.github.io/images/dvorak-qwerty.png" alt="Dvorak to Qwerty Graph" /></p>
+
+<p>There is a single directed edge going from each character to the one that will be displayed when you type it.  There are 3 keys that remain unchanged, 2 pairs of swapped keys, and 2 large cycles of keys.</p>
+
+<p>We can get these groups programmatically using the <a href="http://reference.wolfram.com/mathematica/ref/ConnectedComponents.html">ConnectedComponents function</a>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">TableForm</span><span class="err">@</span>
+</span><span class='line'> <span class="nv">Sort</span><span class="err">@</span>
+</span><span class='line'>  <span class="nv">ConnectedComponents</span><span class="err">@</span>
+</span><span class='line'>   <span class="nv">KeyGraph</span><span class="p">[</span><span class="nv">dvorak</span>, <span class="nv">qwerty</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>Output </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'>\
+</span><span class='line'>a
+</span><span class='line'>m
+</span><span class='line'>] =
+</span><span class='line'>, w
+</span><span class='line'>. e y t f g u c i d h j k v
+</span><span class='line'>[ - &#39; q p r o l / s n ; z x b
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It will take the length of the cycle the letter is in to get the letter we want.  For a given word, we won&rsquo;t get all the letters we want unless we&rsquo;ve iterated some multiple of the length of the cycles each letter is in.  Let&rsquo;s apply the Least Common Multiple function to see the worst case where there is a letter from each cycle:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">LCM</span> <span class="err">@@</span>
+</span><span class='line'> <span class="nv">Length</span> <span class="nv">/</span><span class="err">@</span>
+</span><span class='line'>  <span class="nv">ConnectedComponents</span><span class="err">@</span>
+</span><span class='line'>   <span class="nv">KeyGraph</span><span class="p">[</span><span class="nv">dvorak</span>, <span class="nv">qwerty</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>Output </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'>210
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Looks like Anna got lucky that her name only consists of letters in a cycle of length 1 and 15.</p>
+
+<p>For fun, here&rsquo;s the graph we get if we use Colemak instead of Dvorak:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">colemak</span> <span class="nv">=</span>
+</span><span class='line'>  <span class="p">{</span><span class="s">&quot;-&quot;</span>, <span class="s">&quot;=&quot;</span>,
+</span><span class='line'>   <span class="s">&quot;q&quot;</span>, <span class="s">&quot;w&quot;</span>, <span class="s">&quot;f&quot;</span>, <span class="s">&quot;p&quot;</span>, <span class="s">&quot;g&quot;</span>, <span class="s">&quot;j&quot;</span>, <span class="s">&quot;l&quot;</span>, <span class="s">&quot;u&quot;</span>, <span class="s">&quot;y&quot;</span>, <span class="s">&quot;;&quot;</span>, <span class="s">&quot;[&quot;</span>, <span class="s">&quot;]&quot;</span>, <span class="s">&quot;\\&quot;</span>,
+</span><span class='line'>   <span class="s">&quot;a&quot;</span>, <span class="s">&quot;r&quot;</span>, <span class="s">&quot;s&quot;</span>, <span class="s">&quot;t&quot;</span>, <span class="s">&quot;d&quot;</span>, <span class="s">&quot;h&quot;</span>, <span class="s">&quot;n&quot;</span>, <span class="s">&quot;e&quot;</span>, <span class="s">&quot;i&quot;</span>, <span class="s">&quot;o&quot;</span>, <span class="s">&quot;&#39;&quot;</span>,
+</span><span class='line'>   <span class="s">&quot;z&quot;</span>, <span class="s">&quot;x&quot;</span>, <span class="s">&quot;c&quot;</span>, <span class="s">&quot;v&quot;</span>, <span class="s">&quot;b&quot;</span>, <span class="s">&quot;k&quot;</span>, <span class="s">&quot;m&quot;</span>, <span class="s">&quot;,&quot;</span>, <span class="s">&quot;.&quot;</span>, <span class="s">&quot;/&quot;</span><span class="p">}</span><span class="c1">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">KeyGraph</span><span class="p">[</span><span class="nv">colemak</span>, <span class="nv">qwerty</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="http://adereth.github.io/images/colemak-qwerty.png" alt="Colemak to Qwerty Graph" /></p>
+
+<p>One cycle of length 14, one cycle of length 3, and the rest are just letters that map back to themselves.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">LCM</span> <span class="err">@@</span>
+</span><span class='line'> <span class="nv">Length</span> <span class="nv">/</span><span class="err">@</span>
+</span><span class='line'>  <span class="nv">ConnectedComponents</span><span class="err">@</span>
+</span><span class='line'>   <span class="nv">KeyGraph</span><span class="p">[</span><span class="nv">colemak</span>, <span class="nv">qwerty</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>Output </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'>52
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Custom Clojure Evaluation Keybindings in Emacs]]></title>
     <link href="http://adereth.github.io/blog/2014/05/29/custom-clojure-evaluation-keybindings-in-emacs/"/>
-    <updated>2014-05-29T06:28:00-04:00</updated>
+    <updated>2014-05-29T06:28:00-07:00</updated>
     <id>http://adereth.github.io/blog/2014/05/29/custom-clojure-evaluation-keybindings-in-emacs</id>
     <content type="html"><![CDATA[<p>I love <a href="http://blog.jayfields.com/2014/01/repl-driven-development.html">REPL Driven Development</a>.  My style is to write expressions directly in the file that I&rsquo;m working on and to use <code>C-x C-e</code> to view the value of the last command in the minibuffer.</p>
 
@@ -212,7 +384,7 @@
   <entry>
     <title type="html"><![CDATA[java.awt.Shape's Insidious Insideness]]></title>
     <link href="http://adereth.github.io/blog/2014/04/30/java-dot-awt-dot-shapes-insidious-insideness/"/>
-    <updated>2014-04-30T11:41:00-04:00</updated>
+    <updated>2014-04-30T11:41:00-07:00</updated>
     <id>http://adereth.github.io/blog/2014/04/30/java-dot-awt-dot-shapes-insidious-insideness</id>
     <content type="html"><![CDATA[<p>I recently added text support to the <a href="https://github.com/farrellm/scad-clj">scad-clj</a> 3D modeling library and encountered an interesting bug:</p>
 
@@ -292,7 +464,7 @@
   <entry>
     <title type="html"><![CDATA[3D Printing with Clojure]]></title>
     <link href="http://adereth.github.io/blog/2014/04/09/3d-printing-with-clojure/"/>
-    <updated>2014-04-09T07:02:00-04:00</updated>
+    <updated>2014-04-09T07:02:00-07:00</updated>
     <id>http://adereth.github.io/blog/2014/04/09/3d-printing-with-clojure</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve been doing some 3D printing for <a href="https://twitter.com/adereth/status/444145229109555200/photo/1">my next keyboard project</a> and I&rsquo;ve got a workflow that I&rsquo;m pretty happy with that I&rsquo;d like to share.</p>
 
@@ -388,7 +560,7 @@
   <entry>
     <title type="html"><![CDATA[Finishing up the ErgoDox]]></title>
     <link href="http://adereth.github.io/blog/2014/02/27/finishing-up-the-ergodox/"/>
-    <updated>2014-02-27T22:43:00-05:00</updated>
+    <updated>2014-02-27T22:43:00-08:00</updated>
     <id>http://adereth.github.io/blog/2014/02/27/finishing-up-the-ergodox</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve been busy with a few other keyboard projects since <a href="http://adereth.github.io/blog/2014/02/12/building-an-ergodox/">my last post on my ErgoDox build</a>.  While working on those projects, I&rsquo;ve gotten some parts and done a few more tweaks to the ErgoDox that I&rsquo;d like to share.</p>
 
@@ -437,7 +609,7 @@
   <entry>
     <title type="html"><![CDATA[Sourcing and Building an ErgoDox Keyboard]]></title>
     <link href="http://adereth.github.io/blog/2014/02/12/building-an-ergodox/"/>
-    <updated>2014-02-12T07:25:00-05:00</updated>
+    <updated>2014-02-12T07:25:00-08:00</updated>
     <id>http://adereth.github.io/blog/2014/02/12/building-an-ergodox</id>
     <content type="html"><![CDATA[<p>The <a href="http://ergodox.org/">ErgoDox</a> is a split ergonomic keyboard project.  One of the most notable things about it is that you can&rsquo;t buy this keyboard &mdash; you have to build it yourself!  The <a href="http://ergodox.org/Hardware.aspx">parts list</a> is available on the site, along with the <a href="http://ergodox.org/Downloads.aspx">designs for the PCB and case</a>.</p>
 
@@ -605,7 +777,7 @@
   <entry>
     <title type="html"><![CDATA[Where LISP Fits]]></title>
     <link href="http://adereth.github.io/blog/2014/02/03/where-lisp-fits/"/>
-    <updated>2014-02-03T07:19:00-05:00</updated>
+    <updated>2014-02-03T07:19:00-08:00</updated>
     <id>http://adereth.github.io/blog/2014/02/03/where-lisp-fits</id>
     <content type="html"><![CDATA[<p>There are a lot of great essays about the power and joy of LISP.  I had read a bunch of them, but none convinced me to actually put the energy in to make it over those parentheses-shaped speed bumps.  A part of me always wanted to, mostly because I&rsquo;m convinced that our inevitable robot overlords will have to be programs that write programs and everything I had heard made me think that this would likely be done in a LISP.  It just makes sense to be prepared.</p>
 
@@ -672,7 +844,7 @@ Turing Machines <i class="fa fa-arrows-h"></i> ?
   <entry>
     <title type="html"><![CDATA[Every project.clj]]></title>
     <link href="http://adereth.github.io/blog/2014/01/20/every-project-dot-clj/"/>
-    <updated>2014-01-20T17:33:00-05:00</updated>
+    <updated>2014-01-20T17:33:00-08:00</updated>
     <id>http://adereth.github.io/blog/2014/01/20/every-project-dot-clj</id>
     <content type="html"><![CDATA[<p>I was recently looking for an interesting relational dataset for another project and the idea of using the dependencies for every Clojure project on GitHub came up.  It turns out that it&rsquo;s possible to download almost every project.clj using <a href="https://github.com/Raynes/tentacles">Tentacles</a>, so I decided to&hellip;</p>
 
@@ -1009,7 +1181,7 @@ Turing Machines <i class="fa fa-arrows-h"></i> ?
   <entry>
     <title type="html"><![CDATA[Quine Tweet Challenge]]></title>
     <link href="http://adereth.github.io/blog/2014/01/08/quine-tweet-challenge/"/>
-    <updated>2014-01-08T07:49:00-05:00</updated>
+    <updated>2014-01-08T07:49:00-08:00</updated>
     <id>http://adereth.github.io/blog/2014/01/08/quine-tweet-challenge</id>
     <content type="html"><![CDATA[<p>A <a href="http://en.wikipedia.org/wiki/Quine_(computing)">quine</a> is a program which takes no input and outputs a copy of its own source code.  There&rsquo;s a history of making challenges out of variants on the idea (shortest quine, <a href="http://en.wikipedia.org/wiki/Quine_(computing)#Ouroboros_Programs">Ouroboros Programs</a>, <a href="http://en.wikipedia.org/wiki/Quine_(computing)#Multiquines">Multiquines</a>).  I&rsquo;d like to propose a new variant for our modern social age: the Quine Tweet.</p>
 
@@ -1077,7 +1249,7 @@ Turing Machines <i class="fa fa-arrows-h"></i> ?
   <entry>
     <title type="html"><![CDATA[Benchmarking Mathematica on the Raspberry Pi]]></title>
     <link href="http://adereth.github.io/blog/2014/01/06/benchmarking-mathematica-on-the-raspberry-pi/"/>
-    <updated>2014-01-06T07:23:00-05:00</updated>
+    <updated>2014-01-06T07:23:00-08:00</updated>
     <id>http://adereth.github.io/blog/2014/01/06/benchmarking-mathematica-on-the-raspberry-pi</id>
     <content type="html"><![CDATA[<p>I&rsquo;m really excited about <a href="http://blog.wolfram.com/2013/11/21/putting-the-wolfram-language-and-mathematica-on-every-raspberry-pi/">Wolfram Research&rsquo;s announcement</a> that Mathematica and the Wolfram language are now available for free on the Raspberry Pi.</p>
 
@@ -1331,7 +1503,7 @@ Turing Machines <i class="fa fa-arrows-h"></i> ?
   <entry>
     <title type="html"><![CDATA[Counting Stars on GitHub]]></title>
     <link href="http://adereth.github.io/blog/2013/12/23/counting-stars-on-github/"/>
-    <updated>2013-12-23T08:10:00-05:00</updated>
+    <updated>2013-12-23T08:10:00-08:00</updated>
     <id>http://adereth.github.io/blog/2013/12/23/counting-stars-on-github</id>
     <content type="html"><![CDATA[<script type="text/javascript" src="http://mbostock.github.com/d3/d3.min.js"></script>
 
@@ -2139,7 +2311,7 @@ function position() {
   <entry>
     <title type="html"><![CDATA[Font Awesome Easter Egg]]></title>
     <link href="http://adereth.github.io/blog/2013/12/15/font-awesome-easter-egg/"/>
-    <updated>2013-12-15T12:45:00-05:00</updated>
+    <updated>2013-12-15T12:45:00-08:00</updated>
     <id>http://adereth.github.io/blog/2013/12/15/font-awesome-easter-egg</id>
     <content type="html"><![CDATA[<p><a href="http://fontawesome.io/">Font Awesome</a> is a gorgeous icon font designed to play nicely with Bootstrap.  I was playing around with it today and noticed the highly detailed <a href="http://fontawesome.io/icon/barcode/">fa-barcode</a> character:</p>
 
@@ -2158,7 +2330,7 @@ function position() {
   <entry>
     <title type="html"><![CDATA[Most frequently enabled Emacs packages]]></title>
     <link href="http://adereth.github.io/blog/2013/12/08/most-frequently-enabled-emacs-packages/"/>
-    <updated>2013-12-08T20:38:00-05:00</updated>
+    <updated>2013-12-08T20:38:00-08:00</updated>
     <id>http://adereth.github.io/blog/2013/12/08/most-frequently-enabled-emacs-packages</id>
     <content type="html"><![CDATA[<p>As part of the Emacs-24.4 release, emacs-devel is conducting <a href="http://www.emacswiki.org/emacs/FrequentlyEnabledPackages_Emacs244_Survey">a survey</a> to find out which vanilla GnuEmacs packages/modes people enable by default.  The responses are in one big plain-text alphabetical list which isn&rsquo;t really conducive to browsing.</p>
 
@@ -2187,7 +2359,7 @@ function position() {
   <entry>
     <title type="html"><![CDATA[Colorful Equations with MathJax]]></title>
     <link href="http://adereth.github.io/blog/2013/11/29/colorful-equations/"/>
-    <updated>2013-11-29T09:18:00-05:00</updated>
+    <updated>2013-11-29T09:18:00-08:00</updated>
     <id>http://adereth.github.io/blog/2013/11/29/colorful-equations</id>
     <content type="html"><![CDATA[<p><a href="http://www.altdevblogaday.com/author/stuart-riffle/">Stuart Riffle</a> wrote up <a href="http://www.altdevblogaday.com/2011/05/17/understanding-the-fourier-transform/">a great explanation of the Fourier transform</a>.  There are a number of great visualizations in his post, but the climax is his explanation of the inverse discrete Fourier transform formula:</p>
 
@@ -2297,7 +2469,7 @@ $$
   <entry>
     <title type="html"><![CDATA[A few interesting Clojure microbenchmarks]]></title>
     <link href="http://adereth.github.io/blog/2013/11/22/a-few-interesting-clojure-microbenchmarks/"/>
-    <updated>2013-11-22T07:50:00-05:00</updated>
+    <updated>2013-11-22T07:50:00-08:00</updated>
     <id>http://adereth.github.io/blog/2013/11/22/a-few-interesting-clojure-microbenchmarks</id>
     <content type="html"><![CDATA[<script src="http://d3js.org/d3.v2.js"></script>
 
@@ -2654,7 +2826,7 @@ $$
   <entry>
     <title type="html"><![CDATA[core.matrix + Apache Commons Math]]></title>
     <link href="http://adereth.github.io/blog/2013/11/08/core-dot-matrix-plus-apache-commons-math/"/>
-    <updated>2013-11-08T08:08:00-05:00</updated>
+    <updated>2013-11-08T08:08:00-08:00</updated>
     <id>http://adereth.github.io/blog/2013/11/08/core-dot-matrix-plus-apache-commons-math</id>
     <content type="html"><![CDATA[<p>I&rsquo;d like to share a little project I did to make it more convenient to use Apache Commons Math&rsquo;s linear algebra classes with Clojure.</p>
 
@@ -2781,7 +2953,7 @@ $$
   <entry>
     <title type="html"><![CDATA[Efficiently Computing Kendall's Tau]]></title>
     <link href="http://adereth.github.io/blog/2013/10/30/efficiently-computing-kendalls-tau/"/>
-    <updated>2013-10-30T21:45:00-04:00</updated>
+    <updated>2013-10-30T21:45:00-07:00</updated>
     <id>http://adereth.github.io/blog/2013/10/30/efficiently-computing-kendalls-tau</id>
     <content type="html"><![CDATA[<p>Typically when people talk about correlation they are referring to the <a href="http://en.wikipedia.org/wiki/Pearson_product-moment_correlation_coefficient">Pearson&rsquo;s product-moment coefficient</a>:</p>
 
@@ -3090,7 +3262,7 @@ $$n_2 = \text{Number of pairs with tied values in } Y$$</p>
   <entry>
     <title type="html"><![CDATA[unicode-math 0.2.0 released]]></title>
     <link href="http://adereth.github.io/blog/2013/10/13/unicode-math-0-dot-2-0-released/"/>
-    <updated>2013-10-13T14:28:00-04:00</updated>
+    <updated>2013-10-13T14:28:00-07:00</updated>
     <id>http://adereth.github.io/blog/2013/10/13/unicode-math-0-dot-2-0-released</id>
     <content type="html"><![CDATA[<p>I just deployed a new version of <a href="https://github.com/adereth/unicode-math">unicode-math</a> to Clojars.  It&rsquo;s a silly toy project that implements as many of <a href="http://symbolcodes.tlt.psu.edu/bylanguage/mathchart.html">Unicode&rsquo;s math symbols</a> as possible in Clojure.  If you <code>use</code> it, you can write things like:</p>
 
@@ -3138,7 +3310,7 @@ $$n_2 = \text{Number of pairs with tied values in } Y$$</p>
   <entry>
     <title type="html"><![CDATA[Add it up (properly)]]></title>
     <link href="http://adereth.github.io/blog/2013/10/10/add-it-up/"/>
-    <updated>2013-10-10T22:14:00-04:00</updated>
+    <updated>2013-10-10T22:14:00-07:00</updated>
     <id>http://adereth.github.io/blog/2013/10/10/add-it-up</id>
     <content type="html"><![CDATA[<p>Floating point arithmetic can sometimes be frustratingly <a href="https://en.wikipedia.org/wiki/Numerical_stability">unstable</a>, particularly when applied to large datasets.  Even though the classic <a href="http://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html">What Every Computer Scientist Should Know About Floating-Point Arithmetic</a> seems to make the front page of of Hacker News on a yearly basis (<a href="https://news.ycombinator.com/item?id=4815399">1</a>, <a href="https://news.ycombinator.com/item?id=1982332">2</a>, <a href="http://news.ycombinator.com/item?id=1937182">3</a>, <a href="http://news.ycombinator.com/item?id=1746797">4</a>, <a href="http://news.ycombinator.com/item?id=687604">5</a>,
 <a href="http://news.ycombinator.com/item?id=453396">6</a>), I have never seen any big data package actually apply one of the simplest and cheapest recommendations from it.</p>
@@ -3296,7 +3468,7 @@ $$n_2 = \text{Number of pairs with tied values in } Y$$</p>
   <entry>
     <title type="html"><![CDATA[Why you should try a tiling window manager]]></title>
     <link href="http://adereth.github.io/blog/2013/10/02/why-you-should-try-a-tiling-window-manager/"/>
-    <updated>2013-10-02T07:39:00-04:00</updated>
+    <updated>2013-10-02T07:39:00-07:00</updated>
     <id>http://adereth.github.io/blog/2013/10/02/why-you-should-try-a-tiling-window-manager</id>
     <content type="html"><![CDATA[<h2>What is a tiling window manager?</h2>
 
@@ -3352,45 +3524,6 @@ $$n_2 = \text{Number of pairs with tied values in } Y$$</p>
 <p>As of Ubuntu 12.10, you can simply <code>apt-get install notion</code> to install it. It&rsquo;s also available in the repositories of a number of other distributions.</p>
 
 <p>In some follow-up posts, I&rsquo;m going to detail the tweaks that I&rsquo;ve made to <a href="https://github.com/adereth/notion-config">my notion configuration</a> to improve my workflow.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Tweaking my favorite programming font]]></title>
-    <link href="http://adereth.github.io/blog/2011/02/02/tweaking-my-favorite-programming-font/"/>
-    <updated>2011-02-02T07:47:00-05:00</updated>
-    <id>http://adereth.github.io/blog/2011/02/02/tweaking-my-favorite-programming-font</id>
-    <content type="html"><![CDATA[<p>After trying out every monospaced font I could get my hands on, I decided that <a href="http://www.ms-studio.com/index.html">Mark Simonson</a>‘s <a href="http://www.ms-studio.com/FontSales/anonymouspro.html">Anonymous Pro</a> is the one for me:</p>
-
-<p><a href="http://www.ms-studio.com/FontSales/anonymouspro.html"><img src="http://www.marksimonson.com/assets/content/fonts/anonymouspro_banner.png" alt="Anonymous Pro Sample" /></a></p>
-
-<p>After using it in my IDE for months, I decided to start using it in my terminals. Unfortunately, this revealed a subtle flaw in the font.  Take a look:</p>
-
-<p><img src="http://adereth.github.io/images/anonymous12.png" alt="terminal sample" /></p>
-
-<p>Notice anything?  Those forward slashes seem a bit too far to the right. While this wasn&rsquo;t a problem when writing code, it became a major eye sore when working with lots of paths in a terminal.</p>
-
-<p>One interesting thing is that this issue only shows up when using the font at 12pt without anti-aliasing. This is because Anonymous Pro is a <a href="http://en.wikipedia.org/wiki/TrueType">TrueType font</a>. TrueType is an <a href="http://en.wikipedia.org/wiki/Outline_font#Outline_fonts">outline font</a>, which means the designer draws each character by specifying vectors that define the shape.  By using vectors, the font can be scaled cleanly to any size. At smaller sizes, the scaling of the vector outline may result in an image that isn&rsquo;t as clear as desired. To give the font designer complete control of the display, TrueType fonts can also have bitmapped versions of each character for specific point sizes.</p>
-
-<p>Armed with this knowledge and a font editor (like <a href="http://fontforge.sourceforge.net/">FontForge</a>), we can crack open the .ttf and see exactly what&rsquo;s going on with the forward slash:</p>
-
-<p><img src="http://adereth.github.io/images/slashbitmaporiginal.png" alt="original" /></p>
-
-<p>The green outline shows the vector representation of the character, while the dark squares show the pixels used in the bitmapped version. I think that the pixels should be shifted to the left by 1, so I went ahead and did it:</p>
-
-<p><img src="http://adereth.github.io/images/slashbitmapmodified.png" alt="modified" /></p>
-
-<p>Now everything looks good in my terminal:</p>
-
-<p><img src="http://adereth.github.io/images/anonymous12slashfixed.png" alt="fixed terminal" /></p>
-
-<p>I&rsquo;ve informed Mark Simonson of this and it looks like this fix may be available in the next version of Anonymous Pro.</p>
-
-<p>When you consider how many characters there are to define and the various point sizes, it&rsquo;s clear that designing a font is a monumental task. We should all be grateful that such talented designers are out there and that some of them are generous enough to provide such useful, beautiful fonts for free.</p>
-
-<p>On top of giving it away free, Mark Simonson has released Anonymous Pro under the <a href="http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&amp;id=OFL">SIL Open Font License</a>. This means that you can enjoy my trivial tweak with minimal effort, because I&rsquo;m allowed to redistribute my modified version. I&rsquo;d prefer to call it something like “Anonymous Pro with Shifted Slash” or something equally descriptive, but condition 3 of the OFL says that I need to use a different name.</p>
-
-<p>So, without further ado, I present <a href="https://s3.amazonaws.com/1overBlog/programming_fonts/NamelessAmateur.zip">Nameless Amateur</a>! As soon as the update of Anonymous Pro is available, I&rsquo;ll remove this link and direct people to the new version.</p>
 ]]></content>
   </entry>
   

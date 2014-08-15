@@ -4,7 +4,7 @@
   <title><![CDATA[Category: numerics | adereth]]></title>
   <link href="http://adereth.github.io/blog/categories/numerics/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2014-06-02T06:31:37-04:00</updated>
+  <updated>2014-08-14T18:41:30-07:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Add it up (properly)]]></title>
     <link href="http://adereth.github.io/blog/2013/10/10/add-it-up/"/>
-    <updated>2013-10-10T22:14:00-04:00</updated>
+    <updated>2013-10-10T22:14:00-07:00</updated>
     <id>http://adereth.github.io/blog/2013/10/10/add-it-up</id>
     <content type="html"><![CDATA[<p>Floating point arithmetic can sometimes be frustratingly <a href="https://en.wikipedia.org/wiki/Numerical_stability">unstable</a>, particularly when applied to large datasets.  Even though the classic <a href="http://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html">What Every Computer Scientist Should Know About Floating-Point Arithmetic</a> seems to make the front page of of Hacker News on a yearly basis (<a href="https://news.ycombinator.com/item?id=4815399">1</a>, <a href="https://news.ycombinator.com/item?id=1982332">2</a>, <a href="http://news.ycombinator.com/item?id=1937182">3</a>, <a href="http://news.ycombinator.com/item?id=1746797">4</a>, <a href="http://news.ycombinator.com/item?id=687604">5</a>,
 <a href="http://news.ycombinator.com/item?id=453396">6</a>), I have never seen any big data package actually apply one of the simplest and cheapest recommendations from it.</p>

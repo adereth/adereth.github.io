@@ -4,7 +4,7 @@
   <title><![CDATA[Category: github | adereth]]></title>
   <link href="http://adereth.github.io/blog/categories/github/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2014-06-02T06:31:37-04:00</updated>
+  <updated>2014-08-14T18:41:30-07:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Every project.clj]]></title>
     <link href="http://adereth.github.io/blog/2014/01/20/every-project-dot-clj/"/>
-    <updated>2014-01-20T17:33:00-05:00</updated>
+    <updated>2014-01-20T17:33:00-08:00</updated>
     <id>http://adereth.github.io/blog/2014/01/20/every-project-dot-clj</id>
     <content type="html"><![CDATA[<p>I was recently looking for an interesting relational dataset for another project and the idea of using the dependencies for every Clojure project on GitHub came up.  It turns out that it&rsquo;s possible to download almost every project.clj using <a href="https://github.com/Raynes/tentacles">Tentacles</a>, so I decided to&hellip;</p>
 
@@ -353,7 +353,7 @@
   <entry>
     <title type="html"><![CDATA[Counting Stars on GitHub]]></title>
     <link href="http://adereth.github.io/blog/2013/12/23/counting-stars-on-github/"/>
-    <updated>2013-12-23T08:10:00-05:00</updated>
+    <updated>2013-12-23T08:10:00-08:00</updated>
     <id>http://adereth.github.io/blog/2013/12/23/counting-stars-on-github</id>
     <content type="html"><![CDATA[<script type="text/javascript" src="http://mbostock.github.com/d3/d3.min.js"></script>
 

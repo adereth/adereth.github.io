@@ -4,7 +4,7 @@
   <title><![CDATA[Category: latex | adereth]]></title>
   <link href="http://adereth.github.io/blog/categories/latex/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2014-06-02T06:31:37-04:00</updated>
+  <updated>2014-08-14T18:41:30-07:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Colorful Equations with MathJax]]></title>
     <link href="http://adereth.github.io/blog/2013/11/29/colorful-equations/"/>
-    <updated>2013-11-29T09:18:00-05:00</updated>
+    <updated>2013-11-29T09:18:00-08:00</updated>
     <id>http://adereth.github.io/blog/2013/11/29/colorful-equations</id>
     <content type="html"><![CDATA[<p><a href="http://www.altdevblogaday.com/author/stuart-riffle/">Stuart Riffle</a> wrote up <a href="http://www.altdevblogaday.com/2011/05/17/understanding-the-fourier-transform/">a great explanation of the Fourier transform</a>.  There are a number of great visualizations in his post, but the climax is his explanation of the inverse discrete Fourier transform formula:</p>
 

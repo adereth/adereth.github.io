@@ -4,7 +4,7 @@
   <title><![CDATA[Category: automata | adereth]]></title>
   <link href="http://adereth.github.io/blog/categories/automata/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2014-06-02T06:31:37-04:00</updated>
+  <updated>2014-08-14T18:41:30-07:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Where LISP Fits]]></title>
     <link href="http://adereth.github.io/blog/2014/02/03/where-lisp-fits/"/>
-    <updated>2014-02-03T07:19:00-05:00</updated>
+    <updated>2014-02-03T07:19:00-08:00</updated>
     <id>http://adereth.github.io/blog/2014/02/03/where-lisp-fits</id>
     <content type="html"><![CDATA[<p>There are a lot of great essays about the power and joy of LISP.  I had read a bunch of them, but none convinced me to actually put the energy in to make it over those parentheses-shaped speed bumps.  A part of me always wanted to, mostly because I&rsquo;m convinced that our inevitable robot overlords will have to be programs that write programs and everything I had heard made me think that this would likely be done in a LISP.  It just makes sense to be prepared.</p>
 
