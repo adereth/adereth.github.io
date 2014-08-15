@@ -4,7 +4,7 @@
   <title><![CDATA[adereth]]></title>
   <link href="http://adereth.github.io/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2014-08-15T06:23:41-07:00</updated>
+  <updated>2014-08-15T10:36:56-07:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -177,7 +177,7 @@
 
 <figure class='code'><figcaption><span>Output </span></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='text'><span class='line'>52
+</pre></td><td class='code'><pre><code class='text'><span class='line'>42
 </span></code></pre></td></tr></table></div></figure>
 
 
