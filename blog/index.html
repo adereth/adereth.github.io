@@ -9,7 +9,7 @@
   <meta name="author" content="Matt Adereth">
 
   
-  <meta name="description" content="@thattommyhall posted a fun question on Twitter: If you type your name on a keyboard marked as qwerty but set to Dvorak and keep reinputting what &hellip;">
+  <meta name="description" content="The remedian is an approximation of the median that can be computed using only $O(\log{n})$ storage. The algorithm was originally presented in The &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -107,6 +107,252 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/09/29/computing-the-remedian-in-clojure/">Computing the Remedian in Clojure</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-09-29T09:03:00-07:00" pubdate data-updated="true">Sep 29<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The remedian is an approximation of the <a href="http://en.wikipedia.org/wiki/Median">median</a> that can be computed using only $O(\log{n})$ storage.  The algorithm was originally presented in <a href="http://web.ipac.caltech.edu/staff/fmasci/home/statistics_refs/Remedian.pdf">The Remedian: A Robust Averaging Method for Large Data Sets by Rousseeuw and Bassett</a> (1990).  The core of it is on the first page:</p>
+
+<blockquote><p>Let us assume that $n = b^k$, where $b$ and $k$ are integers (the case where $n$ is not of this form will be treated in Sec. 7.  The <em>remedian</em> with base $b$ proceeds by computing medians of groups of $b$ observations, yielding $b^{k-1}$ estimates on which this procedure is iterated, and so on, until only a single estimate remains.  When implemented properly, this method merely needs $k$ arrays of size $b$ that are continuously reused.</p></blockquote>
+
+<p>The implementation of this part in Clojure is so nice that I just had to share.</p>
+
+<p>First, we need a vanilla implementation of the median function.  We&rsquo;re always going to be computing the median of sets of size $b$, where $b$ is relatively small, so there&rsquo;s no need to get fancy with a linear time algorithm.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">median</span> <span class="p">[</span><span class="nv">coll</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">size</span> <span class="p">(</span><span class="nb">count </span><span class="nv">coll</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">sorted</span> <span class="p">(</span><span class="nb">sort </span><span class="nv">coll</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">odd?</span> <span class="nv">size</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nb">nth </span><span class="nv">sorted</span> <span class="p">(</span><span class="nb">int </span><span class="p">(</span><span class="nb">/ </span><span class="nv">size</span> <span class="mi">2</span><span class="p">)))</span>
+</span><span class='line'>      <span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nb">+ </span><span class="p">(</span><span class="nb">nth </span><span class="nv">sorted</span> <span class="p">(</span><span class="nb">int </span><span class="p">(</span><span class="nb">/ </span><span class="nv">size</span> <span class="mi">2</span><span class="p">)))</span>
+</span><span class='line'>            <span class="p">(</span><span class="nb">nth </span><span class="nv">sorted</span> <span class="p">(</span><span class="nb">dec </span><span class="p">(</span><span class="nb">int </span><span class="p">(</span><span class="nb">/ </span><span class="nv">size</span> <span class="mi">2</span><span class="p">)))))</span>
+</span><span class='line'>         <span class="mi">2</span><span class="p">))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now we can implement the actual algorithm.  We group, compute the median of each group, and recur, with the base case being when we&rsquo;re left with a single element in the collection:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">remedian</span> <span class="p">[</span><span class="nv">b</span> <span class="nv">coll</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">next </span><span class="nv">coll</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">coll</span>
+</span><span class='line'>         <span class="p">(</span><span class="nf">partition-all</span> <span class="nv">b</span><span class="p">)</span>
+</span><span class='line'>         <span class="p">(</span><span class="nb">map </span><span class="nv">median</span><span class="p">)</span>
+</span><span class='line'>         <span class="p">(</span><span class="nf">recur</span> <span class="nv">b</span><span class="p">))</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">first </span><span class="nv">coll</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Because <code>partition-all</code> and <code>map</code> both operate on and return lazy sequences, we maintain the property of only using $O(b \log_{b}{n})$ memory at any point in time.</p>
+
+<p>While this implementation is simple and elegant, it only works if the size of the collection is a power of $b$.  If we don&rsquo;t have $n = b^k$ where $b$ and $k$ are integers, we&rsquo;ll over-weight the observations that get grouped into the last groups of size $&lt; b$.</p>
+
+<p>Section 7 of the original paper describes the weighting scheme you should use to compute the median if you&rsquo;re left with incomplete groupings:</p>
+
+<blockquote><p>How should we proceed when the sample size $n$ is less than $b^k$? The remedian algorithm then ends up with $n_1$ numbers in the first array, $n_2$ numbers in the second array, and $n_k$ numbers in the last array, such that $n = n_1 + n_{2}b + &hellip; + n_k b^{k-1}$.  For our final estimate we then compute a weighted median in which the $n_1$, numbers in the first array have weight 1, the $n_2$ numbers in the second array have weight $b$, and the $n_k$ numbers in the last array have weight $b^{k-1}$. This final computation does not need much storage because there are fewer than $bk$ numbers and they only have to be ranked in increasing order, after which their weights must be added until the sum is at least $n/2$.</p></blockquote>
+
+<p>It&rsquo;s a bit difficult to directly translate this to the recursive solution I gave above because in the final step we&rsquo;re going to do a computation on a mixture of values from the different recursive sequences.  Let&rsquo;s give it a shot.</p>
+
+<p>We need some way of bubbling up the incomplete groups for the final weighted median computation.  Instead of having each recursive sequence <em>always</em> compute the median of each group, we can add a check to see if the group is smaller than $b$ and, if so, just return the incomplete group:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">remedian-with-leftovers</span> <span class="p">[</span><span class="nv">b</span> <span class="nv">coll</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">incomplete-group?</span> <span class="o">#</span><span class="p">(</span><span class="nb">or </span><span class="p">(</span><span class="nb">&lt; </span><span class="p">(</span><span class="nb">count </span><span class="nv">%</span><span class="p">)</span> <span class="nv">b</span><span class="p">)</span>
+</span><span class='line'>                               <span class="p">(</span><span class="nb">seq? </span><span class="p">(</span><span class="nb">last </span><span class="nv">%</span><span class="p">)))]</span>
+</span><span class='line'>    <span class="p">(</span><span class="k">loop </span><span class="p">[</span><span class="nv">coll</span> <span class="nv">coll</span><span class="p">]</span>
+</span><span class='line'>      <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">next </span><span class="nv">coll</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">coll</span>
+</span><span class='line'>             <span class="p">(</span><span class="nf">partition-all</span> <span class="nv">b</span><span class="p">)</span>
+</span><span class='line'>             <span class="p">(</span><span class="nb">map </span><span class="o">#</span><span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">incomplete-group?</span> <span class="nv">%</span><span class="p">)</span> <span class="nv">%</span> <span class="p">(</span><span class="nf">median</span> <span class="nv">%</span><span class="p">)))</span>
+</span><span class='line'>             <span class="p">(</span><span class="nf">recur</span><span class="p">))</span>
+</span><span class='line'>        <span class="nv">coll</span><span class="p">))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For example, if we were using the mutable array implementation proposed in the original paper to compute the remedian of <code>(range 26)</code> with $b = 3$, the final state of the arrays would be:</p>
+
+<table>
+<thead>
+<tr>
+<th>Array  </th>
+<th> $i_0$ </th>
+<th> $i_1$   </th>
+<th> $i_2$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0      </td>
+<td> 24 </td>
+<td> 25 </td>
+<td> <em>empty</em></td>
+</tr>
+<tr>
+<td>1      </td>
+<td> 19 </td>
+<td> 22 </td>
+<td> <em>empty</em></td>
+</tr>
+<tr>
+<td>2      </td>
+<td> 4  </td>
+<td> 13 </td>
+<td> <em>empty</em></td>
+</tr>
+</tbody>
+</table>
+
+
+<br/>
+
+
+<p>In our sequence based solution, the final sequence will be <code>((4 13 (19 22 (24 25))))</code>.</p>
+
+<p>Now, we need to convert these nested sequences into <code>[value weight]</code> pairs that could be fed into a weighted median function:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">weight-leftovers</span> <span class="p">[</span><span class="nv">b</span> <span class="nv">nested-elements</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">loop </span><span class="p">[</span><span class="nv">vw-pairs</span> <span class="p">[]</span>
+</span><span class='line'>         <span class="nv">nested-elements</span> <span class="nv">nested-elements</span>
+</span><span class='line'>         <span class="nv">weight</span> <span class="mi">1</span><span class="p">]</span>
+</span><span class='line'>    <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">element</span> <span class="p">(</span><span class="nb">first </span><span class="nv">nested-elements</span><span class="p">)]</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">cond</span>
+</span><span class='line'>       <span class="p">(</span><span class="nb">next </span><span class="nv">nested-elements</span><span class="p">)</span> <span class="p">(</span><span class="nf">recur</span> <span class="p">(</span><span class="nb">conj </span><span class="nv">vw-pairs</span> <span class="p">[</span><span class="nv">element</span> <span class="nv">weight</span><span class="p">])</span>
+</span><span class='line'>                                     <span class="p">(</span><span class="nb">next </span><span class="nv">nested-elements</span><span class="p">)</span>
+</span><span class='line'>                                     <span class="nv">weight</span><span class="p">)</span>
+</span><span class='line'>       <span class="p">(</span><span class="nb">seq? </span><span class="nv">element</span><span class="p">)</span> <span class="p">(</span><span class="nf">recur</span> <span class="nv">vw-pairs</span>
+</span><span class='line'>                             <span class="nv">element</span>
+</span><span class='line'>                             <span class="p">(</span><span class="nb">/ </span><span class="nv">weight</span> <span class="nv">b</span><span class="p">))</span>
+</span><span class='line'>       <span class="ss">:else</span> <span class="p">(</span><span class="nb">conj </span><span class="nv">vw-pairs</span> <span class="p">[</span><span class="nv">element</span> <span class="nv">weight</span><span class="p">])))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Instead of weighting the values in array $j$ with weight $b^{j-1}$, we&rsquo;re weighting it at $\frac{b^{j-1}}{b^{k}}$.  Dividing all the weights by a constant will give us the same result and this is slightly easier to compute recursively, as we can just start at 1 and divide by $b$ as we descend into each nested sequence.</p>
+
+<p>If we run this on the <code>(range 26)</code> with $b = 3$, we get:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">user&gt;</span> <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="p">(</span><span class="nb">range </span><span class="mi">26</span><span class="p">)</span>
+</span><span class='line'>           <span class="p">(</span><span class="nf">remedian-with-leftovers</span> <span class="mi">3</span><span class="p">)</span>
+</span><span class='line'>           <span class="p">(</span><span class="nf">weight-leftovers</span> <span class="mi">3</span><span class="p">))</span>
+</span><span class='line'><span class="p">[[</span><span class="mi">4</span> <span class="mi">1</span><span class="nv">/3</span><span class="p">]</span> <span class="p">[</span><span class="mi">13</span> <span class="mi">1</span><span class="nv">/3</span><span class="p">]</span> <span class="p">[</span><span class="mi">19</span> <span class="mi">1</span><span class="nv">/9</span><span class="p">]</span> <span class="p">[</span><span class="mi">22</span> <span class="mi">1</span><span class="nv">/9</span><span class="p">]</span> <span class="p">[</span><span class="mi">24</span> <span class="mi">1</span><span class="nv">/27</span><span class="p">]</span> <span class="p">[</span><span class="mi">25</span> <span class="mi">1</span><span class="nv">/27</span><span class="p">]]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, we&rsquo;re going to need a weighted median function.  This operates on a collection of <code>[value weight]</code> pairs:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">weighted-median</span> <span class="p">[</span><span class="nv">vw-pairs</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">total-weight</span> <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">vw-pairs</span>
+</span><span class='line'>                          <span class="p">(</span><span class="nb">map </span><span class="nv">second</span><span class="p">)</span>
+</span><span class='line'>                          <span class="p">(</span><span class="nb">reduce </span><span class="nv">+</span><span class="p">))</span>
+</span><span class='line'>        <span class="nv">middle-weight</span> <span class="p">(</span><span class="nb">/ </span><span class="nv">total-weight</span> <span class="mi">2</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">sorted-pairs</span> <span class="p">(</span><span class="nb">sort-by first </span><span class="nv">vw-pairs</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">sorted-pairs-cum-weight</span> <span class="p">(</span><span class="nf">reductions</span> <span class="p">(</span><span class="k">fn </span><span class="p">[[</span><span class="nv">_</span> <span class="nv">cum-weight</span><span class="p">]</span> <span class="p">[</span><span class="nv">v</span> <span class="nv">w</span><span class="p">]]</span>
+</span><span class='line'>                                              <span class="p">[</span><span class="nv">v</span> <span class="p">(</span><span class="nb">+ </span><span class="nv">cum-weight</span> <span class="nv">w</span><span class="p">)])</span>
+</span><span class='line'>                                            <span class="nv">sorted-pairs</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">sorted-pairs-cum-weight</span>
+</span><span class='line'>         <span class="p">(</span><span class="nb">filter </span><span class="o">#</span><span class="p">(</span><span class="nb">&lt;= </span><span class="nv">middle-weight</span> <span class="p">(</span><span class="nb">second </span><span class="nv">%</span><span class="p">)))</span>
+</span><span class='line'>         <span class="p">(</span><span class="nf">ffirst</span><span class="p">))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can put it all together and redefine the remedian function to deal with the case where $n$ isn&rsquo;t a power of $b$:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">remedian</span> <span class="p">[</span><span class="nv">b</span> <span class="nv">coll</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">coll</span>
+</span><span class='line'>       <span class="p">(</span><span class="nf">remedian-with-leftovers</span> <span class="nv">b</span><span class="p">)</span>
+</span><span class='line'>       <span class="p">(</span><span class="nf">weight-leftovers</span> <span class="nv">b</span><span class="p">)</span>
+</span><span class='line'>       <span class="p">(</span><span class="nf">weighted-median</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The remedian is fun, but in practice I prefer to use the approximate quantile methods that were invented a few years later and presented in <a href="http://www.cs.umd.edu/~samir/498/manku.pdf">Approximate Medians and other Quantiles in One Pass and with Limited Memory by Manku, Rajagopalan, and Lindsay</a> (1998).  There&rsquo;s a high-quality implementation you can use in Clojure via Java interop in Parallel Colt&rsquo;s <a href="http://incanter.org/docs/parallelcolt/api/cern/jet/stat/tdouble/quantile/DoubleQuantileFinderFactory.html">DoubleQuantileFinderFactory</a>.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1584,287 +1830,6 @@ Turing Machines <i class="fa fa-arrows-h"></i> ?
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/01/06/benchmarking-mathematica-on-the-raspberry-pi/">Benchmarking Mathematica on the Raspberry Pi</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-01-06T07:23:00-08:00" pubdate data-updated="true">Jan 6<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&rsquo;m really excited about <a href="http://blog.wolfram.com/2013/11/21/putting-the-wolfram-language-and-mathematica-on-every-raspberry-pi/">Wolfram Research&rsquo;s announcement</a> that Mathematica and the Wolfram language are now available for free on the Raspberry Pi.</p>
-
-<p>In the announcement, Stephen Wolfram gave this disclaimer:</p>
-
-<blockquote><p>To be clear, the Raspberry Pi is perhaps 10 to 20 times slower at running the Wolfram Language than a typical current-model laptop (and sometimes even slower when it’s lacking architecture-specific internal libraries).</p></blockquote>
-
-<p>I&rsquo;ve got a laptop and a Raspberry Pi, so I decided to put this to the test.</p>
-
-<h2>MathematicaMark</h2>
-
-<p>Mathematica ships with <a href="http://reference.wolfram.com/mathematica/Benchmarking/tutorial/Benchmark.html">a benchmarking package called MathematicaMark</a>.  The latest version of the benchmark, <em>MathematicaMark9</em>, consists of 15 tests that use both numeric and symbolic functions.  The MathematicaMark score is the <a href="http://en.wikipedia.org/wiki/Geometric_mean">geometric mean</a> of the reciprocal of the timings, normalized against some reference system&rsquo;s timings:</p>
-
-<p>$$ \sqrt[15]{\prod_{i=1}^{15} \frac{t_{r,i}}{t_{s,i}}} $$</p>
-
-<p>&hellip;where $t_{s,i}$ is the timing for test $i$ on system $s$ and $r$ is the reference system.  For MathematicaMark9, the reference system is a 3.07 GHz Core i7-950 with 8 hyper-threaded cores running 64-bit Windows 7 Pro.  By definition, this system has a MathematicaMark9 score of 1.0.</p>
-
-<p>We can compare systems using the MathematicaMark score.  If a system were 10 to 20 times slower, we would expect its MathematicaMark score to be anywhere from 1/10<sup>th</sup> to 1/20<sup>th</sup> the value of the faster system.  The <a href="http://reference.wolfram.com/mathematica/Benchmarking/ref/Benchmark.html"><code>Benchmark[]</code> function</a> also provides the timings for the individual tests, so we can dig in and see which functions might be benefitting from the architecture-specific internal libraries Wolfram mentioned.</p>
-
-<h2>Raspberry Pi Configuration</h2>
-
-<p><img src="/images/rpi.png" width="350"></p>
-
-<p>I used a <a href="http://en.wikipedia.org/wiki/Raspberry_Pi#Specifications">Model B Raspberry Pi with 512MB of RAM</a>.  The tests were done after a fresh install of <a href="http://www.raspberrypi.org/archives/5580">NOOBS 1.3.3</a>, which includes Mathematica and the Wolfram Language installed by default.  <code>wolfram</code> was invoked from the commandline and nothing else was running on the system, most notably the X Window System and the <a href="http://reference.wolfram.com/mathematica/tutorial/UsingANotebookInterface.html">Mathematica Notebook interface</a>.</p>
-
-<h2>&ldquo;Typical Current-Model Laptop&rdquo;</h2>
-
-<p><img src="/images/mbp13.png" width="350"></p>
-
-<p>Mathematica ships with benchmark results for 15 different systems (including the reference system).  It&rsquo;s not clear which system to use for this comparison, so I conveniently chose my Early 2013 13-inch Retina MacBook Pro, which sports a 2.6 GHz Intel Core i5 processor (4 hyper-threaded cores) as a representative &ldquo;typical current-model laptop.&rdquo;  Based on the sea of glowing Apple logos I&rsquo;ve seen in the audiences of the conferences I attended this year, I think it&rsquo;s a fair selection.</p>
-
-<h2>MathematicaMark9 Scores</h2>
-
-<p>With the setup out of the way, let&rsquo;s take a look at the report comparing the MacBook, Raspberry Pi, and the 15 included systems:</p>
-
-<p><a href="/oneoff/mathematicamark9-20131231/"><img src="/images/MathematicaMark9.png" alt="MathematicaMark9 System Comparison Chart" /></a>
-<em>Click for full-sized report</em></p>
-
-<p>The MacBook Pro weighs in at a respectible 0.86, while the Raspberry Pi is actually getting rounded up to 0.01 from a true score of 0.005.  Running the benchmark takes 16 seconds on the laptop and <em>nearly 49 minutes</em> on the Raspberry Pi.</p>
-
-<p>Even the slowest machine in the included benchmarks score nearly 30x higher.  I don&rsquo;t think Wolfram would consider a pre-Intel Mac to be a &ldquo;typical current-model&rdquo; computer.  To see the numbers he&rsquo;s citing, we need to dig into the timings for the individual tests.</p>
-
-<h2>Performance on Individual Tests</h2>
-
-<p>The source for the 15 individual tests and the timings on a variety of reference systems is included in the <a href="/oneoff/mathematicamark9-20131231/#sources">full MathematicaMark9 Benchmark Report</a>.  Here are the timings on the Raspberry Pi and the Macbook Pro:</p>
-
-<table>
-<thead>
-<tr>
-<th>Test </th>
-<th align="right"> Pi Timing (s) </th>
-<th align="right"> Mac Timing (s) </th>
-<th align="right"> Ratio</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Random Number Sort </td>
-<td align="right"> 25.13 </td>
-<td align="right"> 1.75 </td>
-<td align="right"> 14.4</td>
-</tr>
-<tr>
-<td>Digits of Pi </td>
-<td align="right"> 12.30 </td>
-<td align="right"> 0.78 </td>
-<td align="right"> 15.9</td>
-</tr>
-<tr>
-<td>Matrix Arithmetic </td>
-<td align="right"> 27.76 </td>
-<td align="right"> 1.25 </td>
-<td align="right"> 22.2</td>
-</tr>
-<tr>
-<td>Gamma Function </td>
-<td align="right"> 15.77 </td>
-<td align="right"> 0.63 </td>
-<td align="right"> 25.2</td>
-</tr>
-<tr>
-<td>Large Integer Multiplication </td>
-<td align="right"> 19.20 </td>
-<td align="right"> 0.58 </td>
-<td align="right"> 32.9</td>
-</tr>
-<tr>
-<td>Polynomial Expansion </td>
-<td align="right"> 4.55 </td>
-<td align="right"> 0.12 </td>
-<td align="right"> 36.4</td>
-</tr>
-<tr>
-<td>Numerical Integration </td>
-<td align="right"> 35.41 </td>
-<td align="right"> 0.96 </td>
-<td align="right"> 36.7</td>
-</tr>
-<tr>
-<td>Matrix Transpose </td>
-<td align="right"> 36.77 </td>
-<td align="right"> 0.95 </td>
-<td align="right"> 38.8</td>
-</tr>
-<tr>
-<td>Data Fitting </td>
-<td align="right"> 29.94 </td>
-<td align="right"> 0.66 </td>
-<td align="right"> 45.4</td>
-</tr>
-<tr>
-<td>Discrete Fourier Transform </td>
-<td align="right"> 79.28 </td>
-<td align="right"> 0.95 </td>
-<td align="right"> 83.4</td>
-</tr>
-<tr>
-<td>Elementary Functions </td>
-<td align="right"> 174.93 </td>
-<td align="right"> 1.31 </td>
-<td align="right"> 133.3</td>
-</tr>
-<tr>
-<td>Eigenvalues of a Matrix </td>
-<td align="right"> 136.87 </td>
-<td align="right"> 0.79 </td>
-<td align="right"> 174.1</td>
-</tr>
-<tr>
-<td>Singular Value Decomposition </td>
-<td align="right"> 433.08 </td>
-<td align="right"> 1.52 </td>
-<td align="right"> 284.0</td>
-</tr>
-<tr>
-<td>Solving a Linear System </td>
-<td align="right"> 745.53 </td>
-<td align="right"> 1.65 </td>
-<td align="right"> 452.1</td>
-</tr>
-<tr>
-<td>Matrix Multiplication </td>
-<td align="right"> 1136.51 </td>
-<td align="right"> 2.15 </td>
-<td align="right"> 528.9</td>
-</tr>
-</tbody>
-</table>
-
-
-<br/>
-
-
-<p>Sorting by the ratio reveals that there are definitely cases where the relative performance falls in the 10x &ndash; 20x range cited by Wolfram.</p>
-
-<p>It&rsquo;s interesting to note that the 4 worst performing tests by ratio are all linear algebra operations involving matrix decomposition or multiplication.  These are the types of operations that have probably gotten a lot of optimization love from Wolfram Research developers in the past because this is the area that potential users compare when deciding between Mathematica and its competitors, particularly Matlab.</p>
-
-<p>If you look through <a href="http://www.wolfram.com/mathematica/quick-revision-history.html">the revision history highlights of Mathematica</a>, you&rsquo;ll see that there was a sequence of releases where every version had at least one top-level mention of linear algebra performance improvements:</p>
-
-<ul>
-<li>Mathematica 5.0 &ndash; 2003
-
-<ul>
-<li>&ldquo;Record-breaking speed through processor-optimized numerical linear algebra&rdquo;</li>
-<li>&ldquo;Full support for high-speed sparse linear algebra&rdquo;</li>
-</ul>
-</li>
-<li>Mathematica 5.1 &ndash; 2004
-
-<ul>
-<li>&ldquo;Numerical linear algebra performance enhancements&rdquo;</li>
-</ul>
-</li>
-<li>Mathematica 5.2 &ndash; 2005
-
-<ul>
-<li>&ldquo;Multithreaded numerical linear algebra&rdquo;</li>
-<li>&ldquo;Vector-based performance enhancements&rdquo;</li>
-</ul>
-</li>
-</ul>
-
-
-<p>The 5<sup>th</sup> worst test by ratio, Elementary Functions, is also interesting to dig into.  Here&rsquo;s the source:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">Module</span><span class="p">[{</span><span class="nv">m1</span>, <span class="nv">m2</span><span class="p">}</span>,
-</span><span class='line'> <span class="nv">Timing</span><span class="p">[</span>
-</span><span class='line'>  <span class="nv">SeedRandom</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="c1">;</span>
-</span><span class='line'>  <span class="nv">m1</span> <span class="nb">= </span><span class="nv">RandomReal</span><span class="p">[{}</span>, <span class="p">{</span><span class="mf">2.2</span><span class="o">`</span><span class="nv">*</span><span class="o">^</span><span class="mi">6</span><span class="p">}]</span><span class="c1">;</span>
-</span><span class='line'>  <span class="nv">m2</span> <span class="nb">= </span><span class="nv">RandomReal</span><span class="p">[{}</span>, <span class="p">{</span><span class="mf">2.2</span><span class="o">`</span><span class="nv">*</span><span class="o">^</span><span class="mi">6</span><span class="p">}]</span><span class="c1">;</span>
-</span><span class='line'>  <span class="nv">Do</span><span class="p">[</span>
-</span><span class='line'>   <span class="nv">Exp</span><span class="p">[</span><span class="nv">m1</span><span class="p">]</span><span class="c1">;</span>
-</span><span class='line'>   <span class="nv">Sin</span><span class="p">[</span><span class="nv">m1</span><span class="p">]</span><span class="c1">;</span>
-</span><span class='line'>   <span class="nv">ArcTan</span><span class="p">[</span><span class="nv">m1</span>, <span class="nv">m2</span><span class="p">]</span>,
-</span><span class='line'>   <span class="p">{</span><span class="mi">30</span><span class="p">}]]]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>It&rsquo;s computing $ e^x $, $ \sin{x} $, and $ \text{tan}^{-1} \frac{x}{y} $ for lists of 2,200,000 random numbers 30 times.  <code>Exp</code>, <code>Sin</code>, and <code>ArcTan</code> all have the <a href="http://reference.wolfram.com/mathematica/ref/Listable.html"><code>Listable</code> attribute</a>, which means that they are automatically mapped over lists that are passed in as arguments.  <code>Sin[list]</code> and <code>Map[Sin, list]</code> are functionally equivalent, but the former provides the implementation the opportunity to take an optimized path if there is a faster way of computing the sine of multiple numbers.</p>
-
-<p>We can verify that this is a case where architecture specific optimizations are in play by rewriting the test to use <code>Map</code> and <code>MapThread</code>:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">Module</span><span class="p">[{</span><span class="nv">m1</span>, <span class="nv">m2</span><span class="p">}</span>,
-</span><span class='line'> <span class="nv">Timing</span><span class="p">[</span>
-</span><span class='line'>  <span class="nv">SeedRandom</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="c1">;</span>
-</span><span class='line'>  <span class="nv">m1</span> <span class="nb">= </span><span class="nv">RandomReal</span><span class="p">[{}</span>, <span class="p">{</span><span class="mf">2.2</span><span class="o">`</span><span class="nv">*</span><span class="o">^</span><span class="mi">6</span><span class="p">}]</span><span class="c1">;</span>
-</span><span class='line'>  <span class="nv">m2</span> <span class="nb">= </span><span class="nv">RandomReal</span><span class="p">[{}</span>, <span class="p">{</span><span class="mf">2.2</span><span class="o">`</span><span class="nv">*</span><span class="o">^</span><span class="mi">6</span><span class="p">}]</span><span class="c1">;</span>
-</span><span class='line'>  <span class="nv">Map</span><span class="p">[</span><span class="nv">Exp</span>, <span class="nv">m1</span><span class="p">]</span><span class="c1">;</span>
-</span><span class='line'>  <span class="nv">Map</span><span class="p">[</span><span class="nv">Sin</span>, <span class="nv">m1</span><span class="p">]</span><span class="c1">;</span>
-</span><span class='line'>  <span class="nv">MapThread</span><span class="p">[</span><span class="nv">ArcTan</span>, <span class="p">{</span><span class="nv">m1</span>, <span class="nv">m2</span><span class="p">}]</span><span class="c1">;]]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Note that I&rsquo;m only running this once, as opposed to the 30 times in the original test, because the non-Listable version is so much slower.</p>
-
-<p>The version that doesn&rsquo;t take advantage of the Listable attribute takes 1.63 seconds on the Macbook Pro and 62.64 seconds on the Raspberry Pi.  This ratio of 38.2 (vs. 133.3 before) is much closer to the ratio we see from the other tests that don&rsquo;t take advantage of specifics of the architecture.</p>
-
-<h2>Conclusion</h2>
-
-<p>Even though Mathematica is much slower on the Raspberry Pi, it&rsquo;s a tremendous free gift and it still has many uses:</p>
-
-<ul>
-<li><p><a href="http://www.raspberrypi.org/archives/5623">A recent guest post from Wolfram Research on the Raspberry Pi blog</a> links to several projects that take advantage of the easy ways of controlling hardware using Mathematica on the Raspberry Pi.</p></li>
-<li><p>Much of what most people use Mathematica for doesn&rsquo;t require extreme performance.  For instance, getting the closed form of an integral or derivative is still practically instantaneous from a human&rsquo;s perspective.</p></li>
-<li><p>Just getting to experience the language and environment with only a $35 investment is worthwhile.  For developers, there is a lot to learn from the language, which is heavily influenced by <a href="http://en.wikipedia.org/wiki/M-expression">Lisp&rsquo;s M-expressions</a>, and the notebook enviroment, which is just starting to be replicated by iPython.  On top of that, the incredible interactive documentation for the language is something everyone should experience.</p></li>
-</ul>
-
-
-<p>Any questions, corrections, or suggestions are appreciated!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1916,6 +1881,10 @@ Turing Machines <i class="fa fa-arrows-h"></i> ?
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/09/29/computing-the-remedian-in-clojure/">Computing the Remedian in Clojure</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/08/14/typing-qwerty-on-a-dvorak-keyboard/">Typing Qwerty on a Dvorak Keyboard</a>
       </li>
     
@@ -1949,10 +1918,6 @@ Turing Machines <i class="fa fa-arrows-h"></i> ?
     
       <li class="post">
         <a href="/blog/2014/01/08/quine-tweet-challenge/">Quine Tweet Challenge</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/01/06/benchmarking-mathematica-on-the-raspberry-pi/">Benchmarking Mathematica on the Raspberry Pi</a>
       </li>
     
   </ul>

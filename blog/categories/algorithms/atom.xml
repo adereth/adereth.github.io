@@ -4,7 +4,7 @@
   <title><![CDATA[Category: algorithms | adereth]]></title>
   <link href="http://adereth.github.io/blog/categories/algorithms/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2014-08-15T10:36:56-07:00</updated>
+  <updated>2014-09-29T06:39:22-07:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -12,6 +12,186 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Computing the Remedian in Clojure]]></title>
+    <link href="http://adereth.github.io/blog/2014/09/29/computing-the-remedian-in-clojure/"/>
+    <updated>2014-09-29T09:03:00-07:00</updated>
+    <id>http://adereth.github.io/blog/2014/09/29/computing-the-remedian-in-clojure</id>
+    <content type="html"><![CDATA[<p>The remedian is an approximation of the <a href="http://en.wikipedia.org/wiki/Median">median</a> that can be computed using only $O(\log{n})$ storage.  The algorithm was originally presented in <a href="http://web.ipac.caltech.edu/staff/fmasci/home/statistics_refs/Remedian.pdf">The Remedian: A Robust Averaging Method for Large Data Sets by Rousseeuw and Bassett</a> (1990).  The core of it is on the first page:</p>
+
+<blockquote><p>Let us assume that $n = b^k$, where $b$ and $k$ are integers (the case where $n$ is not of this form will be treated in Sec. 7.  The <em>remedian</em> with base $b$ proceeds by computing medians of groups of $b$ observations, yielding $b^{k-1}$ estimates on which this procedure is iterated, and so on, until only a single estimate remains.  When implemented properly, this method merely needs $k$ arrays of size $b$ that are continuously reused.</p></blockquote>
+
+<p>The implementation of this part in Clojure is so nice that I just had to share.</p>
+
+<p>First, we need a vanilla implementation of the median function.  We&rsquo;re always going to be computing the median of sets of size $b$, where $b$ is relatively small, so there&rsquo;s no need to get fancy with a linear time algorithm.</p>
+
+<p>```clojure
+(defn median [coll]
+  (let [size (count coll)</p>
+
+<pre><code>    sorted (sort coll)]
+(if (odd? size)
+  (nth sorted (int (/ size 2)))
+  (/ (+ (nth sorted (int (/ size 2)))
+        (nth sorted (dec (int (/ size 2)))))
+     2))))
+</code></pre>
+
+<p>```</p>
+
+<p>Now we can implement the actual algorithm.  We group, compute the median of each group, and recur, with the base case being when we&rsquo;re left with a single element in the collection:</p>
+
+<p>```clojure
+(defn remedian [b coll]
+  (if (next coll)</p>
+
+<pre><code>(-&gt;&gt; coll
+     (partition-all b)
+     (map median)
+     (recur b))
+(first coll)))
+</code></pre>
+
+<p>```</p>
+
+<p>Because <code>partition-all</code> and <code>map</code> both operate on and return lazy sequences, we maintain the property of only using $O(b \log_{b}{n})$ memory at any point in time.</p>
+
+<p>While this implementation is simple and elegant, it only works if the size of the collection is a power of $b$.  If we don&rsquo;t have $n = b^k$ where $b$ and $k$ are integers, we&rsquo;ll over-weight the observations that get grouped into the last groups of size $&lt; b$.</p>
+
+<p>Section 7 of the original paper describes the weighting scheme you should use to compute the median if you&rsquo;re left with incomplete groupings:</p>
+
+<blockquote><p>How should we proceed when the sample size $n$ is less than $b^k$? The remedian algorithm then ends up with $n_1$ numbers in the first array, $n_2$ numbers in the second array, and $n_k$ numbers in the last array, such that $n = n_1 + n_{2}b + &hellip; + n_k b^{k-1}$.  For our final estimate we then compute a weighted median in which the $n_1$, numbers in the first array have weight 1, the $n_2$ numbers in the second array have weight $b$, and the $n_k$ numbers in the last array have weight $b^{k-1}$. This final computation does not need much storage because there are fewer than $bk$ numbers and they only have to be ranked in increasing order, after which their weights must be added until the sum is at least $n/2$.</p></blockquote>
+
+<p>It&rsquo;s a bit difficult to directly translate this to the recursive solution I gave above because in the final step we&rsquo;re going to do a computation on a mixture of values from the different recursive sequences.  Let&rsquo;s give it a shot.</p>
+
+<p>We need some way of bubbling up the incomplete groups for the final weighted median computation.  Instead of having each recursive sequence <em>always</em> compute the median of each group, we can add a check to see if the group is smaller than $b$ and, if so, just return the incomplete group:</p>
+
+<p>```clojure
+(defn remedian-with-leftovers [b coll]
+  (let [incomplete-group? #(or (&lt; (count %) b)</p>
+
+<pre><code>                           (seq? (last %)))]
+(loop [coll coll]
+  (if (next coll)
+    (-&gt;&gt; coll
+         (partition-all b)
+         (map #(if (incomplete-group? %) % (median %)))
+         (recur))
+    coll))))
+</code></pre>
+
+<p>```</p>
+
+<p>For example, if we were using the mutable array implementation proposed in the original paper to compute the remedian of <code>(range 26)</code> with $b = 3$, the final state of the arrays would be:</p>
+
+<table>
+<thead>
+<tr>
+<th>Array  </th>
+<th> $i_0$ </th>
+<th> $i_1$   </th>
+<th> $i_2$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0      </td>
+<td> 24 </td>
+<td> 25 </td>
+<td> <em>empty</em></td>
+</tr>
+<tr>
+<td>1      </td>
+<td> 19 </td>
+<td> 22 </td>
+<td> <em>empty</em></td>
+</tr>
+<tr>
+<td>2      </td>
+<td> 4  </td>
+<td> 13 </td>
+<td> <em>empty</em></td>
+</tr>
+</tbody>
+</table>
+
+
+<br/>
+
+
+<p>In our sequence based solution, the final sequence will be <code>((4 13 (19 22 (24 25))))</code>.</p>
+
+<p>Now, we need to convert these nested sequences into <code>[value weight]</code> pairs that could be fed into a weighted median function:</p>
+
+<p>```clojure
+(defn weight-leftovers [b nested-elements]
+  (loop [vw-pairs []</p>
+
+<pre><code>     nested-elements nested-elements
+     weight 1]
+(let [element (first nested-elements)]
+  (cond
+   (next nested-elements) (recur (conj vw-pairs [element weight])
+                                 (next nested-elements)
+                                 weight)
+   (seq? element) (recur vw-pairs
+                         element
+                         (/ weight b))
+   :else (conj vw-pairs [element weight])))))
+</code></pre>
+
+<p>```
+Instead of weighting the values in array $j$ with weight $b^{j-1}$, we&rsquo;re weighting it at $\frac{b^{j-1}}{b^{k}}$.  Dividing all the weights by a constant will give us the same result and this is slightly easier to compute recursively, as we can just start at 1 and divide by $b$ as we descend into each nested sequence.</p>
+
+<p>If we run this on the <code>(range 26)</code> with $b = 3$, we get:</p>
+
+<p>```clojure
+user> (&ndash;>> (range 26)</p>
+
+<pre><code>       (remedian-with-leftovers 3)
+       (weight-leftovers 3))
+</code></pre>
+
+<p>[[4 1/3] [13 1/3] [19 1/9] [22 1/9] [24 1/27] [25 1/27]]
+```</p>
+
+<p>Finally, we&rsquo;re going to need a weighted median function.  This operates on a collection of <code>[value weight]</code> pairs:</p>
+
+<p>```clojure
+(defn weighted-median [vw-pairs]
+  (let [total-weight (&ndash;>> vw-pairs</p>
+
+<pre><code>                      (map second)
+                      (reduce +))
+    middle-weight (/ total-weight 2)
+    sorted-pairs (sort-by first vw-pairs)
+    sorted-pairs-cum-weight (reductions (fn [[_ cum-weight] [v w]]
+                                          [v (+ cum-weight w)])
+                                        sorted-pairs)]
+(-&gt;&gt; sorted-pairs-cum-weight
+     (filter #(&lt;= middle-weight (second %)))
+     (ffirst))))
+</code></pre>
+
+<p>```</p>
+
+<p>We can put it all together and redefine the remedian function to deal with the case where $n$ isn&rsquo;t a power of $b$:</p>
+
+<p>```clojure
+(defn remedian [b coll]
+  (&ndash;>> coll</p>
+
+<pre><code>   (remedian-with-leftovers b)
+   (weight-leftovers b)
+   (weighted-median)))
+</code></pre>
+
+<p>```</p>
+
+<p>The remedian is fun, but in practice I prefer to use the approximate quantile methods that were invented a few years later and presented in <a href="http://www.cs.umd.edu/~samir/498/manku.pdf">Approximate Medians and other Quantiles in One Pass and with Limited Memory by Manku, Rajagopalan, and Lindsay</a> (1998).  There&rsquo;s a high-quality implementation you can use in Clojure via Java interop in Parallel Colt&rsquo;s <a href="http://incanter.org/docs/parallelcolt/api/cern/jet/stat/tdouble/quantile/DoubleQuantileFinderFactory.html">DoubleQuantileFinderFactory</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Efficiently Computing Kendall's Tau]]></title>

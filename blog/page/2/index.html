@@ -9,7 +9,7 @@
   <meta name="author" content="Matt Adereth">
 
   
-  <meta name="description" content="I&rsquo;ve been working on a nerd ethnography project with the GitHub API. There&rsquo;s so much fun data to play with there that it&rsquo;s &hellip;">
+  <meta name="description" content="I&rsquo;m really excited about Wolfram Research&rsquo;s announcement that Mathematica and the Wolfram language are now available for free on the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -107,6 +107,287 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/01/06/benchmarking-mathematica-on-the-raspberry-pi/">Benchmarking Mathematica on the Raspberry Pi</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-06T07:23:00-08:00" pubdate data-updated="true">Jan 6<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&rsquo;m really excited about <a href="http://blog.wolfram.com/2013/11/21/putting-the-wolfram-language-and-mathematica-on-every-raspberry-pi/">Wolfram Research&rsquo;s announcement</a> that Mathematica and the Wolfram language are now available for free on the Raspberry Pi.</p>
+
+<p>In the announcement, Stephen Wolfram gave this disclaimer:</p>
+
+<blockquote><p>To be clear, the Raspberry Pi is perhaps 10 to 20 times slower at running the Wolfram Language than a typical current-model laptop (and sometimes even slower when it’s lacking architecture-specific internal libraries).</p></blockquote>
+
+<p>I&rsquo;ve got a laptop and a Raspberry Pi, so I decided to put this to the test.</p>
+
+<h2>MathematicaMark</h2>
+
+<p>Mathematica ships with <a href="http://reference.wolfram.com/mathematica/Benchmarking/tutorial/Benchmark.html">a benchmarking package called MathematicaMark</a>.  The latest version of the benchmark, <em>MathematicaMark9</em>, consists of 15 tests that use both numeric and symbolic functions.  The MathematicaMark score is the <a href="http://en.wikipedia.org/wiki/Geometric_mean">geometric mean</a> of the reciprocal of the timings, normalized against some reference system&rsquo;s timings:</p>
+
+<p>$$ \sqrt[15]{\prod_{i=1}^{15} \frac{t_{r,i}}{t_{s,i}}} $$</p>
+
+<p>&hellip;where $t_{s,i}$ is the timing for test $i$ on system $s$ and $r$ is the reference system.  For MathematicaMark9, the reference system is a 3.07 GHz Core i7-950 with 8 hyper-threaded cores running 64-bit Windows 7 Pro.  By definition, this system has a MathematicaMark9 score of 1.0.</p>
+
+<p>We can compare systems using the MathematicaMark score.  If a system were 10 to 20 times slower, we would expect its MathematicaMark score to be anywhere from 1/10<sup>th</sup> to 1/20<sup>th</sup> the value of the faster system.  The <a href="http://reference.wolfram.com/mathematica/Benchmarking/ref/Benchmark.html"><code>Benchmark[]</code> function</a> also provides the timings for the individual tests, so we can dig in and see which functions might be benefitting from the architecture-specific internal libraries Wolfram mentioned.</p>
+
+<h2>Raspberry Pi Configuration</h2>
+
+<p><img src="/images/rpi.png" width="350"></p>
+
+<p>I used a <a href="http://en.wikipedia.org/wiki/Raspberry_Pi#Specifications">Model B Raspberry Pi with 512MB of RAM</a>.  The tests were done after a fresh install of <a href="http://www.raspberrypi.org/archives/5580">NOOBS 1.3.3</a>, which includes Mathematica and the Wolfram Language installed by default.  <code>wolfram</code> was invoked from the commandline and nothing else was running on the system, most notably the X Window System and the <a href="http://reference.wolfram.com/mathematica/tutorial/UsingANotebookInterface.html">Mathematica Notebook interface</a>.</p>
+
+<h2>&ldquo;Typical Current-Model Laptop&rdquo;</h2>
+
+<p><img src="/images/mbp13.png" width="350"></p>
+
+<p>Mathematica ships with benchmark results for 15 different systems (including the reference system).  It&rsquo;s not clear which system to use for this comparison, so I conveniently chose my Early 2013 13-inch Retina MacBook Pro, which sports a 2.6 GHz Intel Core i5 processor (4 hyper-threaded cores) as a representative &ldquo;typical current-model laptop.&rdquo;  Based on the sea of glowing Apple logos I&rsquo;ve seen in the audiences of the conferences I attended this year, I think it&rsquo;s a fair selection.</p>
+
+<h2>MathematicaMark9 Scores</h2>
+
+<p>With the setup out of the way, let&rsquo;s take a look at the report comparing the MacBook, Raspberry Pi, and the 15 included systems:</p>
+
+<p><a href="/oneoff/mathematicamark9-20131231/"><img src="/images/MathematicaMark9.png" alt="MathematicaMark9 System Comparison Chart" /></a>
+<em>Click for full-sized report</em></p>
+
+<p>The MacBook Pro weighs in at a respectible 0.86, while the Raspberry Pi is actually getting rounded up to 0.01 from a true score of 0.005.  Running the benchmark takes 16 seconds on the laptop and <em>nearly 49 minutes</em> on the Raspberry Pi.</p>
+
+<p>Even the slowest machine in the included benchmarks score nearly 30x higher.  I don&rsquo;t think Wolfram would consider a pre-Intel Mac to be a &ldquo;typical current-model&rdquo; computer.  To see the numbers he&rsquo;s citing, we need to dig into the timings for the individual tests.</p>
+
+<h2>Performance on Individual Tests</h2>
+
+<p>The source for the 15 individual tests and the timings on a variety of reference systems is included in the <a href="/oneoff/mathematicamark9-20131231/#sources">full MathematicaMark9 Benchmark Report</a>.  Here are the timings on the Raspberry Pi and the Macbook Pro:</p>
+
+<table>
+<thead>
+<tr>
+<th>Test </th>
+<th align="right"> Pi Timing (s) </th>
+<th align="right"> Mac Timing (s) </th>
+<th align="right"> Ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Random Number Sort </td>
+<td align="right"> 25.13 </td>
+<td align="right"> 1.75 </td>
+<td align="right"> 14.4</td>
+</tr>
+<tr>
+<td>Digits of Pi </td>
+<td align="right"> 12.30 </td>
+<td align="right"> 0.78 </td>
+<td align="right"> 15.9</td>
+</tr>
+<tr>
+<td>Matrix Arithmetic </td>
+<td align="right"> 27.76 </td>
+<td align="right"> 1.25 </td>
+<td align="right"> 22.2</td>
+</tr>
+<tr>
+<td>Gamma Function </td>
+<td align="right"> 15.77 </td>
+<td align="right"> 0.63 </td>
+<td align="right"> 25.2</td>
+</tr>
+<tr>
+<td>Large Integer Multiplication </td>
+<td align="right"> 19.20 </td>
+<td align="right"> 0.58 </td>
+<td align="right"> 32.9</td>
+</tr>
+<tr>
+<td>Polynomial Expansion </td>
+<td align="right"> 4.55 </td>
+<td align="right"> 0.12 </td>
+<td align="right"> 36.4</td>
+</tr>
+<tr>
+<td>Numerical Integration </td>
+<td align="right"> 35.41 </td>
+<td align="right"> 0.96 </td>
+<td align="right"> 36.7</td>
+</tr>
+<tr>
+<td>Matrix Transpose </td>
+<td align="right"> 36.77 </td>
+<td align="right"> 0.95 </td>
+<td align="right"> 38.8</td>
+</tr>
+<tr>
+<td>Data Fitting </td>
+<td align="right"> 29.94 </td>
+<td align="right"> 0.66 </td>
+<td align="right"> 45.4</td>
+</tr>
+<tr>
+<td>Discrete Fourier Transform </td>
+<td align="right"> 79.28 </td>
+<td align="right"> 0.95 </td>
+<td align="right"> 83.4</td>
+</tr>
+<tr>
+<td>Elementary Functions </td>
+<td align="right"> 174.93 </td>
+<td align="right"> 1.31 </td>
+<td align="right"> 133.3</td>
+</tr>
+<tr>
+<td>Eigenvalues of a Matrix </td>
+<td align="right"> 136.87 </td>
+<td align="right"> 0.79 </td>
+<td align="right"> 174.1</td>
+</tr>
+<tr>
+<td>Singular Value Decomposition </td>
+<td align="right"> 433.08 </td>
+<td align="right"> 1.52 </td>
+<td align="right"> 284.0</td>
+</tr>
+<tr>
+<td>Solving a Linear System </td>
+<td align="right"> 745.53 </td>
+<td align="right"> 1.65 </td>
+<td align="right"> 452.1</td>
+</tr>
+<tr>
+<td>Matrix Multiplication </td>
+<td align="right"> 1136.51 </td>
+<td align="right"> 2.15 </td>
+<td align="right"> 528.9</td>
+</tr>
+</tbody>
+</table>
+
+
+<br/>
+
+
+<p>Sorting by the ratio reveals that there are definitely cases where the relative performance falls in the 10x &ndash; 20x range cited by Wolfram.</p>
+
+<p>It&rsquo;s interesting to note that the 4 worst performing tests by ratio are all linear algebra operations involving matrix decomposition or multiplication.  These are the types of operations that have probably gotten a lot of optimization love from Wolfram Research developers in the past because this is the area that potential users compare when deciding between Mathematica and its competitors, particularly Matlab.</p>
+
+<p>If you look through <a href="http://www.wolfram.com/mathematica/quick-revision-history.html">the revision history highlights of Mathematica</a>, you&rsquo;ll see that there was a sequence of releases where every version had at least one top-level mention of linear algebra performance improvements:</p>
+
+<ul>
+<li>Mathematica 5.0 &ndash; 2003
+
+<ul>
+<li>&ldquo;Record-breaking speed through processor-optimized numerical linear algebra&rdquo;</li>
+<li>&ldquo;Full support for high-speed sparse linear algebra&rdquo;</li>
+</ul>
+</li>
+<li>Mathematica 5.1 &ndash; 2004
+
+<ul>
+<li>&ldquo;Numerical linear algebra performance enhancements&rdquo;</li>
+</ul>
+</li>
+<li>Mathematica 5.2 &ndash; 2005
+
+<ul>
+<li>&ldquo;Multithreaded numerical linear algebra&rdquo;</li>
+<li>&ldquo;Vector-based performance enhancements&rdquo;</li>
+</ul>
+</li>
+</ul>
+
+
+<p>The 5<sup>th</sup> worst test by ratio, Elementary Functions, is also interesting to dig into.  Here&rsquo;s the source:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">Module</span><span class="p">[{</span><span class="nv">m1</span>, <span class="nv">m2</span><span class="p">}</span>,
+</span><span class='line'> <span class="nv">Timing</span><span class="p">[</span>
+</span><span class='line'>  <span class="nv">SeedRandom</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="c1">;</span>
+</span><span class='line'>  <span class="nv">m1</span> <span class="nb">= </span><span class="nv">RandomReal</span><span class="p">[{}</span>, <span class="p">{</span><span class="mf">2.2</span><span class="o">`</span><span class="nv">*</span><span class="o">^</span><span class="mi">6</span><span class="p">}]</span><span class="c1">;</span>
+</span><span class='line'>  <span class="nv">m2</span> <span class="nb">= </span><span class="nv">RandomReal</span><span class="p">[{}</span>, <span class="p">{</span><span class="mf">2.2</span><span class="o">`</span><span class="nv">*</span><span class="o">^</span><span class="mi">6</span><span class="p">}]</span><span class="c1">;</span>
+</span><span class='line'>  <span class="nv">Do</span><span class="p">[</span>
+</span><span class='line'>   <span class="nv">Exp</span><span class="p">[</span><span class="nv">m1</span><span class="p">]</span><span class="c1">;</span>
+</span><span class='line'>   <span class="nv">Sin</span><span class="p">[</span><span class="nv">m1</span><span class="p">]</span><span class="c1">;</span>
+</span><span class='line'>   <span class="nv">ArcTan</span><span class="p">[</span><span class="nv">m1</span>, <span class="nv">m2</span><span class="p">]</span>,
+</span><span class='line'>   <span class="p">{</span><span class="mi">30</span><span class="p">}]]]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It&rsquo;s computing $ e^x $, $ \sin{x} $, and $ \text{tan}^{-1} \frac{x}{y} $ for lists of 2,200,000 random numbers 30 times.  <code>Exp</code>, <code>Sin</code>, and <code>ArcTan</code> all have the <a href="http://reference.wolfram.com/mathematica/ref/Listable.html"><code>Listable</code> attribute</a>, which means that they are automatically mapped over lists that are passed in as arguments.  <code>Sin[list]</code> and <code>Map[Sin, list]</code> are functionally equivalent, but the former provides the implementation the opportunity to take an optimized path if there is a faster way of computing the sine of multiple numbers.</p>
+
+<p>We can verify that this is a case where architecture specific optimizations are in play by rewriting the test to use <code>Map</code> and <code>MapThread</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">Module</span><span class="p">[{</span><span class="nv">m1</span>, <span class="nv">m2</span><span class="p">}</span>,
+</span><span class='line'> <span class="nv">Timing</span><span class="p">[</span>
+</span><span class='line'>  <span class="nv">SeedRandom</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="c1">;</span>
+</span><span class='line'>  <span class="nv">m1</span> <span class="nb">= </span><span class="nv">RandomReal</span><span class="p">[{}</span>, <span class="p">{</span><span class="mf">2.2</span><span class="o">`</span><span class="nv">*</span><span class="o">^</span><span class="mi">6</span><span class="p">}]</span><span class="c1">;</span>
+</span><span class='line'>  <span class="nv">m2</span> <span class="nb">= </span><span class="nv">RandomReal</span><span class="p">[{}</span>, <span class="p">{</span><span class="mf">2.2</span><span class="o">`</span><span class="nv">*</span><span class="o">^</span><span class="mi">6</span><span class="p">}]</span><span class="c1">;</span>
+</span><span class='line'>  <span class="nv">Map</span><span class="p">[</span><span class="nv">Exp</span>, <span class="nv">m1</span><span class="p">]</span><span class="c1">;</span>
+</span><span class='line'>  <span class="nv">Map</span><span class="p">[</span><span class="nv">Sin</span>, <span class="nv">m1</span><span class="p">]</span><span class="c1">;</span>
+</span><span class='line'>  <span class="nv">MapThread</span><span class="p">[</span><span class="nv">ArcTan</span>, <span class="p">{</span><span class="nv">m1</span>, <span class="nv">m2</span><span class="p">}]</span><span class="c1">;]]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note that I&rsquo;m only running this once, as opposed to the 30 times in the original test, because the non-Listable version is so much slower.</p>
+
+<p>The version that doesn&rsquo;t take advantage of the Listable attribute takes 1.63 seconds on the Macbook Pro and 62.64 seconds on the Raspberry Pi.  This ratio of 38.2 (vs. 133.3 before) is much closer to the ratio we see from the other tests that don&rsquo;t take advantage of specifics of the architecture.</p>
+
+<h2>Conclusion</h2>
+
+<p>Even though Mathematica is much slower on the Raspberry Pi, it&rsquo;s a tremendous free gift and it still has many uses:</p>
+
+<ul>
+<li><p><a href="http://www.raspberrypi.org/archives/5623">A recent guest post from Wolfram Research on the Raspberry Pi blog</a> links to several projects that take advantage of the easy ways of controlling hardware using Mathematica on the Raspberry Pi.</p></li>
+<li><p>Much of what most people use Mathematica for doesn&rsquo;t require extreme performance.  For instance, getting the closed form of an integral or derivative is still practically instantaneous from a human&rsquo;s perspective.</p></li>
+<li><p>Just getting to experience the language and environment with only a $35 investment is worthwhile.  For developers, there is a lot to learn from the language, which is heavily influenced by <a href="http://en.wikipedia.org/wiki/M-expression">Lisp&rsquo;s M-expressions</a>, and the notebook enviroment, which is just starting to be replicated by iPython.  On top of that, the incredible interactive documentation for the language is something everyone should experience.</p></li>
+</ul>
+
+
+<p>Any questions, corrections, or suggestions are appreciated!</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -2316,95 +2597,6 @@ $$n_2 = \text{Number of pairs with tied values in } Y$$</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/02/why-you-should-try-a-tiling-window-manager/">Why You Should Try a Tiling Window Manager</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-02T07:39:00-07:00" pubdate data-updated="true">Oct 2<span>nd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>What is a tiling window manager?</h2>
-
-<p>Window managers control the placement and appearance of programs on your screen.</p>
-
-<p><img src="/images/desk.png" title="Messy Desk" ></p>
-
-<p>Most popular window managers are what are called &ldquo;<a href="http://en.wikipedia.org/wiki/Compositing_window_manager">compositing window managers</a>,&rdquo; which is what you are using by default in Microsoft Windows, OSX, Gnome, and KDE. They use the desktop metaphor, where each program is treated like a re-sizable piece of paper. You can move them around freely, change their size, and cause them to overlap.</p>
-
-<p><img src="/images/drawersopen.gif" title="Organized Drawers" ></p>
-
-<p>In contrast, a <a href="http://en.wikipedia.org/wiki/Tiling_window_manager">tiling window manager</a> is more like a well-organized drawer than a desk. The entire surface is divided into non-overlapping buckets where windows are displayed. If you&rsquo;ve used pretty much any IDE, like Eclipse or Visual Studio, or a terminal multiplexer, like screen or tmux, you&rsquo;re already familiar with this approach.</p>
-
-<h2>Why should I use one?</h2>
-
-<h3>They&rsquo;re efficient</h3>
-
-<p>Unlike most popular compositing window managers, tiling window managers really make an attempt at managing your windows for you. Instead of having you constantly reorganize the individual windows on your screen, you specify at a high level how you want windows to be placed and the window manager does it for you. New windows are intelligently placed based on the high-level directives you&rsquo;ve already given.</p>
-
-<p>Tiling also lends itself well to really efficient keyboard shortcuts. Because there&rsquo;s an unambiguous arrangement, you can quickly do things like switch focus to the window immediately to the left, right, top, or bottom, as opposed to most compositing window managers where the best keyboard option is Alt-Tabbing through a linear list of all your windows:</p>
-
-<p><a href="http://blogs.technet.com/b/drey/archive/2010/01/04/windows-7-what-happens-with-a-lot-of-windows-and-alt-tab.aspx"><img src="/images/alt-tab.jpg" title="Windows Switcher" ></a></p>
-
-<h3>They scale</h3>
-
-<p>With innovative features like tags (Awesome) and nested workspaces (ion3/notion), it&rsquo;s possible to sanely deal with huge numbers of windows and workflows. You&rsquo;re able to group and manipulate windows together in more sophisticated ways than you can in traditional window managers that limit operations to all instances of a single application or everything on a virtual desktop.</p>
-
-<h3>They&rsquo;re customizable</h3>
-
-<p>Most tiling window managers are written by developers for developers. They tend to provide rich, well-documented APIs that expose hooks for everything you could want.</p>
-
-<h2>Which one should I use?</h2>
-
-<p>There are <a href="http://en.wikipedia.org/wiki/Tiling_window_manager#List_of_tiling_window_managers_for_X">a number popular tiling window managers to choose from</a>, but the most popular (based my totally unscientific polling) are:</p>
-
-<ul>
-<li><a href="http://xmonad.org/">xmonad</a></li>
-<li><a href="http://notion.sourceforge.net/">notion</a>, a fork of the controversial and now defunct ion3</li>
-<li><a href="http://awesome.naquadah.org/">awesome</a></li>
-<li><a href="http://dwm.suckless.org/">dwm</a></li>
-</ul>
-
-
-<p>My preferred window manager is notion and it&rsquo;s what I recommend for anyone wanting to dip their toes into the world of tiling window managers. The main reasons I suggest it are:</p>
-
-<ul>
-<li><p>Like most of the other options, it&rsquo;s designed for keyboard use, but it has the best mouse support. You can resize frames, move windows across frames, and access context menus in the expected ways with the mouse. Eventually, you probably will stop relying on these things and do everything with the keyboard, but it really makes the transition easier.</p></li>
-<li><p>Multiple applications can be put into the same frame and are made into tabs. This is possible with some tweaks to the others, most notably xmonad, but it&rsquo;s built-in with notion and there are great shortcuts for switching between tabs. Do you remember what a revelation it was when tabbed browsing was introduced? Having the ability to use tabs to group and switch between heterogeneous applications is equally incredible.</p></li>
-<li><p>It&rsquo;s very stable. I&rsquo;m still using 3 year old builds of ion3 on some of my machines and I never have any problems.</p></li>
-</ul>
-
-
-<p>As of Ubuntu 12.10, you can simply <code>apt-get install notion</code> to install it. It&rsquo;s also available in the repositories of a number of other distributions.</p>
-
-<p>In some follow-up posts, I&rsquo;m going to detail the tweaks that I&rsquo;ve made to <a href="https://github.com/adereth/notion-config">my notion configuration</a> to improve my workflow.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -2458,6 +2650,10 @@ $$n_2 = \text{Number of pairs with tied values in } Y$$</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/09/29/computing-the-remedian-in-clojure/">Computing the Remedian in Clojure</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/08/14/typing-qwerty-on-a-dvorak-keyboard/">Typing Qwerty on a Dvorak Keyboard</a>
       </li>
     
@@ -2491,10 +2687,6 @@ $$n_2 = \text{Number of pairs with tied values in } Y$$</p>
     
       <li class="post">
         <a href="/blog/2014/01/08/quine-tweet-challenge/">Quine Tweet Challenge</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/01/06/benchmarking-mathematica-on-the-raspberry-pi/">Benchmarking Mathematica on the Raspberry Pi</a>
       </li>
     
   </ul>

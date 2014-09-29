@@ -119,20 +119,24 @@
         <lastmod>2014-08-15T10:36:50-07:00</lastmod>
     </url>
     <url>
+        <loc>http://adereth.github.io/blog/2014/09/29/computing-the-remedian-in-clojure/</loc>
+        <lastmod>2014-09-29T06:39:08-07:00</lastmod>
+    </url>
+    <url>
         <loc>http://adereth.github.io/about/</loc>
         <lastmod>2014-02-12T04:24:04-08:00</lastmod>
     </url>
     <url>
         <loc>http://adereth.github.io/archives/</loc>
-        <lastmod>2014-08-15T10:36:50-07:00</lastmod>
+        <lastmod>2014-09-29T06:39:08-07:00</lastmod>
     </url>
     <url>
         <loc>http://adereth.github.io/blog/archives/</loc>
-        <lastmod>2014-08-15T10:36:50-07:00</lastmod>
+        <lastmod>2014-09-29T06:39:08-07:00</lastmod>
     </url>
     <url>
         <loc>http://adereth.github.io/blog/</loc>
-        <lastmod>2014-08-15T10:36:50-07:00</lastmod>
+        <lastmod>2014-09-29T06:39:08-07:00</lastmod>
     </url>
     <url>
         <loc>http://adereth.github.io/clojure.xml</loc>
@@ -140,7 +144,7 @@
     </url>
     <url>
         <loc>http://adereth.github.io/</loc>
-        <lastmod>2014-08-15T10:36:50-07:00</lastmod>
+        <lastmod>2014-09-29T06:39:08-07:00</lastmod>
     </url>
     <url>
         <loc>http://adereth.github.io/oneoff/treemap-with-github-colors/</loc>
