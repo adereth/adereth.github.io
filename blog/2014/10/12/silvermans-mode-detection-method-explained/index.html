@@ -1,0 +1,819 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Silverman's Mode Estimation Method Explained - adereth</title>
+  <meta name="author" content="Matt Adereth">
+
+  
+  <meta name="description" content=".chart { font-size: 10px; margin-top: -40px; } .point { fill: steelblue; fill-opacity: 0.5; stroke: black; stroke-width: 1 stroke-opacity: 0.5; } . &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://adereth.github.io/blog/2014/10/12/silvermans-mode-detection-method-explained/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+   <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="adereth" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic|Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ TeX: { extensions: ["color.js"] }});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript"
+   src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-44572622-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <!-- <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:adereth.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav> -->
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Silverman's Mode Estimation Method Explained</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-12T12:51:00-07:00" pubdate data-updated="true">Oct 12<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><script src="http://d3js.org/d3.v2.js"></script>
+
+
+<div>
+  <style type="text/css">
+
+     .chart {
+       font-size: 10px;
+       margin-top: -40px;
+     }
+
+     .point {
+       fill: steelblue;
+       fill-opacity: 0.5;
+       stroke: black;
+       stroke-width: 1
+       stroke-opacity: 0.5;
+     }
+
+     .axis path, .axis line {
+       fill: none;
+       stroke: #000;
+       shape-rendering: crispEdges;
+     }
+
+     .area {
+       fill: steelblue;
+       fill-opacity: 0.25;
+       stroke: #000;
+       stroke-opacity: 0.5;
+     }
+
+     .summedarea {
+       fill: steelblue;
+       fill-opacity: 0.75;
+       stroke: #000;
+       stroke-opacity: 0.5;
+     }
+
+  </style>
+</div>
+
+
+
+
+<!-- Global Variables and Handlers: -->
+
+
+<script type="text/javascript">
+
+  var margin = {top: 50, right: 40, bottom: 60, left: 60},
+      width = $('.entry-content').width();
+
+  $(window).resize(function() {
+    width = $('.entry-content').width();
+  });
+
+  function drawPoints(data, chart, height) {
+
+    $(chart).empty();
+
+    var x = d3.scale.linear()
+        .domain([0, d3.max(data, function(d) { return d.value}) + 5])
+        .range([0, width - margin.left - margin.right]);
+
+    var y = d3.scale.ordinal()
+        .domain(d3.range(data.length))
+        .rangeRoundBands([height - margin.top - margin.bottom, 0], 0.2);
+
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient('bottom')
+        .tickPadding(8)
+    .ticks(8);
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient('left')
+        .tickPadding(8)
+        .tickSize(0);
+
+    var svg = d3.select(chart).append('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .attr('class', 'chart')
+          .append('g')
+        .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+    svg.selectAll('.chart')
+        .data(data)
+        .enter().append('circle')
+        .attr('class', 'point')
+        .attr('cx', function(d, i) { return x(d.value) })
+        .attr('cy', 0)
+        .attr('r', 3);
+
+    svg.append('g')
+        .attr('class', 'x axis')
+        .call(xAxis);
+
+  }
+
+  function drawPointsWithResize(data, chart, height) {
+    drawPoints(data, chart, height);
+    $(window).resize(function() {drawPoints(data, chart, height); })
+  };
+
+
+     function drawOverlappingDistributions(data, chart, height) {
+
+       $(chart).empty();
+
+       var x = d3.scale.linear()
+                       .domain([0, d3.max(data, function(d) { return d.value}) + 5])
+                       .range([0, width - margin.left - margin.right]);
+
+       var y = d3.scale.linear()
+                       .domain([0, 0.5])
+                       .range([height - margin.top - margin.bottom, 0]);
+
+       var xAxis = d3.svg.axis()
+                         .scale(x)
+                         .orient('bottom')
+                         .tickPadding(8)
+                         .ticks(8);
+
+       var yAxis = d3.svg.axis()
+                         .scale(y)
+                         .orient('left')
+                         .tickPadding(8)
+                         .tickSize(0);
+
+       var svg = d3.select(chart).append('svg')
+                   .attr('width', width)
+                   .attr('height', height)
+                   .attr('class', 'chart')
+                   .append('g')
+                   .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+       var line = d3.svg.line()
+                        .x(function(d) {return x(d.q)})
+                        .y(function(d) {return y(d.p)})
+
+       var scale = 1 / Math.sqrt(2 * Math.PI);
+       function gaussian(x, mean, sigma) {
+         var z = (x - mean) / sigma;
+         return scale * Math.exp(-0.5 * z * z) / sigma;
+       };
+
+       function subpoints(d) {
+         return d3.range(d.value - 4, d.value + 4, 0.1).map(
+           function (d2,i,a) {
+             return {value: d2, height: gaussian(d2, d.value, 1)};
+           });
+       }
+
+       data.forEach(function(d) {
+
+         var area = d3.svg.area()
+                          .interpolate("monotone")
+                          .x(function(d) { return x(d.value); })
+                          .y0(y(0))
+                          .y1(function(d) { return y(d.height); });
+
+         svg.append('path')
+            .attr('class', 'area')
+            .attr("d", area(subpoints(d)))
+       });
+
+       svg.selectAll('.chart')
+          .data(data)
+          .enter().append('circle')
+          .attr('class', 'point')
+          .attr('cx', function(d, i) { return x(d.value) })
+          .attr('cy', y(0))
+          .attr('r', 3);
+
+       svg.append('g')
+          .attr('class', 'x axis')
+          .attr("transform", "translate(0," + (height - margin.top - margin.bottom) + ")")
+          .call(xAxis);
+
+     }
+
+     function drawOverlappingDistributionsWithResize(data, chart, height) {
+       drawOverlappingDistributions(data, chart, height);
+       $(window).resize(function() {drawOverlappingDistributions(data, chart, height); })
+     };
+
+
+     function drawSummedDistributions(data, chart, height, stddev) {
+
+       $(chart).empty();
+
+       var scale = 1 / Math.sqrt(2 * Math.PI);
+       function gaussian(x, mean, sigma) {
+         var z = (x - mean) / sigma;
+         return scale * Math.exp(-0.5 * z * z) / sigma;
+       };
+
+       var points = d3.range(0, 30, 0.01).concat(data.map(function(x) {return x.value}))
+       .sort(function(a,b){return a-b})
+                      .map(
+         function (x,i,a) {
+           var y = 0;
+           data.forEach(function(d) {
+             y += gaussian(x, d.value, stddev)
+           });
+           return {value: x, height: y};
+         }
+
+       );
+
+
+
+       var x = d3.scale.linear()
+                       .domain([0, d3.max(data, function(d) { return d.value}) + 5])
+                       .range([0, width - margin.left - margin.right]);
+
+       var y = d3.scale.linear()
+                       .domain([0, d3.max(points, function(d) { return d.height})])
+                       .range([height - margin.top - margin.bottom, 0]);
+
+       var xAxis = d3.svg.axis()
+                         .scale(x)
+                         .orient('bottom')
+                         .tickPadding(8)
+                         .ticks(8);
+
+       var yAxis = d3.svg.axis()
+                         .scale(y)
+                         .orient('left')
+                         .tickPadding(8)
+                         .tickSize(0);
+
+       var svg = d3.select(chart).append('svg')
+                   .attr('width', width)
+                   .attr('height', height)
+                   .attr('class', 'chart')
+                   .append('g')
+                   .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+       var line = d3.svg.line()
+                        .x(function(d) {return x(d.q)})
+                        .y(function(d) {return y(d.p)})
+
+       var area = d3.svg.area()
+                        .interpolate("monotone")
+                        .x(function(d) { return x(d.value); })
+                        .y0(y(0))
+                        .y1(function(d) { return y(d.height); });
+
+       svg.append('path')
+          .attr('class', 'summedarea')
+          .attr("d", area(points))
+
+       svg.selectAll('.chart')
+          .data(data)
+          .enter().append('circle')
+          .attr('class', 'point')
+          .attr('cx', function(d, i) { return x(d.value) })
+          .attr('cy', y(0))
+          .attr('r', 3);
+
+
+       svg.append('g')
+          .attr('class', 'x axis')
+          .attr("transform", "translate(0," + (height - margin.top - margin.bottom) + ")")
+          .call(xAxis);
+
+     }
+
+
+
+     function drawSummedDistributionsWithResize(data, chart, height, stddev) {
+       drawSummedDistributions(data, chart, height, stddev);
+       $(window).resize(function() {drawSummedDistributions(data, chart, height, stddev); })
+     };
+
+
+
+</script>
+
+
+<p>I started digging into the history of mode detection after watching <a href="http://aysy.lu/">Aysylu Greenberg</a>&rsquo;s <a href="http://youtu.be/XmImGiVuJno">Strange Loop talk on benchmarking</a>.  She pointed out that the usual benchmarking statistics fail to capture that our timings may actually be samples from multiple distributions, commonly caused by the fact that our systems are comprised of hierarchical caches.</p>
+
+<p>I thought it would be useful to add the detection of this to my favorite benchmarking tool, <a href="http://hugoduncan.org/">Hugo Duncan</a>&rsquo;s <a href="https://github.com/hugoduncan/criterium">Criterium</a>.  Not surprisingly, Hugo had already considered this and there&rsquo;s a note under the TODO section:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Multimodal distribution detection.
+</span><span class='line'>Use kernel density estimators?</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I hadn&rsquo;t heard of using kernel density estimation for multimodal distribution detection so I found the original paper, <a href="http://www.stat.washington.edu/wxs/Stat593-s03/Literature/silverman-81a.pdf">Using Kernel Density Estimates to Investigate Multimodality (Silverman, 1981)</a>.  The original paper is a dense 3 pages and my goal with this post is to restate Silverman&rsquo;s method in a more accessible way.  Please excuse anything that seems overly obvious or pedantic and feel encouraged to suggest any modifications that would make it clearer.</p>
+
+<h2>What is a mode?</h2>
+
+<p>The mode of a distribution is the value that has the highest probability of being observed.  Many of us were first exposed to the concept of a mode in a discrete setting.  We have a bunch of observations and the mode is just the observation value that occurs most frequently.  It&rsquo;s an elementary exercise in counting.  Unfortunately, this method of counting doesn&rsquo;t transfer well to observations sampled from a continuous distribution because we don&rsquo;t expect to ever observe the exact some value twice.</p>
+
+<p>What we&rsquo;re really doing when we count the observations in the discrete case is estimating the <a href="http://en.wikipedia.org/wiki/Probability_density_function">probability density function</a> (PDF) of the underlying distribution.  The value that has the highest probability of being observed is the one that is the global maximum of the PDF.  Looking at it this way, we can see that a necessary step for determining the mode in the continuous case is to first estimate the PDF of the underlying distribution.  We&rsquo;ll come back to how Silverman does this with a technique called kernel density estimation later.</p>
+
+<h2>What does it mean to be multimodal?</h2>
+
+<p>In the discrete case, we can see that there might be undeniable multiple modes because the counts for two elements might be the same.  For instance, if we observe:</p>
+
+<p>$$1,2,2,2,3,4,4,4,5$$</p>
+
+<p>Both 2 and 4 occur thrice, so we have no choice but to say they are both modes.  But what if we observe something like this:</p>
+
+<p>$$1,1,1,2,2,2,2,3,3,3,4,9,10,10$$</p>
+
+<p>The value 2 occurs more than anything else, so it&rsquo;s <em>the</em> mode.  But that pair of 10&rsquo;s are out there looking awfully interesting.  If these were benchmark timings, we might suspect there&rsquo;s a significant fraction of calls that go down some different execution path or fall back to a slower level of the cache hierarchy.  Counting alone isn&rsquo;t going to reveal the 10&rsquo;s because there are even more 1&rsquo;s and 3&rsquo;s.  Since they&rsquo;re nestled up right next to the 2&rsquo;s, we probably will assume that they are just part of the expected variance in performance of the same path that caused all those 2&rsquo;s.  <em>What we&rsquo;re really interested in is the local maxima of the PDF because they are the ones that indicate that our underlying distribution may actually be a mixture of several distributions.</em></p>
+
+<h2>Kernel density estimation</h2>
+
+<p>Imagine that we make 20 observations and see that they are distributed like this:</p>
+
+<div id='chart-1'></div>
+
+
+<script type='text/javascript'>
+
+  var data = [
+{value: 13.1138}, {value: 10.6519}, {value: 20.5735}, {value: 7.89327}, {value: 9.02554}, {value: 20.8411}, {value: 8.84072}, {value: 10.6273}, {value: 13.5194}, {value: 17.9757}, {value: 10.1086}, {value: 8.68131}, {value: 7.16192}, {value: 19.9496}, {value: 8.77111}, {value: 19.5314}, {value: 9.40915}, {value: 12.8664}, {value: 23.1322}, {value: 13.5008}];
+  drawPointsWithResize(data, '#chart-1', 90);
+</script>
+
+
+<p>We can estimate the underlying PDF by using what is called a <a href="http://en.wikipedia.org/wiki/Kernel_density_estimation">kernel density estimate</a>.  We replace each observation with some distribution, called the &ldquo;kernel,&rdquo; centered at the point.  Here&rsquo;s what it would look like using a normal distribution with standard deviation 1:</p>
+
+<div id='chart-2'></div>
+
+
+<script type='text/javascript'>
+    drawOverlappingDistributionsWithResize(data, '#chart-2', 200);
+</script>
+
+
+<p>If we sum up all these overlapping distributions, we get a reasonable estimate for the underlying continuous PDF:</p>
+
+<div id='chart-3'></div>
+
+
+<script type='text/javascript'>
+     drawSummedDistributionsWithResize(data, '#chart-3', 300, 1);
+</script>
+
+
+<p>Note that we made two interesting assumptions here:</p>
+
+<ol>
+<li><p>We replaced each point with a normal distribution.  Silverman&rsquo;s approach actually relies on some of the nice mathematical properties of the normal distribution, so that&rsquo;s what we use.</p></li>
+<li><p>We used a standard deviation of 1.  Each normal distribution is wholly specified by a mean and a standard deviation.  The mean is the observation we are replacing, but we had to pick some arbitrary standard deviation which defined the width of the kernel.</p></li>
+</ol>
+
+
+<p>In the case of the normal distribution, we could just vary the standard deviation to adjust the width, but there is a more general way of stretching the kernel for arbitrary distributions.  The kernel density estimate, $\hat{f}$ for observations $X_1,X_2,&hellip;,X_n$, using a kernel $K$ is:</p>
+
+<p>$$\hat{f}(x)=\frac{1}{n}\sum\limits_{i=1}^n K(x-X_i)$$</p>
+
+<p>In our case above, $K$ is the PDF for the normal distribution with standard deviation 1.  We can stretch the kernel by a factor of $h$ like this:</p>
+
+<p>$$\hat{f}(x, h)=\frac{1}{nh}\sum\limits_{i=1}^n K(\frac{x-X_i}{h})$$</p>
+
+<h2>Different kernel widths result in different mode counts</h2>
+
+<p>The width of the kernel is effectively a smoothing factor.  If we choose too large of a width, we just end up with one giant mound that is almost a perfect normal distribution.  Here&rsquo;s what it looks like if we use $h=5$:</p>
+
+<div id='chart-4'></div>
+
+
+<script type='text/javascript'>
+     drawSummedDistributionsWithResize(data, '#chart-4', 300, 5);
+</script>
+
+
+<p>Clearly, this has a single maxima.</p>
+
+<p>If we choose too small of a width, we get a very spiky and over-fit estimate of the PDF.  Here&rsquo;s what it looks like with $h = 0.1$:</p>
+
+<div id='chart-5'></div>
+
+
+<script type='text/javascript'>
+drawSummedDistributionsWithResize(data, '#chart-5', 300, 0.1);
+</script>
+
+
+<p>This PDF has a bunch of local maxima.  If we shrink the width small enough, we&rsquo;ll get $n$ maxima, where $n$ is the number of observations:</p>
+
+<div id='chart-6'></div>
+
+
+<script type='text/javascript'>
+drawSummedDistributionsWithResize(data, '#chart-6', 300, 0.005);
+</script>
+
+
+<p>The neat thing about using the normal distribution as our kernel is that it has the property that shrinking the width will only introduce new local maxima.  Silverman gives a proof of this at the end of Section 2 in the original paper.  This means that for each every integer $k$, where $1&lt;k&lt;n$ we can find the minimum width $h_k$ such that the kernel density estimate has at most $k$ maxima.  Silverman calls these $h_k$ values &ldquo;critical widths.&rdquo;</p>
+
+<h2>Finding the critical widths</h2>
+
+<p>To actually find the critical widths, we need to look at the formula for the kernel density estimate.  The PDF for a plain old normal distribution with mean $\mu$ and standard deviation $\sigma$ is:</p>
+
+<p>$$f(x)=\frac{1}{\sigma\sqrt{2\pi}}\mathrm{e}^{&ndash;\frac{(x-\mu)^2}{2\sigma^2}}$$</p>
+
+<p>The kernel density estimate with standard deviation $\sigma=1$ for observations $X_1,X_2,&hellip;,X_n$ and width $h$ is:</p>
+
+<p>$$\hat{f}(x,h)=\frac{1}{nh}\sum\limits_{i=1}^n \frac{1}{\sqrt{2\pi}}\mathrm{e}^{&ndash;\frac{(x-X_i)^2}{2h^2}}$$</p>
+
+<p>For a given $h$, you can find all the local maxima of $\hat{f}$ using your favorite numerical methods.  Because of the result Silverman proved at the end of section 2, we can then use a binary search to find the critical widths at which new maxima are introduced.</p>
+
+<h2>Picking which kernel width to use</h2>
+
+<p>This is the part of the original paper that I found to be the least clear.  It&rsquo;s pretty dense and makes a number of vague references to the application of techniques from other papers.</p>
+
+<p>We now have a kernel density estimate of the PDF for each number of modes between $1$ and $n$.  For each estimate, we&rsquo;re going to use a statistical test to determine the significance.  We want to be parsimonious in our claims that there are additional modes, so we pick the smallest $k$ such that the significance measure of $h_k$ meets some threshold.</p>
+
+<p><a href="http://en.wikipedia.org/wiki/Bootstrapping_(statistics)">Bootstrapping</a> is used to evaluate the accuracy of a statistical measure by computing that statistic on observations that are <a href="http://en.wikipedia.org/wiki/Resampling_(statistics">resampled</a>) from the original set of observations.</p>
+
+<p>Silverman used a <a href="http://en.wikipedia.org/wiki/Bootstrapping_(statistics)#Smooth_bootstrap">smoothed bootstrap procedure</a> to evaluate the significance.  Smoothed bootstrapping is bootstrapping with some noise addedto the resampled observations.  First, we sample from the original set of observations, with replacement, to get $X_I(i)$.  Then we add noise to get our smoothed $y_i$ values:</p>
+
+<p>$$y_i=\frac{1}{\sqrt{1+h_k^2/\sigma^2}}(X_{I(i)}+h_k \epsilon_i)$$</p>
+
+<p>$\sigma$ is the standard deviation of $X_1,X_2,&hellip;,X_n$, $h_k$ is the critical width we are testing, and $\epsilon_i$ is a random value sampled from a normal distribution with mean 0 and standard deviation 1.</p>
+
+<p>Once we have these smoothed values, we compute the kernel density estimate of them using $h_k$ and count the modes.  If this kernel density estimate doesn&rsquo;t have more than $k$ modes, we take that as a sign that we have a good critical width.  We repeat this many times and use the fraction of simulations where we didn&rsquo;t find more than $k$ modes as the p-value.  In the paper, Silverman does 100 rounds of simulation.</p>
+
+<h2>Conclusion</h2>
+
+<p>Silverman&rsquo;s technique was a really important early step in multimodality detection and it has been thoroughly investigated and improved upon since 1981.  Google Scholar lists <a href="http://scholar.google.com/scholar?espv=2&amp;bav=on.2,or.r_cp.r_qf.&amp;bvm=bv.77161500,d.cGE&amp;ion=1&amp;biw=1680&amp;bih=938&amp;dpr=2&amp;um=1&amp;ie=UTF-8&amp;lr=&amp;cites=18163244822709704741">about 670 citations of this paper</a>.  If you&rsquo;re interested in learning more, one paper I found particularly helpful was <a href="http://www3.stat.sinica.edu.tw/statistica/oldpdf/A11n28.pdf">On the Calibration of Silverman&rsquo;s Test for Multimodality (Hall &amp; York, 2001)</a>.</p>
+
+<p>One of the biggest weaknesses in Silverman&rsquo;s technique is that the critical width is global parameter, so it may have trouble detecting small component distributions in the presence of larger ones.  For an actual implementation of mode detection in a benchmarking package, I&rsquo;d consider using something that doesn&rsquo;t have this issue, like the technique described in <a href="http://private.igf.edu.pl/~jnn/Literatura_tematu/Minnotte_1997.pdf">Nonparametric Testing of the Existence of Modes (Minnotte, 1997)</a>.</p>
+
+<p>I hope this is correct and helpful.  If I misinterpreted anything in the original paper, please let me know.  Thanks!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Matt Adereth</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-12T12:51:00-07:00" pubdate data-updated="true">Oct 12<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/algorithms/'>algorithms</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://adereth.github.io/blog/2014/10/12/silvermans-mode-detection-method-explained/" data-via="adereth" data-counturl="http://adereth.github.io/blog/2014/10/12/silvermans-mode-detection-method-explained/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/09/29/computing-the-remedian-in-clojure/" title="Previous Post: Computing the Remedian in Clojure">&laquo; Computing the Remedian in Clojure</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <p>
+  <center><img src="/images/aleph.png"/></center>
+  <a href="http://adereth.github.io" alt="Home"><h1>Adereth's Blog</h1></a>
+
+  <ul id="recent_posts">
+      <li class="post">
+	<a href="http://adereth.github.io"><i class="fa fa-home fa-fw"></i> Home</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.github.io/about/"><i class="fa fa-user fa-fw"></i> About Me</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.github.io/atom.xml"><i class="fa fa-rss fa-fw"></i> Feed</a>
+      </li>
+  </ul>
+
+  <h1>Connect</h1>
+
+  <ul id="recent_posts">
+      <li class="post">
+	<a href="https://twitter.com/adereth"><i class="fa fa-twitter fa-fw"></i> Twitter</a>
+      </li>
+      <li class="post">
+	<a href="https://github.com/adereth"><i class="fa fa-github fa-fw"></i> GitHub</a>
+      </li>
+      <li class="post">
+	<a href="http://www.linkedin.com/in/adereth/"><i class="fa fa-linkedin fa-fw"></i> LinkedIn</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.tumblr.com/"><i class="fa fa-tumblr fa-fw"></i> Tumblr</a>
+      </li>
+  </ul>
+
+
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/10/12/silvermans-mode-detection-method-explained/">Silverman's Mode Estimation Method Explained</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/29/computing-the-remedian-in-clojure/">Computing the Remedian in Clojure</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/14/typing-qwerty-on-a-dvorak-keyboard/">Typing Qwerty on a Dvorak Keyboard</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/05/29/custom-clojure-evaluation-keybindings-in-emacs/">Custom Clojure Evaluation Keybindings in Emacs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/04/30/java-dot-awt-dot-shapes-insidious-insideness/">java.awt.Shape's Insidious Insideness</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/04/09/3d-printing-with-clojure/">3D Printing with Clojure</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/27/finishing-up-the-ergodox/">Finishing up the ErgoDox</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/12/building-an-ergodox/">Sourcing and Building an ErgoDox Keyboard</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/03/where-lisp-fits/">Where LISP Fits</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/20/every-project-dot-clj/">Every project.clj</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/adereth">@adereth</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'adereth',
+            count: 10,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Matt Adereth -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = '1overn';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://adereth.github.io/blog/2014/10/12/silvermans-mode-detection-method-explained/';
+        var disqus_url = 'http://adereth.github.io/blog/2014/10/12/silvermans-mode-detection-method-explained/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: benchmarks | adereth]]></title>
   <link href="http://adereth.github.io/blog/categories/benchmarks/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2014-09-29T06:39:51-07:00</updated>
+  <updated>2014-10-12T12:37:18-07:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -257,8 +257,6 @@ Module[{m1, m2},
     <content type="html"><![CDATA[<script src="http://d3js.org/d3.v2.js"></script>
 
 
-<p></p>
-
 <!--       font-family: Arial, sans-serif; "Menlo","Monaco","Andale Mono","lucida console","Courier New",monospace;-->
 
 
@@ -303,7 +301,7 @@ Module[{m1, m2},
   });
 
   function draw(data, chart, height) {
-    
+
     $(chart).empty();
 
     var x = d3.scale.linear()
@@ -358,9 +356,9 @@ Module[{m1, m2},
         .call(yAxis)
       .selectAll('text')
         .text(function(d) { return data[d].code; });
-    
+
   }
-  
+
   function drawWithResize(data, chart, height) {
     draw(data, chart, height);
     $(window).resize(function() {draw(data, chart, height); })
