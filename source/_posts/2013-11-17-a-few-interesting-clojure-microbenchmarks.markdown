@@ -6,7 +6,7 @@ comments: true
 categories: clojure benchmarks
 ---
 
-<script src="http://d3js.org/d3.v2.js"></script> 
+<script src="http://d3js.org/d3.v2.js"></script>
 <!--       font-family: Arial, sans-serif; "Menlo","Monaco","Andale Mono","lucida console","Courier New",monospace;-->
 <!-- CSS Styles: -->
 <div>
@@ -42,7 +42,7 @@ categories: clojure benchmarks
   });
 
   function draw(data, chart, height) {
-    
+
     $(chart).empty();
 
     var x = d3.scale.linear()
@@ -97,9 +97,9 @@ categories: clojure benchmarks
         .call(yAxis)
       .selectAll('text')
         .text(function(d) { return data[d].code; });
-    
+
   }
-  
+
   function drawWithResize(data, chart, height) {
     draw(data, chart, height);
     $(window).resize(function() {draw(data, chart, height); })
