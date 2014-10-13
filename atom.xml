@@ -4,7 +4,7 @@
   <title><![CDATA[adereth]]></title>
   <link href="http://adereth.github.io/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2014-10-12T19:48:09-07:00</updated>
+  <updated>2014-10-12T19:51:06-07:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -375,7 +375,7 @@
 </ol>
 
 
-<p>In the case of the normal distribution, we could just vary the standard deviation to adjust the width, but there is a more general way of stretching the kernel for arbitrary distributions.  The kernel density estimate, $\hat{f}$, for observations $X_1,X_2,&hellip;,X_n$, using a kernel $K$ is:</p>
+<p>In the case of the normal distribution, we could just vary the standard deviation to adjust the width, but there is a more general way of stretching the kernel for arbitrary distributions.  The kernel density estimate for observations $X_1,X_2,&hellip;,X_n$ using a kernel function $K$ is:</p>
 
 <p>$$\hat{f}(x)=\frac{1}{n}\sum\limits_{i=1}^n K(x-X_i)$$</p>
 
