@@ -4,7 +4,7 @@
   <title><![CDATA[adereth]]></title>
   <link href="http://adereth.github.io/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2014-10-12T13:45:49-07:00</updated>
+  <updated>2014-10-12T19:47:04-07:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -437,7 +437,7 @@ drawSummedDistributionsWithResize(data, '#chart-6', 300, 0.005);
 
 <p>We now have a kernel density estimate of the PDF for each number of modes between $1$ and $n$.  For each estimate, we&rsquo;re going to use a statistical test to determine the significance.  We want to be parsimonious in our claims that there are additional modes, so we pick the smallest $k$ such that the significance measure of $h_k$ meets some threshold.</p>
 
-<p><a href="http://en.wikipedia.org/wiki/Bootstrapping_(statistics)">Bootstrapping</a> is used to evaluate the accuracy of a statistical measure by computing that statistic on observations that are <a href="http://en.wikipedia.org/wiki/Resampling_(statistics">resampled</a>) from the original set of observations.</p>
+<p><a href="http://en.wikipedia.org/wiki/Bootstrapping_(statistics)">Bootstrapping</a> is used to evaluate the accuracy of a statistical measure by computing that statistic on observations that are <a href="http://en.wikipedia.org/wiki/Resampling_(statistics)">resampled</a> from the original set of observations.</p>
 
 <p>Silverman used a <a href="http://en.wikipedia.org/wiki/Bootstrapping_(statistics)#Smooth_bootstrap">smoothed bootstrap procedure</a> to evaluate the significance.  Smoothed bootstrapping is bootstrapping with some noise added to the resampled observations.  First, we sample from the original set of observations, with replacement, to get $X_I(i)$.  Then we add noise to get our smoothed $y_i$ values:</p>
 
