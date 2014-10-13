@@ -4,7 +4,7 @@
   <title><![CDATA[adereth]]></title>
   <link href="http://adereth.github.io/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2014-10-12T20:23:15-07:00</updated>
+  <updated>2014-10-12T21:35:20-07:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -57,6 +57,20 @@
        stroke-opacity: 0.5;
      }
 
+    .bar rect {
+        fill: steelblue;
+        fill-opacity: 0.75;
+        shape-rendering: crispEdges;
+        stroke: #000;
+        stroke-opacity: 0.5;
+
+    }
+
+    .bar text {
+        fill: #fff;
+    }
+
+
   </style>
 </div>
 
@@ -68,7 +82,7 @@
 
 <script type="text/javascript">
 
-  var margin = {top: 50, right: 40, bottom: 60, left: 60},
+  var margin = {top: 50, right: 40, bottom: 40, left: 60},
       width = $('.entry-content').width();
 
   $(window).resize(function() {
@@ -297,6 +311,68 @@
        $(window).resize(function() {drawSummedDistributions(data, chart, height, stddev); })
      };
 
+     function drawHistogram(data, chart, height) {
+
+       $(chart).empty();
+
+       var x = d3.scale.linear()
+                       .domain([0, 11])
+                       .range([0, width - margin.left - margin.right]);
+
+       var data = d3.layout.histogram()
+                           .bins(x.ticks(10))(data);
+
+       var y = d3.scale.linear()
+                       .domain([0, d3.max(data, function(d) { return d.y; })])
+                       .range([height - margin.top - margin.bottom, 0]);
+
+       var xAxis = d3.svg.axis()
+                         .scale(x)
+                         .orient('bottom')
+                         .tickPadding(8)
+                         .ticks(8);
+
+       var yAxis = d3.svg.axis()
+                         .scale(y)
+                         .orient('left')
+                         .tickPadding(8)
+                         .tickSize(0);
+
+       var svg = d3.select(chart).append('svg')
+                   .attr('width', width)
+                   .attr('height', height)
+                   .attr('class', 'chart')
+                   .append('g')
+                   .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+       var bar = svg.selectAll(".bar")
+                    .data(data)
+                    .enter().append("g")
+                    .attr("class", "bar")
+                    .attr("transform", function(d) { return "translate(" + x(d.x - 0.5) + "," + y(d.y) + ")"; });
+
+       bar.append("rect")
+          .attr("width", x(data[0].dx) - 3)
+          .attr("height", function(d) {
+            console.log(d + " " + y(d.y));
+            return height - y(d.y) - margin.bottom - margin.top; });
+
+       svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + (height - margin.top - margin.bottom) + ")")
+          .call(xAxis);
+
+       svg.append("g")
+          .attr("class", "y axis")
+          .call(yAxis);
+
+
+     }
+
+     function drawHistogramWithResize(data, chart, height) {
+       drawHistogram(data, chart, height);
+       $(window).resize(function() {drawHistogram(data, chart, height); })
+     };
 
 
 </script>
@@ -326,11 +402,21 @@
 
 <p>$$1,2,2,2,3,4,4,4,5$$</p>
 
-<p>Both 2 and 4 occur thrice, so we have no choice but to say they are both modes.  But what if we observe something like this:</p>
+<p>Both 2 and 4 occur thrice, so we have no choice but to say they are both modes.  But perhaps we observe something like this:</p>
 
 <p>$$1,1,1,2,2,2,2,3,3,3,4,9,10,10$$</p>
 
-<p>The value 2 occurs more than anything else, so it&rsquo;s <em>the</em> mode.  But that pair of 10&rsquo;s are out there looking awfully interesting.  If these were benchmark timings, we might suspect there&rsquo;s a significant fraction of calls that go down some different execution path or fall back to a slower level of the cache hierarchy.  Counting alone isn&rsquo;t going to reveal the 10&rsquo;s because there are even more 1&rsquo;s and 3&rsquo;s.  Since they&rsquo;re nestled up right next to the 2&rsquo;s, we probably will assume that they are just part of the expected variance in performance of the same path that caused all those 2&rsquo;s.  <em>What we&rsquo;re really interested in is the local maxima of the PDF because they are the ones that indicate that our underlying distribution may actually be a mixture of several distributions.</em></p>
+<p>The value 2 occurs more than anything else, so it&rsquo;s <em>the</em> mode.  But let&rsquo;s look at the histogram:</p>
+
+<div id='hist'></div>
+
+
+<script type='text/javascript'>
+drawHistogramWithResize([1,1,1,2,2,2,2,3,3,3,4,9,10,10], '#hist', 300);
+</script>
+
+
+<p>That pair of 10&rsquo;s are out there looking awfully interesting.  If these were benchmark timings, we might suspect there&rsquo;s a significant fraction of calls that go down some different execution path or fall back to a slower level of the cache hierarchy.  Counting alone isn&rsquo;t going to reveal the 10&rsquo;s because there are even more 1&rsquo;s and 3&rsquo;s.  Since they&rsquo;re nestled up right next to the 2&rsquo;s, we probably will assume that they are just part of the expected variance in performance of the same path that caused all those 2&rsquo;s.  <em>What we&rsquo;re really interested in is the local maxima of the PDF because they are the ones that indicate that our underlying distribution may actually be a mixture of several distributions.</em></p>
 
 <h2>Kernel density estimation</h2>
 
@@ -383,6 +469,8 @@
 
 <p>$$\hat{f}(x, h)=\frac{1}{nh}\sum\limits_{i=1}^n K(\frac{x-X_i}{h})$$</p>
 
+<p>Note that changing $h$ has the exact same effect as changing the standard deviation: it makes the kernel wider and shorter while maintaining an area of 1 under the curve.</p>
+
 <h2>Different kernel widths result in different mode counts</h2>
 
 <p>The width of the kernel is effectively a smoothing factor.  If we choose too large of a width, we just end up with one giant mound that is almost a perfect normal distribution.  Here&rsquo;s what it looks like if we use $h=5$:</p>
@@ -429,7 +517,7 @@ drawSummedDistributionsWithResize(data, '#chart-6', 300, 0.005);
 
 <p>$$\hat{f}(x,h)=\frac{1}{nh}\sum\limits_{i=1}^n \frac{1}{\sqrt{2\pi}}\mathrm{e}^{&ndash;\frac{(x-X_i)^2}{2h^2}}$$</p>
 
-<p>For a given $h$, you can find all the local maxima of $\hat{f}$ using your favorite numerical methods.  Because of the result Silverman proved at the end of section 2, we can then use a binary search to find the critical widths at which new maxima are introduced.</p>
+<p>For a given $h$, you can find all the local maxima of $\hat{f}$ using your favorite numerical methods.  Now we need to find the $h_k$ where new local maxima are introduced.  Because of a result that Silverman proved at the end of section 2 in the paper, we know we can use a binary search over a range of $h$ values to find the critical widths at which new maxima show up.</p>
 
 <h2>Picking which kernel width to use</h2>
 
@@ -443,7 +531,7 @@ drawSummedDistributionsWithResize(data, '#chart-6', 300, 0.005);
 
 <p>$$y_i=\frac{1}{\sqrt{1+h_k^2/\sigma^2}}(X_{I(i)}+h_k \epsilon_i)$$</p>
 
-<p>$\sigma$ is the standard deviation of $X_1,X_2,&hellip;,X_n$, $h_k$ is the critical width we are testing, and $\epsilon_i$ is a random value sampled from a normal distribution with mean 0 and standard deviation 1.</p>
+<p>Where $\sigma$ is the standard deviation of $X_1,X_2,&hellip;,X_n$, $h_k$ is the critical width we are testing, and $\epsilon_i$ is a random value sampled from a normal distribution with mean 0 and standard deviation 1.</p>
 
 <p>Once we have these smoothed values, we compute the kernel density estimate of them using $h_k$ and count the modes.  If this kernel density estimate doesn&rsquo;t have more than $k$ modes, we take that as a sign that we have a good critical width.  We repeat this many times and use the fraction of simulations where we didn&rsquo;t find more than $k$ modes as the p-value.  In the paper, Silverman does 100 rounds of simulation.</p>
 
@@ -451,7 +539,7 @@ drawSummedDistributionsWithResize(data, '#chart-6', 300, 0.005);
 
 <p>Silverman&rsquo;s technique was a really important early step in multimodality detection and it has been thoroughly investigated and improved upon since 1981.  Google Scholar lists <a href="http://scholar.google.com/scholar?espv=2&amp;bav=on.2,or.r_cp.r_qf.&amp;bvm=bv.77161500,d.cGE&amp;ion=1&amp;biw=1680&amp;bih=938&amp;dpr=2&amp;um=1&amp;ie=UTF-8&amp;lr=&amp;cites=18163244822709704741">about 670 citations of this paper</a>.  If you&rsquo;re interested in learning more, one paper I found particularly helpful was <a href="http://www3.stat.sinica.edu.tw/statistica/oldpdf/A11n28.pdf">On the Calibration of Silverman&rsquo;s Test for Multimodality (Hall &amp; York, 2001)</a>.</p>
 
-<p>One of the biggest weaknesses in Silverman&rsquo;s technique is that the critical width is global parameter, so it may have trouble detecting small component distributions in the presence of larger ones.  For an actual implementation of mode detection in a benchmarking package, I&rsquo;d consider using something that doesn&rsquo;t have this issue, like the technique described in <a href="http://private.igf.edu.pl/~jnn/Literatura_tematu/Minnotte_1997.pdf">Nonparametric Testing of the Existence of Modes (Minnotte, 1997)</a>.</p>
+<p>One of the biggest weaknesses in Silverman&rsquo;s technique is that the critical width is a global parameter, so it may have trouble detecting small component distributions in the presence of larger ones.  For an actual implementation of mode detection in a benchmarking package, I&rsquo;d consider using something that doesn&rsquo;t have this issue, like the technique described in <a href="http://private.igf.edu.pl/~jnn/Literatura_tematu/Minnotte_1997.pdf">Nonparametric Testing of the Existence of Modes (Minnotte, 1997)</a>.</p>
 
 <p>I hope this is correct and helpful.  If I misinterpreted anything in the original paper, please let me know.  Thanks!</p>
 ]]></content>
