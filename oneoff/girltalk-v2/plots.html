@@ -210,14 +210,6 @@
                         .attr("y2", height);
        var sets = data["time-sets"]
        var setTimes = sets.map(function (d) { return d.time} );
-       // var activeTracks = d3.select("body").append("ul")
-       //                      .selectAll("li")
-       //                      .data(samples, function(d) {return d.index})
-       //                      .enter()
-       //                      .append("li")
-       //                      .attr("id", function(d) {return "track" + d.index})
-       //                      .text(function(d) {return d.year})
-       //                      .attr("display", "none");
 
        var activeTracks = d3.select("#root")
                             .append("row")
@@ -228,22 +220,19 @@
                             .classed("media col-md-6 col-xs-12", "true")
                             .attr("id", function(d) {return "track" + d.index});
 
-
-
        activeTracks.append("a")
                    .attr("class", "media-left")
                    .attr("display", "inherit")
                    .append("a")
                    .attr("href", function(d){return d["album-link"]})
+                   .attr("target", "_blank")
                    .append("img")
                    .attr("display", "inherit")
                    .attr("src", function(d) {
                      return d["album-image-link"] ? d["album-image-link"] : d["image-link"]})
                    .attr("height", 128)
                    .attr("width", 128);
-
        
-
        var mediaBodies = activeTracks.append("div")
                                      .attr("class", "media-body");
 
@@ -427,5 +416,17 @@
      })
 
     </script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-44572622-4', 'auto');
+  ga('send', 'pageview');
+
+</script>    
+    
   </body>
 </html>
