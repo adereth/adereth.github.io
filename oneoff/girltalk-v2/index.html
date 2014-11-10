@@ -227,7 +227,8 @@ font-family: 'Arvo', serif;
                    .append("img")
                    .attr("display", "inherit")
                    .attr("src", function(d) {
-                     return d["album-image-link"] ? d["album-image-link"] : d["image-link"]})
+                     return d["album-image-link"] ? d["album-image-link"] :
+                                         (d["image-link"] ? d["image-link"] : "record.jpg") })
                    .attr("height", 128)
                    .attr("width", 128);
        
