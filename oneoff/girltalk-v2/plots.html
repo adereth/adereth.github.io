@@ -233,6 +233,8 @@
        activeTracks.append("a")
                    .attr("class", "media-left")
                    .attr("display", "inherit")
+                   .append("a")
+                   .attr("href", function(d){return d["album-link"]})
                    .append("img")
                    .attr("display", "inherit")
                    .attr("src", function(d) {
@@ -252,7 +254,7 @@
            if (typeof part == "string") {
              result = result + part;
            } else {
-             result = result + "<a href=\"" + part[0] + "\">" + part[1] + "</a>"
+             result = result + "<a href=\"" + part[0] + "\" target=\"_blank\">" + part[1] + "</a>"
            }
          }
          return result
