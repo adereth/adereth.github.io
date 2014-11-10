@@ -1,5 +1,6 @@
 <html>
   <head>
+    <title>Annotated All Day</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -320,7 +321,7 @@ font-family: 'Arvo', serif;
                  .attr("class", "bar")
                  .attr("x", function(d) { return x(d.start); })
                  .attr("height", 4)  //x.rangeBand())
-                 .attr("y", function(d) { return y(d.year - 0.5)-4; })
+                 .attr("y", function(d) { return y(d.year - 0.5)-5; })
                  .attr("width", function(d) { return x(d.end) - x(d.start); })
                  .attr("id", function(d) {return "bar" + d.index})
                  .on("click", function(d) {
