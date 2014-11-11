@@ -210,15 +210,39 @@ font-family: 'Arvo', serif;
                         .attr("y2", height);
        var sets = data["time-sets"]
        var setTimes = sets.map(function (d) { return d.time} );
-       var activeTracks = d3.select("#root")
-                            .append("row")
-                            .selectAll(".sample")
-                            .data(samples, function(d) {return d.index})
-                            .enter()
-                            .append("div")
-                            .classed("media col-md-6 col-xs-12", "true")
-                            .attr("id", function(d) {return "track" + d.index});
 
+       var slotDivs = d3.select("#root")
+                        .append("row")
+                        .selectAll(".slot")
+                        .data(d3.range(8))
+                        .enter()
+                        .append("div")
+                        .classed("col-md-6 col-xs-12", "true")
+                        .attr("id", function(d) {return "slot" + d})
+                        .style("height", "140px");
+
+       for (var idx in samples) {
+         var sample = samples[idx];
+         var slot = data.slots[sample.index];
+         d3.select("#slot" + slot)           
+           .append("div")
+           .datum(sample)
+           //.classed("media col-md-6 col-xs-12", "true")
+           .classed("media", "true")
+           .attr("id", function(d) {return "track" + d.index})
+       }
+//       var activeTracks = d3.select("#root")
+///                            .append("row")
+///                            .selectAll(".sample")
+///                            .data(samples, function(d) {return d.index})
+///                            .enter()
+///                            .append("div")
+///                            .classed("media col-md-6 col-xs-12", "true")
+///                            .attr("id", function(d) {return "track" + d.index});
+
+       var activeTracks = d3.select("#root")
+                            .selectAll(".media")
+         
        activeTracks.append("a")
                    .attr("class", "media-left")
                    .attr("display", "inherit")
@@ -292,7 +316,8 @@ font-family: 'Arvo', serif;
              d3.select("#track" + track)
                .style("display", "block")
                .style("visibility", "hidden");
-             d3.select("#track" + track).classed("media col-md-6 col-xs-12 fadeIn", true);
+             //d3.select("#track" + track).classed("media col-md-6 col-xs-12 fadeIn", true);
+             d3.select("#track" + track).classed("media fadeIn", true);
            }
            activeIndices = nextIndices;
          }
