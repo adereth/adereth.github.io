@@ -49,6 +49,7 @@
        }		
      }
 
+     
      @-webkit-keyframes fadeIn {
        0% {
 	 -webkit-transform: scale(0);
@@ -66,6 +67,46 @@
 	 opacity: 1;	
        }		
      }
+
+     .fadeOut{
+       animation-name: fadeIn;
+       -webkit-animation-name: fadeIn;	
+
+       animation-duration: 0.25s;	
+       -webkit-animation-duration: 0.25s;
+
+       animation-timing-function: ease-in-out;	
+       -webkit-animation-timing-function: ease-in-out;		
+
+       visibility: visible !important;	
+     }
+
+     @keyframes fadeOut{
+       0% {
+	 transform: scale(1);
+	 opacity: 1;	
+       }
+       100% {
+	 transform: scale(0);
+	 opacity: 0.0;		
+       }       
+     }
+
+     
+     @-webkit-keyframes fadeOut {
+       0% {
+	 -webkit-transform: scale(1);
+	 opacity: 1;	
+       }
+       100% {
+	 -webkit-transform: scale(0);
+	 opacity: 0.0;		
+       }
+
+       
+     }
+
+     
      .bar {
        fill: steelblue;
        fill-opacity: 0.5;
@@ -281,6 +322,14 @@ font-family: 'Arvo', serif;
        mediaBodies.append("p")
                   .html(function(d) {return htmlify(d["song"])});
 
+       mediaBodies.append("a")
+                  .attr("href", function(d) {return d["itunes-link"] ? (d["itunes-link"] + "&at=10lNCN") : null})
+                  .attr("target", "_blank")
+                  .append("img")
+                  .attr("src", function(d) {return d["itunes-link"] ? "https://linkmaker.itunes.apple.com/htmlResources/assets//images/web/linkmaker/badge_itunes-sm.png" : null})
+                  .style("border", "0");
+
+
        activeTracks.style("display", "none");
        
        var activeIndices = [];
@@ -347,7 +396,12 @@ font-family: 'Arvo', serif;
                  .attr("x", function(d) { return x(d.start); })
                  .attr("height", 4)  //x.rangeBand())
                  .attr("y", function(d) { return y(d.year - 0.5)-5; })
-                 .attr("width", function(d) { return x(d.end) - x(d.start); })
+                 .attr("width", function(d) {
+                   if (d.end == d.start) {
+                     return x(d.end + 1000) - x(d.start)
+                   } else {
+                     return x(d.end) - x(d.start); }
+                 })
                  .attr("id", function(d) {return "bar" + d.index})
                  .on("click", function(d) {
                    seekTo(d.start);
