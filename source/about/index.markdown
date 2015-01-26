@@ -5,7 +5,7 @@ comments: false
 sharing: false
 footer: true
 ---
-{% img /images/adereth.jpg %}
+{% img /images/me_at_board.jpg %}
 
 > "when you don't create things, you become defined by your tastes rather than ability. your tastes only narrow & exclude people. so create."
 - [_why](http://en.wikipedia.org/wiki/Why_the_lucky_stiff)
