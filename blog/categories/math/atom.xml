@@ -4,7 +4,7 @@
   <title><![CDATA[Category: math | adereth]]></title>
   <link href="http://adereth.github.io/blog/categories/math/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2015-02-02T15:39:00-08:00</updated>
+  <updated>2015-02-02T21:15:58-08:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -1557,6 +1557,14 @@ $$a \neq c$$</p>
 <h2>And?</h2>
 
 <p>Unfortunately, I&rsquo;m just learning about lattice theory and I have no idea if there&rsquo;s any formal connection between these similar concepts.  I have found that there is a branch of lattice theory that is concerned with the planarity of the Hasse diagrams, so it&rsquo;s not like any algebraist hasn&rsquo;t thought of this before.  If anyone has a formal connection or an example of other cases where a pair of structures have this kind of &ldquo;poisonous&rdquo; property, I&rsquo;d love to hear.</p>
+
+<h2>Addendum</h2>
+
+<p><a href="http://www.reddit.com/r/puremathematics/comments/2ul8ek/poisonous_shapes_in_algebra_and_graph_theory/co9ifo8">Nerkbot over at /r/puremathematics</a> was kind enough to share:</p>
+
+<blockquote><p>You might be interested in the <a href="http://en.wikipedia.org/wiki/Robertson%E2%80%93Seymour_theorem">Robertson-Seymour theorem</a> which says that for any graph property that is closed under taking minors there is a finite list of &ldquo;forbidden minors&rdquo; or as you call them &ldquo;poisonous&rdquo; graphs. Kuratowski&rsquo;s theorem is one particular example of this.<br/><br/>
+This relates also to the concept of <a href="http://en.wikipedia.org/wiki/Well-quasi-ordering">well-quasi-orders</a>. A quasi-ordered set $(X, \leq)$ is a well-quasi-order if every infinite sequence ($x_1, x_2, &hellip;$) with elements in $X$ has some $i &lt; j$ with $x_i \leq x_j$. An equivalent statement of the Robertson-Seymour theorem is that the set of all finite graphs ordered by the minor relation is well-quasi-ordered.<br/><br/>
+Another example where &ldquo;forbidden minors&rdquo; appear is matroids. Matroids also have minors but unlike graphs they are not well-quasi-ordered under the minor relation. However certain minor closed properties do have a finite list of forbidden minors. For example <a href="http://en.wikipedia.org/wiki/Rota%27s_conjecture">Rota&rsquo;s conjecture</a>, which was announced to be proven very recently, says that for any finite field the set of matroids that are representable over that field are characterized by a finite list of forbidden minors.</em></p></blockquote>
 ]]></content>
   </entry>
   
