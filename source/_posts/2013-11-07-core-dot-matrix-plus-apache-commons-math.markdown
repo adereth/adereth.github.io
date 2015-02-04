@@ -3,7 +3,7 @@ layout: post
 title: "core.matrix + Apache Commons Math"
 date: 2013-11-08 08:08
 comments: true
-categories: clojure
+categories: clojure math
 ---
 I'd like to share a little project I did to make it more convenient to use Apache Commons Math's linear algebra classes with Clojure.
 
@@ -58,7 +58,7 @@ Without this, you have to write some pretty cumbersome array manipulation code t
 ;; #<Array2DRowRealMatrix Array2DRowRealMatrix{ {1.0,1.0}, {1.0,0.0} }>
 ```
 
-If you're working from the REPL or otherwise don't care about indirectly changing the behavior of your code, you could even avoid `with-implementation` and just make `:apache-commons` the default by evaluating: 
+If you're working from the REPL or otherwise don't care about indirectly changing the behavior of your code, you could even avoid `with-implementation` and just make `:apache-commons` the default by evaluating:
 ```clojure
 (m/set-current-implementation :apache-commons)
 ```

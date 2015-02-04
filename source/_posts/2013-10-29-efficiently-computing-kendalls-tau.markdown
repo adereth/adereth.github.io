@@ -3,7 +3,7 @@ layout: post
 title: "Efficiently Computing Kendall's Tau"
 date: 2013-10-30 21:45
 comments: true
-categories: clojure algorithms
+categories: clojure algorithms math
 ---
 Typically when people talk about correlation they are referring to the [Pearson's product-moment coefficient](http://en.wikipedia.org/wiki/Pearson_product-moment_correlation_coefficient):
 
@@ -19,7 +19,7 @@ $$x_1 > x_2 \text{ and } y_1 > y_2$$
 $$x_1 < x_2 \text{ and } y_1 > y_2$$
 $$\text{or}$$
 $$x_1 > x_2 \text{ and } y_1 < y_2$$
-If $x_1 = x_2 \text{ or } y_1 = y_2$, the pair is neither concordant nor discordant.  
+If $x_1 = x_2 \text{ or } y_1 = y_2$, the pair is neither concordant nor discordant.
 
 Kendall's Tau is then defined as:
 $$\tau = \frac{n_c-n_d}{\frac{1}{2} n (n-1) }$$
@@ -120,7 +120,7 @@ A tuple containing the count of discords and the merged sequence is returned."
          ;; scan of the sequence each time, which would get us back to O(n^2)
          remaining-i (count coll1)
          remaining-j (count coll2)
-         
+
          [i & rest-i :as all-i] coll1
          [j & rest-j :as all-j] coll2
          result []]

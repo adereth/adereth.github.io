@@ -3,7 +3,7 @@ layout: post
 title: "Silverman's Mode Estimation Method Explained"
 date: 2014-10-12 12:51
 comments: true
-categories: algorithms
+categories: algorithms math
 ---
 <script src="http://d3js.org/d3.v2.js"></script>
 <div>

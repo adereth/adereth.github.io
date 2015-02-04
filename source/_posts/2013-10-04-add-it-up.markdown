@@ -3,7 +3,7 @@ layout: post
 title: "Add it up (properly)"
 date: 2013-10-10 22:14
 comments: true
-categories: clojure numerics
+categories: clojure math
 ---
 
 Floating point arithmetic can sometimes be frustratingly [unstable](https://en.wikipedia.org/wiki/Numerical_stability), particularly when applied to large datasets.  Even though the classic [What Every Computer Scientist Should Know About Floating-Point Arithmetic](http://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html) seems to make the front page of of Hacker News on a yearly basis ([1](https://news.ycombinator.com/item?id=4815399), [2](https://news.ycombinator.com/item?id=1982332), [3](http://news.ycombinator.com/item?id=1937182), [4](http://news.ycombinator.com/item?id=1746797), [5](http://news.ycombinator.com/item?id=687604),

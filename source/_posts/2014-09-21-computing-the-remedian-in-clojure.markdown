@@ -3,7 +3,7 @@ layout: post
 title: "Computing the Remedian in Clojure"
 date: 2014-09-29 09:03
 comments: true
-categories: clojure algorithms
+categories: clojure algorithms math
 ---
 The remedian is an approximation of the [median](http://en.wikipedia.org/wiki/Median) that can be computed using only $O(\log{n})$ storage.  The algorithm was originally presented in [The Remedian: A Robust Averaging Method for Large Data Sets by Rousseeuw and Bassett](http://web.ipac.caltech.edu/staff/fmasci/home/statistics_refs/Remedian.pdf) (1990).  The core of it is on the first page:
 

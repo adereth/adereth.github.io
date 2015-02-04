@@ -3,7 +3,7 @@ layout: post
 title: "unicode-math 0.2.0 released"
 date: 2013-10-13 14:28
 comments: true
-categories: clojure unicode
+categories: clojure unicode math
 ---
 I just deployed a new version of [unicode-math](https://github.com/adereth/unicode-math) to Clojars.  It's a silly toy project that implements as many of [Unicode's math symbols](http://symbolcodes.tlt.psu.edu/bylanguage/mathchart.html) as possible in Clojure.  If you `use` it, you can write things like:
 

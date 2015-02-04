@@ -3,7 +3,7 @@ layout: post
 title: "Typing Qwerty on a Dvorak Keyboard"
 date: 2014-08-14 18:40
 comments: true
-categories: mathematica keyboards
+categories: mathematica keyboards math
 ---
 [@thattommyhall](https://twitter.com/thattommyhall) posted a fun question on Twitter:
 
@@ -43,7 +43,7 @@ KeyGraph[dvorak, qwerty]
 ```
 ![Dvorak to Qwerty Graph](/images/dvorak-qwerty.png)
 
-There is a single directed edge going from each character to the one that will be displayed when you type it.  There are 3 keys that remain unchanged, 2 pairs of swapped keys, and 2 large cycles of keys. 
+There is a single directed edge going from each character to the one that will be displayed when you type it.  There are 3 keys that remain unchanged, 2 pairs of swapped keys, and 2 large cycles of keys.
 
 We can get these groups programmatically using the [ConnectedComponents function](http://reference.wolfram.com/mathematica/ref/ConnectedComponents.html):
 
