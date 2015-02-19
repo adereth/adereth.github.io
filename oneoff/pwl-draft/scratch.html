@@ -1,0 +1,139 @@
+<html>
+  <head>
+    <title>The Mode Tree - PWL Too</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="d3.js"></script>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link href='http://fonts.googleapis.com/css?family=Vollkorn:400italic,700italic,400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="style.css">
+    <script src="jquery-1.11.2.js"></script>
+  </head>
+
+  <body>
+      <script>
+       width = 1280;
+       height = 90;
+       delay = 250;
+       margin = {top: 50, right: 40, bottom: 40, left: 60}
+       currentPage = 0;
+
+       keyHandlerForPage = {};
+       turnThePage = function(e) {
+           console.log("Turning page");
+           var key = e.keyCode ? e.keyCode : e.which;
+           var oldPage = currentPage;
+           if (key == 39) {
+               currentPage++;
+           } else if (key == 37 && currentPage > 0) {
+               currentPage--;
+           }
+           if (currentPage != oldPage) {
+               $("#page" + oldPage).fadeOut(delay, "swing", function() {
+                   $("#page" + currentPage).fadeIn(delay, "swing");
+               });
+               var keyHandler = keyHandlerForPage[currentPage]
+               if (keyHandler) {
+                   console.log(keyHandler);
+                   window.onkeyup = keyHandler;
+               }
+
+           }
+           console.log(currentPage);
+       }
+
+       window.onkeyup = turnThePage;
+      </script>
+
+      <div class="slide" id="page0">
+          <h1>The Mode Tree</h1>
+          <h3>A Tool for Visualization of <br/> Nonparametric Density Features</h3>
+          <p>Michael C. Minnotte & David W. Scott<p/>
+	      <small>Presented by <a href="http://adereth.githubiio">Matt Adereth</a> /
+                  <a href="http://twitter.com/adereth">@adereth</a></small>
+      </div>
+
+
+      <div class="slide" id="page1">
+          <div id='chart-1'></div>
+      </div>
+
+
+      <div class="slide" id="page2">
+          <h1>All done</h1>
+      </div>
+
+      <script>
+       function drawPoints(data, chart, height) {
+
+           $(chart).empty();
+
+           var x = d3.scale.linear()
+                     .domain([0, d3.max(data, function(d) { return d.value}) + 5])
+                     .range([0, width - margin.left - margin.right]);
+
+           var y = d3.scale.ordinal()
+                     .domain(d3.range(data.length))
+                     .rangeRoundBands([height - margin.top - margin.bottom, 0], 0.2);
+
+           var xAxis = d3.svg.axis()
+                         .scale(x)
+                         .orient('bottom')
+                         .tickPadding(8)
+	                 .ticks(8);
+
+           var yAxis = d3.svg.axis()
+                         .scale(y)
+                         .orient('left')
+                         .tickPadding(8)
+                         .tickSize(0);
+
+           var svg = d3.select(chart).append('svg')
+                       .attr('width', width)
+                       .attr('height', height)
+                       .attr('class', 'chart')
+	               .append('g')
+                       .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+
+           svg.append('g')
+              .attr('class', 'x axis')
+              .call(xAxis);
+
+           keyHandlerForPage[1] = function() {
+               svg.selectAll('.chart')
+                  .data(data)
+	          .enter().append('circle')
+                  .classed('point', true)
+                  .attr("id", function(d, i) { return "point" + i })
+                  .attr('cx', function(d, i) { return x(d.value) })
+                  .attr('cy', 0)
+                  .attr('r', 5);
+
+               function fadePointAndStartNext(i) {
+                   $("#point" + i).fadeIn(500, "swing", function() {
+                       if ($("#point" + (i + 1))) {
+                           fadePointAndStartNext(i+1)
+                       }
+                   })
+
+               }
+               fadePointAndStartNext(0);
+               window.onkeyup = turnThePage;
+           };
+
+
+       }
+
+       var data = [{value: 13.1138}, {value: 10.6519}, {value: 20.5735}, {value: 7.89327}, {value: 9.02554}, {value: 20.8411}, {value: 8.84072}, {value: 10.6273}, {value: 13.5194}, {value: 17.9757}, {value: 10.1086}, {value: 8.68131}, {value: 7.16192}, {value: 19.9496}, {value: 8.77111}, {value: 19.5314}, {value: 9.40915}, {value: 12.8664}, {value: 23.1322}, {value: 13.5008}];
+       drawPoints(data, '#chart-1', height);
+
+      </script>
+
+      <script>
+       $("#page" + currentPage).fadeIn(1000, "swing");
+      </script>
+  </body>
+</html>
