@@ -6,48 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <script src="d3.js"></script>
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <link href='http://fonts.googleapis.com/css?family=Vollkorn:400italic,700italic,400,700' rel='stylesheet' type='text/css'>
+    <link href='google-fonts/volkorn.css' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="style.css">
     <script src="jquery-1.11.2.js"></script>
+    <script src="presentation.js"></script>
+    <script src="kde.js"></script>
   </head>
 
   <body>
       <script>
        width = 1280;
-       height = 90;
-       delay = 250;
-       margin = {top: 50, right: 40, bottom: 40, left: 60}
-       currentPage = 0;
-
-       keyHandlerForPage = {};
-       turnThePage = function(e) {
-           console.log("Turning page");
-           var key = e.keyCode ? e.keyCode : e.which;
-           var oldPage = currentPage;
-           if (key == 39) {
-               currentPage++;
-           } else if (key == 37 && currentPage > 0) {
-               currentPage--;
-           }
-           if (currentPage != oldPage) {
-               $("#page" + oldPage).fadeOut(delay, "swing", function() {
-                   $("#page" + currentPage).fadeIn(delay, "swing");
-               });
-               var keyHandler = keyHandlerForPage[currentPage]
-               if (keyHandler) {
-                   console.log(keyHandler);
-                   window.onkeyup = keyHandler;
-               }
-
-           }
-           console.log(currentPage);
-       }
-
-       window.onkeyup = turnThePage;
+       height = 590;
+       margin = {top: 50, right: 40, bottom: 40, left: 60};
       </script>
 
-      <div class="slide" id="page0">
+      <div class="slide" id="titleSlide">
           <h1>The Mode Tree</h1>
           <h3>A Tool for Visualization of <br/> Nonparametric Density Features</h3>
           <p>Michael C. Minnotte & David W. Scott<p/>
@@ -56,17 +29,29 @@
       </div>
 
 
-      <div class="slide" id="page1">
+      <div class="slide" id="dataSlide">
           <div id='chart-1'></div>
       </div>
 
+      <div class="slide" id="what">
+          What
+      </div>
 
-      <div class="slide" id="page2">
+      <div class="slide" id="doneSlide">
           <h1>All done</h1>
       </div>
 
+      <div class="slide" id="doneSlide">
+          Huh?
+      </div>
+
+
       <script>
+
+
+       var pointsDrawn = false;
        function drawPoints(data, chart, height) {
+           //Use one color for the points, one for the function, one for the convolution
 
            $(chart).empty();
 
@@ -76,7 +61,7 @@
 
            var y = d3.scale.ordinal()
                      .domain(d3.range(data.length))
-                     .rangeRoundBands([height - margin.top - margin.bottom, 0], 0.2);
+                     .rangeRoundBands([0,height - margin.top - margin.bottom], 0.2);
 
            var xAxis = d3.svg.axis()
                          .scale(x)
@@ -97,43 +82,317 @@
 	               .append('g')
                        .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
 
-
            svg.append('g')
               .attr('class', 'x axis')
               .call(xAxis);
 
-           keyHandlerForPage[1] = function() {
+           keyHandlerForPage["dataSlide"] = function() {
+               if (!pointsDrawn){
+                   svg.selectAll('.chart')
+                      .data(data)
+	              .enter().append('circle')
+                      .classed('point', true)
+                      .attr("id", function(d, i) { return "point" + i })
+                      .attr('cx', function(d, i) { return x(d.value) })
+                      .attr('cy', 0)
+                      .attr('r', 5);
+                   pointsDrawn = true;
+                   function fadePointAndStartNext(i) {
+                       $("#point" + i).fadeIn(200, "swing", function() {
+                           if ($("#point" + (i + 1))) {
+                               fadePointAndStartNext(i+1)
+                           }
+                       })
+
+                   }
+                   fadePointAndStartNext(0);
+               }
+               return function() {drawWorstHistogram(data, svg,height, x)};
+           };
+       }
+
+       function drawHistogram(data, chart, height) {
+           //$(chart).empty();
+
+           var x = d3.scale.linear()
+                     .domain([0, 30])   //d3.max(data, function(d) { return d.value}) + 5])
+                     .range([0, width - margin.left - margin.right]);
+
+           var xAxis = d3.svg.axis()
+                         .scale(x)
+                         .orient('bottom')
+                         .tickPadding(8)
+                         .ticks(8);
+
+           var svg = d3.select(chart).append('svg')
+                       .attr('width', width)
+                       .attr('height', height)
+                       .attr('class', 'chart')
+                       .append('g')
+                       .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+           svg.append("g")
+              .attr("class", "x axis")
+              .attr("transform", "translate(0," + (height - margin.top - margin.bottom) + ")")
+              .call(xAxis);
+
+           var y0 = height - margin.top - margin.bottom;
+
+           var ticksToShow = [3,20,800]; //TODO: Fix the bug where it only works when there are progressively more ticks
+           function drawHistogramBars(tickIndex) {
+               console.log("Drawing " + ticksToShow[tickIndex]);
+               var histdata = d3.layout.histogram()
+                                .bins(x.ticks(ticksToShow[tickIndex]))(data.map(function(d){ return d.value }));
+
+               var y = d3.scale.linear()
+                         .domain([0, d3.max(histdata, function(d) { return d.y; })])
+                         .range([y0, 0]);
+
+
+               var yAxis = d3.svg.axis()
+                             .scale(y)
+                             .orient('left')
+                             .tickPadding(8)
+                             .tickSize(0);
+
+               var bar = svg.selectAll(".bar")
+                            .data(histdata)  //I suspect this and the enter() are the problematic part for fewer ticks
+                            .enter().append("g")
+                            .attr("class", "bar")
+                            .attr("transform", function(d) { return "translate(" + x(d.x) + "," + y(d.y) + ")"; });
+
+               var rects = bar.append("rect")
+                              .attr("tickIndex", tickIndex)
+                              .attr("width", x(histdata[0].dx))
+                              .attr("height", function(d) {
+                                  return height - y(d.y) - margin.bottom - margin.top; });
+
+
+               var yaxis2 = svg.append("g")
+                               .attr("class", "y axis")
+                               .call(yAxis);
+
+               function clearHistogramBars() {
+                   rects.remove();
+                   yaxis2.remove();
+                   nextPageHandler = (tickIndex + 1 < ticksToShow.length) ?
+                                     function() {drawHistogramBars(tickIndex + 1)} :
+                                     function() {drawNormalKernels(1);};
+               }
+               nextPageHandler = clearHistogramBars;
+
+           }
+
+           var scale = 0.5 / Math.sqrt(2 * Math.PI) / 2;
+           function gaussian(x, mean, sigma) {
+               var z = (x - mean) / sigma;
+               return scale * Math.exp(-0.5 * z * z) / sigma;
+           };
+
+
+           function drawNormalKernels(stddev) {
+
+               var y = d3.scale.linear()
+                         .domain([0, 1])
+                         .range([height - margin.top - margin.bottom, 0]);
+
+               function subpoints(d) {
+                   return d3.range(d.value - 4, d.value + 4, 0.1).map(
+                       function (d2,i,a) {
+                           return {value: d2, height: gaussian(d2, d.value, 1)};
+                       });
+               }
+
+               var kernels = data.sort(function(x,y){return x.value - y.value}).map(function(d) {
+                   var area = d3.svg.area()
+                                    .x(function(d) { return x(d.value); })
+                                    .y0(y(0))
+                                    .y1(function(d) { return y(d.height); });
+
+                   return svg.append('path')
+                             .attr('class', 'area')
+                             .attr("d", area(subpoints(d)))
+               });
+
+               var flatArea = d3.svg.area()
+                                .x(function(d) { return x(d.value); })
+                                .y0(y(0))
+                                .y1(y(0));
+
+               function drawSummedKernels() {
+                   var points = d3.range(0, 30, 0.01).concat(data.map(function(x) {return x.value}))
+                                  .sort(function(a,b){return a-b})
+                                  .map(
+                                      function (x,i,a) {
+                                          var y = 0;
+                                          data.forEach(function(d) {
+                                              y += gaussian(x, d.value, stddev)
+                                          });
+                                          return {value: x, height: y};
+                                      }
+
+                                  );
+
+                   var intermediateAreaPoints = data.map(function(d, i){
+                       var points = d3.range(0, 30, 0.01).concat(data.slice(0,i+1).map(function(x) {return x.value}))
+                                      .sort(function(a,b){return a-b})
+                                      .map(
+                                          function (x,i2,a) {
+                                              var y = 0;
+                                              //console.log(x)
+                                              data.slice(0,i+1).forEach(function(d) {
+                                                  y += gaussian(x, d.value, stddev)
+                                              });
+                                              return {value: x, height: y};
+                                          }
+                                      );
+                       return points;
+                   });
+
+                   var delay = 75;
+
+                   var summedArea = svg.append('path')
+                                       .attr('class', 'summedarea')
+                                       .attr("d", flatArea(intermediateAreaPoints[0]));
+
+                   var area = d3.svg.area()
+                                    .x(function(d) { return x(d.value); })
+                                    .y0(y(0))
+                                    .y1(function(d) { return y(d.height); });
+
+                   var line = d3.svg.line()
+                                .x(function(d) { return x(d.value); })
+                                .y(function(d) { return y(d.height); });
+
+
+                   var intermediateAreas = intermediateAreaPoints.map(function(p){area(p) })
+
+                   kernels.forEach(function(k, i){
+                       k.transition()
+                        .ease("linear")
+                        .duration(delay)
+                         .delay(delay * i)
+                        .style("stroke-opacity", 0)
+                         .attr("d", flatArea(subpoints(data[i])));
+                       summedArea.transition()
+                                 .ease("linear")
+                                  .duration(delay)
+                                  .delay(delay * i)
+                                  .attr("d", area(intermediateAreaPoints[i]));
+
+                   });
+
+                   var stdDev1Points = intermediateAreaPoints[intermediateAreaPoints.length - 1];
+                   var stdDev1Line;
+
+                   function clearArea() {
+                       summedArea.transition()
+                                 .duration(1000)
+                                 .style("fill-opacity", 0)
+                                 .style("stroke-opacity", 0);
+                       stdDev1Line = svg.append('path')
+                                        .attr('class', 'kdeline')
+                                        .style("stroke-width", 1)
+                                        .style("stroke", d3.hsl(360 * 7 / 21,0.5,0.5))
+                                        .attr("d", line(stdDev1Points));
+                       stdDev1Line.transition()
+                                  .duration(1000)
+                                  .style("stroke-width", 5);
+
+                       nextPageHandler = drawMultipleSummedKernels;
+                   }
+
+                   function drawMultipleSummedKernels() {
+
+                       var stddevs = d3.range(0.4, 2.0, 0.1);
+                       console.log(stddevs)
+
+                       var differentLines = stddevs.map(function(stddev, i){
+
+
+                           var points = d3.range(0, 30, 0.01).concat(data.map(function(x) {return x.value}))
+                                          .sort(function(a,b){return a-b})
+                                          .map(
+                                              function (x,i2,a) {
+                                                  var y = 0;
+                                                  data.forEach(function(d) {
+                                                      y += gaussian(x, d.value, stddev)
+                                                  });
+                                                  return {value: x, height: y};
+                                              }
+                                          );
+
+                           var path = svg.append('path')
+                                         .attr('class', 'kdeline')
+                                         .style("stroke-width", 5)
+                                         .style("stroke-opacity", 0)
+                                         .style("stroke", d3.hsl(360 * 7 / 21,0.5,0.5))
+                                         .attr("d", line(stdDev1Points));
+
+                           if (i > 7) {
+                               path.transition()
+                                   .delay(1000 * i)
+                                   .duration(500)
+                                   .style("stroke-opacity", 1)
+                                   .transition()
+                                   .duration(500)
+                                   .style("stroke", d3.hsl(360 * i / 21,0.5,0.5))
+                                   .attr("d", line(points));
+
+                           } else {
+                               path.transition()
+                                   .delay(1000 * i)
+                                   .duration(500)
+                                   .style("stroke-opacity", 1)
+                                   .transition()
+                                   .duration(500)
+                                   .style("stroke", d3.hsl(360 * i / 21,0.5,0.5))
+                                   .attr("d", line(points));
+
+                           }
+
+
+                           return points;
+                       });
+
+
+                   }
+
+                   nextPageHandler = clearArea;
+
+
+               }
+
+               nextPageHandler = drawSummedKernels;
+
+           }
+
+
+           keyHandlerForPage["dataSlide"] = function() {
+               console.log("Adding points")
                svg.selectAll('.chart')
                   .data(data)
 	          .enter().append('circle')
                   .classed('point', true)
                   .attr("id", function(d, i) { return "point" + i })
                   .attr('cx', function(d, i) { return x(d.value) })
-                  .attr('cy', 0)
+                  .attr('cy', y0)
                   .attr('r', 5);
 
-               function fadePointAndStartNext(i) {
-                   $("#point" + i).fadeIn(500, "swing", function() {
-                       if ($("#point" + (i + 1))) {
-                           fadePointAndStartNext(i+1)
-                       }
-                   })
-
-               }
-               fadePointAndStartNext(0);
-               window.onkeyup = turnThePage;
+               //nextPageHandler = function() {drawHistogramBars(0)};
+               nextPageHandler = function() {drawNormalKernels(1)};
            };
+
 
 
        }
 
+
        var data = [{value: 13.1138}, {value: 10.6519}, {value: 20.5735}, {value: 7.89327}, {value: 9.02554}, {value: 20.8411}, {value: 8.84072}, {value: 10.6273}, {value: 13.5194}, {value: 17.9757}, {value: 10.1086}, {value: 8.68131}, {value: 7.16192}, {value: 19.9496}, {value: 8.77111}, {value: 19.5314}, {value: 9.40915}, {value: 12.8664}, {value: 23.1322}, {value: 13.5008}];
-       drawPoints(data, '#chart-1', height);
+       //drawPoints(data, '#chart-1', height);
+       drawHistogram(data, '#chart-1', height);
 
       </script>
 
-      <script>
-       $("#page" + currentPage).fadeIn(1000, "swing");
-      </script>
   </body>
 </html>

@@ -64,7 +64,7 @@ small {
   stroke: black;
   stroke-width: 1
   stroke-opacity: 0.5;
-  display: none;
+ // display: none;
 }
 
 .axis path, .axis line {
@@ -74,11 +74,18 @@ small {
 }
 
 .area {
-  fill: steelblue;
+  fill: indianred;
   fill-opacity: 0.25;
   stroke: #000;
   stroke-opacity: 0.5;
 }
+
+.kdeline {
+  fill: none;
+  stroke: #000;
+  stroke-opacity: 0.75;
+}
+
 
 .summedarea {
   fill: steelblue;
