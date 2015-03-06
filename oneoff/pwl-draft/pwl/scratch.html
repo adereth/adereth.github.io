@@ -58,77 +58,23 @@ $$</div>
       <script>
        var speedFactor = 1;
 
-       var pointsDrawn = false;
-       function drawPoints(data, chart, height) {
-           //Use one color for the points, one for the function, one for the convolution
-
-           $(chart).empty();
-
-           var x = d3.scale.linear()
-                     .domain([0, d3.max(data, function(d) { return d.value}) + 5])
-                     .range([0, width - margin.left - margin.right]);
-
-           var y = d3.scale.ordinal()
-                     .domain(d3.range(data.length))
-                     .rangeRoundBands([0,height - margin.top - margin.bottom], 0.2);
-
-           var xAxis = d3.svg.axis()
-                         .scale(x)
-                         .orient('bottom')
-                         .tickPadding(8)
-	                 .ticks(8);
-
-           var yAxis = d3.svg.axis()
-                         .scale(y)
-                         .orient('left')
-                         .tickPadding(8)
-                         .tickSize(0);
-
-           var svg = d3.select(chart).append('svg')
-                       .attr('width', width)
-                       .attr('height', height)
-                       .attr('class', 'chart')
-	               .append('g')
-                       .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
-
-           var top = svg;
-           svg = svg.append('g');
-
-           top.append('g')
-              .attr('class', 'x axis')
-              .call(xAxis);
-
-
-
-           keyHandlerForPage["dataSlide"] = function() {
-               if (!pointsDrawn){
-                   svg.selectAll('.chart')
-                      .data(data)
-	              .enter().append('circle')
-                      .classed('point', true)
-                      .attr("id", function(d, i) { return "point" + i })
-                      .attr('cx', function(d, i) { return x(d.value) })
-                      .attr('cy', 0)
-                      .attr('r', 5);
-                   pointsDrawn = true;
-                   function fadePointAndStartNext(i) {
-                       $("#point" + i).fadeIn(200, "swing", function() {
-                           if ($("#point" + (i + 1))) {
-                               fadePointAndStartNext(i+1)
-                           }
-                       })
-
-                   }
-                   fadePointAndStartNext(0);
+       function getModesAndAntimodes(points) {
+           var results = []
+           for (var i = 1; i < points.length - 1; i++) {
+               var left = points[i - 1];
+               var point = points[i];
+               var right = points[i - 1];
+               if (point > left && point > right) {
+                   results.push(["mode", point])
+               } else if (point < left && point < right) {
+                   results.push(["antimode", point])
                }
-               return function() {drawWorstHistogram(data, svg,height, x)};
-           };
+           }
+           return results;
        }
 
        function drawHistogram(data, chart, height) {
            //$(chart).empty();
-
-
 
            var x = d3.scale.linear()
                      .domain([0, 30])   //d3.max(data, function(d) { return d.value}) + 5])
@@ -154,7 +100,7 @@ $$</div>
 
            var y0 = height - margin.top - margin.bottom;
 
-           var ticksToShow = [1,3,20,800]; //TODO: Fix the bug where it only works when there are progressively more ticks
+           var ticksToShow = [1,3,20,1600]; //TODO: Fix the bug where it only works when there are progressively more ticks
            function drawHistogramBars(tickIndex) {
                var ticks = ticksToShow[tickIndex]
                var histdata;
@@ -183,21 +129,28 @@ $$</div>
                             .attr("class", "bar")
                             .attr("transform", function(d) { return "translate(" + x(d.x) + "," + y(d.y) + ")"; });
 
+
+
+
                var rects = bar.append("rect")
                               .attr("tickIndex", tickIndex)
                               .attr("width", x(histdata[0].dx))
                               .attr("height", function(d) {
-                                  return height - y(d.y) - margin.bottom - margin.top; });
+                                  return height - y(d.y) - margin.bottom - margin.top; })
+                              .style("opacity", 0);;
 
+               rects.transition().duration(500).style("opacity", 1.0);;
 
                var yaxis2 = svg.append("g")
                                .attr("class", "y axis")
-                               .call(yAxis);
+                               .call(yAxis)
+                               .style("opacity", 0);
+               yaxis2.transition().duration(500).style("opacity", 1.0);;
 
                function clearHistogramBars() {
-                   svg.selectAll(".bar").data([]).exit().remove();
-                   rects.remove();
-                   yaxis2.remove();
+                   rects.transition().duration(500).style("opacity", 0).remove().each("end", function() {svg.selectAll(".bar").data([]).exit().remove();});
+                   yaxis2.transition().duration(500).style("opacity", 0).remove();;
+
                    nextPageHandler = (tickIndex + 1 < ticksToShow.length) ?
                                      function() {drawHistogramBars(tickIndex + 1)} :
                                      function() {drawNormalKernels(1);};
@@ -401,7 +354,7 @@ $$</div>
                        nextPageHandler = function() {
                            console.log(svg);
                            console.log(height);
-                           svg.transform(); //.duration(500).attr('height', height/2);
+                           //svg.transform(); //.duration(500).attr('height', height/2);
                        };
 
                    }
@@ -418,18 +371,23 @@ $$</div>
 
 
            keyHandlerForPage["dataSlide"] = function() {
-               console.log("Adding points")
-               svg.selectAll('.chart')
-                  .data(data)
-	          .enter().append('circle')
-                  .classed('point', true)
-                  .attr("id", function(d, i) { return "point" + i })
-                  .attr('cx', function(d, i) { return x(d.value) })
-                  .attr('cy', y0)
-                  .attr('r', 5);
+               console.log("Adding points");
+               var points = svg.selectAll('.chart')
+                               .data(data)
+	                       .enter().append('circle')
+                               .classed('point', true)
+                               .attr("id", function(d, i) { return "point" + i })
+                               .attr('cx', function(d, i) { return x(d.value) })
+                               .attr('cy', y0)
+                               .attr('r', 0);
+
+               var pointDuration = 150;
+               points.transition().duration(pointDuration)
+                   .delay(function(d,i){ return i * pointDuration})
+                   .attr('r', 5);
 
                nextPageHandler = function() {drawHistogramBars(0)};
-             //  nextPageHandler = function() {drawNormalKernels(1)};
+               //nextPageHandler = function() {drawNormalKernels(1)};
            };
 
 
@@ -437,7 +395,7 @@ $$</div>
        }
 
 
-       var data = [{value: 7.16192}, {value: 13.1138}, {value: 10.6519}, {value: 20.5735}, {value: 7.89327}, {value: 9.02554}, {value: 20.8411}, {value: 8.84072}, {value: 10.6273}, {value: 13.5194}, {value: 17.9757}, {value: 10.1086}, {value: 8.68131}, {value: 19.9496}, {value: 8.77111}, {value: 19.5314}, {value: 9.40915}, {value: 12.8664}, {value: 23.1322}, {value: 13.5008}];
+       var data = [{value: 7.16192}, {value: 13.1138}, {value: 10.6519}, {value: 20.5735}, {value: 7.89327}, {value: 9.02554}, {value: 20.8411}, {value: 8.84072}, {value: 10.6273}, {value: 13.5194}, {value: 17.9757}, {value: 10.1086}, {value: 8.68131}, {value: 19.9496}, {value: 8.77111}, {value: 19.5314}, {value: 9.40915}, {value: 12.8664}, {value: 23.1322}, {value: 13.6008}];
        //drawPoints(data, '#chart-1', height);
        drawHistogram(data, '#chart-1', height);
 
