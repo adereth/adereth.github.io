@@ -61,16 +61,26 @@ $$</div>
        function getModesAndAntimodes(points) {
            var results = []
            for (var i = 1; i < points.length - 1; i++) {
-               var left = points[i - 1];
-               var point = points[i];
-               var right = points[i - 1];
+               var left = points[i - 1].height;
+               var point = points[i].height;
+               var right = points[i + 1].height;
                if (point > left && point > right) {
-                   results.push(["mode", point])
+                   results.push(["mode", points[i]])
                } else if (point < left && point < right) {
-                   results.push(["antimode", point])
+                   results.push(["antimode", points[i]])
                }
            }
            return results;
+       }
+
+       function modesAndAntiModesToBuckets(mam) {
+           var buckets = [];
+           for (var i = 0; i < mam.length; i+=2) {
+               buckets.push([(i == 0 ? 0 : mam[i - 1][1].value),
+                             mam[i][1].value,
+                             (i == mam.length - 1 ? 30 : mam[i + 1][1].value)])
+           }
+           return buckets;
        }
 
        function drawHistogram(data, chart, height) {
@@ -111,7 +121,7 @@ $$</div>
                    histdata = [{x: 0, dx: 30, y: data.length}];
                }
 
-               console.log(histdata)
+               //console.log(histdata)
                var y = d3.scale.linear()
                          .domain([0, d3.max(histdata, function(d) { return d.y; })])
                          .range([y0, 0]);
@@ -141,15 +151,15 @@ $$</div>
 
                rects.transition().duration(500).style("opacity", 1.0);;
 
-               var yaxis2 = svg.append("g")
+               var yAxis2 = svg.append("g")
                                .attr("class", "y axis")
                                .call(yAxis)
                                .style("opacity", 0);
-               yaxis2.transition().duration(500).style("opacity", 1.0);;
+               yAxis2.transition().duration(500).style("opacity", 1.0);;
 
                function clearHistogramBars() {
                    rects.transition().duration(500).style("opacity", 0).remove().each("end", function() {svg.selectAll(".bar").data([]).exit().remove();});
-                   yaxis2.transition().duration(500).style("opacity", 0).remove();;
+                   yAxis2.transition().duration(500).style("opacity", 0).remove();;
 
                    nextPageHandler = (tickIndex + 1 < ticksToShow.length) ?
                                      function() {drawHistogramBars(tickIndex + 1)} :
@@ -261,9 +271,6 @@ $$</div>
 
                    });
 
-                   var stdDev1Points = intermediateAreaPoints[intermediateAreaPoints.length - 1];
-                   var stdDev1Line;
-
                    function changeKernelWidth(width) {
                        var line = d3.svg.line()
                                     .x(function(d) { return x(d.value); })
@@ -304,40 +311,43 @@ $$</div>
 
                    function hideEquationAndKernels() {
                        var hideSpeed = 1000 * speedFactor;
-                       d3.select("#kdeequation").transition().duration(hideSpeed).style("opacity", 0);
-                       kernels.forEach(function(k) { k.transition().duration(hideSpeed).style("opacity", 0); });
-                       widthLine.transition().duration(hideSpeed).style("opacity", 0);
-                       nextPageHandler = drawAllSummedKernels
+                       d3.select("#kdeequation").transition().duration(hideSpeed).style("opacity", 0)
+                         .transition().duration(hideSpeed).style("height", 0);
+                       // .transition().duration(hideSpeed).style("height", 0);
+                       kernels.forEach(function(k) { k.transition().duration(hideSpeed).delay(hideSpeed).style("opacity", 0).remove(); });
+                       widthLine.transition().delay(hideSpeed).duration(hideSpeed).style("opacity", 0).remove();
+                       nextPageHandler = drawAllSummedKernels;
                    }
 
                    function drawAllSummedKernels() {
                        summedArea.transition().duration(delay).ease("linear").style("stroke", d3.hsl(360 * 0 / 21,0.5,0.5));
 
-                       var stddevs = d3.range(0.4, 2.0, 0.1);
+                       var logScale = d3.scale.log()
+                                        .domain([0.4, 10])
+                                        .range([0.1,1]);
 
-                       var pointsPerLine = stddevs.map(function(stddev, i) {
+                       var stddevs = d3.range(0.1, 1, 0.05).map(function(d) { return logScale.invert(d)});
+                       var pointsPerLine = stddevs.map(function(stddev) {
                            return d3.range(0, 30, 0.01).concat(data.map(function(x) {return x.value}))
                                     .sort(function(a,b){return a-b})
-                                    .map(
-                                        function (x,i2,a) {
-                                            var y = 0;
-                                            data.forEach(function(d) {
-                                                y += gaussian(x, d.value, stddev)
-                                            });
-                                            return {value: x, height: y};
-                                        }
-                                    );
+                                    .map(function (x) {
+                                        var y = 0;
+                                        data.forEach(function(d) {
+                                            y += gaussian(x, d.value, stddev)
+                                        });
+                                        return {value: x, height: y};
+                                    });
                        });
 
-                       console.log(pointsPerLine);
-
                        var differentLines = stddevs.map(function(stddev, i) {
-
+                           var points = pointsPerLine[i > 0 ? i - 1 : i];
                            var path = svg.append('path')
                                          .attr('class', 'kdeline')
                                          .style("stroke-opacity", 0)
                                          .style("stroke", d3.hsl(320 * i / stddevs.length,0.5,0.5))
-                                         .attr("d", line(pointsPerLine[i > 0 ? i - 1 : i]));
+                                         .attr("d", line(points));
+                           // console.log(points);
+                           // console.log(getModesAndAntimodes(points));
 
                            var shiftSpeed = 400 * speedFactor;
 
@@ -351,12 +361,142 @@ $$</div>
                                .attr("d", line(pointsPerLine[i]));
                        });
 
-                       nextPageHandler = function() {
-                           console.log(svg);
-                           console.log(height);
-                           //svg.transform(); //.duration(500).attr('height', height/2);
-                       };
+                       function addModeTreeAxes() {
 
+                           var svg = d3.select(chart).append('svg')
+                                       .attr('width', width)
+                                       .attr('height', 0)
+                                       .attr('class', 'chart');
+
+                           var g = svg.append('g')
+                                       .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+
+                           var y = d3.scale.log()
+                                     .domain([0.1, 10])
+                                     .range([y0, 0]);
+
+
+                           var yAxis = d3.svg.axis()
+                                         .scale(y)
+                                         .orient('left')
+                                         .tickValues([0.1, 0.5, 1, 5 ,10])
+                                         .tickPadding(8)
+                                         .tickSize(0)
+                                         .tickFormat(d3.format(",.1f"));
+
+                           g.append("g")
+                              .attr("class", "x axis")
+                              .attr("transform", "translate(0," + (height - margin.top - margin.bottom) + ")")
+                              .call(xAxis);
+
+                           svg.transition().duration(500).attr('height', height);
+
+                           var yAxis2 = g.append("g")
+                                           .attr("class", "y axis")
+                                           .call(yAxis)
+                                           .style("opacity", 0);
+                           yAxis2.transition().duration(500).style("opacity", 1.0);;
+
+                           function drawModeTree() {
+
+                               var logScale = d3.scale.log()
+                                                .domain([0.1, 10])
+                                                .range([0.1,1]);
+
+                               var stddevs = d3.range(1, 0.1, -0.005).map(function(d) {return logScale.invert(d)});
+                               var previousBumps = null;
+                               function points(stddev) {
+                                   return d3.range(0, 30, 0.01).concat(data.map(function(x) {return x.value}))
+                                            .sort(function(a,b){return a-b})
+                                            .map(function (x) {
+                                                var y = 0;
+                                                data.forEach(function(d) {
+                                                    y += gaussian(x, d.value, stddev)
+                                                });
+                                                return {value: x, height: y};
+                                            });
+                               }
+
+                               for (var i = 0; i < stddevs.length; i++) {
+                                   var currentPoints = points(stddevs[i]);
+                                   var currentBumps = modesAndAntiModesToBuckets(getModesAndAntimodes(currentPoints));
+                                   if (previousBumps != null) {
+                                       if (currentBumps.length == previousBumps.length) {
+                                           for (var j = 0; j < currentBumps.length; j++) {
+                                               g.append('line')
+                                                .attr("class", "treeline")
+                                                .attr("x1", x(currentBumps[j][1]))
+                                                .attr("y1", y(stddevs[i]))
+                                                .attr("x2", x(previousBumps[j][1]))
+                                                .attr("y2", y(stddevs[i-1]));
+                                           }
+                                       } else {
+                                           function inBump(bump, point) {
+                                               return (point > bump[0] && point < bump[2])
+                                           }
+                                           for (var j = 0; j < currentBumps.length; j++) {
+                                               var parentBump = null;
+                                               for (var b = 0; b < previousBumps.length; b++) {
+                                                   if (inBump(previousBumps[b], currentBumps[j][1])) {
+                                                       parentBump = previousBumps[b];
+                                                   }
+                                               }
+                                               if ((j + 1 < currentBumps.length) && (inBump(parentBump, currentBumps[j + 1][1]))) {
+                                                   console.log("Twofer");
+
+                                                   var mainBump;
+                                                   var splitBump;
+                                                   if (inBump(currentBumps[j], parentBump[1])) {
+                                                       mainBump = currentBumps[j];
+                                                       splitBump = currentBumps[j+1];
+                                                   } else {
+                                                       mainBump = currentBumps[j+1];
+                                                       splitBump = currentBumps[j];
+                                                   }
+
+                                                   g.append('line')
+                                                    .attr("class", "treeline")
+                                                    .attr("x1", x(mainBump[1]))
+                                                    .attr("y1", y(stddevs[i]))
+                                                    .attr("x2", x(parentBump[1]))
+                                                    .attr("y2", y(stddevs[i-1]));
+
+                                                   g.append('line')
+                                                    .attr("class", "treeconnector")
+                                                    .attr("x1", x(splitBump[1]))
+                                                    .attr("y1", y(stddevs[i]))
+                                                    .attr("x2", x(mainBump[1]))
+                                                    .attr("y2", y(stddevs[i]))
+                                                    .attr("stroke-dasharray", "5,5");
+                                                   j++;
+
+                                               } else {
+                                                   g.append('line')
+                                                    .attr("class", "treeline")
+                                                    .attr("x1", x(currentBumps[j][1]))
+                                                    .attr("y1", y(stddevs[i]))
+                                                    .attr("x2", x(parentBump[1]))
+                                                    .attr("y2", y(stddevs[i-1]));
+                                               }
+
+                                           }
+
+
+                                           //console.log(modesAndAntiModesToBuckets(previousModes));
+                                           //console.log(modesAndAntiModesToBuckets(modes));
+
+                                       }
+                                   }
+                                   previousBumps = currentBumps;
+                               }
+
+
+
+                           }
+                           nextPageHandler = drawModeTree;
+                       };
+                       nextPageHandler = addModeTreeAxes;
                    }
 
 //                   nextPageHandler = clearArea;
@@ -386,8 +526,8 @@ $$</div>
                    .delay(function(d,i){ return i * pointDuration})
                    .attr('r', 5);
 
-               nextPageHandler = function() {drawHistogramBars(0)};
-               //nextPageHandler = function() {drawNormalKernels(1)};
+               //nextPageHandler = function() {drawHistogramBars(0)};
+               nextPageHandler = function() {drawNormalKernels(1)};
            };
 
 
