@@ -21,11 +21,11 @@ document.addEventListener('DOMContentLoaded', function() {
             usedPageHandler = false;
             var key = e.keyCode ? e.keyCode : e.which;
             var oldPage = currentPage;
-            if (key == 39) {
+            //if (key == 39) {
                 currentPage++;
-            } else if (key == 37 && currentPage > 0) {
-                currentPage--;
-            }
+            // } else if (key == 37 && currentPage > 0) {
+            //     currentPage--;
+            // }
             if (currentPage != oldPage) {
                 slides.eq(oldPage).fadeOut(delay, "swing", function() {
                     slides.eq(currentPage).fadeIn(delay, "swing");
@@ -35,4 +35,6 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     window.onkeyup = turnThePage;
+    window.onclick = turnThePage;
+    document.addEventListener('touchstart', turnThePage);
 });
