@@ -296,7 +296,7 @@ var x = d3.scale.linear().domain([0, 30]).range([0, width - margin.left - margin
                                .attr("id", function(d, i) { return "point" + i })
                                .attr('cx', function(d, i) { return x(d.value) })
                                .attr('cy', y0)
-                               .attr('r', 2.5);
+                               .attr('r', 3.25);
 
                var y = d3.scale.linear()
                          .domain([0, 1])

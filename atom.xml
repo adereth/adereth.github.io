@@ -4,7 +4,7 @@
   <title><![CDATA[adereth]]></title>
   <link href="http://adereth.github.io/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2015-04-06T21:48:52-07:00</updated>
+  <updated>2015-04-06T21:50:51-07:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -174,7 +174,7 @@ var x = d3.scale.linear().domain([0, 30]).range([0, width - margin.left - margin
                                .attr("id", function(d, i) { return "point" + i })
                                .attr('cx', function(d, i) { return x(d.value) })
                                .attr('cy', y0)
-                               .attr('r', 2.5);
+                               .attr('r', 3.25);
 
                var y = d3.scale.linear()
                          .domain([0, 1])
