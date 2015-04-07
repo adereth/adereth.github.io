@@ -122,11 +122,14 @@ $$</div>
 
            var y0 = height - margin.top - margin.bottom;
 
-           var ticksToShow = [1,3,20,1600]; //TODO: Fix the bug where it only works when there are progressively more ticks
+           var ticksToShow = [1,3,"special",20,1600];
            function drawHistogramBars(tickIndex) {
                var ticks = ticksToShow[tickIndex]
                var histdata;
-               if (ticks > 1) {
+               if (ticks == "special") {
+                   histdata = d3.layout.histogram()
+                                .bins([-5,5,15,25,35])(data.map(function(d){ return d.value }));
+               } else if (ticks > 1) {
                    histdata = d3.layout.histogram()
                                 .bins(x.ticks(ticks))(data.map(function(d){ return d.value }));
                } else {
@@ -392,6 +395,7 @@ $$</div>
                            summedArea.transition().duration(1000).style("opacity", 0).remove();
 
                            var currentKDE = differentLines[differentLines.length - 1];
+                           currentKDE.transition().duration(100).style("stroke-opacity", 1.0);
 
                            var svg = d3.select(chart).append('svg')
                                        .attr('width', width)
