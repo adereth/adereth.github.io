@@ -5,11 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Every project.clj - adereth</title>
+  <title>Presentation on The Mode Tree at Papers We Love Too - adereth</title>
   <meta name="author" content="Matt Adereth">
 
   
-  <meta name="description" content="I was recently looking for an interesting relational dataset for another project and the idea of using the dependencies for every Clojure project on &hellip;">
+  <meta name="description" content=".chart { font-size: 10px; margin-top: -40px;
+} .axis path, .axis line { fill: none; stroke: #000; stroke-width: 2; shape-rendering: crispEdges;
+} . &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://adereth.github.io/blog/2014/01/20/every-project-dot-clj/">
+  <link rel="canonical" href="http://adereth.github.io/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
    <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
@@ -112,7 +114,7 @@
   
   <header>
     
-      <h1 class="entry-title">Every project.clj</h1>
+      <h1 class="entry-title">Presentation on the Mode Tree at Papers We Love Too</h1>
     
     
       <p class="meta">
@@ -128,342 +130,249 @@
   
 
 
-<time datetime="2014-01-20T17:33:00-08:00" pubdate data-updated="true">Jan 20<span>th</span>, 2014</time>
+<time datetime="2015-04-06T20:10:00-07:00" pubdate data-updated="true">Apr 6<span>th</span>, 2015</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>I was recently looking for an interesting relational dataset for another project and the idea of using the dependencies for every Clojure project on GitHub came up.  It turns out that it&rsquo;s possible to download almost every project.clj using <a href="https://github.com/Raynes/tentacles">Tentacles</a>, so I decided to&hellip;</p>
-
-<p><img src="/images/download-all.png" width="350"></p>
-
-<p>The most annoying part was dealing with GitHub&rsquo;s rate limits, but after waiting a few hours I had them all on local disk and was able to play around.  I haven&rsquo;t gotten to dig into the data for the actual project I&rsquo;m doing, but there were a couple simple queries that I thought were worth sharing.</p>
-
-<h2>Most frequently included packages</h2>
-
-<p>I was able to download 10770 project.clj files.  Here are the 50 most frequently included packages listed in their <code>:dependencies</code>:</p>
-
-<table>
-<thead>
-<tr>
-<th>Dependency </th>
-<th> Count</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>org.clojure/clojure-contrib </td>
-<td> 1524</td>
-</tr>
-<tr>
-<td>compojure </td>
-<td> 1348</td>
-</tr>
-<tr>
-<td>hiccup </td>
-<td> 743</td>
-</tr>
-<tr>
-<td>clj-http </td>
-<td> 738</td>
-</tr>
-<tr>
-<td>ring/ring-jetty-adapter </td>
-<td> 607</td>
-</tr>
-<tr>
-<td>cheshire </td>
-<td> 558</td>
-</tr>
-<tr>
-<td>org.clojure/data.json </td>
-<td> 552</td>
-</tr>
-<tr>
-<td>clj-time </td>
-<td> 526</td>
-</tr>
-<tr>
-<td>org.clojure/tools.logging </td>
-<td> 490</td>
-</tr>
-<tr>
-<td>enlive </td>
-<td> 444</td>
-</tr>
-<tr>
-<td>noir </td>
-<td> 388</td>
-</tr>
-<tr>
-<td>ring/ring-core </td>
-<td> 375</td>
-</tr>
-<tr>
-<td>ring </td>
-<td> 361</td>
-</tr>
-<tr>
-<td>org.clojure/tools.cli </td>
-<td> 348</td>
-</tr>
-<tr>
-<td>org.clojure/java.jdbc </td>
-<td> 344</td>
-</tr>
-<tr>
-<td>org.clojure/clojurescript </td>
-<td> 339</td>
-</tr>
-<tr>
-<td>org.clojure/core.async </td>
-<td> 235</td>
-</tr>
-<tr>
-<td>midje </td>
-<td> 227</td>
-</tr>
-<tr>
-<td>org.clojure/math.numeric-tower </td>
-<td> 219</td>
-</tr>
-<tr>
-<td>korma </td>
-<td> 206</td>
-</tr>
-<tr>
-<td>incanter </td>
-<td> 202</td>
-</tr>
-<tr>
-<td>seesaw </td>
-<td> 195</td>
-</tr>
-<tr>
-<td>overtone </td>
-<td> 172</td>
-</tr>
-<tr>
-<td>slingshot </td>
-<td> 160</td>
-</tr>
-<tr>
-<td>quil </td>
-<td> 158</td>
-</tr>
-<tr>
-<td>com.taoensso/timbre </td>
-<td> 150</td>
-</tr>
-<tr>
-<td>http-kit </td>
-<td> 149</td>
-</tr>
-<tr>
-<td>ring/ring-devel </td>
-<td> 145</td>
-</tr>
-<tr>
-<td>org.clojure/math.combinatorics </td>
-<td> 145</td>
-</tr>
-<tr>
-<td>org.clojure/core.logic </td>
-<td> 138</td>
-</tr>
-<tr>
-<td>environ </td>
-<td> 132</td>
-</tr>
-<tr>
-<td>aleph </td>
-<td> 132</td>
-</tr>
-<tr>
-<td>log4j </td>
-<td> 131</td>
-</tr>
-<tr>
-<td>ch.qos.logback/logback-classic </td>
-<td> 125</td>
-</tr>
-<tr>
-<td>org.clojure/tools.nrepl </td>
-<td> 124</td>
-</tr>
-<tr>
-<td>congomongo </td>
-<td> 124</td>
-</tr>
-<tr>
-<td>com.datomic/datomic-free </td>
-<td> 123</td>
-</tr>
-<tr>
-<td>com.novemberain/monger </td>
-<td> 123</td>
-</tr>
-<tr>
-<td>lib-noir </td>
-<td> 121</td>
-</tr>
-<tr>
-<td>org.clojure/core.match </td>
-<td> 118</td>
-</tr>
-<tr>
-<td>ring/ring-json </td>
-<td> 111</td>
-</tr>
-<tr>
-<td>clojure </td>
-<td> 110</td>
-</tr>
-<tr>
-<td>org.clojure/data.xml </td>
-<td> 110</td>
-</tr>
-<tr>
-<td>log4j/log4j </td>
-<td> 109</td>
-</tr>
-<tr>
-<td>mysql/mysql-connector-java </td>
-<td> 109</td>
-</tr>
-<tr>
-<td>postgresql/postgresql </td>
-<td> 107</td>
-</tr>
-<tr>
-<td>org.clojure/data.csv </td>
-<td> 101</td>
-</tr>
-<tr>
-<td>org.clojure/tools.trace </td>
-<td> 98</td>
-</tr>
-<tr>
-<td>org.clojure/tools.namespace </td>
-<td> 92</td>
-</tr>
-<tr>
-<td>ring-server </td>
-<td> 92</td>
-</tr>
-</tbody>
-</table>
+<div class="entry-content"><script src="http://d3js.org/d3.v2.js"></script>
 
 
-<br/>
+<div>
+<style type="text/css">
+
+.chart {
+  font-size: 10px;
+  margin-top: -40px;
+}
 
 
-<p>I think it makes a nice hit-list of projects to check out!</p>
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2;
+  shape-rendering: crispEdges;
+}
 
-<p>A couple interesting things jumped out at me:</p>
+.area {
+  fill: indianred;
+  fill-opacity: 0.25;
+  stroke: #000;
+  stroke-opacity: 0.5;
+}
 
-<ol>
-<li>12.5% of Clojure projects on GitHub are using Compojure.  Impressive.</li>
-<li>congomongo, com.novemberain/monger, com.datomic/datomic-free, mysql/mysql-connector-java, and postgresql/postgresql are all clustered together in the low 100&rsquo;s.</li>
-</ol>
+.point {
+  fill: #126ED5;
+  fill-opacity: 0.75;
+  stroke: none;
+  stroke-width: 1
+  stroke-opacity: 0.5;
+}
 
+.kernelline {
+  fill: none;
+  stroke: #D04400;
+  stroke-width: 1;
+  stroke-opacity: 0.75;
+}
 
-<h2>Most frequently applied licenses</h2>
+.kdeline {
+  fill: none;
+  stroke: #CB17CE;
+  stroke-opacity: 0.75;
+  stroke-width: 4
+}
 
-<p>Just over half of the project.clj&rsquo;s don&rsquo;t contain a <code>:license</code>.  Here are the most popular:</p>
+.summedarea {
+  fill: steelblue;
+  fill-opacity: 0.75;
+  stroke: #000;
+  stroke-opacity: 0.5;
+}
 
-<table>
-<thead>
-<tr>
-<th>License </th>
-<th> Count</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>EPL </td>
-<td> 4430</td>
-</tr>
-<tr>
-<td>MIT </td>
-<td> 336</td>
-</tr>
-<tr>
-<td>Apache </td>
-<td> 106</td>
-</tr>
-<tr>
-<td>BSD </td>
-<td> 92</td>
-</tr>
-<tr>
-<td>GPL </td>
-<td> 90</td>
-</tr>
-<tr>
-<td>LGPL </td>
-<td> 25</td>
-</tr>
-<tr>
-<td>CC </td>
-<td> 21</td>
-</tr>
-<tr>
-<td>WTFPL </td>
-<td> 18</td>
-</tr>
-<tr>
-<td>AGPL </td>
-<td> 11</td>
-</tr>
-<tr>
-<td>Mozilla  </td>
-<td> 11</td>
-</tr>
-</tbody>
-</table>
+.bar rect {
+  fill: steelblue;
+  fill-opacity: 0.75;
+  shape-rendering: crispEdges;
+  stroke: #000;
+  stroke-opacity: 0.5;
 
+}
 
-<br/>
+.bar text {
+  fill: #fff;
+}
 
+.equation {
+  opacity: 0;
+}
 
-<p>The EPL&rsquo;s dominance doesn&rsquo;t come as a surprise, given Clojure&rsquo;s use of it for the core libraries.</p>
+.kernelwidth {
+  stroke: #2DB15D;
+  stroke-width: 4;
+}
 
-<p>23 projects have &ldquo;WTF&rdquo; or &ldquo;fuck&rdquo; in their license string:</p>
+.treeline {
+  fill: none;
+  stroke: #000;
+  stroke-opacity: 0.75;
+  stroke-width: 2
+}
 
-<table>
-<thead>
-<tr>
-<th>License </th>
-<th> Count</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>WTFPL </td>
-<td> 18</td>
-</tr>
-<tr>
-<td>Do What The Fuck You Want To Public License </td>
-<td> 3</td>
-</tr>
-<tr>
-<td>DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE Version 2 </td>
-<td> 1</td>
-</tr>
-<tr>
-<td>All Rights Reserved Muthafucka </td>
-<td> 1</td>
-</tr>
-</tbody>
-</table>
+.treeconnector {
+  fill: none;
+  stroke: #999;
+  stroke-opacity: 0.75;
+  stroke-width: 2
+}
+
+</style>
+</div>
 
 
-<h2>Conclusion</h2>
+<p>I recently gave a mini talk on <a href="http://adereth.github.io/oneoff/Mode%20Trees.pdf">The Mode Tree: A Tool for Visualization of Nonparametric Density Features</a> at <a href="http://www.meetup.com/papers-we-love-too/">Papers We Love Too</a> in San Francisco.  The talk is just the first 10 minutes:</p>
 
-<p>I&rsquo;d like to share a mirror of just the project.clj files wrapped up in a single download, but I want to be conscientious of the variety of licenses.  I&rsquo;ll clean up the code for pulling and summarizing all this data soon so others can play with it.  In the meantime, feel free to suggest other analyses that could be done on these&hellip;</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/T3Bt9Tn6P5c" frameborder="0" allowfullscreen></iframe>
+
+
+<p>I did the entire presentation as one huge sequence of animations using <a href="http://d3js.org/">D3.js</a>.  The Youtube video doesn&rsquo;t capture the glory that is SVG, so <a href="/oneoff/pwl-draft/scratch.html">I&rsquo;ve posted the slides</a>.</p>
+
+<p>I also finally got to apply the technique that I wrote about in my <a href="/blog/2013/11/29/colorful-equations/">Colorful Equations with MathJax post</a> from over a year ago, only instead of coloring explanatory text, the colors in the accompanying chart match:</p>
+
+<div style="font-size: 150%;">
+$$
+\definecolor{kernel}{RGB}{217,86,16}
+\definecolor{kde}{RGB}{203,23,206}
+\definecolor{point}{RGB}{18,110,213}
+\definecolor{width}{RGB}{45,177,93}
+\color{kde}\hat{f}_{\color{width}h}\color{black}(x) \color{black} = \frac{1}{n\color{width}h}\color{black}\sum\limits_{i=1}^n \color{kernel}K\color{black}(\frac{x-\color{point}X_i}{\color{width}h})
+$$
+</div>
+
+
+<div id='chart-1'></div>
+
+
+<script type='text/javascript'>
+var data = [
+{value: 13.1138}, {value: 10.6519}, {value: 20.5735}, {value: 7.89327}, {value: 9.02554}, {value: 20.8411}, {value: 8.84072}, {value: 10.6273}, {value: 13.5194}, {value: 17.9757}, {value: 10.1086}, {value: 8.68131}, {value: 7.16192}, {value: 19.9496}, {value: 8.77111}, {value: 19.5314}, {value: 9.40915}, {value: 12.8664}, {value: 23.1322}, {value: 13.5008}];
+
+function drawChart(data,chart,height) {
+$(chart).empty();
+var margin = {top: 50, right: 40, bottom: 40, left: 60};
+var width = $('.entry-content').width();
+var x = d3.scale.linear().domain([0, 30]).range([0, width - margin.left - margin.right]);
+
+           var xAxis = d3.svg.axis()
+                         .scale(x)
+                         .orient('bottom')
+                         .tickPadding(8)
+                         .ticks(8);
+
+           var svg = d3.select(chart).append('svg')
+                       .attr('width', width)
+                       .attr('height', height)
+                       .attr('class', 'chart')
+                       .append('g')
+                       .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+           svg.append("g")
+              .attr("class", "x axis")
+              .attr("transform", "translate(0," + (height - margin.top - margin.bottom) + ")")
+              .call(xAxis);
+
+           var y0 = height - margin.top - margin.bottom;
+
+
+               var points = svg.selectAll('.chart')
+                               .data(data)
+                           .enter().append('circle')
+                               .classed('point', true)
+                               .attr("id", function(d, i) { return "point" + i })
+                               .attr('cx', function(d, i) { return x(d.value) })
+                               .attr('cy', y0)
+                               .attr('r', 5);
+
+               var y = d3.scale.linear()
+                         .domain([0, 1])
+                         .range([height - margin.top - margin.bottom, 0]);
+
+               function subpoints(d, stddev) {
+                   return d3.range(d.value - 7, d.value + 7, 0.1).map(
+                       function (d2,i,a) {
+                           return {value: d2, height: gaussian(d2, d.value, stddev)};
+                       });
+               }
+
+               var widthLine = svg.append('path')
+                   .attr('class', 'kernelwidth')
+                   .attr("d", d3.svg.line()([[x(data[0].value - 1), y(0) + 2,],[x(data[0].value), y(0) + 2]]))
+                   .style('opacity', 0);
+
+               widthLine.transition().duration(1000).style('opacity', 1);
+
+var stddev = 1;
+
+           var scale = 0.5 / Math.sqrt(2 * Math.PI) / 2;
+           function gaussian(x, mean, sigma) {
+               var z = (x - mean) / sigma;
+               return scale * Math.exp(-0.5 * z * z) / sigma;
+           };
+
+
+               var kernels = data.sort(function(x,y){return x.value - y.value}).map(function(d, i) {
+                   var line = d3.svg.line()
+                                .x(function(d) { return x(d.value); })
+                                .y(function(d) { return y(d.height) });
+
+                   return svg.append('path')
+                             .attr('class', 'kernelline')
+                             .attr("d", line(subpoints(d, stddev)))
+                             .style('opacity', 1);
+
+               });
+
+                   var intermediateAreaPoints =
+                       d3.range(0, 30, 0.01).concat(data.map(function(x) {return x.value}))
+                                      .sort(function(a,b){return a-b})
+                                      .map(
+                                          function (x,i2,a) {
+                                              var y = 0;
+                                              //console.log(x)
+                                              data.forEach(function(d) {
+                                                  y += gaussian(x, d.value, stddev)
+                                              });
+                                              return {value: x, height: y};
+                                          }
+                                      );
+                   var line = d3.svg.line()
+                                .x(function(d) { return x(d.value); })
+                                .y(function(d) { return y(d.height); });
+
+
+        var summedArea = svg.append('path')
+            .attr('class', 'kdeline')
+                .attr("d", line(intermediateAreaPoints));
+
+
+
+}
+
+function drawChartWithResize(data, chart, height) {
+    drawChart(data, chart, height);
+        $(window).resize(function() {drawChart(data, chart, height); })
+};
+
+
+drawChartWithResize(data, '#chart-1', 300);
+
+
+</script>
+
+
+<p>Any questions or feedback on the presentation are welcome&hellip; thanks!</p>
 </div>
 
 
@@ -486,12 +395,12 @@
   
 
 
-<time datetime="2014-01-20T17:33:00-08:00" pubdate data-updated="true">Jan 20<span>th</span>, 2014</time>
+<time datetime="2015-04-06T20:10:00-07:00" pubdate data-updated="true">Apr 6<span>th</span>, 2015</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/clojure/'>clojure</a>, <a class='category' href='/blog/categories/data/'>data</a>, <a class='category' href='/blog/categories/github/'>github</a>
+    <a class='category' href='/blog/categories/algorithms/'>algorithms</a>, <a class='category' href='/blog/categories/d3/'>d3</a>, <a class='category' href='/blog/categories/latex/'>latex</a>, <a class='category' href='/blog/categories/math/'>math</a>
   
 </span>
 
@@ -500,7 +409,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://adereth.github.io/blog/2014/01/20/every-project-dot-clj/" data-via="adereth" data-counturl="http://adereth.github.io/blog/2014/01/20/every-project-dot-clj/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://adereth.github.io/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love/" data-via="adereth" data-counturl="http://adereth.github.io/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -513,10 +422,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/01/08/quine-tweet-challenge/" title="Previous Post: Quine Tweet Challenge">&laquo; Quine Tweet Challenge</a>
+        <a class="basic-alignment left" href="/blog/2015/02/17/sa-profile-keys-on-a-kinesis-advantage/" title="Previous Post: SA Profile Keys on a Kinesis Advantage">&laquo; SA Profile Keys on a Kinesis Advantage</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/02/03/where-lisp-fits/" title="Next Post: Where LISP Fits">Where LISP Fits &raquo;</a>
       
     </p>
   </footer>
@@ -664,8 +571,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://adereth.github.io/blog/2014/01/20/every-project-dot-clj/';
-        var disqus_url = 'http://adereth.github.io/blog/2014/01/20/every-project-dot-clj/';
+        var disqus_identifier = 'http://adereth.github.io/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love/';
+        var disqus_url = 'http://adereth.github.io/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love/';
         var disqus_script = 'embed.js';
       
     (function () {

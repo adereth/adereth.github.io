@@ -4,7 +4,7 @@
   <title><![CDATA[adereth]]></title>
   <link href="http://adereth.github.io/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2015-03-27T18:08:42-07:00</updated>
+  <updated>2015-04-06T20:12:09-07:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -12,6 +12,250 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Presentation on The Mode Tree at Papers We Love Too]]></title>
+    <link href="http://adereth.github.io/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love/"/>
+    <updated>2015-04-06T20:10:00-07:00</updated>
+    <id>http://adereth.github.io/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love</id>
+    <content type="html"><![CDATA[<script src="http://d3js.org/d3.v2.js"></script>
+
+
+<div>
+<style type="text/css">
+
+.chart {
+  font-size: 10px;
+  margin-top: -40px;
+}
+
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2;
+  shape-rendering: crispEdges;
+}
+
+.area {
+  fill: indianred;
+  fill-opacity: 0.25;
+  stroke: #000;
+  stroke-opacity: 0.5;
+}
+
+.point {
+  fill: #126ED5;
+  fill-opacity: 0.75;
+  stroke: none;
+  stroke-width: 1
+  stroke-opacity: 0.5;
+}
+
+.kernelline {
+  fill: none;
+  stroke: #D04400;
+  stroke-width: 1;
+  stroke-opacity: 0.75;
+}
+
+.kdeline {
+  fill: none;
+  stroke: #CB17CE;
+  stroke-opacity: 0.75;
+  stroke-width: 4
+}
+
+.summedarea {
+  fill: steelblue;
+  fill-opacity: 0.75;
+  stroke: #000;
+  stroke-opacity: 0.5;
+}
+
+.bar rect {
+  fill: steelblue;
+  fill-opacity: 0.75;
+  shape-rendering: crispEdges;
+  stroke: #000;
+  stroke-opacity: 0.5;
+
+}
+
+.bar text {
+  fill: #fff;
+}
+
+.equation {
+  opacity: 0;
+}
+
+.kernelwidth {
+  stroke: #2DB15D;
+  stroke-width: 4;
+}
+
+.treeline {
+  fill: none;
+  stroke: #000;
+  stroke-opacity: 0.75;
+  stroke-width: 2
+}
+
+.treeconnector {
+  fill: none;
+  stroke: #999;
+  stroke-opacity: 0.75;
+  stroke-width: 2
+}
+
+</style>
+</div>
+
+
+<p>I recently gave a mini talk on <a href="http://adereth.github.io/oneoff/Mode%20Trees.pdf">The Mode Tree: A Tool for Visualization of Nonparametric Density Features</a> at <a href="http://www.meetup.com/papers-we-love-too/">Papers We Love Too</a> in San Francisco.  The talk is just the first 10 minutes:</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/T3Bt9Tn6P5c" frameborder="0" allowfullscreen></iframe>
+
+
+<p>I did the entire presentation as one huge sequence of animations using <a href="http://d3js.org/">D3.js</a>.  The Youtube video doesn&rsquo;t capture the glory that is SVG, so <a href="http://adereth.github.io/oneoff/pwl-draft/scratch.html">I&rsquo;ve posted the slides</a>.</p>
+
+<p>I also finally got to apply the technique that I wrote about in my <a href="http://adereth.github.io/blog/2013/11/29/colorful-equations/">Colorful Equations with MathJax post</a> from over a year ago, only instead of coloring explanatory text, the colors in the accompanying chart match:</p>
+
+<div style="font-size: 150%;">
+$$
+\definecolor{kernel}{RGB}{217,86,16}
+\definecolor{kde}{RGB}{203,23,206}
+\definecolor{point}{RGB}{18,110,213}
+\definecolor{width}{RGB}{45,177,93}
+\color{kde}\hat{f}_{\color{width}h}\color{black}(x) \color{black} = \frac{1}{n\color{width}h}\color{black}\sum\limits_{i=1}^n \color{kernel}K\color{black}(\frac{x-\color{point}X_i}{\color{width}h})
+$$
+</div>
+
+
+<div id='chart-1'></div>
+
+
+<script type='text/javascript'>
+var data = [
+{value: 13.1138}, {value: 10.6519}, {value: 20.5735}, {value: 7.89327}, {value: 9.02554}, {value: 20.8411}, {value: 8.84072}, {value: 10.6273}, {value: 13.5194}, {value: 17.9757}, {value: 10.1086}, {value: 8.68131}, {value: 7.16192}, {value: 19.9496}, {value: 8.77111}, {value: 19.5314}, {value: 9.40915}, {value: 12.8664}, {value: 23.1322}, {value: 13.5008}];
+
+function drawChart(data,chart,height) {
+$(chart).empty();
+var margin = {top: 50, right: 40, bottom: 40, left: 60};
+var width = $('.entry-content').width();
+var x = d3.scale.linear().domain([0, 30]).range([0, width - margin.left - margin.right]);
+
+           var xAxis = d3.svg.axis()
+                         .scale(x)
+                         .orient('bottom')
+                         .tickPadding(8)
+                         .ticks(8);
+
+           var svg = d3.select(chart).append('svg')
+                       .attr('width', width)
+                       .attr('height', height)
+                       .attr('class', 'chart')
+                       .append('g')
+                       .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+           svg.append("g")
+              .attr("class", "x axis")
+              .attr("transform", "translate(0," + (height - margin.top - margin.bottom) + ")")
+              .call(xAxis);
+
+           var y0 = height - margin.top - margin.bottom;
+
+
+               var points = svg.selectAll('.chart')
+                               .data(data)
+                           .enter().append('circle')
+                               .classed('point', true)
+                               .attr("id", function(d, i) { return "point" + i })
+                               .attr('cx', function(d, i) { return x(d.value) })
+                               .attr('cy', y0)
+                               .attr('r', 5);
+
+               var y = d3.scale.linear()
+                         .domain([0, 1])
+                         .range([height - margin.top - margin.bottom, 0]);
+
+               function subpoints(d, stddev) {
+                   return d3.range(d.value - 7, d.value + 7, 0.1).map(
+                       function (d2,i,a) {
+                           return {value: d2, height: gaussian(d2, d.value, stddev)};
+                       });
+               }
+
+               var widthLine = svg.append('path')
+                   .attr('class', 'kernelwidth')
+                   .attr("d", d3.svg.line()([[x(data[0].value - 1), y(0) + 2,],[x(data[0].value), y(0) + 2]]))
+                   .style('opacity', 0);
+
+               widthLine.transition().duration(1000).style('opacity', 1);
+
+var stddev = 1;
+
+           var scale = 0.5 / Math.sqrt(2 * Math.PI) / 2;
+           function gaussian(x, mean, sigma) {
+               var z = (x - mean) / sigma;
+               return scale * Math.exp(-0.5 * z * z) / sigma;
+           };
+
+
+               var kernels = data.sort(function(x,y){return x.value - y.value}).map(function(d, i) {
+                   var line = d3.svg.line()
+                                .x(function(d) { return x(d.value); })
+                                .y(function(d) { return y(d.height) });
+
+                   return svg.append('path')
+                             .attr('class', 'kernelline')
+                             .attr("d", line(subpoints(d, stddev)))
+                             .style('opacity', 1);
+
+               });
+
+                   var intermediateAreaPoints =
+                       d3.range(0, 30, 0.01).concat(data.map(function(x) {return x.value}))
+                                      .sort(function(a,b){return a-b})
+                                      .map(
+                                          function (x,i2,a) {
+                                              var y = 0;
+                                              //console.log(x)
+                                              data.forEach(function(d) {
+                                                  y += gaussian(x, d.value, stddev)
+                                              });
+                                              return {value: x, height: y};
+                                          }
+                                      );
+                   var line = d3.svg.line()
+                                .x(function(d) { return x(d.value); })
+                                .y(function(d) { return y(d.height); });
+
+
+        var summedArea = svg.append('path')
+            .attr('class', 'kdeline')
+                .attr("d", line(intermediateAreaPoints));
+
+
+
+}
+
+function drawChartWithResize(data, chart, height) {
+    drawChart(data, chart, height);
+        $(window).resize(function() {drawChart(data, chart, height); })
+};
+
+
+drawChartWithResize(data, '#chart-1', 300);
+
+
+</script>
+
+
+<p>Any questions or feedback on the presentation are welcome&hellip; thanks!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[SA Profile Keys on a Kinesis Advantage]]></title>
@@ -4766,8 +5010,8 @@ $$
 \definecolor{circle}{RGB}{217,86,16}
 \definecolor{average}{RGB}{203,23,206}
 \color{energy} X_{\color{freq} k} \color{black} =
-\color{average} \frac{1}{N} \sum_{n=0}^{N-1} 
-\color{signal}x_n \color{spin} 
+\color{average} \frac{1}{N} \sum_{n=0}^{N-1}
+\color{signal}x_n \color{spin}
 e^{\mathrm{i} \color{circle} 2\pi \color{freq}k \color{average} \frac{n}{N}}
 $$
 </div>
@@ -5206,133 +5450,6 @@ $$
 <p>Thanks to Zach Tellman for the informative presentation that motivated this and to David Greenberg for help investigating the protocol performance issues.</p>
 
 <p>If there&rsquo;s anything I got wrong, please let me know in the comments&hellip; thanks!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[core.matrix + Apache Commons Math]]></title>
-    <link href="http://adereth.github.io/blog/2013/11/08/core-dot-matrix-plus-apache-commons-math/"/>
-    <updated>2013-11-08T08:08:00-08:00</updated>
-    <id>http://adereth.github.io/blog/2013/11/08/core-dot-matrix-plus-apache-commons-math</id>
-    <content type="html"><![CDATA[<p>I&rsquo;d like to share a little project I did to make it more convenient to use Apache Commons Math&rsquo;s linear algebra classes with Clojure.</p>
-
-<h2>Apache Commons Math</h2>
-
-<p><img src="http://adereth.github.io/images/acm.gif" alt="Apache Commons Math Logo" /></p>
-
-<p><a href="http://commons.apache.org/proper/commons-math/index.html">Apache Commons Math</a> is a Java library of mathematics and statistics components.  It&rsquo;s loaded with useful things including:</p>
-
-<ul>
-<li>Statistics</li>
-<li>Data Generation</li>
-<li>Probability Distributions</li>
-<li>Machine Learning</li>
-<li>Optimization</li>
-<li>Numerical Analysis</li>
-<li>Curve Fitting</li>
-<li>Linear Algebra</li>
-<li>Complex Numbers</li>
-<li>Ordinary Differential Equations</li>
-</ul>
-
-
-<p>I highly recommend at least skimming the <a href="http://commons.apache.org/proper/commons-math/userguide/index.html">User Guide</a>.  It&rsquo;s useful to know what&rsquo;s already available and you may even discover a branch of mathematics that you find interesting.</p>
-
-<p>As with most Java libraries, it&rsquo;s generally pleasant to use from Clojure via interop.  Of course, there are a few places where there&rsquo;s unnecessary object constructiion just to get at methods that could easily be static and there are a few others where <em>mutation</em> rears its ugly head.  For the non-static cases, it&rsquo;s trivial enough to create a <code>fn</code> that creates the object and calls the method you need.</p>
-
-<p>Many of the methods in the library either accept or return matrices and vectors, using the <a href="http://commons.apache.org/proper/commons-math/apidocs/org/apache/commons/math3/linear/RealMatrix.html">RealMatrix</a> and <a href="http://commons.apache.org/proper/commons-math/apidocs/org/apache/commons/math3/linear/RealVector.html">RealVector</a> interfaces.  While we could use interop to create and use these, it&rsquo;s nice to be able to use them in idiomatic Clojure and even nicer to be able to seamlessly use them with pure Clojure data structures.</p>
-
-<h2>core.matrix</h2>
-
-<p><a href="https://github.com/mikera/core.matrix">core.matrix</a> is a library and API that aims to make matrix and array programming idiomatic, elegant and fast in Clojure.  It features pluggable support for different underlying matrix library implementations.</p>
-
-<p>For all my examples, I&rsquo;ve included core.matrix as <code>m</code>:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">require</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">clojure.core.matrix</span> <span class="ss">:as</span> <span class="nv">m</span><span class="p">])</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>apache-commons-matrix</h2>
-
-<p>After implementing a few protocols, I was able to get full support for Apache Commons Math&rsquo;s matrices and vectors into the core.matrix API, which I&rsquo;ve released as <a href="https://github.com/adereth/apache-commons-matrix">adereth/apache-commons-matrix</a>.</p>
-
-<p>Once you&rsquo;ve loaded <code>apache-commons-matrix.core</code>, you can begin using the <code>core.matrix</code> functions on any combination of Apache Commons Math matrices and vectors and any other implementation of matrix and vectors, including Clojure&rsquo;s built-in persistent vectors.</p>
-
-<p>Without this, you have to write some pretty cumbersome array manipulation code to get the interop to work.  For instance:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">org.apache.commons.math3.linear.Array2DRowRealMatrix.</span>
-</span><span class='line'> <span class="p">(</span><span class="nb">into-array </span><span class="p">[(</span><span class="nf">double-array</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">1</span><span class="p">])</span>
-</span><span class='line'>              <span class="p">(</span><span class="nf">double-array</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span><span class="p">])]))</span>
-</span><span class='line'><span class="c1">;; #&lt;Array2DRowRealMatrix Array2DRowRealMatrix{ {1.0,1.0}, {1.0,0.0} }&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>&hellip;versus:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">m/with-implementation</span> <span class="ss">:apache-commons</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">m/matrix</span> <span class="p">[[</span><span class="mi">1</span> <span class="mi">1</span><span class="p">]</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span><span class="p">]]))</span>
-</span><span class='line'><span class="c1">;; #&lt;Array2DRowRealMatrix Array2DRowRealMatrix{ {1.0,1.0}, {1.0,0.0} }&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If you&rsquo;re working from the REPL or otherwise don&rsquo;t care about indirectly changing the behavior of your code, you could even avoid <code>with-implementation</code> and just make <code>:apache-commons</code> the default by evaluating:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">m/set-current-implementation</span> <span class="ss">:apache-commons</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Things become really convenient when you start combining Apache Commons Math data structures with Clojure&rsquo;s.  For example, we can multiply a <code>RealMatrix</code> and a vector:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">fib-matrix</span>
-</span><span class='line'>  <span class="p">(</span><span class="nf">m/with-implementation</span> <span class="ss">:apache-commons</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">m/matrix</span> <span class="p">[[</span><span class="mi">1</span> <span class="mi">1</span><span class="p">]</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span><span class="p">]])))</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">m/transform</span> <span class="nv">fib-matrix</span> <span class="p">[</span><span class="mi">5</span> <span class="mi">3</span><span class="p">])</span>
-</span><span class='line'><span class="c1">;; #&lt;ArrayRealVector {8; 5}&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Note that the type of the result depends on the implementation of the first parameter:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">fib-vector</span>
-</span><span class='line'>    <span class="p">(</span><span class="nf">m/with-implementation</span> <span class="ss">:apache-commons</span>
-</span><span class='line'>      <span class="p">(</span><span class="nf">m/array</span> <span class="p">[</span><span class="mi">5</span> <span class="mi">3</span><span class="p">])))</span>
-</span><span class='line'><span class="c1">;; #&lt;ArrayRealVector {5; 3}&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="nf">m/transform</span> <span class="p">[[</span><span class="mi">1</span> <span class="mi">1</span><span class="p">]</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">0</span><span class="p">]]</span> <span class="nv">fib-vector</span><span class="p">)</span>
-</span><span class='line'><span class="c1">;; [8.0 5.0]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Implementation Experience</h2>
-
-<p>It was really easy to follow the <a href="https://github.com/mikera/core.matrix/wiki/Implementation-Guide">Implementation Guide for core.matrix</a> that Mike Anderson wrote.  There were just a handful of protocols that I needed to implement and I magically got all the functionality of core.matrix.  The test framework is incredibly thorough and it immediately revealed a number of subtle bugs in my initial implementation.  Overall, it was a great experience and I wish that all interfaces provided such nice documentation and testing.</p>
-
-<h2>Conclusion</h2>
-
-<p>If you&rsquo;re doing any math on the JVM, you should at least check out what Apache Commons Math has to offer.  If you&rsquo;re using it in Clojure, I recommend using core.matrix instead of interop whenever possible.  If you do try this out, please let me know if there&rsquo;s anything missing or just send me a pull request!</p>
 ]]></content>
   </entry>
   
