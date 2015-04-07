@@ -244,7 +244,7 @@
 
 <p>I also finally got to apply the technique that I wrote about in my <a href="/blog/2013/11/29/colorful-equations/">Colorful Equations with MathJax post</a> from over a year ago, only instead of coloring explanatory text, the colors in the accompanying chart match:</p>
 
-<div style="font-size: 150%;">
+<div style="font-size: 100%;">
 $$
 \definecolor{kernel}{RGB}{217,86,16}
 \definecolor{kde}{RGB}{203,23,206}
@@ -296,7 +296,7 @@ var x = d3.scale.linear().domain([0, 30]).range([0, width - margin.left - margin
                                .attr("id", function(d, i) { return "point" + i })
                                .attr('cx', function(d, i) { return x(d.value) })
                                .attr('cy', y0)
-                               .attr('r', 5);
+                               .attr('r', 2.5);
 
                var y = d3.scale.linear()
                          .domain([0, 1])
