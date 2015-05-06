@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.0">
+  <head>
+    <title>RSS subscriptions for adereth@gmail.com</title>
+    <dateCreated>Wed, 06 May 2015 17:43:31 -0500</dateCreated>
+    <ownerEmail>adereth@gmail.com</ownerEmail>
+  </head>
+  <body>
+<outline text="Daring Fireball" title="Daring Fireball" type="rss" xmlUrl="http://daringfireball.net/index.xml" htmlUrl="http://daringfireball.net/"/>
+<outline text="Hacker News" title="Hacker News" type="rss" xmlUrl="http://news.ycombinator.com/rss" htmlUrl="http://news.ycombinator.com/"/>
+<outline text="Marco.org" title="Marco.org" type="rss" xmlUrl="http://www.marco.org/rss" htmlUrl="http://www.marco.org/"/>
+<outline text="Saturday Morning Breakfast Cereal (updated daily)" title="Saturday Morning Breakfast Cereal (updated daily)" type="rss" xmlUrl="http://feeds.feedburner.com/smbc-comics/PvLb" htmlUrl="http://www.smbc-comics.com"/>
+<outline text="xkcd.com" title="xkcd.com" type="rss" xmlUrl="http://xkcd.com/rss.xml" htmlUrl="http://xkcd.com/"/>
+<outline text="FlowingData" title="FlowingData" type="rss" xmlUrl="http://feeds.feedburner.com/FlowingData" htmlUrl="http://flowingdata.com"/>
+<outline text="Google Research Blog" title="Google Research Blog" type="rss" xmlUrl="http://feeds.feedburner.com/blogspot/gJZg" htmlUrl="http://googleresearch.blogspot.com/"/>
+<outline text="Coding Horror" title="Coding Horror" type="rss" xmlUrl="http://feeds.feedburner.com/codinghorror" htmlUrl="http://www.codinghorror.com/blog/"/>
+<outline text="The Setup" title="The Setup" type="rss" xmlUrl="http://usesthis.com/feed/" htmlUrl="http://usesthis.com/"/>
+<outline text="Wolfram Blog" title="Wolfram Blog" type="rss" xmlUrl="http://blog.wolfram.com/feed/" htmlUrl="http://blog.wolfram.com"/>
+<outline text="Futility Closet" title="Futility Closet" type="rss" xmlUrl="http://feeds.feedburner.com/FutilityCloset" htmlUrl="http://www.futilitycloset.com"/>
+<outline text="The Big Picture" title="The Big Picture" type="rss" xmlUrl="http://feeds.feedburner.com/TheBigPicture" htmlUrl="http://www.ritholtz.com/blog"/>
+<outline text="Paul Graham: Essays" title="Paul Graham: Essays" type="rss" xmlUrl="http://www.aaronsw.com/2002/feeds/pgessays.rss" htmlUrl="http://www.paulgraham.com/"/>
+<outline text="Google Testing Blog" title="Google Testing Blog" type="rss" xmlUrl="http://feeds.feedburner.com/blogspot/RLXA" htmlUrl="http://googletesting.blogspot.com/"/>
+<outline text="SKORKS" title="SKORKS" type="rss" xmlUrl="http://feeds.feedburner.com/softwaretechandmore" htmlUrl="http://www.skorks.com"/>
+<outline text="OkTrends" title="OkTrends" type="rss" xmlUrl="http://blog.okcupid.com/index.php/feed/" htmlUrl="http://blog.okcupid.com"/>
+<outline text="Planet Clojure" title="Planet Clojure" type="rss" xmlUrl="http://planet.clojure.in/atom.xml" htmlUrl="http://planet.clojure.in/"/>
+<outline text="Computational Complexity" title="Computational Complexity" type="rss" xmlUrl="http://blog.computationalcomplexity.org/rss.xml" htmlUrl="http://blog.computationalcomplexity.org/"/>
+<outline text="Gödel's Lost Letter and P=NP" title="Gödel's Lost Letter and P=NP" type="rss" xmlUrl="http://rjlipton.wordpress.com/feed/" htmlUrl="http://rjlipton.wordpress.com"/>
+<outline text="Steve Losh" title="Steve Losh" type="rss" xmlUrl="http://feeds.feedburner.com/stevelosh" htmlUrl="http://stevelosh.com"/>
+<outline text="Ask E.T" title="Ask E.T" type="rss" xmlUrl="http://www.edwardtufte.com/bboard/asket.xml" htmlUrl="http://www.edwardtufte.com/bboard/q-and-a?topic_id=1"/>
+<outline text="Visual Business Intelligence" title="Visual Business Intelligence" type="rss" xmlUrl="http://www.perceptualedge.com/blog/?feed=rss2" htmlUrl="http://www.perceptualedge.com/blog"/>
+<outline text="Well-formed data" title="Well-formed data" type="rss" xmlUrl="http://feeds.feedburner.com/well-formed_data" htmlUrl="http://well-formed-data.net"/>
+<outline text="apenwarr - Business is Programming" title="apenwarr - Business is Programming" type="rss" xmlUrl="http://apenwarr.ca/log/rss.php" htmlUrl="http://apenwarr.ca/log/"/>
+<outline text="Cheap Talk" title="Cheap Talk" type="rss" xmlUrl="http://cheaptalk.org/feed/" htmlUrl="http://cheaptalk.org"/>
+<outline text="danah boyd | apophenia" title="danah boyd | apophenia" type="rss" xmlUrl="http://www.zephoria.org/thoughts/feed" htmlUrl="http://www.zephoria.org/thoughts"/>
+<outline text="Design Staff" title="Design Staff" type="rss" xmlUrl="http://feeds.feedburner.com/DesignStaff" htmlUrl="http://www.designstaff.org/"/>
+<outline text="A Neighborhood of Infinity" title="A Neighborhood of Infinity" type="rss" xmlUrl="http://blog.sigfpe.com/feeds/posts/default" htmlUrl="http://blog.sigfpe.com/"/>
+<outline text="Matt Might's blog" title="Matt Might's blog" type="rss" xmlUrl="http://matt.might.net/articles/feed.rss" htmlUrl="http://matt.might.net/"/>
+<outline text="Otaku, Cedric's blog" title="Otaku, Cedric's blog" type="rss" xmlUrl="http://beust.com/weblog/feed/" htmlUrl="http://beust.com/weblog"/>
+<outline text="BibliOdyssey" title="BibliOdyssey" type="rss" xmlUrl="http://feeds.feedburner.com/Bibliodyssey" htmlUrl="http://bibliodyssey.blogspot.com/"/>
+<outline text="Coder Weekly Archive Feed" title="Coder Weekly Archive Feed" type="rss" xmlUrl="http://feeds.feedburner.com/CoderWeeklyArchiveFeed" htmlUrl="http://us4.campaign-archive.com/feed?u=a2e40d31d41d5e395f44447e8&amp;id=3b843cbb69"/>
+<outline text="Less Wrong" title="Less Wrong" type="rss" xmlUrl="http://lesswrong.com/.rss" htmlUrl="http://lesswrong.com/"/>
+<outline text="Startups, life, learning and happiness" title="Startups, life, learning and happiness" type="rss" xmlUrl="http://feeds.feedburner.com/joelis" htmlUrl="http://joel.is/"/>
+<outline text="Yanko Design" title="Yanko Design" type="rss" xmlUrl="http://feeds.feedburner.com/yankodesign" htmlUrl="http://www.yankodesign.com"/>
+<outline text="Michael O. Church" title="Michael O. Church" type="rss" xmlUrl="http://michaelochurch.wordpress.com/feed/" htmlUrl="http://michaelochurch.wordpress.com"/>
+<outline text="Savage Chickens - Cartoons on Sticky Notes by Doug Savage" title="Savage Chickens - Cartoons on Sticky Notes by Doug Savage" type="rss" xmlUrl="http://www.savagechickens.com/feed" htmlUrl="http://www.savagechickens.com"/>
+<outline text="Never Read Passively" title="Never Read Passively" type="rss" xmlUrl="http://feeds.feedburner.com/NeverReadPassively" htmlUrl="http://www.neverreadpassively.com/"/>
+<outline text="information aesthetics" title="information aesthetics" type="rss" xmlUrl="http://feeds.infosthetics.com/infosthetics" htmlUrl="http://infosthetics.com/"/>
+<outline text="RyanHoliday.netRyanHoliday.net | Meditations on strategy and life" title="RyanHoliday.netRyanHoliday.net | Meditations on strategy and life" type="rss" xmlUrl="http://feeds.feedburner.com/rudiusmedia/rch" htmlUrl="http://www.ryanholiday.net"/>
+<outline text="Bram Cohen's Journal" title="Bram Cohen's Journal" type="rss" xmlUrl="http://bramcohen.livejournal.com/data/rss" htmlUrl="http://bramcohen.livejournal.com/"/>
+<outline text="Planet Emacsen" title="Planet Emacsen" type="rss" xmlUrl="http://planet.emacsen.org/atom.xml" htmlUrl="http://planet.emacsen.org/"/>
+<outline text="Joel on Software" title="Joel on Software" type="rss" xmlUrl="http://joelonsoftware.com/rss.xml" htmlUrl="http://www.joelonsoftware.com"/>
+<outline text="Economists Do It With Models" title="Economists Do It With Models" type="rss" xmlUrl="http://feeds.feedburner.com/economistsdoitwithmodels" htmlUrl="http://www.economistsdoitwithmodels.com/feed/"/>
+<outline text="Zero Intelligence Agents - Drew Conway" title="Zero Intelligence Agents - Drew Conway" type="rss" xmlUrl="http://drewconway.com/zia?format=rss" htmlUrl="http://www.drewconway.com/zia/?feed=rss2"/>
+<outline text="The Geomblog" title="The Geomblog" type="rss" xmlUrl="http://feeds.feedburner.com/TheGeomblog" htmlUrl="http://geomblog.blogspot.com/"/>
+<outline text="Elided Branches" title="Elided Branches" type="rss" xmlUrl="http://whilefalse.blogspot.com/feeds/posts/default?alt=rss" htmlUrl="http://whilefalse.blogspot.com/"/>
+<outline text="GroovyBlogs.org" title="GroovyBlogs.org" type="rss" xmlUrl="http://feeds.feedburner.com/groovyblogs" htmlUrl="http://www.groovyblogs.org"/>
+<outline text="AllAboutAlpha: Hedge Fund Trends &amp; Alternative Investment Analysis" title="AllAboutAlpha: Hedge Fund Trends &amp; Alternative Investment Analysis" type="rss" xmlUrl="http://www.allaboutalpha.com/blog/feed/" htmlUrl="http://allaboutalpha.com/blog"/>
+<outline text="The Physics arXiv Blog - MIT Technology Review" title="The Physics arXiv Blog - MIT Technology Review" type="rss" xmlUrl="http://feeds.feedburner.com/arxivblog/GmoU" htmlUrl="http://www.technologyreview.com/stream/26986/?sort=recent"/>
+<outline text="Guillaume Laforge's blog feed" title="Guillaume Laforge's blog feed" type="rss" xmlUrl="http://feeds.feedburner.com/glaforge" htmlUrl="http://www.google.com/reader/view/feed%2Fhttp%3A%2F%2Fglaforge.free.fr%2Fweblog%2Fxml-rss2.php%3Fcatid%3D2"/>
+<outline text="Lenovo: David Hill" title="Lenovo: David Hill" type="rss" xmlUrl="http://feeds.feedburner.com/lenovoblogs/designmatters" htmlUrl="http://www.google.com/reader/view/feed%2Fhttp%3A%2F%2Ffeeds.feedburner.com%2Flenovoblogs%2Fdesignmatters"/>
+<outline text="Lenovo: Matt Kohut" title="Lenovo: Matt Kohut" type="rss" xmlUrl="http://feeds.feedburner.com/lenovoblogs/insidethebox" htmlUrl="http://www.google.com/reader/view/feed%2Fhttp%3A%2F%2Ffeeds.feedburner.com%2Flenovoblogs%2Finsidethebox"/>
+<outline text="Quantitative Trading" title="Quantitative Trading" type="rss" xmlUrl="http://epchan.blogspot.com/feeds/posts/default" htmlUrl="http://epchan.blogspot.com/"/>
+<outline text="Quantivity" title="Quantivity" type="rss" xmlUrl="http://quantivity.wordpress.com/feed/" htmlUrl="http://quantivity.wordpress.com"/>
+<outline text="MarkSimonson.com Notebook" title="MarkSimonson.com Notebook" type="rss" xmlUrl="http://www.marksimonson.com/notebook/feed" htmlUrl="http://www.marksimonson.com/notebook"/>
+<outline text="The ByteBaker" title="The ByteBaker" type="rss" xmlUrl="http://bytebaker.com/feed/" htmlUrl="http://bytebaker.com"/>
+<outline text="&quot;two sigma&quot; - Twitter Search" title="&quot;two sigma&quot; - Twitter Search" type="rss" xmlUrl="http://search.twitter.com/search.atom?q=%22two+sigma%22" htmlUrl="http://search.twitter.com/search?q=%22two+sigma%22"/>
+<outline text="Blackdrag's View" title="Blackdrag's View" type="rss" xmlUrl="http://blackdragsview.blogspot.com/rss.xml" htmlUrl="http://blackdragsview.blogspot.com/"/>
+<outline text="Alex Hochberger" title="Alex Hochberger" type="rss" xmlUrl="http://alexhochberger.com/feed/" htmlUrl="http://alexhochberger.com"/>
+<outline text="behind the times" title="behind the times" type="rss" xmlUrl="http://hamletdarcy.blogspot.com/feeds/posts/default" htmlUrl="http://hamletdarcy.blogspot.com/"/>
+<outline text="Quantitative Artisan" title="Quantitative Artisan" type="rss" xmlUrl="http://feeds.feedburner.com/Quantisan" htmlUrl="http://www.quantisan.com/"/>
+<outline text="LeetCode" title="LeetCode" type="rss" xmlUrl="http://feeds.feedburner.com/ihas1337code" htmlUrl="http://leetcode.com"/>
+<outline text="A WorkLife FrameWork Blog" title="A WorkLife FrameWork Blog" type="rss" xmlUrl="http://scientificarts.com/worklife/wlfwblog/rss.xml" htmlUrl="http://scientificarts.com/worklife/wlfwblog/"/>
+<outline text="A Computer Scientist in a Business School" title="A Computer Scientist in a Business School" type="rss" xmlUrl="http://feeds.feedburner.com/AComputerScientistInABusinessSchool" htmlUrl="http://www.behind-the-enemy-lines.com/"/>
+<outline text="brookburg blog" title="brookburg blog" type="rss" xmlUrl="http://blog.brookburg.com/feeds/posts/default" htmlUrl="http://blog.brookburg.com/"/>
+<outline text="Optimi" title="Optimi" type="rss" xmlUrl="http://optimi.wordpress.com/feed/" htmlUrl="http://optimi.wordpress.com"/>
+<outline text="Decomposition" title="Decomposition" type="rss" xmlUrl="http://seanjtaylor.com/rss" htmlUrl="http://seanjtaylor.com/"/>
+<outline text="1/N" title="1/N" type="rss" xmlUrl="http://1overn.com/feed/" htmlUrl="http://1overn.com"/>
+<outline text="visualcomplexity.com" title="visualcomplexity.com" type="rss" xmlUrl="http://feeds2.feedburner.com/visualcomplexity" htmlUrl="http://www.visualcomplexity.com"/>
+<outline text="Coding the markets" title="Coding the markets" type="rss" xmlUrl="http://etrading.wordpress.com/feed/" htmlUrl="http://etrading.wordpress.com"/>
+<outline text="Religious Relevance: Judaism and Modernity" title="Religious Relevance: Judaism and Modernity" type="rss" xmlUrl="http://relevantmesorah.blogspot.com/feeds/posts/default" htmlUrl="http://relevantmesorah.blogspot.com/"/>
+<outline text="Cogitatio" title="Cogitatio" type="rss" xmlUrl="http://feeds.feedburner.com/Cogitatio" htmlUrl="http://semanticvector.blogspot.com/"/>
+<outline text="Posts of News" title="Posts of News" type="rss" xmlUrl="http://trove.starlight-systems.com/news/posts.xml" htmlUrl="http://sites.google.com/feeds/content/site/trove4j?parent=5995762731626345061&amp;#38;kind=announcement"/>
+<outline text="Stimulated Annealing" title="Stimulated Annealing" type="rss" xmlUrl="http://stimulatedannealing.wordpress.com/feed/" htmlUrl="http://stimulatedannealing.wordpress.com"/>
+<outline text="Ruslan's blog" title="Ruslan's blog" type="rss" xmlUrl="http://feeds.feedburner.com/RuslansBlog" htmlUrl="http://blog.khmelyuk.com/"/>
+<outline text="Dataspora » Blog" title="Dataspora » Blog" type="rss" xmlUrl="http://feeds2.feedburner.com/data-evolution" htmlUrl="http://www.dataspora.com"/>
+<outline text="Fifesoft Blog" title="Fifesoft Blog" type="rss" xmlUrl="http://fifesoft.com/blog/?feed=rss2" htmlUrl="http://fifesoft.com/blog"/>
+<outline text="Functional Jobs: Search 'clojure'" title="Functional Jobs: Search 'clojure'" type="rss" xmlUrl="http://functionaljobs.com/jobs/search/?q=clojure&amp;format=rss" htmlUrl="http://functionaljobs.com/"/>
+<outline text="Hairy Sun" title="Hairy Sun" type="rss" xmlUrl="http://hairysun.com/atom.xml" htmlUrl="http://hairysun.com/"/>
+<outline text="Squid's Blog" title="Squid's Blog" type="rss" xmlUrl="http://gigasquid.github.io/atom.xml" htmlUrl="http://gigasquid.github.io/"/>
+<outline text="Tech for People" title="Tech for People" type="rss" xmlUrl="http://tech-for-people.herokuapp.com/feed/" htmlUrl="http://tech-for-people.herokuapp.com/"/>
+<outline text="deskthority" title="deskthority" type="rss" xmlUrl="http://deskthority.net/feed.php" htmlUrl="http://deskthority.net/index.php"/>
+<outline text="newest submissions : MechanicalKeyboards" title="newest submissions : MechanicalKeyboards" type="rss" xmlUrl="http://www.reddit.com/r/MechanicalKeyboards/new/.rss" htmlUrl="http://www.reddit.com/r/MechanicalKeyboards/"/>
+    <outline text="Coding" title="Coding">
+<outline text="Marco.org" title="Marco.org" type="rss" xmlUrl="http://www.marco.org/rss" htmlUrl="http://www.marco.org/"/>
+<outline text="Coding Horror" title="Coding Horror" type="rss" xmlUrl="http://feeds.feedburner.com/codinghorror" htmlUrl="http://www.codinghorror.com/blog/"/>
+<outline text="Wolfram Blog" title="Wolfram Blog" type="rss" xmlUrl="http://blog.wolfram.com/feed/" htmlUrl="http://blog.wolfram.com"/>
+<outline text="Paul Graham: Essays" title="Paul Graham: Essays" type="rss" xmlUrl="http://www.aaronsw.com/2002/feeds/pgessays.rss" htmlUrl="http://www.paulgraham.com/"/>
+<outline text="Google Testing Blog" title="Google Testing Blog" type="rss" xmlUrl="http://feeds.feedburner.com/blogspot/RLXA" htmlUrl="http://googletesting.blogspot.com/"/>
+<outline text="SKORKS" title="SKORKS" type="rss" xmlUrl="http://feeds.feedburner.com/softwaretechandmore" htmlUrl="http://www.skorks.com"/>
+<outline text="Planet Clojure" title="Planet Clojure" type="rss" xmlUrl="http://planet.clojure.in/atom.xml" htmlUrl="http://planet.clojure.in/"/>
+<outline text="Gödel's Lost Letter and P=NP" title="Gödel's Lost Letter and P=NP" type="rss" xmlUrl="http://rjlipton.wordpress.com/feed/" htmlUrl="http://rjlipton.wordpress.com"/>
+<outline text="Steve Losh" title="Steve Losh" type="rss" xmlUrl="http://feeds.feedburner.com/stevelosh" htmlUrl="http://stevelosh.com"/>
+<outline text="apenwarr - Business is Programming" title="apenwarr - Business is Programming" type="rss" xmlUrl="http://apenwarr.ca/log/rss.php" htmlUrl="http://apenwarr.ca/log/"/>
+<outline text="Matt Might's blog" title="Matt Might's blog" type="rss" xmlUrl="http://matt.might.net/articles/feed.rss" htmlUrl="http://matt.might.net/"/>
+<outline text="Otaku, Cedric's blog" title="Otaku, Cedric's blog" type="rss" xmlUrl="http://beust.com/weblog/feed/" htmlUrl="http://beust.com/weblog"/>
+<outline text="Coder Weekly Archive Feed" title="Coder Weekly Archive Feed" type="rss" xmlUrl="http://feeds.feedburner.com/CoderWeeklyArchiveFeed" htmlUrl="http://us4.campaign-archive.com/feed?u=a2e40d31d41d5e395f44447e8&amp;id=3b843cbb69"/>
+<outline text="Startups, life, learning and happiness" title="Startups, life, learning and happiness" type="rss" xmlUrl="http://feeds.feedburner.com/joelis" htmlUrl="http://joel.is/"/>
+<outline text="Michael O. Church" title="Michael O. Church" type="rss" xmlUrl="http://michaelochurch.wordpress.com/feed/" htmlUrl="http://michaelochurch.wordpress.com"/>
+<outline text="Never Read Passively" title="Never Read Passively" type="rss" xmlUrl="http://feeds.feedburner.com/NeverReadPassively" htmlUrl="http://www.neverreadpassively.com/"/>
+<outline text="Bram Cohen's Journal" title="Bram Cohen's Journal" type="rss" xmlUrl="http://bramcohen.livejournal.com/data/rss" htmlUrl="http://bramcohen.livejournal.com/"/>
+<outline text="Planet Emacsen" title="Planet Emacsen" type="rss" xmlUrl="http://planet.emacsen.org/atom.xml" htmlUrl="http://planet.emacsen.org/"/>
+<outline text="Joel on Software" title="Joel on Software" type="rss" xmlUrl="http://joelonsoftware.com/rss.xml" htmlUrl="http://www.joelonsoftware.com"/>
+<outline text="Elided Branches" title="Elided Branches" type="rss" xmlUrl="http://whilefalse.blogspot.com/feeds/posts/default?alt=rss" htmlUrl="http://whilefalse.blogspot.com/"/>
+<outline text="GroovyBlogs.org" title="GroovyBlogs.org" type="rss" xmlUrl="http://feeds.feedburner.com/groovyblogs" htmlUrl="http://www.groovyblogs.org"/>
+<outline text="Guillaume Laforge's blog feed" title="Guillaume Laforge's blog feed" type="rss" xmlUrl="http://feeds.feedburner.com/glaforge" htmlUrl="http://www.google.com/reader/view/feed%2Fhttp%3A%2F%2Fglaforge.free.fr%2Fweblog%2Fxml-rss2.php%3Fcatid%3D2"/>
+<outline text="The ByteBaker" title="The ByteBaker" type="rss" xmlUrl="http://bytebaker.com/feed/" htmlUrl="http://bytebaker.com"/>
+<outline text="Blackdrag's View" title="Blackdrag's View" type="rss" xmlUrl="http://blackdragsview.blogspot.com/rss.xml" htmlUrl="http://blackdragsview.blogspot.com/"/>
+<outline text="behind the times" title="behind the times" type="rss" xmlUrl="http://hamletdarcy.blogspot.com/feeds/posts/default" htmlUrl="http://hamletdarcy.blogspot.com/"/>
+<outline text="Quantitative Artisan" title="Quantitative Artisan" type="rss" xmlUrl="http://feeds.feedburner.com/Quantisan" htmlUrl="http://www.quantisan.com/"/>
+<outline text="LeetCode" title="LeetCode" type="rss" xmlUrl="http://feeds.feedburner.com/ihas1337code" htmlUrl="http://leetcode.com"/>
+<outline text="A Computer Scientist in a Business School" title="A Computer Scientist in a Business School" type="rss" xmlUrl="http://feeds.feedburner.com/AComputerScientistInABusinessSchool" htmlUrl="http://www.behind-the-enemy-lines.com/"/>
+<outline text="Decomposition" title="Decomposition" type="rss" xmlUrl="http://seanjtaylor.com/rss" htmlUrl="http://seanjtaylor.com/"/>
+<outline text="Posts of News" title="Posts of News" type="rss" xmlUrl="http://trove.starlight-systems.com/news/posts.xml" htmlUrl="http://sites.google.com/feeds/content/site/trove4j?parent=5995762731626345061&amp;#38;kind=announcement"/>
+<outline text="Ruslan's blog" title="Ruslan's blog" type="rss" xmlUrl="http://feeds.feedburner.com/RuslansBlog" htmlUrl="http://blog.khmelyuk.com/"/>
+<outline text="Fifesoft Blog" title="Fifesoft Blog" type="rss" xmlUrl="http://fifesoft.com/blog/?feed=rss2" htmlUrl="http://fifesoft.com/blog"/>
+<outline text="Hairy Sun" title="Hairy Sun" type="rss" xmlUrl="http://hairysun.com/atom.xml" htmlUrl="http://hairysun.com/"/>
+<outline text="Squid's Blog" title="Squid's Blog" type="rss" xmlUrl="http://gigasquid.github.io/atom.xml" htmlUrl="http://gigasquid.github.io/"/>
+    </outline>
+    <outline text="Comics" title="Comics">
+<outline text="Saturday Morning Breakfast Cereal (updated daily)" title="Saturday Morning Breakfast Cereal (updated daily)" type="rss" xmlUrl="http://feeds.feedburner.com/smbc-comics/PvLb" htmlUrl="http://www.smbc-comics.com"/>
+<outline text="xkcd.com" title="xkcd.com" type="rss" xmlUrl="http://xkcd.com/rss.xml" htmlUrl="http://xkcd.com/"/>
+<outline text="Savage Chickens - Cartoons on Sticky Notes by Doug Savage" title="Savage Chickens - Cartoons on Sticky Notes by Doug Savage" type="rss" xmlUrl="http://www.savagechickens.com/feed" htmlUrl="http://www.savagechickens.com"/>
+    </outline>
+    <outline text="Friends" title="Friends">
+<outline text="Alex Hochberger" title="Alex Hochberger" type="rss" xmlUrl="http://alexhochberger.com/feed/" htmlUrl="http://alexhochberger.com"/>
+<outline text="brookburg blog" title="brookburg blog" type="rss" xmlUrl="http://blog.brookburg.com/feeds/posts/default" htmlUrl="http://blog.brookburg.com/"/>
+<outline text="1/N" title="1/N" type="rss" xmlUrl="http://1overn.com/feed/" htmlUrl="http://1overn.com"/>
+<outline text="Stimulated Annealing" title="Stimulated Annealing" type="rss" xmlUrl="http://stimulatedannealing.wordpress.com/feed/" htmlUrl="http://stimulatedannealing.wordpress.com"/>
+    </outline>
+    <outline text="Keyboards" title="Keyboards">
+<outline text="deskthority" title="deskthority" type="rss" xmlUrl="http://deskthority.net/feed.php" htmlUrl="http://deskthority.net/index.php"/>
+<outline text="newest submissions : MechanicalKeyboards" title="newest submissions : MechanicalKeyboards" type="rss" xmlUrl="http://www.reddit.com/r/MechanicalKeyboards/new/.rss" htmlUrl="http://www.reddit.com/r/MechanicalKeyboards/"/>
+    </outline>
+    <outline text="Mathematica" title="Mathematica">
+<outline text="Wolfram Blog" title="Wolfram Blog" type="rss" xmlUrl="http://blog.wolfram.com/feed/" htmlUrl="http://blog.wolfram.com"/>
+<outline text="A WorkLife FrameWork Blog" title="A WorkLife FrameWork Blog" type="rss" xmlUrl="http://scientificarts.com/worklife/wlfwblog/rss.xml" htmlUrl="http://scientificarts.com/worklife/wlfwblog/"/>
+<outline text="Cogitatio" title="Cogitatio" type="rss" xmlUrl="http://feeds.feedburner.com/Cogitatio" htmlUrl="http://semanticvector.blogspot.com/"/>
+    </outline>
+    <outline text="Philosophy and Society" title="Philosophy and Society">
+<outline text="danah boyd | apophenia" title="danah boyd | apophenia" type="rss" xmlUrl="http://www.zephoria.org/thoughts/feed" htmlUrl="http://www.zephoria.org/thoughts"/>
+<outline text="Less Wrong" title="Less Wrong" type="rss" xmlUrl="http://lesswrong.com/.rss" htmlUrl="http://lesswrong.com/"/>
+<outline text="RyanHoliday.netRyanHoliday.net | Meditations on strategy and life" title="RyanHoliday.netRyanHoliday.net | Meditations on strategy and life" type="rss" xmlUrl="http://feeds.feedburner.com/rudiusmedia/rch" htmlUrl="http://www.ryanholiday.net"/>
+<outline text="Religious Relevance: Judaism and Modernity" title="Religious Relevance: Judaism and Modernity" type="rss" xmlUrl="http://relevantmesorah.blogspot.com/feeds/posts/default" htmlUrl="http://relevantmesorah.blogspot.com/"/>
+    </outline>
+    <outline text="Technolust" title="Technolust">
+<outline text="Daring Fireball" title="Daring Fireball" type="rss" xmlUrl="http://daringfireball.net/index.xml" htmlUrl="http://daringfireball.net/"/>
+<outline text="The Setup" title="The Setup" type="rss" xmlUrl="http://usesthis.com/feed/" htmlUrl="http://usesthis.com/"/>
+<outline text="Lenovo: David Hill" title="Lenovo: David Hill" type="rss" xmlUrl="http://feeds.feedburner.com/lenovoblogs/designmatters" htmlUrl="http://www.google.com/reader/view/feed%2Fhttp%3A%2F%2Ffeeds.feedburner.com%2Flenovoblogs%2Fdesignmatters"/>
+<outline text="Lenovo: Matt Kohut" title="Lenovo: Matt Kohut" type="rss" xmlUrl="http://feeds.feedburner.com/lenovoblogs/insidethebox" htmlUrl="http://www.google.com/reader/view/feed%2Fhttp%3A%2F%2Ffeeds.feedburner.com%2Flenovoblogs%2Finsidethebox"/>
+    </outline>
+    <outline text="Theory" title="Theory">
+<outline text="Google Research Blog" title="Google Research Blog" type="rss" xmlUrl="http://feeds.feedburner.com/blogspot/gJZg" htmlUrl="http://googleresearch.blogspot.com/"/>
+<outline text="Computational Complexity" title="Computational Complexity" type="rss" xmlUrl="http://blog.computationalcomplexity.org/rss.xml" htmlUrl="http://blog.computationalcomplexity.org/"/>
+<outline text="A Neighborhood of Infinity" title="A Neighborhood of Infinity" type="rss" xmlUrl="http://blog.sigfpe.com/feeds/posts/default" htmlUrl="http://blog.sigfpe.com/"/>
+<outline text="The Geomblog" title="The Geomblog" type="rss" xmlUrl="http://feeds.feedburner.com/TheGeomblog" htmlUrl="http://geomblog.blogspot.com/"/>
+<outline text="The Physics arXiv Blog - MIT Technology Review" title="The Physics arXiv Blog - MIT Technology Review" type="rss" xmlUrl="http://feeds.feedburner.com/arxivblog/GmoU" htmlUrl="http://www.technologyreview.com/stream/26986/?sort=recent"/>
+<outline text="Optimi" title="Optimi" type="rss" xmlUrl="http://optimi.wordpress.com/feed/" htmlUrl="http://optimi.wordpress.com"/>
+    </outline>
+    <outline text="Trading" title="Trading">
+<outline text="The Big Picture" title="The Big Picture" type="rss" xmlUrl="http://feeds.feedburner.com/TheBigPicture" htmlUrl="http://www.ritholtz.com/blog"/>
+<outline text="Cheap Talk" title="Cheap Talk" type="rss" xmlUrl="http://cheaptalk.org/feed/" htmlUrl="http://cheaptalk.org"/>
+<outline text="Economists Do It With Models" title="Economists Do It With Models" type="rss" xmlUrl="http://feeds.feedburner.com/economistsdoitwithmodels" htmlUrl="http://www.economistsdoitwithmodels.com/feed/"/>
+<outline text="AllAboutAlpha: Hedge Fund Trends &amp; Alternative Investment Analysis" title="AllAboutAlpha: Hedge Fund Trends &amp; Alternative Investment Analysis" type="rss" xmlUrl="http://www.allaboutalpha.com/blog/feed/" htmlUrl="http://allaboutalpha.com/blog"/>
+<outline text="Quantitative Trading" title="Quantitative Trading" type="rss" xmlUrl="http://epchan.blogspot.com/feeds/posts/default" htmlUrl="http://epchan.blogspot.com/"/>
+<outline text="Quantivity" title="Quantivity" type="rss" xmlUrl="http://quantivity.wordpress.com/feed/" htmlUrl="http://quantivity.wordpress.com"/>
+<outline text="Coding the markets" title="Coding the markets" type="rss" xmlUrl="http://etrading.wordpress.com/feed/" htmlUrl="http://etrading.wordpress.com"/>
+    </outline>
+    <outline text="Visualization and Design" title="Visualization and Design">
+<outline text="FlowingData" title="FlowingData" type="rss" xmlUrl="http://feeds.feedburner.com/FlowingData" htmlUrl="http://flowingdata.com"/>
+<outline text="OkTrends" title="OkTrends" type="rss" xmlUrl="http://blog.okcupid.com/index.php/feed/" htmlUrl="http://blog.okcupid.com"/>
+<outline text="Ask E.T" title="Ask E.T" type="rss" xmlUrl="http://www.edwardtufte.com/bboard/asket.xml" htmlUrl="http://www.edwardtufte.com/bboard/q-and-a?topic_id=1"/>
+<outline text="Visual Business Intelligence" title="Visual Business Intelligence" type="rss" xmlUrl="http://www.perceptualedge.com/blog/?feed=rss2" htmlUrl="http://www.perceptualedge.com/blog"/>
+<outline text="Well-formed data" title="Well-formed data" type="rss" xmlUrl="http://feeds.feedburner.com/well-formed_data" htmlUrl="http://well-formed-data.net"/>
+<outline text="Design Staff" title="Design Staff" type="rss" xmlUrl="http://feeds.feedburner.com/DesignStaff" htmlUrl="http://www.designstaff.org/"/>
+<outline text="BibliOdyssey" title="BibliOdyssey" type="rss" xmlUrl="http://feeds.feedburner.com/Bibliodyssey" htmlUrl="http://bibliodyssey.blogspot.com/"/>
+<outline text="Yanko Design" title="Yanko Design" type="rss" xmlUrl="http://feeds.feedburner.com/yankodesign" htmlUrl="http://www.yankodesign.com"/>
+<outline text="information aesthetics" title="information aesthetics" type="rss" xmlUrl="http://feeds.infosthetics.com/infosthetics" htmlUrl="http://infosthetics.com/"/>
+<outline text="Zero Intelligence Agents - Drew Conway" title="Zero Intelligence Agents - Drew Conway" type="rss" xmlUrl="http://drewconway.com/zia?format=rss" htmlUrl="http://www.drewconway.com/zia/?feed=rss2"/>
+<outline text="MarkSimonson.com Notebook" title="MarkSimonson.com Notebook" type="rss" xmlUrl="http://www.marksimonson.com/notebook/feed" htmlUrl="http://www.marksimonson.com/notebook"/>
+<outline text="visualcomplexity.com" title="visualcomplexity.com" type="rss" xmlUrl="http://feeds2.feedburner.com/visualcomplexity" htmlUrl="http://www.visualcomplexity.com"/>
+<outline text="Dataspora » Blog" title="Dataspora » Blog" type="rss" xmlUrl="http://feeds2.feedburner.com/data-evolution" htmlUrl="http://www.dataspora.com"/>
+    </outline>
+  </body>
+</opml>
