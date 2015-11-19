@@ -4,7 +4,7 @@
   <title><![CDATA[Category: clojure | adereth]]></title>
   <link href="http://adereth.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2015-05-06T15:43:59-07:00</updated>
+  <updated>2015-11-19T15:05:59-08:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -12,6 +12,64 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Clojure/conj Talk on 3D Printing Keyboards]]></title>
+    <link href="http://adereth.github.io/blog/2015/11/19/clojure-slash-conj-talk-on-3d-printing-keyboards/"/>
+    <updated>2015-11-19T15:05:00-08:00</updated>
+    <id>http://adereth.github.io/blog/2015/11/19/clojure-slash-conj-talk-on-3d-printing-keyboards</id>
+    <content type="html"><![CDATA[<p>I gave a talk on building an ergonomic keyboard using Clojure at <a href="http://clojure-conj.org/">Clojure/conj 2015</a>:</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/uk3A41U0iO4" frameborder="0" allowfullscreen></iframe>
+
+
+<p>Here&rsquo;s a complete list of the references from the talk, in order of appearance:</p>
+
+<ul>
+<li><a href="https://twitter.com/ftrain">@ftrain</a>&rsquo;s <a href="https://twitter.com/ftrain/status/577205992406065152">Tweet</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Typewriter">Typewriter (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Computer_keyboard">Computer keyboard (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Sholes_and_Glidden_typewriter">Sholes and Glidden typewriter (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Hansen_Writing_Ball">Hansen Writing Ball (WIkipedia)</a></li>
+<li><a href="http://www.malling-hansen.org/friedrich-nietzsche-and-his-typewriter-a-malling-hansen-writing-ball.html">Friedrich Nietzsche and his typewriter</a></li>
+<li><a href="https://en.wikipedia.org/wiki/E._Remington_and_Sons#Remington_Typewriter_Company">E. Remington and Sons (Wikipedia)</a></li>
+<li><a href="http://deskthority.net/wiki/Staggering">Staggering (Deskthority Wiki)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/QWERTY">QWERTY (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/IBM_Selectric_typewriter">IBM Selectric typewriter (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/IBM_2741">IBM 2741 (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/ADM-3A">ADM-3A (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Space-cadet_keyboard">Space-cadet keyboard (Wikipedia)</a></li>
+<li><a href="https://www.flickr.com/photos/obra/sets/72157635353286814/">Jesse Vincent&rsquo;s Space Cadet Keyboard Photo Album</a></li>
+<li><a href="http://www.maltron.com/">Maltron (Official Site)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Maltron">Maltron (Wikipedia)</a></li>
+<li><a href="http://www.amazon.com/Mothers-Daughters-Invention-Revised-Technology/dp/0813521971">Mother&rsquo;s and Daughters of Invention: Notes for a Revised History of Technology</a></li>
+<li><a href="http://www.kinesis-ergo.com/">Kinesis (Official Site)</a></li>
+<li><a href="https://www.pjrc.com/teensy/">Teensy USB Development Board</a></li>
+<li><a href="http://deskthority.net/">Deskthority</a></li>
+<li><a href="https://geekhack.org/">Geekhack</a></li>
+<li><a href="http://www.makerbot.com/">Makerbot</a></li>
+<li><a href="https://www.inventables.com/technologies/x-carve">X-Carve</a></li>
+<li><a href="http://ergodox.org/">ErgoDox (Official Site)</a></li>
+<li><a href="https://www.massdrop.com/buy/ergodox">ErgoDox (Massdrop)</a></li>
+<li><a href="/blog/2014/02/12/building-an-ergodox/">Sourcing and Building an ErgoDox Keyboard</a></li>
+<li><a href="http://atreus.technomancy.us/">Atreus</a></li>
+<li><a href="http://keyboard.io">Keyboard.io</a></li>
+<li><a href="http://www.openscad.org/">OpenSCAD</a></li>
+<li><a href="https://github.com/openscad/openscad/issues/522#issuecomment-27741699">OpenSCAD Namespace Issue (Github)</a></li>
+<li><a href="https://github.com/farrellm/scad-clj">scad-clj (Github)</a></li>
+<li><a href="/blog/2014/04/09/3d-printing-with-clojure/">3D Printing with Clojure</a></li>
+<li><a href="/blog/2014/05/29/custom-clojure-evaluation-keybindings-in-emacs/">Custom Clojure Evaluation Keybindings in Emacs</a></li>
+<li><a href="https://github.com/adereth/dactyl-cave">Dactyl Keyboard (Github)</a></li>
+<li><a href="https://www.shapeways.com/">Shapeways</a></li>
+<li><a href="https://www.shapeways.com/shops/bespokeys">Full Dactyl Keyboard (Shapeways)</a></li>
+<li><a href="http://www.smokingresistor.com/product/pyralux-lf9120r/">Pyralux LF9120R &ndash; Flexible PCB Material (Smoking Resistor)</a></li>
+<li><a href="https://github.com/benblazak/ergodox-firmware/blob/master/src/keyboard/ergodox/circuit-diagram.svg">ErgoDox Circuit Diagram (Github)</a></li>
+<li><a href="http://www.instructables.com/id/Is-the-best-PCB-etchant-in-every-kitchen-/">Is the best PCB etchant in every kitchen? (Instructables)</a></li>
+<li><a href="http://pimpmykeyboard.com/">Signature Plastics Keycap Shop</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Computing the Remedian in Clojure]]></title>
@@ -500,343 +558,6 @@ Turing Machines <i class="fa fa-arrows-h"></i> ?
 <p>Anyway, this is a connection that I wish I had been shown at the peak of my interest in automata theory because it would have gotten me a lot more excited about LISP sooner.  I think it&rsquo;s interesting to look at LISP as something that has the same theoretical underpinnings as these other tools (RegEx and CFG) that we already acknowledged as vital.</p>
 
 <p><em>Thanks to <a href="http://jliszka.github.io/">Jason Liszka</a> and my colleagues at <a href="http://www.twosigma.com">Two Sigma</a> for help with this post!</em></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Every project.clj]]></title>
-    <link href="http://adereth.github.io/blog/2014/01/20/every-project-dot-clj/"/>
-    <updated>2014-01-20T17:33:00-08:00</updated>
-    <id>http://adereth.github.io/blog/2014/01/20/every-project-dot-clj</id>
-    <content type="html"><![CDATA[<p>I was recently looking for an interesting relational dataset for another project and the idea of using the dependencies for every Clojure project on GitHub came up.  It turns out that it&rsquo;s possible to download almost every project.clj using <a href="https://github.com/Raynes/tentacles">Tentacles</a>, so I decided to&hellip;</p>
-
-<p><img src="/images/download-all.png" width="350"></p>
-
-<p>The most annoying part was dealing with GitHub&rsquo;s rate limits, but after waiting a few hours I had them all on local disk and was able to play around.  I haven&rsquo;t gotten to dig into the data for the actual project I&rsquo;m doing, but there were a couple simple queries that I thought were worth sharing.</p>
-
-<h2>Most frequently included packages</h2>
-
-<p>I was able to download 10770 project.clj files.  Here are the 50 most frequently included packages listed in their <code>:dependencies</code>:</p>
-
-<table>
-<thead>
-<tr>
-<th>Dependency </th>
-<th> Count</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>org.clojure/clojure-contrib </td>
-<td> 1524</td>
-</tr>
-<tr>
-<td>compojure </td>
-<td> 1348</td>
-</tr>
-<tr>
-<td>hiccup </td>
-<td> 743</td>
-</tr>
-<tr>
-<td>clj-http </td>
-<td> 738</td>
-</tr>
-<tr>
-<td>ring/ring-jetty-adapter </td>
-<td> 607</td>
-</tr>
-<tr>
-<td>cheshire </td>
-<td> 558</td>
-</tr>
-<tr>
-<td>org.clojure/data.json </td>
-<td> 552</td>
-</tr>
-<tr>
-<td>clj-time </td>
-<td> 526</td>
-</tr>
-<tr>
-<td>org.clojure/tools.logging </td>
-<td> 490</td>
-</tr>
-<tr>
-<td>enlive </td>
-<td> 444</td>
-</tr>
-<tr>
-<td>noir </td>
-<td> 388</td>
-</tr>
-<tr>
-<td>ring/ring-core </td>
-<td> 375</td>
-</tr>
-<tr>
-<td>ring </td>
-<td> 361</td>
-</tr>
-<tr>
-<td>org.clojure/tools.cli </td>
-<td> 348</td>
-</tr>
-<tr>
-<td>org.clojure/java.jdbc </td>
-<td> 344</td>
-</tr>
-<tr>
-<td>org.clojure/clojurescript </td>
-<td> 339</td>
-</tr>
-<tr>
-<td>org.clojure/core.async </td>
-<td> 235</td>
-</tr>
-<tr>
-<td>midje </td>
-<td> 227</td>
-</tr>
-<tr>
-<td>org.clojure/math.numeric-tower </td>
-<td> 219</td>
-</tr>
-<tr>
-<td>korma </td>
-<td> 206</td>
-</tr>
-<tr>
-<td>incanter </td>
-<td> 202</td>
-</tr>
-<tr>
-<td>seesaw </td>
-<td> 195</td>
-</tr>
-<tr>
-<td>overtone </td>
-<td> 172</td>
-</tr>
-<tr>
-<td>slingshot </td>
-<td> 160</td>
-</tr>
-<tr>
-<td>quil </td>
-<td> 158</td>
-</tr>
-<tr>
-<td>com.taoensso/timbre </td>
-<td> 150</td>
-</tr>
-<tr>
-<td>http-kit </td>
-<td> 149</td>
-</tr>
-<tr>
-<td>ring/ring-devel </td>
-<td> 145</td>
-</tr>
-<tr>
-<td>org.clojure/math.combinatorics </td>
-<td> 145</td>
-</tr>
-<tr>
-<td>org.clojure/core.logic </td>
-<td> 138</td>
-</tr>
-<tr>
-<td>environ </td>
-<td> 132</td>
-</tr>
-<tr>
-<td>aleph </td>
-<td> 132</td>
-</tr>
-<tr>
-<td>log4j </td>
-<td> 131</td>
-</tr>
-<tr>
-<td>ch.qos.logback/logback-classic </td>
-<td> 125</td>
-</tr>
-<tr>
-<td>org.clojure/tools.nrepl </td>
-<td> 124</td>
-</tr>
-<tr>
-<td>congomongo </td>
-<td> 124</td>
-</tr>
-<tr>
-<td>com.datomic/datomic-free </td>
-<td> 123</td>
-</tr>
-<tr>
-<td>com.novemberain/monger </td>
-<td> 123</td>
-</tr>
-<tr>
-<td>lib-noir </td>
-<td> 121</td>
-</tr>
-<tr>
-<td>org.clojure/core.match </td>
-<td> 118</td>
-</tr>
-<tr>
-<td>ring/ring-json </td>
-<td> 111</td>
-</tr>
-<tr>
-<td>clojure </td>
-<td> 110</td>
-</tr>
-<tr>
-<td>org.clojure/data.xml </td>
-<td> 110</td>
-</tr>
-<tr>
-<td>log4j/log4j </td>
-<td> 109</td>
-</tr>
-<tr>
-<td>mysql/mysql-connector-java </td>
-<td> 109</td>
-</tr>
-<tr>
-<td>postgresql/postgresql </td>
-<td> 107</td>
-</tr>
-<tr>
-<td>org.clojure/data.csv </td>
-<td> 101</td>
-</tr>
-<tr>
-<td>org.clojure/tools.trace </td>
-<td> 98</td>
-</tr>
-<tr>
-<td>org.clojure/tools.namespace </td>
-<td> 92</td>
-</tr>
-<tr>
-<td>ring-server </td>
-<td> 92</td>
-</tr>
-</tbody>
-</table>
-
-
-<br/>
-
-
-<p>I think it makes a nice hit-list of projects to check out!</p>
-
-<p>A couple interesting things jumped out at me:</p>
-
-<ol>
-<li>12.5% of Clojure projects on GitHub are using Compojure.  Impressive.</li>
-<li>congomongo, com.novemberain/monger, com.datomic/datomic-free, mysql/mysql-connector-java, and postgresql/postgresql are all clustered together in the low 100&rsquo;s.</li>
-</ol>
-
-
-<h2>Most frequently applied licenses</h2>
-
-<p>Just over half of the project.clj&rsquo;s don&rsquo;t contain a <code>:license</code>.  Here are the most popular:</p>
-
-<table>
-<thead>
-<tr>
-<th>License </th>
-<th> Count</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>EPL </td>
-<td> 4430</td>
-</tr>
-<tr>
-<td>MIT </td>
-<td> 336</td>
-</tr>
-<tr>
-<td>Apache </td>
-<td> 106</td>
-</tr>
-<tr>
-<td>BSD </td>
-<td> 92</td>
-</tr>
-<tr>
-<td>GPL </td>
-<td> 90</td>
-</tr>
-<tr>
-<td>LGPL </td>
-<td> 25</td>
-</tr>
-<tr>
-<td>CC </td>
-<td> 21</td>
-</tr>
-<tr>
-<td>WTFPL </td>
-<td> 18</td>
-</tr>
-<tr>
-<td>AGPL </td>
-<td> 11</td>
-</tr>
-<tr>
-<td>Mozilla  </td>
-<td> 11</td>
-</tr>
-</tbody>
-</table>
-
-
-<br/>
-
-
-<p>The EPL&rsquo;s dominance doesn&rsquo;t come as a surprise, given Clojure&rsquo;s use of it for the core libraries.</p>
-
-<p>23 projects have &ldquo;WTF&rdquo; or &ldquo;fuck&rdquo; in their license string:</p>
-
-<table>
-<thead>
-<tr>
-<th>License </th>
-<th> Count</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>WTFPL </td>
-<td> 18</td>
-</tr>
-<tr>
-<td>Do What The Fuck You Want To Public License </td>
-<td> 3</td>
-</tr>
-<tr>
-<td>DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE Version 2 </td>
-<td> 1</td>
-</tr>
-<tr>
-<td>All Rights Reserved Muthafucka </td>
-<td> 1</td>
-</tr>
-</tbody>
-</table>
-
-
-<h2>Conclusion</h2>
-
-<p>I&rsquo;d like to share a mirror of just the project.clj files wrapped up in a single download, but I want to be conscientious of the variety of licenses.  I&rsquo;ll clean up the code for pulling and summarizing all this data soon so others can play with it.  In the meantime, feel free to suggest other analyses that could be done on these&hellip;</p>
 ]]></content>
   </entry>
   

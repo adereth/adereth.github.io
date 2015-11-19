@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: latex | adereth]]></title>
-  <link href="http://adereth.github.io/blog/categories/latex/atom.xml" rel="self"/>
+  <title><![CDATA[Category: talks | adereth]]></title>
+  <link href="http://adereth.github.io/blog/categories/talks/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
   <updated>2015-11-19T15:05:59-08:00</updated>
   <id>http://adereth.github.io/</id>
@@ -12,6 +12,64 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Clojure/conj Talk on 3D Printing Keyboards]]></title>
+    <link href="http://adereth.github.io/blog/2015/11/19/clojure-slash-conj-talk-on-3d-printing-keyboards/"/>
+    <updated>2015-11-19T15:05:00-08:00</updated>
+    <id>http://adereth.github.io/blog/2015/11/19/clojure-slash-conj-talk-on-3d-printing-keyboards</id>
+    <content type="html"><![CDATA[<p>I gave a talk on building an ergonomic keyboard using Clojure at <a href="http://clojure-conj.org/">Clojure/conj 2015</a>:</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/uk3A41U0iO4" frameborder="0" allowfullscreen></iframe>
+
+
+<p>Here&rsquo;s a complete list of the references from the talk, in order of appearance:</p>
+
+<ul>
+<li><a href="https://twitter.com/ftrain">@ftrain</a>&rsquo;s <a href="https://twitter.com/ftrain/status/577205992406065152">Tweet</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Typewriter">Typewriter (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Computer_keyboard">Computer keyboard (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Sholes_and_Glidden_typewriter">Sholes and Glidden typewriter (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Hansen_Writing_Ball">Hansen Writing Ball (WIkipedia)</a></li>
+<li><a href="http://www.malling-hansen.org/friedrich-nietzsche-and-his-typewriter-a-malling-hansen-writing-ball.html">Friedrich Nietzsche and his typewriter</a></li>
+<li><a href="https://en.wikipedia.org/wiki/E._Remington_and_Sons#Remington_Typewriter_Company">E. Remington and Sons (Wikipedia)</a></li>
+<li><a href="http://deskthority.net/wiki/Staggering">Staggering (Deskthority Wiki)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/QWERTY">QWERTY (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/IBM_Selectric_typewriter">IBM Selectric typewriter (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/IBM_2741">IBM 2741 (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/ADM-3A">ADM-3A (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Space-cadet_keyboard">Space-cadet keyboard (Wikipedia)</a></li>
+<li><a href="https://www.flickr.com/photos/obra/sets/72157635353286814/">Jesse Vincent&rsquo;s Space Cadet Keyboard Photo Album</a></li>
+<li><a href="http://www.maltron.com/">Maltron (Official Site)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Maltron">Maltron (Wikipedia)</a></li>
+<li><a href="http://www.amazon.com/Mothers-Daughters-Invention-Revised-Technology/dp/0813521971">Mother&rsquo;s and Daughters of Invention: Notes for a Revised History of Technology</a></li>
+<li><a href="http://www.kinesis-ergo.com/">Kinesis (Official Site)</a></li>
+<li><a href="https://www.pjrc.com/teensy/">Teensy USB Development Board</a></li>
+<li><a href="http://deskthority.net/">Deskthority</a></li>
+<li><a href="https://geekhack.org/">Geekhack</a></li>
+<li><a href="http://www.makerbot.com/">Makerbot</a></li>
+<li><a href="https://www.inventables.com/technologies/x-carve">X-Carve</a></li>
+<li><a href="http://ergodox.org/">ErgoDox (Official Site)</a></li>
+<li><a href="https://www.massdrop.com/buy/ergodox">ErgoDox (Massdrop)</a></li>
+<li><a href="/blog/2014/02/12/building-an-ergodox/">Sourcing and Building an ErgoDox Keyboard</a></li>
+<li><a href="http://atreus.technomancy.us/">Atreus</a></li>
+<li><a href="http://keyboard.io">Keyboard.io</a></li>
+<li><a href="http://www.openscad.org/">OpenSCAD</a></li>
+<li><a href="https://github.com/openscad/openscad/issues/522#issuecomment-27741699">OpenSCAD Namespace Issue (Github)</a></li>
+<li><a href="https://github.com/farrellm/scad-clj">scad-clj (Github)</a></li>
+<li><a href="/blog/2014/04/09/3d-printing-with-clojure/">3D Printing with Clojure</a></li>
+<li><a href="/blog/2014/05/29/custom-clojure-evaluation-keybindings-in-emacs/">Custom Clojure Evaluation Keybindings in Emacs</a></li>
+<li><a href="https://github.com/adereth/dactyl-cave">Dactyl Keyboard (Github)</a></li>
+<li><a href="https://www.shapeways.com/">Shapeways</a></li>
+<li><a href="https://www.shapeways.com/shops/bespokeys">Full Dactyl Keyboard (Shapeways)</a></li>
+<li><a href="http://www.smokingresistor.com/product/pyralux-lf9120r/">Pyralux LF9120R &ndash; Flexible PCB Material (Smoking Resistor)</a></li>
+<li><a href="https://github.com/benblazak/ergodox-firmware/blob/master/src/keyboard/ergodox/circuit-diagram.svg">ErgoDox Circuit Diagram (Github)</a></li>
+<li><a href="http://www.instructables.com/id/Is-the-best-PCB-etchant-in-every-kitchen-/">Is the best PCB etchant in every kitchen? (Instructables)</a></li>
+<li><a href="http://pimpmykeyboard.com/">Signature Plastics Keycap Shop</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Presentation on The Mode Tree at Papers We Love Too]]></title>
@@ -254,98 +312,6 @@ drawChartWithResize(data, '#chart-1', 300);
 
 
 <p>Any questions or feedback on the presentation are welcome&hellip; thanks!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Colorful Equations with MathJax]]></title>
-    <link href="http://adereth.github.io/blog/2013/11/29/colorful-equations/"/>
-    <updated>2013-11-29T09:18:00-08:00</updated>
-    <id>http://adereth.github.io/blog/2013/11/29/colorful-equations</id>
-    <content type="html"><![CDATA[<p><a href="http://www.altdevblogaday.com/author/stuart-riffle/">Stuart Riffle</a> wrote up <a href="http://www.altdevblogaday.com/2011/05/17/understanding-the-fourier-transform/">a great explanation of the Fourier transform</a>.  There are a number of great visualizations in his post, but the climax is his explanation of the inverse discrete Fourier transform formula:</p>
-
-<p><img class="center" src="/images/DerivedDFT.png"></p>
-
-<p>What a brilliant representation!  My first thought was that more equations should have such elegant explanations that focus on the comprehension of the reader.  I&rsquo;d love to be able to produce such clear explanations in this style, so I did a little experimenting with Octopress and <a href="http://www.mathjax.org/">MathJax</a> to see how easy it would be.</p>
-
-<p>It turns out to only require a few minor yak trimmings to get something nice:</p>
-
-<div style="font-size: 150%;">
-$$
-\definecolor{energy}{RGB}{114,0,172}
-\definecolor{freq}{RGB}{45,177,93}
-\definecolor{spin}{RGB}{251,0,29}
-\definecolor{signal}{RGB}{18,110,213}
-\definecolor{circle}{RGB}{217,86,16}
-\definecolor{average}{RGB}{203,23,206}
-\color{energy} X_{\color{freq} k} \color{black} =
-\color{average} \frac{1}{N} \sum_{n=0}^{N-1}
-\color{signal}x_n \color{spin}
-e^{\mathrm{i} \color{circle} 2\pi \color{freq}k \color{average} \frac{n}{N}}
-$$
-</div>
-
-
-<blockquote><p>To find <font color="#7200AC">the energy</font> <font color="2DB15D">at a particular frequency</font>, <font color="#FB001D">spin</font> <font color="#126ED5">your signal</font> <font color="#D04400">around a circle</font> <font color="2DB15D">at that frequency</font>, and <font color="#CB17CE">average a bunch of points along that path</font>.</p></blockquote>
-
-<p>By using MathJax instead of including a .png we get some nice benefits:</p>
-
-<ol>
-<li>Accessibility via screen readers</li>
-<li>Scalable renderings that look awesome on Retina displays</li>
-<li>$\LaTeX$ source that is accessible by the audience (right click on the formula)</li>
-<li>Simplified page-build process and source management</li>
-</ol>
-
-
-<p>There are <a href="http://www.google.com/search?q=octopress%20mathjax">a bunch of guides on setting up MathJax with Octopress</a>, but I didn&rsquo;t mess with any of them because the <a href="https://github.com/bijumon/oct2">oct2 theme</a> ships with an alternative <code>head.html</code> that is preconfigured to support it.</p>
-
-<p>The only tweak I made was to load the <a href="http://docs.mathjax.org/en/latest/tex.html#color">Color extension for MathJax</a>:</p>
-
-<p>```html</p>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({ TeX: { extensions: ["color.js"] }});
-</script>
-
-
-<p>```</p>
-
-<p>After adding that, I was able to use the <code>\definecolor</code> and <code>\color</code> directives just like I would in a paper:</p>
-
-<p><code>latex
-\definecolor{energy}{RGB}{114,0,172}
-\definecolor{freq}{RGB}{45,177,93}
-\definecolor{spin}{RGB}{251,0,29}
-\definecolor{signal}{RGB}{18,110,213}
-\definecolor{circle}{RGB}{217,86,16}
-\definecolor{average}{RGB}{203,23,206}
-\color{energy} X_{\color{freq} k} \color{black} =
-\color{average} \frac{1}{N} \sum_{n=0}^{N-1}
-\color{signal}x_n \color{spin}
-e^{\mathrm{i} \color{circle} 2\pi \color{freq}k
-\color{average} \frac{n}{N}}
-</code></p>
-
-<p>There were a couple issues:</p>
-
-<ol>
-<li>As mentioned in several of the guides, the default markdown processor for Octopress will interfere with the <code>_</code> and <code>^</code> in your TeX.  I had originally worked around this by escaping them.  At the end, I wrapped the whole expression in a <code>&lt;div&gt;</code> to make the font larger, which had the side-effect of eliminating the need for escaping.</li>
-<li>MathJax&rsquo;s <code>\definecolor</code> doesn&rsquo;t seem to support the <code>HTML</code> color space, which lets you specify colors in hex codes.  I ended up manually converting the colors back and forth between decimal and hexidecimal for the prose below the equation:</li>
-</ol>
-
-
-<p><code>html
-To find &lt;font color="#7200AC"&gt;the energy&lt;/font&gt;
-&lt;font color="2DB15D"&gt;at a particular frequency&lt;/font&gt;,
-&lt;font color="#FB001D"&gt;spin&lt;/font&gt; &lt;font color="#126ED5"&gt;your
-signal&lt;/font&gt; &lt;font color="#D04400"&gt;around a circle&lt;/font&gt;
-&lt;font color="2DB15D"&gt;at that frequency&lt;/font&gt;, and
-&lt;font color="#CB17CE"&gt;average a bunch of points along that
-path&lt;/font&gt;.
-</code></p>
-
-<p>Now I just need a formula to explain&hellip;</p>
 ]]></content>
   </entry>
   
