@@ -4,7 +4,7 @@
   <title><![CDATA[adereth]]></title>
   <link href="http://adereth.github.io/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2015-11-19T15:05:59-08:00</updated>
+  <updated>2016-01-20T06:05:20-08:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -12,6 +12,259 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Visualizing Girl Talk: Parsing with Clojure's Instaparse]]></title>
+    <link href="http://adereth.github.io/blog/2016/01/20/visualizing-girl-talk-with-clojure-and-d3-dot-js/"/>
+    <updated>2016-01-20T06:10:00-08:00</updated>
+    <id>http://adereth.github.io/blog/2016/01/20/visualizing-girl-talk-with-clojure-and-d3-dot-js</id>
+    <content type="html"><![CDATA[<p>Greg Gillis, also known as Girl Talk, is an impressive DJ who creates mega-mashups consisting of hundreds of samples.  His sample selections span 7 decades and dozens of genres.  Listening to his albums is a bit like having a concentrated dump of music history injected right into your brain.</p>
+
+<p><img src="http://adereth.github.io/images/popculture.png" alt="Neo: &quot;I know pop culture&quot;" /></p>
+
+<p>I became a little obsessed with his work last year and I wanted a better way to experience his albums, so I created an annotated player using Clojure and d3 that shows relevant data and links about every track as it plays:</p>
+
+<p><a href="http://adereth.github.io/oneoff/girltalk-v2/"><img src="http://adereth.github.io/images/girltalkplayer.png" alt="Image of player" /></a></p>
+
+<p>I have versions of this player for his two most recent albums:</p>
+
+<ul>
+<li><a href="http://adereth.github.io/oneoff/girltalk-v2/">All Day</a></li>
+<li><a href="http://adereth.github.io/oneoff/girltalk-v2/fta.html">Feed The Animals</a></li>
+</ul>
+
+
+<p>Unfortunately, they only really work on the desktop right now.</p>
+
+<h2>Parsing Track Data</h2>
+
+<p>I&rsquo;ve released <a href="http://github.com/adereth/girltalk-visualization">all the code</a> that I used to collect the data and to generate the visualizations, but in this post I&rsquo;m just going to talk about the first stage of the process: getting the details of which tracks were sampled at each time.</p>
+
+<p>There&rsquo;s an excellent (totally legal!) crowd-sourced wiki called <a href="http://illegal-tracklist.net/Tracklists/">Illegal Tracklist</a> that has information about most of the samples displayed like this:</p>
+
+<ol><li>&#8220;Oh No&#8221; - 5:39</li>
+<ul><li>0:03 - 2:08 <a class='urllink' href='http://en.wikipedia.org/wiki/Black%20Sabbath' rel='nofollow'>Black Sabbath</a> - &#8221;<a class='urllink' href='http://en.wikipedia.org/wiki/War%20Pigs' rel='nofollow'>War Pigs</a>&#8221;
+</li><li>0:13 - 0:15 <a class='urllink' href='http://en.wikipedia.org/wiki/Tupac_Shakur' rel='nofollow'>2Pac</a> featuring <a class='urllink' href='http://en.wikipedia.org/wiki/K-Ci%20&amp;%20JoJo' rel='nofollow'>K-Ci &amp; JoJo</a> - &#8221;<a class='urllink' href='http://en.wikipedia.org/wiki/How%20Do%20U%20Want%20It' rel='nofollow'>How Do U Want It</a>&#8221;
+</li><li>0:15 - 0:15 <a class='urllink' href='http://en.wikipedia.org/wiki/Jay-Z' rel='nofollow'>Jay-Z</a> - &#8221;<a class='urllink' href='http://en.wikipedia.org/wiki/99%20Problems' rel='nofollow'>99 Problems</a>&#8221;
+</li><li>0:20 - 2:02 <a class='urllink' href='http://en.wikipedia.org/wiki/Ludacris' rel='nofollow'>Ludacris</a> featuring <a class='urllink' href='http://en.wikipedia.org/wiki/Mystikal' rel='nofollow'>Mystikal</a> and <a class='urllink' href='http://en.wikipedia.org/wiki/I-20%20%28rapper%29' rel='nofollow'>I-20</a> - &#8221;<a class='urllink' href='http://en.wikipedia.org/wiki/Move%20Bitch' rel='nofollow'>Move Bitch</a>&#8221;
+</li>
+⋮
+<li>4:45 - 4:55 <a class='urllink' href='http://en.wikipedia.org/wiki/Trina' rel='nofollow'>Trina</a> featuring <a class='urllink' href='http://en.wikipedia.org/wiki/Killer%20Mike' rel='nofollow'>Killer Mike</a> - &#8220;Look Back at Me&#8221;
+</li><li>4:53 - 4:53 <a class='urllink' href='http://en.wikipedia.org/wiki/N.W.A' rel='nofollow'>N.W.A</a> - &#8220;Appetite for Destruction&#8221; (portion sampled samples &#8220;Get Me Back on Time, Engine #9&#8221; by <a class='urllink' href='http://en.wikipedia.org/wiki/Wilson_Pickett' rel='nofollow'>Wilson Pickett</a>)
+</li><li>4:56 - 5:39 <a class='urllink' href='http://en.wikipedia.org/wiki/Missy%20Elliott' rel='nofollow'>Missy Elliott</a> - &#8221;<a class='urllink' href='http://en.wikipedia.org/wiki/Get%20Ur%20Freak%20On' rel='nofollow'>Get Ur Freak On</a>&#8221;
+</li></ul>
+
+<li>&#8220;Let It Out&#8221; - 6:29</li>
+<ul><li>0:00 - 0:01 <a class='urllink' href='http://en.wikipedia.org/wiki/Ramones' rel='nofollow'>Ramones</a> - &#8221;<a class='urllink' href='http://en.wikipedia.org/wiki/Blitzkrieg%20Bop' rel='nofollow'>Blitzkrieg Bop</a>&#8221;
+</li><li>0:00 - 0:05 <a class='urllink' href='http://en.wikipedia.org/wiki/Missy%20Elliott' rel='nofollow'>Missy Elliott</a> - &#8221;<a class='urllink' href='http://en.wikipedia.org/wiki/Get%20Ur%20Freak%20On' rel='nofollow'>Get Ur Freak On</a>&#8221;
+</li><li>0:00 - 0:10 <a class='urllink' href='http://en.wikipedia.org/wiki/Busta%20Rhymes' rel='nofollow'>Busta Rhymes</a> featuring <a class='urllink' href='http://en.wikipedia.org/wiki/Sean%20Paul' rel='nofollow'>Sean Paul</a> and Spliff Star - &#8221;<a class='urllink' href='http://en.wikipedia.org/wiki/Make%20It%20Clap' rel='nofollow'>Make It Clap</a>&#8221;
+</li>
+⋮
+</ul>
+</ol>
+
+
+<p>At first, I used Enlive to suck down the HTML versions of the wiki pages, but I realized it might be cleaner to operate off the raw wiki markup which looks like this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>!! 1. "Oh No" - 5:39
+</span><span class='line'>* 0:03 - 2:08 [[http://en.wikipedia.org/wiki/Black%20Sabbath | Black Sabbath]] - "[[http://en.wikipedia.org/wiki/War%20Pigs | War Pigs]]"
+</span><span class='line'>* 0:13 - 0:15 [[http://en.wikipedia.org/wiki/Tupac_Shakur | 2Pac]] featuring [[http://en.wikipedia.org/wiki/K-Ci%20&%20JoJo | K-Ci & JoJo]] - "[[http://en.wikipedia.org/wiki/How%20Do%20U%20Want%20It | How Do U Want It]]"
+</span><span class='line'>* 0:15 - 0:15 [[http://en.wikipedia.org/wiki/Jay-Z | Jay-Z]] - "[[http://en.wikipedia.org/wiki/99%20Problems | 99 Problems]]"
+</span><span class='line'>* 0:20 - 2:02 [[http://en.wikipedia.org/wiki/Ludacris | Ludacris]] featuring [[http://en.wikipedia.org/wiki/Mystikal | Mystikal]] and [[http://en.wikipedia.org/wiki/I-20%20%28rapper%29 | I-20]] - "[[http://en.wikipedia.org/wiki/Move%20Bitch | Move Bitch]]"
+</span><span class='line'>* 0:20 - 0:54 JC featuring [[http://en.wikipedia.org/wiki/Yung%20Joc | Yung Joc]] - "Vote 4 Me"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I wrote a few specialized functions to pull the details out of the strings and into a data structure, but it quickly became unwieldy and unreadable.  I then saw that this was a perfect opportunity to use <a href="https://github.com/Engelberg/instaparse">Instaparse</a>.  Instaparse is a library that makes it easy to build parsers in Clojure by writing context-free grammars.</p>
+
+<p>Here&rsquo;s the Instaparse grammar that I used that parses the Illegal Tracklists&#8217; markup format:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">wiki-line</span> <span class="nb">= </span><span class="nv">title-track-line</span> <span class="err">|</span> <span class="nv">sample-track-line</span> <span class="err">|</span> <span class="nv">&lt;</span><span class="o">&#39;</span><span class="ss">&#39;&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">title-track-line</span> <span class="nb">= </span><span class="nv">&lt;</span><span class="ss">&#39;!!</span> <span class="ss">&#39;&gt;</span> <span class="nv">track-number</span> <span class="nv">&lt;</span><span class="ss">&#39;.</span> <span class="ss">&#39;&gt;</span> <span class="nv">track-name</span> <span class="nv">&lt;</span><span class="o">&#39;</span> <span class="nb">- </span><span class="ss">&#39;&gt;</span> <span class="nv">track-time</span>
+</span><span class='line'><span class="nv">track-number</span> <span class="nb">= </span><span class="o">#&#39;</span><span class="sc">\\</span><span class="nv">d+</span><span class="o">&#39;</span>
+</span><span class='line'><span class="nv">track-name</span> <span class="nb">= </span><span class="o">#&#39;</span><span class="p">[</span><span class="o">^</span><span class="nv">-</span><span class="p">]</span><span class="nv">+</span><span class="p">(</span><span class="nf">?=</span> <span class="nb">- </span><span class="p">)</span><span class="o">&#39;</span>
+</span><span class='line'><span class="nv">track-time</span> <span class="nb">= </span><span class="nv">time</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">sample-track-line</span> <span class="nb">= </span><span class="nv">&lt;</span><span class="ss">&#39;*</span> <span class="ss">&#39;&gt;</span> <span class="nv">start-time</span> <span class="nv">&lt;</span><span class="o">&#39;</span> <span class="nb">- </span><span class="ss">&#39;&gt;</span> <span class="nv">end-time</span> <span class="nv">&lt;</span><span class="o">&#39;</span> <span class="ss">&#39;&gt;</span> <span class="nv">artist-name</span> <span class="nv">&lt;</span><span class="o">&#39;</span> <span class="nb">- </span><span class="ss">&#39;&gt;</span> <span class="nv">sample-name</span>
+</span><span class='line'><span class="nv">artist-name</span> <span class="nb">= </span><span class="p">(</span><span class="nf">link</span> <span class="err">|</span> <span class="nv">artist-plain-text</span><span class="p">)</span><span class="nv">*</span>
+</span><span class='line'><span class="nv">artist-plain-text</span> <span class="nb">= </span><span class="o">#&#39;</span><span class="p">[</span><span class="o">^</span><span class="sc">\\</span><span class="p">[]</span><span class="nv">+</span><span class="p">(</span><span class="nf">?=</span> <span class="nb">- </span><span class="p">)</span><span class="o">&#39;</span> <span class="err">|</span> <span class="o">#&#39;</span><span class="p">[</span><span class="o">^</span><span class="sc">\\</span><span class="p">[]</span><span class="nv">+</span><span class="p">(</span><span class="nf">?=</span><span class="sc">\\</span><span class="p">[)</span><span class="o">&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">sample-name</span> <span class="nb">= </span><span class="p">(</span><span class="nf">link</span> <span class="err">|</span> <span class="nv">sample-plain-text</span><span class="p">)</span><span class="nv">*</span>
+</span><span class='line'><span class="nv">sample-plain-text</span> <span class="nb">= </span><span class="o">#&#39;</span><span class="p">[</span><span class="o">^</span><span class="sc">\\</span><span class="p">[]</span><span class="nv">*</span><span class="o">&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">link</span> <span class="nb">= </span><span class="nv">&lt;</span><span class="o">&#39;</span><span class="p">[[</span><span class="ss">&#39;&gt;</span> <span class="nv">url</span> <span class="nv">&lt;</span><span class="o">&#39;</span> <span class="err">|</span> <span class="ss">&#39;&gt;</span> <span class="nv">text</span> <span class="nv">&lt;</span><span class="o">&#39;</span><span class="p">]]</span><span class="ss">&#39;&gt;</span>
+</span><span class='line'><span class="nv">url</span> <span class="nb">= </span><span class="o">#&#39;</span><span class="p">[</span><span class="o">^</span><span class="err">|</span><span class="p">]</span><span class="nv">+</span><span class="p">(</span><span class="nf">?=</span> <span class="err">|</span> <span class="p">)</span><span class="o">&#39;</span>
+</span><span class='line'><span class="nv">text</span> <span class="nb">= </span><span class="o">#&#39;</span><span class="p">[</span><span class="o">^</span><span class="p">]]</span><span class="nv">*</span><span class="o">&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">start-time</span> <span class="nb">= </span><span class="nv">time</span>
+</span><span class='line'><span class="nv">end-time</span> <span class="nb">= </span><span class="nv">time</span>
+</span><span class='line'><span class="nv">&lt;time&gt;</span> <span class="nb">= </span><span class="o">#&#39;</span><span class="sc">\\</span><span class="nv">d+</span><span class="err">:</span><span class="sc">\\</span><span class="nv">d+</span><span class="o">&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The high level structure is practically self-documenting: each line in the wiki source is either a title track line, a sample track line, or a blank line and each type of line is pretty clearly broken down into named components that are separated by string literals to be ignored in the output.  It does, however, become a bit nasty when you get to the terminal rules that are defined as regular expressions.  Instaparse truly delivers on its tagline:</p>
+
+<blockquote><p>What if context-free grammars were as easy to use as regular expressions?</p></blockquote>
+
+<p>The only problem is that regular expressions <em>aren&rsquo;t</em> always easy to use, especially when you have to start worrying about not greedily matching the text that is going to be used by Instaparse.</p>
+
+<blockquote class="twitter-tweet" lang="en"><p>Some people, when confronted with a problem, think “I know, I&#39;ll use Instaparse.” Now they have three problems. <a href="https://twitter.com/hashtag/clojure?src=hash">#clojure</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/525670531396165632">October 24, 2014</a></blockquote>
+
+
+<script async src="http://adereth.github.io//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<p>Despite some of the pain of regular expressions and grammar debugging, Instaparse was awesome for this part of the project and I would definitely use it again.  I love the organization that it brought to the code and the structure I got out was very usable:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">({</span><span class="ss">:tag</span> <span class="ss">:wiki-line</span>,
+</span><span class='line'>  <span class="ss">:content</span>
+</span><span class='line'>  <span class="p">({</span><span class="ss">:tag</span> <span class="ss">:title-track-line</span>,
+</span><span class='line'>    <span class="ss">:content</span>
+</span><span class='line'>    <span class="p">({</span><span class="ss">:tag</span> <span class="ss">:track-number</span>, <span class="ss">:content</span> <span class="p">(</span><span class="s">&quot;1&quot;</span><span class="p">)}</span>
+</span><span class='line'>     <span class="p">{</span><span class="ss">:tag</span> <span class="ss">:track-name</span>, <span class="ss">:content</span> <span class="p">(</span><span class="s">&quot;\&quot;Oh No\&quot; &quot;</span><span class="p">)}</span>
+</span><span class='line'>     <span class="p">{</span><span class="ss">:tag</span> <span class="ss">:track-time</span>, <span class="ss">:content</span> <span class="p">(</span><span class="s">&quot;5:39&quot;</span><span class="p">)})})}</span>
+</span><span class='line'> <span class="p">{</span><span class="ss">:tag</span> <span class="ss">:wiki-line</span>,
+</span><span class='line'>  <span class="ss">:content</span>
+</span><span class='line'>  <span class="p">({</span><span class="ss">:tag</span> <span class="ss">:sample-track-line</span>,
+</span><span class='line'>    <span class="ss">:content</span>
+</span><span class='line'>    <span class="p">({</span><span class="ss">:tag</span> <span class="ss">:start-time</span>, <span class="ss">:content</span> <span class="p">(</span><span class="s">&quot;0:03&quot;</span><span class="p">)}</span>
+</span><span class='line'>     <span class="p">{</span><span class="ss">:tag</span> <span class="ss">:end-time</span>, <span class="ss">:content</span> <span class="p">(</span><span class="s">&quot;2:08&quot;</span><span class="p">)}</span>
+</span><span class='line'>     <span class="p">{</span><span class="ss">:tag</span> <span class="ss">:artist-name</span>,
+</span><span class='line'>      <span class="ss">:content</span>
+</span><span class='line'>      <span class="p">({</span><span class="ss">:tag</span> <span class="ss">:link</span>,
+</span><span class='line'>        <span class="ss">:content</span>
+</span><span class='line'>        <span class="p">({</span><span class="ss">:tag</span> <span class="ss">:url</span>,
+</span><span class='line'>          <span class="ss">:content</span> <span class="p">(</span><span class="s">&quot;http://en.wikipedia.org/wiki/Black%20Sabbath&quot;</span><span class="p">)}</span>
+</span><span class='line'>         <span class="p">{</span><span class="ss">:tag</span> <span class="ss">:text</span>, <span class="ss">:content</span> <span class="p">(</span><span class="s">&quot;Black Sabbath&quot;</span><span class="p">)})})}</span>
+</span><span class='line'>     <span class="p">{</span><span class="ss">:tag</span> <span class="ss">:sample-name</span>,
+</span><span class='line'>      <span class="ss">:content</span>
+</span><span class='line'>      <span class="p">({</span><span class="ss">:tag</span> <span class="ss">:sample-plain-text</span>, <span class="ss">:content</span> <span class="p">(</span><span class="s">&quot;\&quot;&quot;</span><span class="p">)}</span>
+</span><span class='line'>       <span class="p">{</span><span class="ss">:tag</span> <span class="ss">:link</span>,
+</span><span class='line'>        <span class="ss">:content</span>
+</span><span class='line'>        <span class="p">({</span><span class="ss">:tag</span> <span class="ss">:url</span>,
+</span><span class='line'>          <span class="ss">:content</span> <span class="p">(</span><span class="s">&quot;http://en.wikipedia.org/wiki/War%20Pigs&quot;</span><span class="p">)}</span>
+</span><span class='line'>         <span class="p">{</span><span class="ss">:tag</span> <span class="ss">:text</span>, <span class="ss">:content</span> <span class="p">(</span><span class="s">&quot;War Pigs&quot;</span><span class="p">)})}</span>
+</span><span class='line'>       <span class="p">{</span><span class="ss">:tag</span> <span class="ss">:sample-plain-text</span>, <span class="ss">:content</span> <span class="p">(</span><span class="s">&quot;\&quot;&quot;</span><span class="p">)})})})}</span>
+</span><span class='line'> <span class="p">{</span><span class="ss">:tag</span> <span class="ss">:wiki-line</span>,
+</span><span class='line'>  <span class="ss">:content</span>
+</span><span class='line'>  <span class="p">({</span><span class="ss">:tag</span> <span class="ss">:sample-track-line</span>,
+</span><span class='line'>    <span class="ss">:content</span>
+</span><span class='line'>    <span class="p">({</span><span class="ss">:tag</span> <span class="ss">:start-time</span>, <span class="ss">:content</span> <span class="p">(</span><span class="s">&quot;0:13&quot;</span><span class="p">)}</span>
+</span><span class='line'>     <span class="p">{</span><span class="ss">:tag</span> <span class="ss">:end-time</span>, <span class="ss">:content</span> <span class="p">(</span><span class="s">&quot;0:15&quot;</span><span class="p">)}</span>
+</span><span class='line'>     <span class="p">{</span><span class="ss">:tag</span> <span class="ss">:artist-name</span>,
+</span><span class='line'>      <span class="ss">:content</span>
+</span><span class='line'>      <span class="p">({</span><span class="ss">:tag</span> <span class="ss">:link</span>,
+</span><span class='line'>        <span class="ss">:content</span>
+</span><span class='line'>        <span class="p">({</span><span class="ss">:tag</span> <span class="ss">:url</span>,
+</span><span class='line'>          <span class="ss">:content</span> <span class="p">(</span><span class="s">&quot;http://en.wikipedia.org/wiki/Tupac_Shakur&quot;</span><span class="p">)}</span>
+</span><span class='line'>         <span class="p">{</span><span class="ss">:tag</span> <span class="ss">:text</span>, <span class="ss">:content</span> <span class="p">(</span><span class="s">&quot;2Pac&quot;</span><span class="p">)})}</span>
+</span><span class='line'>       <span class="p">{</span><span class="ss">:tag</span> <span class="ss">:artist-plain-text</span>, <span class="ss">:content</span> <span class="p">(</span><span class="s">&quot; featuring &quot;</span><span class="p">)}</span>
+</span><span class='line'>       <span class="p">{</span><span class="ss">:tag</span> <span class="ss">:link</span>,
+</span><span class='line'>        <span class="ss">:content</span>
+</span><span class='line'>        <span class="p">({</span><span class="ss">:tag</span> <span class="ss">:url</span>,
+</span><span class='line'>          <span class="ss">:content</span> <span class="p">(</span><span class="s">&quot;http://en.wikipedia.org/wiki/K-Ci%20&amp;%20JoJo&quot;</span><span class="p">)}</span>
+</span><span class='line'>         <span class="p">{</span><span class="ss">:tag</span> <span class="ss">:text</span>, <span class="ss">:content</span> <span class="p">(</span><span class="s">&quot;K-Ci &amp; JoJo&quot;</span><span class="p">)})})}</span>
+</span><span class='line'>     <span class="p">{</span><span class="ss">:tag</span> <span class="ss">:sample-name</span>,
+</span><span class='line'>      <span class="ss">:content</span>
+</span><span class='line'>      <span class="p">({</span><span class="ss">:tag</span> <span class="ss">:sample-plain-text</span>, <span class="ss">:content</span> <span class="p">(</span><span class="s">&quot;\&quot;&quot;</span><span class="p">)}</span>
+</span><span class='line'>       <span class="p">{</span><span class="ss">:tag</span> <span class="ss">:link</span>,
+</span><span class='line'>        <span class="ss">:content</span>
+</span><span class='line'>        <span class="p">({</span><span class="ss">:tag</span> <span class="ss">:url</span>,
+</span><span class='line'>          <span class="ss">:content</span>
+</span><span class='line'>          <span class="p">(</span><span class="s">&quot;http://en.wikipedia.org/wiki/How%20Do%20U%20Want%20It&quot;</span><span class="p">)}</span>
+</span><span class='line'>         <span class="p">{</span><span class="ss">:tag</span> <span class="ss">:text</span>, <span class="ss">:content</span> <span class="p">(</span><span class="s">&quot;How Do U Want It&quot;</span><span class="p">)})}</span>
+</span><span class='line'>       <span class="p">{</span><span class="ss">:tag</span> <span class="ss">:sample-plain-text</span>, <span class="ss">:content</span> <span class="p">(</span><span class="s">&quot;\&quot;&quot;</span><span class="p">)})})})}</span>
+</span><span class='line'>       <span class="nv">...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Clojure/conj Talk on 3D Printing Keyboards]]></title>
@@ -5043,116 +5296,6 @@ function position() {
 <li><p><code>winner-mode</code> &ndash; <a href="http://www.emacswiki.org/emacs/WinnerMode">Winner Mode</a> allows you to undo and redo changes in the window configuration with the key commands <code>C-c left</code> and <code>C-c right</code>.</p></li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Colorful Equations with MathJax]]></title>
-    <link href="http://adereth.github.io/blog/2013/11/29/colorful-equations/"/>
-    <updated>2013-11-29T09:18:00-08:00</updated>
-    <id>http://adereth.github.io/blog/2013/11/29/colorful-equations</id>
-    <content type="html"><![CDATA[<p><a href="http://www.altdevblogaday.com/author/stuart-riffle/">Stuart Riffle</a> wrote up <a href="http://www.altdevblogaday.com/2011/05/17/understanding-the-fourier-transform/">a great explanation of the Fourier transform</a>.  There are a number of great visualizations in his post, but the climax is his explanation of the inverse discrete Fourier transform formula:</p>
-
-<p><img class="center" src="http://adereth.github.io/images/DerivedDFT.png"></p>
-
-<p>What a brilliant representation!  My first thought was that more equations should have such elegant explanations that focus on the comprehension of the reader.  I&rsquo;d love to be able to produce such clear explanations in this style, so I did a little experimenting with Octopress and <a href="http://www.mathjax.org/">MathJax</a> to see how easy it would be.</p>
-
-<p>It turns out to only require a few minor yak trimmings to get something nice:</p>
-
-<div style="font-size: 150%;">
-$$
-\definecolor{energy}{RGB}{114,0,172}
-\definecolor{freq}{RGB}{45,177,93}
-\definecolor{spin}{RGB}{251,0,29}
-\definecolor{signal}{RGB}{18,110,213}
-\definecolor{circle}{RGB}{217,86,16}
-\definecolor{average}{RGB}{203,23,206}
-\color{energy} X_{\color{freq} k} \color{black} =
-\color{average} \frac{1}{N} \sum_{n=0}^{N-1}
-\color{signal}x_n \color{spin}
-e^{\mathrm{i} \color{circle} 2\pi \color{freq}k \color{average} \frac{n}{N}}
-$$
-</div>
-
-
-<blockquote><p>To find <font color="#7200AC">the energy</font> <font color="2DB15D">at a particular frequency</font>, <font color="#FB001D">spin</font> <font color="#126ED5">your signal</font> <font color="#D04400">around a circle</font> <font color="2DB15D">at that frequency</font>, and <font color="#CB17CE">average a bunch of points along that path</font>.</p></blockquote>
-
-<p>By using MathJax instead of including a .png we get some nice benefits:</p>
-
-<ol>
-<li>Accessibility via screen readers</li>
-<li>Scalable renderings that look awesome on Retina displays</li>
-<li>$\LaTeX$ source that is accessible by the audience (right click on the formula)</li>
-<li>Simplified page-build process and source management</li>
-</ol>
-
-
-<p>There are <a href="http://www.google.com/search?q=octopress%20mathjax">a bunch of guides on setting up MathJax with Octopress</a>, but I didn&rsquo;t mess with any of them because the <a href="https://github.com/bijumon/oct2">oct2 theme</a> ships with an alternative <code>head.html</code> that is preconfigured to support it.</p>
-
-<p>The only tweak I made was to load the <a href="http://docs.mathjax.org/en/latest/tex.html#color">Color extension for MathJax</a>:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/x-mathjax-config&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>  <span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">Config</span><span class="p">({</span> <span class="nx">TeX</span><span class="o">:</span> <span class="p">{</span> <span class="nx">extensions</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;color.js&quot;</span><span class="p">]</span> <span class="p">}});</span>
-</span><span class='line'><span class="nt">&lt;/script&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>After adding that, I was able to use the <code>\definecolor</code> and <code>\color</code> directives just like I would in a paper:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='latex'><span class='line'><span class="k">\definecolor</span><span class="nb">{</span>energy<span class="nb">}{</span>RGB<span class="nb">}{</span>114,0,172<span class="nb">}</span>
-</span><span class='line'><span class="k">\definecolor</span><span class="nb">{</span>freq<span class="nb">}{</span>RGB<span class="nb">}{</span>45,177,93<span class="nb">}</span>
-</span><span class='line'><span class="k">\definecolor</span><span class="nb">{</span>spin<span class="nb">}{</span>RGB<span class="nb">}{</span>251,0,29<span class="nb">}</span>
-</span><span class='line'><span class="k">\definecolor</span><span class="nb">{</span>signal<span class="nb">}{</span>RGB<span class="nb">}{</span>18,110,213<span class="nb">}</span>
-</span><span class='line'><span class="k">\definecolor</span><span class="nb">{</span>circle<span class="nb">}{</span>RGB<span class="nb">}{</span>217,86,16<span class="nb">}</span>
-</span><span class='line'><span class="k">\definecolor</span><span class="nb">{</span>average<span class="nb">}{</span>RGB<span class="nb">}{</span>203,23,206<span class="nb">}</span>
-</span><span class='line'><span class="k">\color</span><span class="nb">{</span>energy<span class="nb">}</span> X<span class="nb">_{</span><span class="k">\color</span><span class="nb">{</span>freq<span class="nb">}</span> k<span class="nb">}</span> <span class="k">\color</span><span class="nb">{</span>black<span class="nb">}</span> =
-</span><span class='line'><span class="k">\color</span><span class="nb">{</span>average<span class="nb">}</span> <span class="k">\frac</span><span class="nb">{</span>1<span class="nb">}{</span>N<span class="nb">}</span> <span class="k">\sum</span><span class="nb">_{</span>n=0<span class="nb">}^{</span>N-1<span class="nb">}</span>
-</span><span class='line'><span class="k">\color</span><span class="nb">{</span>signal<span class="nb">}</span>x<span class="nb">_</span>n <span class="k">\color</span><span class="nb">{</span>spin<span class="nb">}</span>
-</span><span class='line'>e<span class="nb">^{</span><span class="k">\mathrm</span><span class="nb">{</span>i<span class="nb">}</span> <span class="k">\color</span><span class="nb">{</span>circle<span class="nb">}</span> 2<span class="k">\pi</span> <span class="k">\color</span><span class="nb">{</span>freq<span class="nb">}</span>k
-</span><span class='line'><span class="k">\color</span><span class="nb">{</span>average<span class="nb">}</span> <span class="k">\frac</span><span class="nb">{</span>n<span class="nb">}{</span>N<span class="nb">}}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>There were a couple issues:</p>
-
-<ol>
-<li>As mentioned in several of the guides, the default markdown processor for Octopress will interfere with the <code>_</code> and <code>^</code> in your TeX.  I had originally worked around this by escaping them.  At the end, I wrapped the whole expression in a <code>&lt;div&gt;</code> to make the font larger, which had the side-effect of eliminating the need for escaping.</li>
-<li>MathJax&rsquo;s <code>\definecolor</code> doesn&rsquo;t seem to support the <code>HTML</code> color space, which lets you specify colors in hex codes.  I ended up manually converting the colors back and forth between decimal and hexidecimal for the prose below the equation:</li>
-</ol>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'>To find <span class="nt">&lt;font</span> <span class="na">color=</span><span class="s">&quot;#7200AC&quot;</span><span class="nt">&gt;</span>the energy<span class="nt">&lt;/font&gt;</span>
-</span><span class='line'><span class="nt">&lt;font</span> <span class="na">color=</span><span class="s">&quot;2DB15D&quot;</span><span class="nt">&gt;</span>at a particular frequency<span class="nt">&lt;/font&gt;</span>,
-</span><span class='line'><span class="nt">&lt;font</span> <span class="na">color=</span><span class="s">&quot;#FB001D&quot;</span><span class="nt">&gt;</span>spin<span class="nt">&lt;/font&gt;</span> <span class="nt">&lt;font</span> <span class="na">color=</span><span class="s">&quot;#126ED5&quot;</span><span class="nt">&gt;</span>your
-</span><span class='line'>signal<span class="nt">&lt;/font&gt;</span> <span class="nt">&lt;font</span> <span class="na">color=</span><span class="s">&quot;#D04400&quot;</span><span class="nt">&gt;</span>around a circle<span class="nt">&lt;/font&gt;</span>
-</span><span class='line'><span class="nt">&lt;font</span> <span class="na">color=</span><span class="s">&quot;2DB15D&quot;</span><span class="nt">&gt;</span>at that frequency<span class="nt">&lt;/font&gt;</span>, and
-</span><span class='line'><span class="nt">&lt;font</span> <span class="na">color=</span><span class="s">&quot;#CB17CE&quot;</span><span class="nt">&gt;</span>average a bunch of points along that
-</span><span class='line'>path<span class="nt">&lt;/font&gt;</span>.
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now I just need a formula to explain&hellip;</p>
 ]]></content>
   </entry>
   

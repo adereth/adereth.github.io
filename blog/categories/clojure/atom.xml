@@ -4,7 +4,7 @@
   <title><![CDATA[Category: clojure | adereth]]></title>
   <link href="http://adereth.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2015-11-19T15:05:59-08:00</updated>
+  <updated>2016-01-20T06:05:20-08:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -12,6 +12,183 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Visualizing Girl Talk: Parsing with Clojure's Instaparse]]></title>
+    <link href="http://adereth.github.io/blog/2016/01/20/visualizing-girl-talk-with-clojure-and-d3-dot-js/"/>
+    <updated>2016-01-20T06:10:00-08:00</updated>
+    <id>http://adereth.github.io/blog/2016/01/20/visualizing-girl-talk-with-clojure-and-d3-dot-js</id>
+    <content type="html"><![CDATA[<p>Greg Gillis, also known as Girl Talk, is an impressive DJ who creates mega-mashups consisting of hundreds of samples.  His sample selections span 7 decades and dozens of genres.  Listening to his albums is a bit like having a concentrated dump of music history injected right into your brain.</p>
+
+<p><img src="/images/popculture.png" alt="Neo: &quot;I know pop culture&quot;" /></p>
+
+<p>I became a little obsessed with his work last year and I wanted a better way to experience his albums, so I created an annotated player using Clojure and d3 that shows relevant data and links about every track as it plays:</p>
+
+<p><a href="http://adereth.github.io/oneoff/girltalk-v2/"><img src="/images/girltalkplayer.png" alt="Image of player" /></a></p>
+
+<p>I have versions of this player for his two most recent albums:</p>
+
+<ul>
+<li><a href="http://adereth.github.io/oneoff/girltalk-v2/">All Day</a></li>
+<li><a href="http://adereth.github.io/oneoff/girltalk-v2/fta.html">Feed The Animals</a></li>
+</ul>
+
+
+<p>Unfortunately, they only really work on the desktop right now.</p>
+
+<h2>Parsing Track Data</h2>
+
+<p>I&rsquo;ve released <a href="http://github.com/adereth/girltalk-visualization">all the code</a> that I used to collect the data and to generate the visualizations, but in this post I&rsquo;m just going to talk about the first stage of the process: getting the details of which tracks were sampled at each time.</p>
+
+<p>There&rsquo;s an excellent (totally legal!) crowd-sourced wiki called <a href="http://illegal-tracklist.net/Tracklists/">Illegal Tracklist</a> that has information about most of the samples displayed like this:</p>
+
+<ol><li>"Oh No" - 5:39</li>
+<ul><li>0:03 - 2:08 <a class='urllink' href='http://en.wikipedia.org/wiki/Black%20Sabbath' rel='nofollow'>Black Sabbath</a> - "<a class='urllink' href='http://en.wikipedia.org/wiki/War%20Pigs' rel='nofollow'>War Pigs</a>"
+</li><li>0:13 - 0:15 <a class='urllink' href='http://en.wikipedia.org/wiki/Tupac_Shakur' rel='nofollow'>2Pac</a> featuring <a class='urllink' href='http://en.wikipedia.org/wiki/K-Ci%20&amp;%20JoJo' rel='nofollow'>K-Ci &amp; JoJo</a> - "<a class='urllink' href='http://en.wikipedia.org/wiki/How%20Do%20U%20Want%20It' rel='nofollow'>How Do U Want It</a>"
+</li><li>0:15 - 0:15 <a class='urllink' href='http://en.wikipedia.org/wiki/Jay-Z' rel='nofollow'>Jay-Z</a> - "<a class='urllink' href='http://en.wikipedia.org/wiki/99%20Problems' rel='nofollow'>99 Problems</a>"
+</li><li>0:20 - 2:02 <a class='urllink' href='http://en.wikipedia.org/wiki/Ludacris' rel='nofollow'>Ludacris</a> featuring <a class='urllink' href='http://en.wikipedia.org/wiki/Mystikal' rel='nofollow'>Mystikal</a> and <a class='urllink' href='http://en.wikipedia.org/wiki/I-20%20%28rapper%29' rel='nofollow'>I-20</a> - "<a class='urllink' href='http://en.wikipedia.org/wiki/Move%20Bitch' rel='nofollow'>Move Bitch</a>"
+</li>
+⋮
+<li>4:45 - 4:55 <a class='urllink' href='http://en.wikipedia.org/wiki/Trina' rel='nofollow'>Trina</a> featuring <a class='urllink' href='http://en.wikipedia.org/wiki/Killer%20Mike' rel='nofollow'>Killer Mike</a> - "Look Back at Me"
+</li><li>4:53 - 4:53 <a class='urllink' href='http://en.wikipedia.org/wiki/N.W.A' rel='nofollow'>N.W.A</a> - "Appetite for Destruction" (portion sampled samples "Get Me Back on Time, Engine #9" by <a class='urllink' href='http://en.wikipedia.org/wiki/Wilson_Pickett' rel='nofollow'>Wilson Pickett</a>)
+</li><li>4:56 - 5:39 <a class='urllink' href='http://en.wikipedia.org/wiki/Missy%20Elliott' rel='nofollow'>Missy Elliott</a> - "<a class='urllink' href='http://en.wikipedia.org/wiki/Get%20Ur%20Freak%20On' rel='nofollow'>Get Ur Freak On</a>"
+</li></ul>
+
+<li>"Let It Out" - 6:29</li>
+<ul><li>0:00 - 0:01 <a class='urllink' href='http://en.wikipedia.org/wiki/Ramones' rel='nofollow'>Ramones</a> - "<a class='urllink' href='http://en.wikipedia.org/wiki/Blitzkrieg%20Bop' rel='nofollow'>Blitzkrieg Bop</a>"
+</li><li>0:00 - 0:05 <a class='urllink' href='http://en.wikipedia.org/wiki/Missy%20Elliott' rel='nofollow'>Missy Elliott</a> - "<a class='urllink' href='http://en.wikipedia.org/wiki/Get%20Ur%20Freak%20On' rel='nofollow'>Get Ur Freak On</a>"
+</li><li>0:00 - 0:10 <a class='urllink' href='http://en.wikipedia.org/wiki/Busta%20Rhymes' rel='nofollow'>Busta Rhymes</a> featuring <a class='urllink' href='http://en.wikipedia.org/wiki/Sean%20Paul' rel='nofollow'>Sean Paul</a> and Spliff Star - "<a class='urllink' href='http://en.wikipedia.org/wiki/Make%20It%20Clap' rel='nofollow'>Make It Clap</a>"
+</li>
+⋮
+</ul>
+</ol>
+
+
+<p>At first, I used Enlive to suck down the HTML versions of the wiki pages, but I realized it might be cleaner to operate off the raw wiki markup which looks like this:</p>
+
+<p><code>
+!! 1. "Oh No" - 5:39
+* 0:03 - 2:08 [[http://en.wikipedia.org/wiki/Black%20Sabbath | Black Sabbath]] - "[[http://en.wikipedia.org/wiki/War%20Pigs | War Pigs]]"
+* 0:13 - 0:15 [[http://en.wikipedia.org/wiki/Tupac_Shakur | 2Pac]] featuring [[http://en.wikipedia.org/wiki/K-Ci%20&amp;%20JoJo | K-Ci &amp; JoJo]] - "[[http://en.wikipedia.org/wiki/How%20Do%20U%20Want%20It | How Do U Want It]]"
+* 0:15 - 0:15 [[http://en.wikipedia.org/wiki/Jay-Z | Jay-Z]] - "[[http://en.wikipedia.org/wiki/99%20Problems | 99 Problems]]"
+* 0:20 - 2:02 [[http://en.wikipedia.org/wiki/Ludacris | Ludacris]] featuring [[http://en.wikipedia.org/wiki/Mystikal | Mystikal]] and [[http://en.wikipedia.org/wiki/I-20%20%28rapper%29 | I-20]] - "[[http://en.wikipedia.org/wiki/Move%20Bitch | Move Bitch]]"
+* 0:20 - 0:54 JC featuring [[http://en.wikipedia.org/wiki/Yung%20Joc | Yung Joc]] - "Vote 4 Me"
+</code></p>
+
+<p>I wrote a few specialized functions to pull the details out of the strings and into a data structure, but it quickly became unwieldy and unreadable.  I then saw that this was a perfect opportunity to use <a href="https://github.com/Engelberg/instaparse">Instaparse</a>.  Instaparse is a library that makes it easy to build parsers in Clojure by writing context-free grammars.</p>
+
+<p>Here&rsquo;s the Instaparse grammar that I used that parses the Illegal Tracklists' markup format:</p>
+
+<p>`&ldquo;clojure
+wiki-line = title-track-line | sample-track-line | &lt;&rdquo;></p>
+
+<p>title-track-line = &lt;&lsquo;!! &rsquo;> track-number &lt;&lsquo;. &rsquo;> track-name &lt;&lsquo; &ndash; &rsquo;> track-time
+track-number = #&lsquo;\d+&rsquo;
+track-name = #&lsquo;[^&ndash;]+(?= &ndash; )&rsquo;
+track-time = time</p>
+
+<p>sample-track-line = &lt;&lsquo;<em> &rsquo;> start-time &lt;&lsquo; &ndash; &rsquo;> end-time &lt;&lsquo; &rsquo;> artist-name &lt;&lsquo; &ndash; &rsquo;> sample-name
+artist-name = (link | artist-plain-text)</em>
+artist-plain-text = #&lsquo;[^\[]+(?= &ndash; )&rsquo; | #&lsquo;[^\[]+(?=\[)&rsquo;</p>
+
+<p>sample-name = (link | sample-plain-text)<em>
+sample-plain-text = #&lsquo;[^\[]</em>&rsquo;</p>
+
+<p>link = &lt;&lsquo;[[&rsquo;> url &lt;&lsquo; | &rsquo;> text &lt;&lsquo;]]&rsquo;>
+url = #&lsquo;[^|]+(?= | )&rsquo;
+text = #&lsquo;[^]]*&rsquo;</p>
+
+<p>start-time = time
+end-time = time
+<time> = #&lsquo;\d+:\d+&rsquo;
+```</p>
+
+<p>The high level structure is practically self-documenting: each line in the wiki source is either a title track line, a sample track line, or a blank line and each type of line is pretty clearly broken down into named components that are separated by string literals to be ignored in the output.  It does, however, become a bit nasty when you get to the terminal rules that are defined as regular expressions.  Instaparse truly delivers on its tagline:</p>
+
+<blockquote><p>What if context-free grammars were as easy to use as regular expressions?</p></blockquote>
+
+<p>The only problem is that regular expressions <em>aren&rsquo;t</em> always easy to use, especially when you have to start worrying about not greedily matching the text that is going to be used by Instaparse.</p>
+
+<blockquote class="twitter-tweet" lang="en"><p>Some people, when confronted with a problem, think “I know, I&#39;ll use Instaparse.” Now they have three problems. <a href="https://twitter.com/hashtag/clojure?src=hash">#clojure</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/525670531396165632">October 24, 2014</a></blockquote>
+
+
+<script async src="http://adereth.github.io//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<p>Despite some of the pain of regular expressions and grammar debugging, Instaparse was awesome for this part of the project and I would definitely use it again.  I love the organization that it brought to the code and the structure I got out was very usable:</p>
+
+<p>```clojure
+({:tag :wiki-line,
+  :content
+  ({:tag :title-track-line,</p>
+
+<pre><code>:content
+({:tag :track-number, :content ("1")}
+ {:tag :track-name, :content ("\"Oh No\" ")}
+ {:tag :track-time, :content ("5:39")})})}
+</code></pre>
+
+<p> {:tag :wiki-line,
+  :content
+  ({:tag :sample-track-line,</p>
+
+<pre><code>:content
+({:tag :start-time, :content ("0:03")}
+ {:tag :end-time, :content ("2:08")}
+ {:tag :artist-name,
+  :content
+  ({:tag :link,
+    :content
+    ({:tag :url,
+      :content ("http://en.wikipedia.org/wiki/Black%20Sabbath")}
+     {:tag :text, :content ("Black Sabbath")})})}
+ {:tag :sample-name,
+  :content
+  ({:tag :sample-plain-text, :content ("\"")}
+   {:tag :link,
+    :content
+    ({:tag :url,
+      :content ("http://en.wikipedia.org/wiki/War%20Pigs")}
+     {:tag :text, :content ("War Pigs")})}
+   {:tag :sample-plain-text, :content ("\"")})})})}
+</code></pre>
+
+<p> {:tag :wiki-line,
+  :content
+  ({:tag :sample-track-line,</p>
+
+<pre><code>:content
+({:tag :start-time, :content ("0:13")}
+ {:tag :end-time, :content ("0:15")}
+ {:tag :artist-name,
+  :content
+  ({:tag :link,
+    :content
+    ({:tag :url,
+      :content ("http://en.wikipedia.org/wiki/Tupac_Shakur")}
+     {:tag :text, :content ("2Pac")})}
+   {:tag :artist-plain-text, :content (" featuring ")}
+   {:tag :link,
+    :content
+    ({:tag :url,
+      :content ("http://en.wikipedia.org/wiki/K-Ci%20&amp;%20JoJo")}
+     {:tag :text, :content ("K-Ci &amp; JoJo")})})}
+ {:tag :sample-name,
+  :content
+  ({:tag :sample-plain-text, :content ("\"")}
+   {:tag :link,
+    :content
+    ({:tag :url,
+      :content
+      ("http://en.wikipedia.org/wiki/How%20Do%20U%20Want%20It")}
+     {:tag :text, :content ("How Do U Want It")})}
+   {:tag :sample-plain-text, :content ("\"")})})})}
+   ...
+</code></pre>
+
+<p>```</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Clojure/conj Talk on 3D Printing Keyboards]]></title>
@@ -491,73 +668,6 @@ If invoked with a PREFIX argument, print the result in the current buffer.&rdquo
 <p>Once your design is complete, you can use OpenSCAD to export it as an STL file which can then be imported to software like <a href="http://replicat.org/">ReplicatorG</a> or <a href="https://www.makerbot.com/makerware/">Makerware</a> for processing into an .x3g file that can be printed:</p>
 
 <p><img src="/images/printed.JPG" alt="Keyboard" /></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Where LISP Fits]]></title>
-    <link href="http://adereth.github.io/blog/2014/02/03/where-lisp-fits/"/>
-    <updated>2014-02-03T07:19:00-08:00</updated>
-    <id>http://adereth.github.io/blog/2014/02/03/where-lisp-fits</id>
-    <content type="html"><![CDATA[<p>There are a lot of great essays about the power and joy of LISP.  I had read a bunch of them, but none convinced me to actually put the energy in to make it over those parentheses-shaped speed bumps.  A part of me always wanted to, mostly because I&rsquo;m convinced that our inevitable robot overlords will have to be programs that write programs and everything I had heard made me think that this would likely be done in a LISP.  It just makes sense to be prepared.</p>
-
-<p>Almost two years ago, a coworker showed me some gorgeous code that used Clojure&rsquo;s <a href="http://clojuredocs.org/clojure_core/clojure.core/-%3E">thrush macro</a> and I fell in love.  I found myself jonesing for <code>C-x C-e</code> whenever I tried going back to Java.  I devoured <a href="http://www.amazon.com/gp/product/1934356867/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1934356867&amp;linkCode=as2&amp;tag=adereth-20">Programming Clojure</a>, then <a href="http://www.amazon.com/gp/product/1935182641/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1935182641&amp;linkCode=as2&amp;tag=adereth-20">The Joy of Clojure</a>.  In search of a purer hit, I turned to the source: <a href="http://www-formal.stanford.edu/jmc/recursive.pdf">McCarthy&rsquo;s original paper on LISP</a>.  After reading it, I realized what someone could have told me that would have convinced me to invest the time 12 years earlier.</p>
-
-<p>There&rsquo;s a lot of interesting stuff in that paper, but what really struck me was that it felt like it fit into a theoretical framework that I thought I already knew reasonably well.  This post isn&rsquo;t about the power of LISP, which has been covered by others better than I could.  Rather, it&rsquo;s about where LISP fits in the world of computation.</p>
-
-<p><em>None of what I&rsquo;m about to say is novel or rigorous.  I&rsquo;m pretty sure that all the novel and rigorous stuff around this topic is 50 &ndash; 75 years old, but I just wasn&rsquo;t exposed to it as directly as I&rsquo;m going to try and lay out.</em></p>
-
-<h2>The Automaton Model of Computation</h2>
-
-<p>One of my favorite classes in school was <a href="http://www.cs.cmu.edu/~lblum/flac/index.htm">15-453: Formal Languages, Automata, and Computation</a>, which used <a href="http://www.amazon.com/gp/product/113318779X/ref=as_li_ss_il?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=113318779X&amp;linkCode=as2&amp;tag=adereth-20">Sipser&rsquo;s Introduction to the Theory of Computation</a>:</p>
-
-<p><a href="http://www.amazon.com/gp/product/113318779X/ref=as_li_ss_il?ie=UTF8&camp=1789&creative=390957&creativeASIN=113318779X&linkCode=as2&tag=adereth-20"><img src="http://adereth.github.io/images/sipser.jpg" width="250"></a></p>
-
-<p>One aspect that I really enjoyed was that there was a narrative; we started with Finite State Automata (FSA), analyzed the additional power of Pushdown Automata (PDA), and saw it culminate in Turing Machines (TM).  Each of these models look very similar and have a natural connection: <em>they are each just state machines with different types of external memory.</em></p>
-
-<p>The tape in the Turing Machine can be viewed as two stacks, with one stack representing everything to the left of the current position and the other stack as the current position and everything to the right.  With this model, we can view the computational hierarchy (FSA &ndash;> PDA &ndash;> TM) as just state machines with 0, 1, or 2 stacks.  I think it&rsquo;s quite an elegant representation and it makes the progression seem quite natural.</p>
-
-<p>A key insight along the journey is that these machines are equivalent in power to other useful systems.  A sizable section in the chapter on Finite State Automata is dedicated to their equivalence with Regular Expressions (RegEx).  Context Free Grammars (CFG) are actually introduced <em>before</em> Pushdown Automata.  But when we get to Turing Machines, there&rsquo;s nothing but a couple paragraphs in a section called &ldquo;Equivalence with Other Models&rdquo;, which says:</p>
-
-<blockquote><p>Many [languages], such as Pascal and LISP, look quite different from one another in style and structure.  Can some algorithm be programmed in one of them and not the others?  Of course not &mdash; we can compile LISP into Pascal and Pascal into LISP, which means that the two languages describe <em>exactly</em> the same class of algorithms.  So do all other reasonable programming languages.</p></blockquote>
-
-<p>The book and class leave it at that and proceed onto the limits of computability, which is the real point of the material.  But there&rsquo;s a natural question that isn&rsquo;t presented in the book and which I never thought to ask:</p>
-
-<center>
-Finite State Automata <i class="fa fa-arrows-h"></i> Regular Expressions<br>
-Pushdown Automata <i class="fa fa-arrows-h"></i> Context Free Grammars<br>
-Turing Machines <i class="fa fa-arrows-h"></i> ?
-</center>
-
-
-<br>
-
-
-<p>While we know that there are many models that equal Turing Machines, we could also construct other models that equal FSAs or PDAs.  Why are RegExs and CFGs used as the parallel models of computation?  With the machine model, we were able to just add a stack to move up at each level &ndash; is there a natural connection between RegExs and CFGs that we extrapolate to find their next level that is Turing equivalent?</p>
-
-<h2>The Chomsky-Schützenberger Hierarchy</h2>
-
-<p>It turns out that the answers to these questions were well covered in the 1950&rsquo;s by the <a href="http://en.wikipedia.org/wiki/Chomsky_hierarchy#The_hierarchy">Chomsky-Schützenberger Hierarchy of Formal Grammars</a>.</p>
-
-<p>The left-hand side of the relations above are the automaton-based models and the right-hand side are the language-based models.  The language models are all implemented as production rules, where some symbols are converted to other symbols.  The different levels of computation just have different restrictions on what kind of replacements rules are allowed.</p>
-
-<p>For instance RegExs are all rules of the form $A \to a$ and $A \to aB$, where the uppercase letters are <a href="http://en.wikipedia.org/wiki/Terminal_and_nonterminal_symbols">non-terminal symbols</a> and the lowercase are terminal.  In CFGs, some of the restrictions on the right-hand side are lifted.  Allowing terminals to appear on the left-hand side lets us make rules that are conditional on what has already been replaced, which appropriately gets called &ldquo;Context Sensitive Grammars.&rdquo;  Finally, when all the rules are lifted, we get Recursively Enumerable languages, which are Turing equivalent.  The <a href="http://en.wikipedia.org/wiki/Chomsky_hierarchy#The_hierarchy">Wikipedia page</a> for the hierarchy and the respective levels is a good source for learning more.</p>
-
-<p>When you look at the definition of LISP in McCarthy&rsquo;s paper, it&rsquo;s much closer to being an applied version of Chomsky&rsquo;s style than Turing&rsquo;s.  This isn&rsquo;t surprising, given that they were contemporaries at MIT.  In McCarthy&rsquo;s <a href="http://www-formal.stanford.edu/jmc/history/lisp/node3.html#SECTION00030000000000000000">History of Lisp</a>, he expicitly states that making a usable version of this other side was his goal:</p>
-
-<blockquote><p>These simplifications made LISP into a way of describing computable functions much neater than the Turing machines or the general recursive definitions used in recursive function theory.  The fact that Turing machines constitute an awkward programming language doesn&rsquo;t much bother recursive function theorists, because they almost never have any reason to write particular recursive definitions, since the theory concerns recursive functions in general.  They often have reason to prove that recursive functions with specific properties exist, but this can be done by an informal argument without having to write them down explicitly.  In the early days of computing, some people developed programming languages based on Turing machines; perhaps it seemed more scientific.  Anyway, I decided to write a paper describing LISP both as a programming language and as a formalism for doing recursive function theory.</p></blockquote>
-
-<p>Here we have it straight from the source.  McCarthy was trying to capture the power of recursive definitions in a usable form.  Just like the automata theorists, once the linguists theorist hit Turing completeness, they focused on the limits instead of the usage.</p>
-
-<p>Theoreticians are more interested in the equality of the systems than the usability, but as practitioners we know that it matters that some problems are more readily solvable in different representations.  Sometimes it&rsquo;s more appropriate to use a RegEx and sometimes an FSA is better suited, even though you could apply either.  While nobody is busting out the Turing Machine to tackle real-world problems, some of our languages are more influenced by one side or the other.</p>
-
-<h2>Turing Machines Considered Harmful</h2>
-
-<p>If you track back the imperative/functional divide to Turing Machines and Chomsky&rsquo;s forms, some of the roots are showing.  Turing Machines are conducive to a couple things that are considered harmful in larger systems: GOTO-based<sup><a href="http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html">1</a></sup> and mutation-centric<sup><a href="https://www.google.com/search?q=mutable+state+considered+harmful">2</a></sup> thinking.  In a lot of cases, we&rsquo;re finding that the languages influenced by the language-side are better suited for our problems.  Paul Graham <a href="http://www.paulgraham.com/diff.html">argues</a> that the popular languages have been steadily evolving towards the LISPy side.</p>
-
-<p>Anyway, this is a connection that I wish I had been shown at the peak of my interest in automata theory because it would have gotten me a lot more excited about LISP sooner.  I think it&rsquo;s interesting to look at LISP as something that has the same theoretical underpinnings as these other tools (RegEx and CFG) that we already acknowledged as vital.</p>
-
-<p><em>Thanks to <a href="http://jliszka.github.io/">Jason Liszka</a> and my colleagues at <a href="http://www.twosigma.com">Two Sigma</a> for help with this post!</em></p>
 ]]></content>
   </entry>
   
