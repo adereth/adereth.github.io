@@ -9,12 +9,7 @@
   <meta name="author" content="Matt Adereth">
 
   
-  <meta name="description" content="One of the comments on the reddit discussion of my first post suggested looking at groups of characters that might be troublesome: 1
-2
-3
-4
-5
-1l|i &hellip;">
+  <meta name="description" content="I really like this visualization of the difference between Deja Vu Sans Mono and Apple Menlo: (Credit to Jesse Burgheimer) I decided to take a stab &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -114,6 +109,66 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/01/26/Comparing-Programming-Font-Pairs/">Comparing Programming Font Pairs</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-01-26T22:46:00-08:00" pubdate data-updated="true">Jan 26<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I really like this visualization of the difference between Deja Vu Sans Mono and Apple Menlo:</p>
+
+<p><img src="http://typophile.com/files/menlovsdejavusansmono_6131.png" alt="Menlo vs. Deja Vu Sans Mono" /></p>
+
+<p>(Credit to <a href="http://www.down10.com">Jesse Burgheimer</a>)</p>
+
+<p>I decided to take a stab at programmatically generating a similar comparison for all the fonts I’ve been looking at.  <a href="/assets/paircompare.nb">Here’s the Mathematica code</a>.</p>
+
+<p><a href="images/dejavusansmonodroidsansmono.png"><img src="images/dejavusansmonodroidsansmono.png" alt="Menlo vs. Deja Vu Sans Mono in Mathematica" /></a>
+(Click for full size version)</p>
+
+<p>It was then easy to generate this for every pair of fonts:</p>
+
+<p><img src="/images/MapCompareFontPair.png" alt="CompareFontPair /@ Subsets[monospacedFonts, {2}]" /></p>
+
+<p>I went through them all and picked out the ones I thought were most interesting:</p>
+
+<p><a href="/images/consolasinconsolata.png"><img src="/images/consolasinconsolata.png" alt="consolasinconsolata" /></a>
+<a href="/images/dejavusansmonodroidsansmono.png"><img src="/images/dejavusansmonodroidsansmono.png" alt="dejavusansmonodroidsansmono" /></a>
+<a href="/images/dejavusansmonopanicsans.png"><img src="/images/dejavusansmonopanicsans.png" alt="dejavusansmonopanicsans" /></a>
+<a href="/images/droidsansmonoinconsolata.png"><img src="/images/droidsansmonoinconsolata.png" alt="droidsansmonoinconsolata" /></a>
+<a href="/images/envycoderterminus.png"><img src="/images/envycoderterminus.png" alt="envycoderterminus" /></a>
+<a href="/images/inconsolatamonofur.png"><img src="/images/inconsolatamonofur.png" alt="inconsolatamonofur" /></a></p>
+
+<p>If you’re interested in seeing the results for every pair, you can <a href="https://s3.amazonaws.com/1overBlog/programming_fonts/AllFontPairComparisons.zip">download them all</a>.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -302,6 +357,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too/">Bag of Little Bootstraps Presentation at PWL SF</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2016/01/20/visualizing-girl-talk-with-clojure-and-d3-dot-js/">Visualizing Girl Talk: Parsing with Clojure&#8217;s Instaparse</a>
       </li>
     
@@ -335,10 +394,6 @@
     
       <li class="post">
         <a href="/blog/2014/05/29/custom-clojure-evaluation-keybindings-in-emacs/">Custom Clojure Evaluation Keybindings in Emacs</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/30/java-dot-awt-dot-shapes-insidious-insideness/">java.awt.Shape&#8217;s Insidious Insideness</a>
       </li>
     
   </ul>

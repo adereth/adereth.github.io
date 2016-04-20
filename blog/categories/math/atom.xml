@@ -4,7 +4,7 @@
   <title><![CDATA[Category: math | adereth]]></title>
   <link href="http://adereth.github.io/blog/categories/math/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2016-01-20T06:05:20-08:00</updated>
+  <updated>2016-04-19T20:25:48-07:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -12,6 +12,34 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Bag of Little Bootstraps Presentation at PWL SF]]></title>
+    <link href="http://adereth.github.io/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too/"/>
+    <updated>2016-04-19T20:25:00-07:00</updated>
+    <id>http://adereth.github.io/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too</id>
+    <content type="html"><![CDATA[<p>I recently gave a talk on the Bag of Little Bootstraps algorithm at <a href="http://www.meetup.com/papers-we-love-too/">Papers We Love Too</a> in San Francisco:</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Wsly7pIuGsI" frameborder="0" allowfullscreen></iframe>
+
+
+<p>My part starts around 31:27, but you should watch the excellent mini talk at the beginning too!  For reference, here are all the papers that are mentioned in the talk:</p>
+
+<p><font style="font-variant: small-caps">Quenouille, M. H.</font> (1956) <a href="http://www.jstor.org/stable/2332914">Notes on Bias in Estimation.</a> <i>Biometrika</i>, Vol. 43, No. 3 / 4.</p>
+
+<p><font style="font-variant: small-caps">Jaeckel, L.</font> (1972) <a href="http://www.stat.washington.edu/people/fritz/Reports/InfinitesimalJackknife.pdf">The infinitesimal jackknife.</a> <i>Bell Laboratories Memorandum</i>, #MM 72-1215-11.</p>
+
+<p><font style="font-variant: small-caps">Miller, R. G.</font> (1974) <a href="http://www.stat.cmu.edu/~fienberg/Statistics36-756/jackknife.pdf">The jackknife: a review.</a> Biometrika 61 1-15.</p>
+
+<p><font style="font-variant: small-caps">Efron, B.</font> (1979) <a href="http://www.stat.cmu.edu/~fienberg/Statistics36-756/Efron1979.pdf">Bootstrap methods: Another look at the jackknife.</a> <i>Annals of Statistics</i>, 7(1):1-16.</p>
+
+<p><font style="font-variant: small-caps">Kleiner, A., Talwalkar, A., Sarkar, P., and Jordan, M. I.</font> (2012) <a href="http://arxiv.org/abs/1112.5016">A scalable bootstrap for massive data.</a></p>
+
+<p><font style="font-variant: small-caps">Kleiner, A., Talwalkar, A., Sarkar, P., and Jordan, M. I.</font> (2012) <a href="http://arxiv.org/abs/1206.6415">The big data bootstrap.</a></p>
+
+<p>Also, in case there&rsquo;s any confusion, I don&rsquo;t train Arabian horses.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Presentation on The Mode Tree at Papers We Love Too]]></title>
@@ -2520,127 +2548,6 @@ user> (&ndash;>> (range 26)</p>
 <p>```</p>
 
 <p>The remedian is fun, but in practice I prefer to use the approximate quantile methods that were invented a few years later and presented in <a href="http://www.cs.umd.edu/~samir/498/manku.pdf">Approximate Medians and other Quantiles in One Pass and with Limited Memory by Manku, Rajagopalan, and Lindsay</a> (1998).  There&rsquo;s a high-quality implementation you can use in Clojure via Java interop in Parallel Colt&rsquo;s <a href="http://incanter.org/docs/parallelcolt/api/cern/jet/stat/tdouble/quantile/DoubleQuantileFinderFactory.html">DoubleQuantileFinderFactory</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Typing Qwerty on a Dvorak Keyboard]]></title>
-    <link href="http://adereth.github.io/blog/2014/08/14/typing-qwerty-on-a-dvorak-keyboard/"/>
-    <updated>2014-08-14T18:40:00-07:00</updated>
-    <id>http://adereth.github.io/blog/2014/08/14/typing-qwerty-on-a-dvorak-keyboard</id>
-    <content type="html"><![CDATA[<p><a href="https://twitter.com/thattommyhall">@thattommyhall</a> posted a fun question on Twitter:</p>
-
-<blockquote class="twitter-tweet" data-partner="tweetdeck"><p>If you type your name on a keyboard marked as qwerty but set to Dvorak and keep reinputting what comes out, will it ever say your name?</p>&mdash; !!!!!11111oneoneone (@thattommyhall) <a href="https://twitter.com/thattommyhall/statuses/494916131598393344">July 31, 2014</a></blockquote>
-
-
-<script async src="http://adereth.github.io//platform.twitter.com/widgets.js" charset="utf-8"></script>
-
-
-<p>The best answer was &ldquo;yes because group theory&rdquo; and <a href="https://twitter.com/AnnaPawlicka">@AnnaPawlicka</a> demonstrated it was true for her name:</p>
-
-<blockquote class="twitter-tweet" lang="en"><p><a href="https://twitter.com/thattommyhall">@thattommyhall</a> Yes. I can confirm that. :) <a href="http://t.co/Vubkf1ltoK">pic.twitter.com/Vubkf1ltoK</a></p>&mdash; Anna Pawlicka (@AnnaPawlicka) <a href="https://twitter.com/AnnaPawlicka/statuses/494918999747350529">July 31, 2014</a></blockquote>
-
-
-<script async src="http://adereth.github.io//platform.twitter.com/widgets.js" charset="utf-8"></script>
-
-
-<p>But is it really true?  And if so, how many iterations will it take to get the target string?  I turned to Mathematica&hellip;</p>
-
-<p><code>clojure
-qwerty =
-  {"-", "=",
-   "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "[", "]", "\\",
-   "a", "s", "d", "f", "g", "h", "j", "k", "l", ";", "'",
-   "z", "x", "c", "v", "b", "n", "m", ",", ".", "/"};
-dvorak =
-  {"[", "]",
-   "'", ",", ".", "p", "y", "f", "g", "c", "r", "l", "/", "=", "\\",
-   "a", "o", "e", "u", "i", "d", "h", "t", "n", "s", "-",
-   ";", "q", "j", "k", "x", "b", "m", "w", "v", "z"};
-</code></p>
-
-<p><code>clojure
-KeyGraph[from_, to_] :=
- Graph[
-  MapThread[#1 -&gt; #2 &amp;, {from, to}],
-  VertexLabels -&gt; "Name", DirectedEdges -&gt; True]
-</code></p>
-
-<p>This allows us to visualize the mapping of keys from one layout to another:</p>
-
-<p><code>clojure
-KeyGraph[dvorak, qwerty]
-</code>
-<img src="/images/dvorak-qwerty.png" alt="Dvorak to Qwerty Graph" /></p>
-
-<p>There is a single directed edge going from each character to the one that will be displayed when you type it.  There are 3 keys that remain unchanged, 2 pairs of swapped keys, and 2 large cycles of keys.</p>
-
-<p>We can get these groups programmatically using the <a href="http://reference.wolfram.com/mathematica/ref/ConnectedComponents.html">ConnectedComponents function</a>:</p>
-
-<p><code>clojure
-TableForm @
- Sort @
-  ConnectedComponents @
-   KeyGraph[dvorak, qwerty]
-</code></p>
-
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Output </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='text'><span class='line'>\
-</span><span class='line'>a
-</span><span class='line'>m
-</span><span class='line'>] =
-</span><span class='line'>, w
-</span><span class='line'>. e y t f g u c i d h j k v
-</span><span class='line'>[ &amp;ndash; &amp;lsquo; q p r o l / s n ; z x b
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>It will take the length of the cycle the letter is in to get the letter we want.  For a given word, we won&rsquo;t get all the letters we want unless we&rsquo;ve iterated some multiple of the length of the cycles each letter is in.  Let&rsquo;s apply the Least Common Multiple function to see the worst case where there is a letter from each cycle:</p>
-
-<p><code>clojure
-LCM @@
- Length /@
-  ConnectedComponents @
-   KeyGraph[dvorak, qwerty]
-</code>
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Output </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='text'><span class='line'>210
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<p>Looks like Anna got lucky that her name only consists of letters in a cycle of length 1 and 15.</p>
-
-<p>For fun, here&rsquo;s the graph we get if we use Colemak instead of Dvorak:</p>
-
-<p>```clojure
-colemak =
-  {&ldquo;&ndash;&rdquo;, &ldquo;=&rdquo;,
-   &ldquo;q&rdquo;, &ldquo;w&rdquo;, &ldquo;f&rdquo;, &ldquo;p&rdquo;, &ldquo;g&rdquo;, &ldquo;j&rdquo;, &ldquo;l&rdquo;, &ldquo;u&rdquo;, &ldquo;y&rdquo;, &ldquo;;&rdquo;, &ldquo;[&rdquo;, &ldquo;]&rdquo;, &ldquo;\&rdquo;,
-   &ldquo;a&rdquo;, &ldquo;r&rdquo;, &ldquo;s&rdquo;, &ldquo;t&rdquo;, &ldquo;d&rdquo;, &ldquo;h&rdquo;, &ldquo;n&rdquo;, &ldquo;e&rdquo;, &ldquo;i&rdquo;, &ldquo;o&rdquo;, &ldquo;&lsquo;&rdquo;,
-   &ldquo;z&rdquo;, &ldquo;x&rdquo;, &ldquo;c&rdquo;, &ldquo;v&rdquo;, &ldquo;b&rdquo;, &ldquo;k&rdquo;, &ldquo;m&rdquo;, &ldquo;,&rdquo;, &ldquo;.&rdquo;, &ldquo;/&rdquo;};</p>
-
-<p>KeyGraph[colemak, qwerty]
-```
-<img src="/images/colemak-qwerty.png" alt="Colemak to Qwerty Graph" /></p>
-
-<p>One cycle of length 14, one cycle of length 3, and the rest are just letters that map back to themselves.</p>
-
-<p><code>clojure
-LCM @@
- Length /@
-  ConnectedComponents @
-   KeyGraph[colemak, qwerty]
-</code>
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Output </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='text'><span class='line'>42
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 ]]></content>
   </entry>
   

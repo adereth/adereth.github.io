@@ -9,7 +9,7 @@
   <meta name="author" content="Matt Adereth">
 
   
-  <meta name="description" content="Greg Gillis, also known as Girl Talk, is an impressive DJ who creates mega-mashups consisting of hundreds of samples. His sample selections span 7 &hellip;">
+  <meta name="description" content="I recently gave a talk on the Bag of Little Bootstraps algorithm at Papers We Love Too in San Francisco: My part starts around 31:27, but you should &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -109,6 +109,61 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too/">Bag of Little Bootstraps Presentation at PWL SF</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-04-19T20:25:00-07:00" pubdate data-updated="true">Apr 19<span>th</span>, 2016</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I recently gave a talk on the Bag of Little Bootstraps algorithm at <a href="http://www.meetup.com/papers-we-love-too/">Papers We Love Too</a> in San Francisco:</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Wsly7pIuGsI" frameborder="0" allowfullscreen></iframe>
+
+
+<p>My part starts around 31:27, but you should watch the excellent mini talk at the beginning too!  For reference, here are all the papers that are mentioned in the talk:</p>
+
+<p><font style="font-variant: small-caps">Quenouille, M. H.</font> (1956) <a href="http://www.jstor.org/stable/2332914">Notes on Bias in Estimation.</a> <i>Biometrika</i>, Vol. 43, No. 3 / 4.</p>
+
+<p><font style="font-variant: small-caps">Jaeckel, L.</font> (1972) <a href="http://www.stat.washington.edu/people/fritz/Reports/InfinitesimalJackknife.pdf">The infinitesimal jackknife.</a> <i>Bell Laboratories Memorandum</i>, #MM 72-1215-11.</p>
+
+<p><font style="font-variant: small-caps">Miller, R. G.</font> (1974) <a href="http://www.stat.cmu.edu/~fienberg/Statistics36-756/jackknife.pdf">The jackknife: a review.</a> Biometrika 61 1-15.</p>
+
+<p><font style="font-variant: small-caps">Efron, B.</font> (1979) <a href="http://www.stat.cmu.edu/~fienberg/Statistics36-756/Efron1979.pdf">Bootstrap methods: Another look at the jackknife.</a> <i>Annals of Statistics</i>, 7(1):1-16.</p>
+
+<p><font style="font-variant: small-caps">Kleiner, A., Talwalkar, A., Sarkar, P., and Jordan, M. I.</font> (2012) <a href="http://arxiv.org/abs/1112.5016">A scalable bootstrap for massive data.</a></p>
+
+<p><font style="font-variant: small-caps">Kleiner, A., Talwalkar, A., Sarkar, P., and Jordan, M. I.</font> (2012) <a href="http://arxiv.org/abs/1206.6415">The big data bootstrap.</a></p>
+
+<p>Also, in case there&rsquo;s any confusion, I don&rsquo;t train Arabian horses.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -3664,113 +3719,6 @@ drawSummedDistributionsWithResize(data, '#chart-6', 300, 0.005);
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/04/30/java-dot-awt-dot-shapes-insidious-insideness/">java.awt.Shape&#8217;s Insidious Insideness</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-04-30T11:41:00-07:00" pubdate data-updated="true">Apr 30<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I recently added text support to the <a href="https://github.com/farrellm/scad-clj">scad-clj</a> 3D modeling library and encountered an interesting bug:</p>
-
-<p><img src="/images/bad4.png" alt="Poorly rendered 4" /></p>
-
-<p>See that 4?  No hole!  Why?!?  All the other holes are there&hellip;</p>
-
-<h2>Shape Outlines</h2>
-
-<p>First, let&rsquo;s look at how you get the outline of some text in a font in Java:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="n">FontRenderContext</span> <span class="n">frc</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FontRenderContext</span><span class="o">(</span>
-</span><span class='line'>        <span class="kc">null</span><span class="o">,</span>
-</span><span class='line'>        <span class="n">RenderingHints</span><span class="o">.</span><span class="na">VALUE_TEXT_ANTIALIAS_DEFAULT</span><span class="o">,</span>
-</span><span class='line'>        <span class="n">RenderingHints</span><span class="o">.</span><span class="na">VALUE_FRACTIONALMETRICS_DEFAULT</span><span class="o">);</span>
-</span><span class='line'><span class="n">Font</span> <span class="n">font</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Font</span><span class="o">(</span><span class="s2">&quot;Andale Mono&quot;</span><span class="o">,</span> <span class="n">Font</span><span class="o">.</span><span class="na">PLAIN</span><span class="o">,</span> <span class="mi">12</span><span class="o">);</span>
-</span><span class='line'><span class="n">String</span> <span class="n">myText</span> <span class="o">=</span> <span class="s2">&quot;1234567890&quot;</span><span class="o">;</span>
-</span><span class='line'><span class="n">PathIterator</span> <span class="n">path</span> <span class="o">=</span> <span class="n">font</span>
-</span><span class='line'>       <span class="o">.</span><span class="na">createGlyphVector</span><span class="o">(</span><span class="n">frc</span><span class="o">,</span> <span class="n">myText</span><span class="o">)</span>
-</span><span class='line'>       <span class="o">.</span><span class="na">getOutline</span><span class="o">()</span>
-</span><span class='line'>       <span class="o">.</span><span class="na">getPathIterator</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="mf">0.01d</span><span class="o">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>We end up with a <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/geom/PathIterator.html"><code>PathIterator</code></a> that traces along the outline of the character.  This code uses the version of <code>getPathIterator</code> that specifies &ldquo;flatness&rdquo;, which means that we get back a path strictly made up of straight line segments that approximate the curves.</p>
-
-<p>Characters that are made from a single filled polygon are relatively easy; there is a single path and the bounded area is what gets filled:</p>
-
-<p><img src="/images/one-path.png" alt="12357" /></p>
-
-<p>The complexity comes when the path crosses over itself or if it is discontinuous and contains multiple outlines:</p>
-
-<p><img src="/images/multiple-parts.png" alt="46890" /></p>
-
-<p>The <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/geom/PathIterator.html">JavaDocs for PathIterator</a> explain a bit about how to actually determine what is inside the path.  All of the fill areas are determined using the <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/geom/PathIterator.html#WIND_EVEN_ODD"><code>WIND_EVEN_ODD</code> rule</a>: <em>a point is in the fill area if it is contained by an odd number of paths.</em></p>
-
-<p>For example, the dotted zero is made up of three paths:</p>
-
-<ol>
-<li>The outline of the outside of the oval</li>
-<li>The outline of the inside of the oval</li>
-<li>The outline of the dot</li>
-</ol>
-
-
-<p>The points inside #1 but outside #2 are in 1 area and the points inside #3 are inside 3 areas.</p>
-
-<h2>Counting Areas</h2>
-
-<p>For each path, we need to count how many other paths contain it.  One way is to use <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/geom/Path2D.Double.html"><code>java.awt.geom.Path2D.Double</code></a> to make a Shape and then use the <code>contains(double x, double y)</code> method to see if any of the points from the other paths are in it.</p>
-
-<p>I incorrectly assumed that each Shape contained at least one of the points that define it&rsquo;s outline.  It usually does, which is why all the other holes were properly rendered, but it doesn&rsquo;t for some shapes, including triangles in certain orientations!</p>
-
-<p>The <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/Shape.html">JavaDoc for Shape</a> says that a point is considered to lie inside a Shape if and only if:</p>
-
-<ol>
-<li>It lies completely inside the Shape boundary or</li>
-<li>It lies exactly on the Shape boundary and the space immediately adjacent to the point in the increasing X direction is entirely inside the boundary or</li>
-<li>It lies exactly on a horizontal boundary segment and the space immediately adjacent to the point in the increasing Y direction is inside the boundary.</li>
-</ol>
-
-
-<p>The three points defining the triangle that form the hole in 4 don&rsquo;t meet any of these criteria, so instead of counting as being in 2 paths (itself and the outer outline), it was counted as being in 1.  The fix was to explicitly define a path as containing itself.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -3822,6 +3770,10 @@ drawSummedDistributionsWithResize(data, '#chart-6', 300, 0.005);
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too/">Bag of Little Bootstraps Presentation at PWL SF</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2016/01/20/visualizing-girl-talk-with-clojure-and-d3-dot-js/">Visualizing Girl Talk: Parsing with Clojure&#8217;s Instaparse</a>
       </li>
     
@@ -3855,10 +3807,6 @@ drawSummedDistributionsWithResize(data, '#chart-6', 300, 0.005);
     
       <li class="post">
         <a href="/blog/2014/05/29/custom-clojure-evaluation-keybindings-in-emacs/">Custom Clojure Evaluation Keybindings in Emacs</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/30/java-dot-awt-dot-shapes-insidious-insideness/">java.awt.Shape&#8217;s Insidious Insideness</a>
       </li>
     
   </ul>

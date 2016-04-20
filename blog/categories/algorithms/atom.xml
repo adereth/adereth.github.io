@@ -4,7 +4,7 @@
   <title><![CDATA[Category: algorithms | adereth]]></title>
   <link href="http://adereth.github.io/blog/categories/algorithms/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2016-01-20T06:05:20-08:00</updated>
+  <updated>2016-04-19T20:25:48-07:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -12,6 +12,34 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Bag of Little Bootstraps Presentation at PWL SF]]></title>
+    <link href="http://adereth.github.io/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too/"/>
+    <updated>2016-04-19T20:25:00-07:00</updated>
+    <id>http://adereth.github.io/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too</id>
+    <content type="html"><![CDATA[<p>I recently gave a talk on the Bag of Little Bootstraps algorithm at <a href="http://www.meetup.com/papers-we-love-too/">Papers We Love Too</a> in San Francisco:</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Wsly7pIuGsI" frameborder="0" allowfullscreen></iframe>
+
+
+<p>My part starts around 31:27, but you should watch the excellent mini talk at the beginning too!  For reference, here are all the papers that are mentioned in the talk:</p>
+
+<p><font style="font-variant: small-caps">Quenouille, M. H.</font> (1956) <a href="http://www.jstor.org/stable/2332914">Notes on Bias in Estimation.</a> <i>Biometrika</i>, Vol. 43, No. 3 / 4.</p>
+
+<p><font style="font-variant: small-caps">Jaeckel, L.</font> (1972) <a href="http://www.stat.washington.edu/people/fritz/Reports/InfinitesimalJackknife.pdf">The infinitesimal jackknife.</a> <i>Bell Laboratories Memorandum</i>, #MM 72-1215-11.</p>
+
+<p><font style="font-variant: small-caps">Miller, R. G.</font> (1974) <a href="http://www.stat.cmu.edu/~fienberg/Statistics36-756/jackknife.pdf">The jackknife: a review.</a> Biometrika 61 1-15.</p>
+
+<p><font style="font-variant: small-caps">Efron, B.</font> (1979) <a href="http://www.stat.cmu.edu/~fienberg/Statistics36-756/Efron1979.pdf">Bootstrap methods: Another look at the jackknife.</a> <i>Annals of Statistics</i>, 7(1):1-16.</p>
+
+<p><font style="font-variant: small-caps">Kleiner, A., Talwalkar, A., Sarkar, P., and Jordan, M. I.</font> (2012) <a href="http://arxiv.org/abs/1112.5016">A scalable bootstrap for massive data.</a></p>
+
+<p><font style="font-variant: small-caps">Kleiner, A., Talwalkar, A., Sarkar, P., and Jordan, M. I.</font> (2012) <a href="http://arxiv.org/abs/1206.6415">The big data bootstrap.</a></p>
+
+<p>Also, in case there&rsquo;s any confusion, I don&rsquo;t train Arabian horses.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Presentation on The Mode Tree at Papers We Love Too]]></title>

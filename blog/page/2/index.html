@@ -9,7 +9,7 @@
   <meta name="author" content="Matt Adereth">
 
   
-  <meta name="description" content="I&rsquo;ve been doing some 3D printing for my next keyboard project and I&rsquo;ve got a workflow that I&rsquo;m pretty happy with that I&rsquo;d &hellip;">
+  <meta name="description" content="I recently added text support to the scad-clj 3D modeling library and encountered an interesting bug: See that 4? No hole! Why?!? All the other holes &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -109,6 +109,113 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/04/30/java-dot-awt-dot-shapes-insidious-insideness/">java.awt.Shape&#8217;s Insidious Insideness</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-30T11:41:00-07:00" pubdate data-updated="true">Apr 30<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I recently added text support to the <a href="https://github.com/farrellm/scad-clj">scad-clj</a> 3D modeling library and encountered an interesting bug:</p>
+
+<p><img src="/images/bad4.png" alt="Poorly rendered 4" /></p>
+
+<p>See that 4?  No hole!  Why?!?  All the other holes are there&hellip;</p>
+
+<h2>Shape Outlines</h2>
+
+<p>First, let&rsquo;s look at how you get the outline of some text in a font in Java:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="n">FontRenderContext</span> <span class="n">frc</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FontRenderContext</span><span class="o">(</span>
+</span><span class='line'>        <span class="kc">null</span><span class="o">,</span>
+</span><span class='line'>        <span class="n">RenderingHints</span><span class="o">.</span><span class="na">VALUE_TEXT_ANTIALIAS_DEFAULT</span><span class="o">,</span>
+</span><span class='line'>        <span class="n">RenderingHints</span><span class="o">.</span><span class="na">VALUE_FRACTIONALMETRICS_DEFAULT</span><span class="o">);</span>
+</span><span class='line'><span class="n">Font</span> <span class="n">font</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Font</span><span class="o">(</span><span class="s2">&quot;Andale Mono&quot;</span><span class="o">,</span> <span class="n">Font</span><span class="o">.</span><span class="na">PLAIN</span><span class="o">,</span> <span class="mi">12</span><span class="o">);</span>
+</span><span class='line'><span class="n">String</span> <span class="n">myText</span> <span class="o">=</span> <span class="s2">&quot;1234567890&quot;</span><span class="o">;</span>
+</span><span class='line'><span class="n">PathIterator</span> <span class="n">path</span> <span class="o">=</span> <span class="n">font</span>
+</span><span class='line'>       <span class="o">.</span><span class="na">createGlyphVector</span><span class="o">(</span><span class="n">frc</span><span class="o">,</span> <span class="n">myText</span><span class="o">)</span>
+</span><span class='line'>       <span class="o">.</span><span class="na">getOutline</span><span class="o">()</span>
+</span><span class='line'>       <span class="o">.</span><span class="na">getPathIterator</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="mf">0.01d</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We end up with a <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/geom/PathIterator.html"><code>PathIterator</code></a> that traces along the outline of the character.  This code uses the version of <code>getPathIterator</code> that specifies &ldquo;flatness&rdquo;, which means that we get back a path strictly made up of straight line segments that approximate the curves.</p>
+
+<p>Characters that are made from a single filled polygon are relatively easy; there is a single path and the bounded area is what gets filled:</p>
+
+<p><img src="/images/one-path.png" alt="12357" /></p>
+
+<p>The complexity comes when the path crosses over itself or if it is discontinuous and contains multiple outlines:</p>
+
+<p><img src="/images/multiple-parts.png" alt="46890" /></p>
+
+<p>The <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/geom/PathIterator.html">JavaDocs for PathIterator</a> explain a bit about how to actually determine what is inside the path.  All of the fill areas are determined using the <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/geom/PathIterator.html#WIND_EVEN_ODD"><code>WIND_EVEN_ODD</code> rule</a>: <em>a point is in the fill area if it is contained by an odd number of paths.</em></p>
+
+<p>For example, the dotted zero is made up of three paths:</p>
+
+<ol>
+<li>The outline of the outside of the oval</li>
+<li>The outline of the inside of the oval</li>
+<li>The outline of the dot</li>
+</ol>
+
+
+<p>The points inside #1 but outside #2 are in 1 area and the points inside #3 are inside 3 areas.</p>
+
+<h2>Counting Areas</h2>
+
+<p>For each path, we need to count how many other paths contain it.  One way is to use <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/geom/Path2D.Double.html"><code>java.awt.geom.Path2D.Double</code></a> to make a Shape and then use the <code>contains(double x, double y)</code> method to see if any of the points from the other paths are in it.</p>
+
+<p>I incorrectly assumed that each Shape contained at least one of the points that define it&rsquo;s outline.  It usually does, which is why all the other holes were properly rendered, but it doesn&rsquo;t for some shapes, including triangles in certain orientations!</p>
+
+<p>The <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/Shape.html">JavaDoc for Shape</a> says that a point is considered to lie inside a Shape if and only if:</p>
+
+<ol>
+<li>It lies completely inside the Shape boundary or</li>
+<li>It lies exactly on the Shape boundary and the space immediately adjacent to the point in the increasing X direction is entirely inside the boundary or</li>
+<li>It lies exactly on a horizontal boundary segment and the space immediately adjacent to the point in the increasing Y direction is inside the boundary.</li>
+</ol>
+
+
+<p>The three points defining the triangle that form the hole in 4 don&rsquo;t meet any of these criteria, so instead of counting as being in 2 paths (itself and the outer outline), it was counted as being in 1.  The fix was to explicitly define a path as containing itself.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -2219,62 +2326,6 @@ function position() {
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/12/08/most-frequently-enabled-emacs-packages/">Most Frequently Enabled Emacs Packages</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-12-08T20:38:00-08:00" pubdate data-updated="true">Dec 8<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>As part of the Emacs-24.4 release, emacs-devel is conducting <a href="http://www.emacswiki.org/emacs/FrequentlyEnabledPackages_Emacs244_Survey">a survey</a> to find out which vanilla GnuEmacs packages/modes people enable by default.  The responses are in one big plain-text alphabetical list which isn&rsquo;t really conducive to browsing.</p>
-
-<p>I&rsquo;ve gone through the most frequently enabled ones to see what they do.  I figured others might be interested, so I&rsquo;ve put the top ones in order of popularity, along with brief descriptions and links to the related pages if one exists.  Enjoy!</p>
-
-<ul>
-<li><p><code>uniquify</code> &ndash; <a href="http://www.emacswiki.org/emacs/uniquify">Uniquify</a> overrides the default mechanism for making buffer names unique (using suffixes like <code>&lt;2&gt;</code>, <code>&lt;3&gt;</code> etc.) with a more sensible behaviour which use parts of the file names to make the buffer names distinguishable.  This will be turned on by default in 24.4.</p></li>
-<li><p><code>column-number-mode</code> &ndash; Displays which column the cursor is currently on in the mode line.</p></li>
-<li><p><code>show-paren-mode</code> &ndash; <a href="http://www.emacswiki.org/emacs/ShowParenMode">show-paren-mode</a> allows you to see matching pairs of parentheses and other characters. When the cursor is on one of the paired characters, the other is highlighted.</p></li>
-<li><p><code>ido-mode</code> &ndash; <a href="http://www.emacswiki.org/emacs/InteractivelyDoThings">Ido</a> lets you interactively do things with buffers and files.  The <a href="http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/">Introduction to Ido Mode</a> on <a href="http://www.masteringemacs.org/">Mastering Emacs</a> does a much better job of explaining why and how you should use it.</p></li>
-<li><p><code>transient-mark-mode</code> &ndash; <a href="http://www.emacswiki.org/emacs/TransientMarkMode">Transient Mark mode</a> gives you much of the standard selection-highlighting behavior of other editors.  This is on by default in recent Emacsen.</p></li>
-<li><p><code>ibuffer</code> &ndash; <a href="http://www.emacswiki.org/emacs/IbufferMode">Ibuffer</a> is an advanced replacement for BufferMenu, which lets you operate on buffers much in the same manner as Dired.</p></li>
-<li><p><code>blink-cursor-mode</code> &ndash; Toggle cursor blinking.  This is on by default.</p></li>
-<li><p><code>flyspell-mode</code> &ndash; <a href="http://www.emacswiki.org/emacs/FlySpell">Flyspell</a> enables on-the-fly spell checking in Emacs by the means of a minor mode.</p></li>
-<li><p><code>recentf-mode</code> &ndash; <a href="http://www.emacswiki.org/emacs/RecentFiles">Recentf</a> is a minor mode that builds a list of recently opened files. This list is is automatically saved across Emacs sessions. You can then access this list through a menu.</p></li>
-<li><p><code>eldoc-mode</code> &ndash; <a href="http://www.emacswiki.org/emacs/ElDoc">Eldoc-mode</a> is a MinorMode which shows you, in the echo area, the argument list of the function call you are currently writing.</p></li>
-<li><p><code>dired-x</code> &ndash; <a href="http://www.emacswiki.org/emacs/DiredExtra">Dired X</a> provides extra functionality for DiredMode.</p></li>
-<li><p><code>windmove</code> &ndash; <a href="http://www.emacswiki.org/emacs/WindMove">Wind Move</a> lets you move point from window to window using Shift and the arrow keys.</p></li>
-<li><p><code>line-number-mode</code> &ndash; <a href="http://www.emacswiki.org/emacs/LineNumbers">Line Numbers</a> displays line numbers in a buffer, or otherwise indicates line numbers, without actually changing the buffer content.</p></li>
-<li><p><code>winner-mode</code> &ndash; <a href="http://www.emacswiki.org/emacs/WinnerMode">Winner Mode</a> allows you to undo and redo changes in the window configuration with the key commands <code>C-c left</code> and <code>C-c right</code>.</p></li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -2328,6 +2379,10 @@ function position() {
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too/">Bag of Little Bootstraps Presentation at PWL SF</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2016/01/20/visualizing-girl-talk-with-clojure-and-d3-dot-js/">Visualizing Girl Talk: Parsing with Clojure&#8217;s Instaparse</a>
       </li>
     
@@ -2361,10 +2416,6 @@ function position() {
     
       <li class="post">
         <a href="/blog/2014/05/29/custom-clojure-evaluation-keybindings-in-emacs/">Custom Clojure Evaluation Keybindings in Emacs</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/30/java-dot-awt-dot-shapes-insidious-insideness/">java.awt.Shape&#8217;s Insidious Insideness</a>
       </li>
     
   </ul>

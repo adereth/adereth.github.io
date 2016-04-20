@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Tweaking my favorite programming font - adereth</title>
+  <title>Bag of Little Bootstraps Presentation at PWL SF - adereth</title>
   <meta name="author" content="Matt Adereth">
 
   
-  <meta name="description" content="After trying out every monospaced font I could get my hands on, I decided that Mark Simonson‘s Anonymous Pro is the one for me: After using it in my &hellip;">
+  <meta name="description" content="I recently gave a talk on the Bag of Little Bootstraps algorithm at Papers We Love Too in San Francisco: My part starts around 31:27, but you should &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://adereth.github.io/blog/2011/02/02/tweaking-my-favorite-programming-font/">
+  <link rel="canonical" href="http://adereth.github.io/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
    <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
@@ -112,7 +112,7 @@
   
   <header>
     
-      <h1 class="entry-title">Tweaking My Favorite Programming Font</h1>
+      <h1 class="entry-title">Bag of Little Bootstraps Presentation at PWL SF</h1>
     
     
       <p class="meta">
@@ -128,44 +128,33 @@
   
 
 
-<time datetime="2011-02-02T07:47:00-08:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2011</time>
+<time datetime="2016-04-19T20:25:00-07:00" pubdate data-updated="true">Apr 19<span>th</span>, 2016</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>After trying out every monospaced font I could get my hands on, I decided that <a href="http://www.ms-studio.com/index.html">Mark Simonson</a>‘s <a href="http://www.ms-studio.com/FontSales/anonymouspro.html">Anonymous Pro</a> is the one for me:</p>
+<div class="entry-content"><p>I recently gave a talk on the Bag of Little Bootstraps algorithm at <a href="http://www.meetup.com/papers-we-love-too/">Papers We Love Too</a> in San Francisco:</p>
 
-<p><a href="http://www.ms-studio.com/FontSales/anonymouspro.html"><img src="http://www.marksimonson.com/assets/content/fonts/anonymouspro_banner.png" alt="Anonymous Pro Sample" /></a></p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Wsly7pIuGsI" frameborder="0" allowfullscreen></iframe>
 
-<p>After using it in my IDE for months, I decided to start using it in my terminals. Unfortunately, this revealed a subtle flaw in the font.  Take a look:</p>
 
-<p><img src="/images/anonymous12.png" alt="terminal sample" /></p>
+<p>My part starts around 31:27, but you should watch the excellent mini talk at the beginning too!  For reference, here are all the papers that are mentioned in the talk:</p>
 
-<p>Notice anything?  Those forward slashes seem a bit too far to the right. While this wasn&rsquo;t a problem when writing code, it became a major eye sore when working with lots of paths in a terminal.</p>
+<p><font style="font-variant: small-caps">Quenouille, M. H.</font> (1956) <a href="http://www.jstor.org/stable/2332914">Notes on Bias in Estimation.</a> <i>Biometrika</i>, Vol. 43, No. 3 / 4.</p>
 
-<p>One interesting thing is that this issue only shows up when using the font at 12pt without anti-aliasing. This is because Anonymous Pro is a <a href="http://en.wikipedia.org/wiki/TrueType">TrueType font</a>. TrueType is an <a href="http://en.wikipedia.org/wiki/Outline_font#Outline_fonts">outline font</a>, which means the designer draws each character by specifying vectors that define the shape.  By using vectors, the font can be scaled cleanly to any size. At smaller sizes, the scaling of the vector outline may result in an image that isn&rsquo;t as clear as desired. To give the font designer complete control of the display, TrueType fonts can also have bitmapped versions of each character for specific point sizes.</p>
+<p><font style="font-variant: small-caps">Jaeckel, L.</font> (1972) <a href="http://www.stat.washington.edu/people/fritz/Reports/InfinitesimalJackknife.pdf">The infinitesimal jackknife.</a> <i>Bell Laboratories Memorandum</i>, #MM 72-1215-11.</p>
 
-<p>Armed with this knowledge and a font editor (like <a href="http://fontforge.sourceforge.net/">FontForge</a>), we can crack open the .ttf and see exactly what&rsquo;s going on with the forward slash:</p>
+<p><font style="font-variant: small-caps">Miller, R. G.</font> (1974) <a href="http://www.stat.cmu.edu/~fienberg/Statistics36-756/jackknife.pdf">The jackknife: a review.</a> Biometrika 61 1-15.</p>
 
-<p><img src="/images/slashbitmaporiginal.png" alt="original" /></p>
+<p><font style="font-variant: small-caps">Efron, B.</font> (1979) <a href="http://www.stat.cmu.edu/~fienberg/Statistics36-756/Efron1979.pdf">Bootstrap methods: Another look at the jackknife.</a> <i>Annals of Statistics</i>, 7(1):1-16.</p>
 
-<p>The green outline shows the vector representation of the character, while the dark squares show the pixels used in the bitmapped version. I think that the pixels should be shifted to the left by 1, so I went ahead and did it:</p>
+<p><font style="font-variant: small-caps">Kleiner, A., Talwalkar, A., Sarkar, P., and Jordan, M. I.</font> (2012) <a href="http://arxiv.org/abs/1112.5016">A scalable bootstrap for massive data.</a></p>
 
-<p><img src="/images/slashbitmapmodified.png" alt="modified" /></p>
+<p><font style="font-variant: small-caps">Kleiner, A., Talwalkar, A., Sarkar, P., and Jordan, M. I.</font> (2012) <a href="http://arxiv.org/abs/1206.6415">The big data bootstrap.</a></p>
 
-<p>Now everything looks good in my terminal:</p>
-
-<p><img src="/images/anonymous12slashfixed.png" alt="fixed terminal" /></p>
-
-<p>I&rsquo;ve informed Mark Simonson of this and it looks like this fix may be available in the next version of Anonymous Pro.</p>
-
-<p>When you consider how many characters there are to define and the various point sizes, it&rsquo;s clear that designing a font is a monumental task. We should all be grateful that such talented designers are out there and that some of them are generous enough to provide such useful, beautiful fonts for free.</p>
-
-<p>On top of giving it away free, Mark Simonson has released Anonymous Pro under the <a href="http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&amp;id=OFL">SIL Open Font License</a>. This means that you can enjoy my trivial tweak with minimal effort, because I&rsquo;m allowed to redistribute my modified version. I&rsquo;d prefer to call it something like “Anonymous Pro with Shifted Slash” or something equally descriptive, but condition 3 of the OFL says that I need to use a different name.</p>
-
-<p>So, without further ado, I present <a href="https://s3.amazonaws.com/1overBlog/programming_fonts/NamelessAmateur.zip">Nameless Amateur</a>! As soon as the update of Anonymous Pro is available, I&rsquo;ll remove this link and direct people to the new version.</p>
+<p>Also, in case there&rsquo;s any confusion, I don&rsquo;t train Arabian horses.</p>
 </div>
 
 
@@ -188,12 +177,12 @@
   
 
 
-<time datetime="2011-02-02T07:47:00-08:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2011</time>
+<time datetime="2016-04-19T20:25:00-07:00" pubdate data-updated="true">Apr 19<span>th</span>, 2016</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/fonts/'>fonts</a>
+    <a class='category' href='/blog/categories/algorithms/'>algorithms</a>, <a class='category' href='/blog/categories/math/'>math</a>, <a class='category' href='/blog/categories/talks/'>talks</a>
   
 </span>
 
@@ -202,7 +191,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://adereth.github.io/blog/2011/02/02/tweaking-my-favorite-programming-font/" data-via="adereth" data-counturl="http://adereth.github.io/blog/2011/02/02/tweaking-my-favorite-programming-font/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://adereth.github.io/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too/" data-via="adereth" data-counturl="http://adereth.github.io/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -215,10 +204,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2011/01/31/Iterating-on-Font-Pair-Comparisons/" title="Previous Post: Iterating on Font Pair Comparisons">&laquo; Iterating on Font Pair Comparisons</a>
+        <a class="basic-alignment left" href="/blog/2016/01/20/visualizing-girl-talk-with-clojure-and-d3-dot-js/" title="Previous Post: Visualizing Girl Talk: Parsing with Clojure's Instaparse">&laquo; Visualizing Girl Talk: Parsing with Clojure's Instaparse</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/10/02/why-you-should-try-a-tiling-window-manager/" title="Next Post: Why you should try a tiling window manager">Why you should try a tiling window manager &raquo;</a>
       
     </p>
   </footer>
@@ -366,8 +353,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://adereth.github.io/blog/2011/02/02/tweaking-my-favorite-programming-font/';
-        var disqus_url = 'http://adereth.github.io/blog/2011/02/02/tweaking-my-favorite-programming-font/';
+        var disqus_identifier = 'http://adereth.github.io/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too/';
+        var disqus_url = 'http://adereth.github.io/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too/';
         var disqus_script = 'embed.js';
       
     (function () {
