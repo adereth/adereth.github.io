@@ -4,7 +4,7 @@
   <title><![CDATA[adereth]]></title>
   <link href="http://adereth.github.io/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2016-07-19T17:52:16-07:00</updated>
+  <updated>2016-07-19T18:38:32-07:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -12,15 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[Tweet-sized Animations with Mathematica]]></title>
-    <link href="http://adereth.github.io/blog/2016/04/19/tweet-sized-animations-with-mathematica/"/>
-    <updated>2016-04-19T20:45:00-07:00</updated>
-    <id>http://adereth.github.io/blog/2016/04/19/tweet-sized-animations-with-mathematica</id>
-    <content type="html"><![CDATA[
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[Bag of Little Bootstraps Presentation at PWL SF]]></title>
@@ -5285,6 +5276,25 @@ function position() {
 
 
 <p><i class="fa fa-star fa-2x"></i></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Font Awesome Easter Egg]]></title>
+    <link href="http://adereth.github.io/blog/2013/12/15/font-awesome-easter-egg/"/>
+    <updated>2013-12-15T12:45:00-08:00</updated>
+    <id>http://adereth.github.io/blog/2013/12/15/font-awesome-easter-egg</id>
+    <content type="html"><![CDATA[<p><a href="http://fontawesome.io/">Font Awesome</a> is a gorgeous icon font designed to play nicely with Bootstrap.  I was playing around with it today and noticed the highly detailed <a href="http://fontawesome.io/icon/barcode/">fa-barcode</a> character:</p>
+
+<p><i class="fa fa-barcode"></i></p>
+
+<p>If we make it a little larger, we can see that it really looks like a legit barcode:</p>
+
+<p><i class="fa fa-barcode fa-5x"></i></p>
+
+<p>I scanned it with a barcode reader and it&rsquo;s the code for <code>FA</code>.</p>
+
+<p><i class="fa fa-trophy"></i> Font Awesome wins at detail.</p>
 ]]></content>
   </entry>
   
