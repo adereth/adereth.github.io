@@ -9,7 +9,7 @@
   <meta name="author" content="Matt Adereth">
 
   
-  <meta name="description" content="I recently added text support to the scad-clj 3D modeling library and encountered an interesting bug: See that 4? No hole! Why?!? All the other holes &hellip;">
+  <meta name="description" content="I love REPL Driven Development. My style is to write expressions directly in the file that I&rsquo;m working on and to use C-x C-e to view the value &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -109,6 +109,229 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/05/29/custom-clojure-evaluation-keybindings-in-emacs/">Custom Clojure Evaluation Keybindings in Emacs</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-29T06:28:00-07:00" pubdate data-updated="true">May 29<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I love <a href="http://blog.jayfields.com/2014/01/repl-driven-development.html">REPL Driven Development</a>.  My style is to write expressions directly in the file that I&rsquo;m working on and to use <code>C-x C-e</code> to view the value of the last command in the minibuffer.</p>
+
+<p>Being able to move my cursor to a sub-expression and see the value of that expression immediately feels like a superpower.  I love this ability and it&rsquo;s one of the things that keeps me locked into Clojure+Emacs as my preferred enviroment.</p>
+
+<p>This power can be taken to the next level by making custom evaluation commands that run whatever you want on the expression at your cursor.</p>
+
+<h2>The Basic Pattern</h2>
+
+<p>Let&rsquo;s start by looking at the Elisp that defines <code>cider-eval-last-sexp</code>, which is what gets invoked when we press <code>C-x C-e</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">cider-eval-last-sexp</span> <span class="p">(</span><span class="o">&amp;</span><span class="nv">optional</span> <span class="nv">prefix</span><span class="p">)</span>
+</span><span class='line'>  <span class="s">&quot;Evaluate the expression preceding point.</span>
+</span><span class='line'><span class="s">If invoked with a PREFIX argument, print the result in the current buffer.&quot;</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">interactive</span> <span class="s">&quot;P&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">if </span><span class="nv">prefix</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">cider-interactive-eval-print</span> <span class="p">(</span><span class="nf">cider-last-sexp</span><span class="p">))</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">cider-interactive-eval</span> <span class="p">(</span><span class="nf">cider-last-sexp</span><span class="p">))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The important part is that we can use <code>cider-last-sexp</code> to get the expression before the cursor as a string and we can evaluate a string by passing it to <code>cider-interactive-eval</code>.  We&rsquo;ll write some basic Elisp to make a new function that modifies the string before evaluation and then we&rsquo;ll bind this function to a new key sequence.</p>
+
+<p>The essential pattern we&rsquo;ll use is:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">custom-eval-last-sexp</span> <span class="p">()</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">interactive</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">cider-interactive-eval</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">format</span> <span class="s">&quot;(require &#39;some-namespace)</span>
+</span><span class='line'><span class="s">             (some-namespace/some-fn %s)&quot;</span>
+</span><span class='line'>            <span class="p">(</span><span class="nf">cider-last-sexp</span><span class="p">))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">define-key</span> <span class="nv">cider-mode-map</span> <span class="p">(</span><span class="nf">kbd</span> <span class="s">&quot;C-c c&quot;</span><span class="p">)</span> <span class="ss">&#39;custom-eval-last-sexp</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you happen to still be using Swank or nrepl.el, you should use <code>swank-interactive-eval</code> and <code>swank-last-sexp</code> or <code>swank-interactive-eval</code> and <code>nrepl-last-sexp</code>.</p>
+
+<p>Let&rsquo;s look at some of the useful things we can do with this&hellip;</p>
+
+<h2>Collections</h2>
+
+<p>I frequently deal with collections that are too big to display nicely in the minibuffer.  It&rsquo;s nice to be able to explore them with a couple keystrokes.  Here&rsquo;s a simple application of the pattern that gives us the size of the collection by just hitting <code>C-c c</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">count-last-expression</span> <span class="p">()</span>
+</span><span class='line'>       <span class="p">(</span><span class="nf">interactive</span><span class="p">)</span>
+</span><span class='line'>       <span class="p">(</span><span class="nf">cider-interactive-eval</span>
+</span><span class='line'>         <span class="p">(</span><span class="nf">format</span> <span class="s">&quot;(count %s)&quot;</span>
+</span><span class='line'>                 <span class="p">(</span><span class="nf">cider-last-expression</span><span class="p">))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">define-key</span> <span class="nv">cider-mode-map</span> <span class="p">(</span><span class="nf">kbd</span> <span class="s">&quot;C-c c&quot;</span><span class="p">)</span> <span class="ss">&#39;count-last-expression</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Another useful one is to just show the nth value.  This one is a little more interesting because it requires a parameter:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">nth-from-last-expression</span> <span class="p">(</span><span class="nf">n</span><span class="p">)</span>
+</span><span class='line'>       <span class="p">(</span><span class="nf">interactive</span> <span class="s">&quot;p&quot;</span><span class="p">)</span>
+</span><span class='line'>       <span class="p">(</span><span class="nf">cider-interactive-eval</span>
+</span><span class='line'>         <span class="p">(</span><span class="nf">format</span> <span class="s">&quot;(nth %s %s)&quot;</span>
+</span><span class='line'>                 <span class="p">(</span><span class="nf">cider-last-expression</span><span class="p">)</span> <span class="nv">n</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">define-key</span> <span class="nv">cider-mode-map</span> <span class="p">(</span><span class="nf">kbd</span> <span class="s">&quot;C-c n&quot;</span><span class="p">)</span> <span class="o">`</span><span class="nv">nth-from-last-expression</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you just use <code>C-c n</code>, Emacs defaults the parameter value to 1.  You can pass an argument using <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Arguments.html">Emacs&#8217; universal argument functionality</a>.  For example, to get the 0<sup>th</sup> element, you could either use <code>C-u 0 C-c n</code> or <code>M-0 C-c n</code>.</p>
+
+<h2>Write to File</h2>
+
+<p>Sometimes the best way to view a value is to look at it in an external program.  I&rsquo;ve used this pattern when working on Clojure code that generates SVG, HTML, and <a href="/blog/2014/04/09/3d-printing-with-clojure/">3D models</a>.  Here&rsquo;s what I use for 3D modeling:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">spit-scad-last-expression</span> <span class="p">()</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">interactive</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">cider-interactive-eval</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">format</span>    
+</span><span class='line'>      <span class="s">&quot;(require &#39;scad-clj.scad)</span>
+</span><span class='line'><span class="s">       (spit \&quot;eval.scad\&quot; (scad-clj.scad/write-scad %s))&quot;</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">cider-last-expression</span><span class="p">))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">define-key</span> <span class="nv">cider-mode-map</span> <span class="p">(</span><span class="nf">kbd</span> <span class="s">&quot;C-c 3&quot;</span><span class="p">)</span> <span class="ss">&#39;spit-scad-last-expression</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This writes the <code>eval.scad</code> file to the root directory of the project.  It&rsquo;s great because OpenSCAD watches open files and automatically refreshes when they change.  You can run this on an expression that defines a shape and immediately see the shape in another window.  I used this technique in <a href="http://www.meetup.com/Clojure-NYC/events/180303582/">my recent presentation on 3D printing at the Clojure NYC meetup</a> and I got feedback that this made the live demos easier to follow.</p>
+
+<p>Here&rsquo;s what it looks like when you <code>C-c 3</code> on a nested expression that defines a cube:</p>
+
+<p><img src="/images/show-scad.png" alt="OpenScad Screenshot" /></p>
+
+<h2>View Swing Components</h2>
+
+<p>If you have to use Swing, your pain can be slightly mitigated by having a quick way to view components.  This will give you a shortcut to pop up a new frame that contains what your expression evaluates to:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">frame-last-expression</span> <span class="p">()</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">interactive</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">cider-interactive-eval</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">format</span>    
+</span><span class='line'>     <span class="s">&quot;(doto (javax.swing.JFrame. \&quot;eval\&quot;)</span>
+</span><span class='line'><span class="s">        (.. (getContentPane) (add %s))</span>
+</span><span class='line'><span class="s">        (.pack)</span>
+</span><span class='line'><span class="s">        (.show))&quot;</span>
+</span><span class='line'>     <span class="p">(</span><span class="nf">cider-last-expression</span><span class="p">))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">define-key</span> <span class="nv">cider-mode-map</span> <span class="p">(</span><span class="nf">kbd</span> <span class="s">&quot;C-c f&quot;</span><span class="p">)</span> <span class="ss">&#39;frame-last-expression</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This plays nicely with <a href="https://github.com/daveray/seesaw">Seesaw</a>, but doesn&rsquo;t presume that you have it on your classpath.  Here&rsquo;s what it looks like when you <code>C-c f</code> at the end of an expression that defines a Swing component:</p>
+
+<p><img src="/images/show-frame.png" alt="JFrame Screenshot" /></p>
+
+<h2>Benchmarking with Criterium</h2>
+
+<p>In <a href="/blog/2013/11/22/a-few-interesting-clojure-microbenchmarks/">A Few Interesing Clojure Microbenchmarks</a>, I mentioned Hugo Duncan&rsquo;s <a href="https://github.com/hugoduncan/criterium">Criterium library</a>.  It&rsquo;s a reliable way of measuring the performance of an expression.  We can bring it closer to our fingertips by making a function for benchmarking an expression instead of just evaluating it:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">benchmark-last-expression</span> <span class="p">()</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">interactive</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">cider-interactive-eval</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">format</span> <span class="s">&quot;(require &#39;criterium.core)</span>
+</span><span class='line'><span class="s">             (criterium.core/quick-benchmark %s)&quot;</span>
+</span><span class='line'>            <span class="p">(</span><span class="nf">cider-last-expression</span><span class="p">))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">define-key</span> <span class="nv">cider-mode-map</span> <span class="p">(</span><span class="nf">kbd</span> <span class="s">&quot;C-c b&quot;</span><span class="p">)</span> <span class="ss">&#39;benchmark-last-expression</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Conclusion</h2>
+
+<p>I find this simple pattern to be quite handy.  Also, when I&rsquo;m showing off the power of nrepl to the uninitiated, being able to invoke arbitrary functions on whatever is at my cursor looks like pure magic.</p>
+
+<p>I hope you find this useful and if you invent any useful bindings or alternative ways of implementing this pattern, please share!</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -2280,52 +2503,6 @@ function position() {
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/12/15/font-awesome-easter-egg/">Font Awesome Easter Egg</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-12-15T12:45:00-08:00" pubdate data-updated="true">Dec 15<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://fontawesome.io/">Font Awesome</a> is a gorgeous icon font designed to play nicely with Bootstrap.  I was playing around with it today and noticed the highly detailed <a href="http://fontawesome.io/icon/barcode/">fa-barcode</a> character:</p>
-
-<p><i class="fa fa-barcode"></i></p>
-
-<p>If we make it a little larger, we can see that it really looks like a legit barcode:</p>
-
-<p><i class="fa fa-barcode fa-5x"></i></p>
-
-<p>I scanned it with a barcode reader and it&rsquo;s the code for <code>FA</code>.</p>
-
-<p><i class="fa fa-trophy"></i> Font Awesome wins at detail.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -2379,6 +2556,10 @@ function position() {
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2016/04/19/tweet-sized-animations-with-mathematica/">Tweet-sized Animations with Mathematica</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too/">Bag of Little Bootstraps Presentation at PWL SF</a>
       </li>
     
@@ -2412,10 +2593,6 @@ function position() {
     
       <li class="post">
         <a href="/blog/2014/08/14/typing-qwerty-on-a-dvorak-keyboard/">Typing Qwerty on a Dvorak Keyboard</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/05/29/custom-clojure-evaluation-keybindings-in-emacs/">Custom Clojure Evaluation Keybindings in Emacs</a>
       </li>
     
   </ul>
