@@ -7,6 +7,52 @@ endAll = function(transition, callback) {
         .on("end", function() { if (!--n) callback.apply(this, arguments); });
 }
 
+var turn = 0;
+var playing = true;
+var transitionDuration = 700;
+var transitionDurationToSet = 700;
+
+var updateFunctions = []
+var updateTime = function() {
+    for (var i = 0; i < updateFunctions.length; i++) {
+	updateFunctions[i](turn);
+    }
+}
+
+var advanceFunctions =[]
+var advanceTurn = function() {
+    transitionDuration = transitionDurationToSet;
+    for (var i = 0; i < advanceFunctions.length; i++) {
+	advanceFunctions[i](turn);
+    }
+    turn++;
+    updateTime();
+    if(playing) {
+	setTimeout(advanceTurn, transitionDuration + 30);
+    }
+}
+
+var setPlaying = function(p) {
+    if (p) {
+	d3.select("#play-icon").style("display", "none");
+	d3.select("#pause-icon").style("display", "block");
+	playing = true;
+	advanceTurn();
+    } else {
+	d3.select("#play-icon").style("display", "block");
+	d3.select("#pause-icon").style("display", "none");
+	playing = false;
+    }
+}
+
+d3.select("#play").on("click", function() {
+    setPlaying(!playing)
+});
+
+
+d3.select("#speedSlider").on("input", function(e) {
+    transitionDurationToSet = 2000 - d3.select("#speedSlider")._groups[0][0].value})
+
 addPlot = function(label, vals) {
     var margin = {top: 20, right: 5, bottom: 20, left: 5},
 	width = 133 - margin.left - margin.right,
@@ -28,7 +74,6 @@ addPlot = function(label, vals) {
 	.append("g")
 	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");;
 
-    console.log(vals[0].length)
     for (i = 0; i < vals[0].length; i++) {
 	var line = d3.line()
 	    .x(function(d,i2) { return x(i2) })
@@ -43,11 +88,39 @@ addPlot = function(label, vals) {
     }
 
 
-    svg.append("text")
-        .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
-        .attr("transform", "translate("+ (width/2) +","+(height+10)+")")  // centre below axis
-	.text(label);
+    var currentLine = svg.append("line")
+	.attr("class", "current")
+	.attr("x1", x(turn))
+	.attr("x2", x(turn))
+	.attr("y1", 0)
+	.attr("y2", height);
 
+    updateFunctions.push(function(turn) {
+	var t = d3.transition()
+	    .duration(100)
+	    .ease(d3.easeLinear);
+	currentLine.transition(t)
+	    .attr("x1", x(turn))
+	    .attr("x2", x(turn));
+    });
+
+    var bg = svg.append("rect")
+	.attr("x", 0)
+	.attr("y", 0)
+	.attr("height", height)
+	.attr("width", width)
+	.attr("fill-opacity", 0)
+	.on("click", function(d) {
+	    console.log(x.invert(d3.mouse(this)[0]))
+	    turn = Math.floor(x.invert(d3.mouse(this)[0]));
+	    setPlaying(false);
+	    updateTime()
+	});
+
+    svg.append("text")
+	.attr("text-anchor", "middle")
+	.attr("transform", "translate("+ (width/2) +","+(height+10)+")")  // centre below axis
+	.text(label);
 
 }
 
@@ -137,7 +210,7 @@ showGame = function(game) {
     var squareSize = Math.abs(x(1) - x(2))
 
     var playerMarkers;
-    setPlayerMarkers = function() {
+    setPlayerMarkers = function(turn) {
 	playerMarkers = svg.selectAll("circle")
 	    .data(game.frames[turn]).enter()
 	    .append("circle")
@@ -158,12 +231,21 @@ showGame = function(game) {
 	.style("fill", function(d) {return d3.rgb(0.5, 0.5, 0.5)})
 	.style("opacity", 0);
 
-    var turn = 0;
+    var t2 = d3.transition()
+	.delay(transitionDuration / 2)
+	.duration(transitionDuration / 3)
+	.ease(d3.easeLinear);
 
+    updateFunctions.push(function(turn) {
+	var prodTransition = productionSquares.transition(t2)
+	    .style("fill", function(d, i) {return (game.frames[turn][i].owner == 0 ?
+						   d3.rgb(1/2,1/2,1/2) :
+						   color(game.frames[turn][i].owner))})
+	    .style("opacity", function(d, i) {return 0.5 * d.production / maxProduction})
+    })
 
-    setPlayerMarkers();
-    moveMarkers = function () {
-	var transitionDuration = 700;
+    setPlayerMarkers(turn);
+    moveMarkers = function (turn) {
 	var t = d3.transition()
 	    .duration(transitionDuration)
 	    .ease(d3.easeCubicInOut);
@@ -186,26 +268,19 @@ showGame = function(game) {
 		    return y(-0.5 + ((i - (i % game.width)) / game.width))
 		}})
 
-	var t2 = d3.transition()
-	    .delay(transitionDuration / 2)
-	    .duration(transitionDuration / 3)
-	    .ease(d3.easeLinear);
-
-	var prodTransition = productionSquares.transition(t2)
-	    .style("fill", function(d, i) {return (game.frames[turn + 1][i].owner == 0 ?
-						   d3.rgb(1/2,1/2,1/2) :
-						   color(game.frames[turn + 1][i].owner))})
-	    .style("opacity", function(d, i) {return 0.5 * d.production / maxProduction})
-
-	endAll(moveTransition, function() {
-	    turn++;
-	    playerMarkers.remove()
-	    setPlayerMarkers();
-	    moveMarkers();
-	})
     }
-    moveMarkers()
+    updateFunctions.push(
+	function (turn) {
+	    setTimeout(function() {
+		playerMarkers.remove()
+		setPlayerMarkers(turn); }, transitionDuration + 10);
+
+	});
+    advanceFunctions.push(moveMarkers);
+    advanceTurn()
 }
+
+
 
 var dropZone = document.getElementById('dropZone');
 
