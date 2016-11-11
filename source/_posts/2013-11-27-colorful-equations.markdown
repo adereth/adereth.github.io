@@ -23,8 +23,8 @@ $$
 \definecolor{circle}{RGB}{217,86,16}
 \definecolor{average}{RGB}{203,23,206}
 \color{energy} X_{\color{freq} k} \color{black} =
-\color{average} \frac{1}{N} \sum_{n=0}^{N-1} 
-\color{signal}x_n \color{spin} 
+\color{average} \frac{1}{N} \sum_{n=0}^{N-1}
+\color{signal}x_n \color{spin}
 e^{\mathrm{i} \color{circle} 2\pi \color{freq}k \color{average} \frac{n}{N}}
 $$
 </div>
@@ -58,8 +58,8 @@ After adding that, I was able to use the `\definecolor` and `\color` directives 
 \definecolor{circle}{RGB}{217,86,16}
 \definecolor{average}{RGB}{203,23,206}
 \color{energy} X_{\color{freq} k} \color{black} =
-\color{average} \frac{1}{N} \sum_{n=0}^{N-1} 
-\color{signal}x_n \color{spin} 
+\color{average} \frac{1}{N} \sum_{n=0}^{N-1}
+\color{signal}x_n \color{spin}
 e^{\mathrm{i} \color{circle} 2\pi \color{freq}k
 \color{average} \frac{n}{N}}
 ```
@@ -73,8 +73,8 @@ There were a couple issues:
 To find <font color="#7200AC">the energy</font>
 <font color="2DB15D">at a particular frequency</font>,
 <font color="#FB001D">spin</font> <font color="#126ED5">your
-signal</font> <font color="#D04400">around a circle</font> 
-<font color="2DB15D">at that frequency</font>, and 
+signal</font> <font color="#D04400">around a circle</font>
+<font color="2DB15D">at that frequency</font>, and
 <font color="#CB17CE">average a bunch of points along that
 path</font>.
 ```

@@ -7,7 +7,180 @@ endAll = function(transition, callback) {
         .on("end", function() { if (!--n) callback.apply(this, arguments); });
 }
 
+var turn = 0;
+var playing = true;
+var transitionDuration = 700;
+var transitionDurationToSet = 700;
+
+var updateFunctions = []
+var updateTime = function() {
+    for (var i = 0; i < updateFunctions.length; i++) {
+	updateFunctions[i](turn);
+    }
+}
+
+var advanceFunctions =[]
+var advanceTurn = function() {
+    transitionDuration = transitionDurationToSet;
+    for (var i = 0; i < advanceFunctions.length; i++) {
+	advanceFunctions[i](turn);
+    }
+    turn++;
+    updateTime();
+    if(playing) {
+	setTimeout(advanceTurn, transitionDuration + 30);
+    }
+}
+
+var setPlaying = function(p) {
+    if (p) {
+	d3.select("#play-icon").style("display", "none");
+	d3.select("#pause-icon").style("display", "block");
+	playing = true;
+	advanceTurn();
+    } else {
+	d3.select("#play-icon").style("display", "block");
+	d3.select("#pause-icon").style("display", "none");
+	playing = false;
+    }
+}
+
+d3.select("#play").on("click", function() {
+    setPlaying(!playing)
+});
+
+
+d3.select("#speedSlider").on("input", function(e) {
+    transitionDurationToSet = 2000 - d3.select("#speedSlider")._groups[0][0].value})
+
+addPlot = function(label, vals) {
+    var margin = {top: 20, right: 5, bottom: 20, left: 5},
+	width = 133 - margin.left - margin.right,
+	height = 133 - margin.top - margin.bottom;
+
+    var x = d3.scaleLinear()
+	.domain([0, vals.length])
+	.range([0, width]);
+
+    var y = d3.scaleLinear()
+    	.domain([0, d3.max(vals, function(vs) {return d3.max(d3.values(vs))})])
+	.range([height, 0]);
+
+    var color = d3.scaleOrdinal(d3.schemeCategory10)
+
+    var svg = d3.select("#plots").append("svg")
+	.attr("width", width + margin.left + margin.right)
+	.attr("height", height + margin.top + margin.bottom)
+	.append("g")
+	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");;
+
+    for (i = 0; i < vals[0].length; i++) {
+	var line = d3.line()
+	    .x(function(d,i2) { return x(i2) })
+	    .y(function(d) { return y(d[i]) })
+
+	svg.append("path")
+	    .datum(vals)
+	    .attr("class", "line")
+	    .attr("d", line)
+	    .attr("fill", "none")
+	    .style("stroke", color(i))
+    }
+
+
+    var currentLine = svg.append("line")
+	.attr("class", "current")
+	.attr("x1", x(turn))
+	.attr("x2", x(turn))
+	.attr("y1", 0)
+	.attr("y2", height);
+
+    updateFunctions.push(function(turn) {
+	var t = d3.transition()
+	    .duration(100)
+	    .ease(d3.easeLinear);
+	currentLine.transition(t)
+	    .attr("x1", x(turn))
+	    .attr("x2", x(turn));
+    });
+
+    var bg = svg.append("rect")
+	.attr("x", 0)
+	.attr("y", 0)
+	.attr("height", height)
+	.attr("width", width)
+	.attr("fill-opacity", 0)
+	.on("click", function(d) {
+	    console.log(x.invert(d3.mouse(this)[0]))
+	    turn = Math.floor(x.invert(d3.mouse(this)[0]));
+	    setPlaying(false);
+	    updateTime()
+	});
+
+    svg.append("text")
+	.attr("text-anchor", "middle")
+	.attr("transform", "translate("+ (width/2) +","+(height+10)+")")  // centre below axis
+	.text(label);
+
+}
+
+getPlayerStrengthData = function(game) {
+    var result = []
+    for (frame = 0; frame < game.frames.length; frame++) {
+	var frameResult = [];
+	for (p = 0; p < game.players.length; p++) {
+	    frameResult.push(0);
+	}
+	for (i = 0; i < game.width * game.height; i++) {
+	    var currPlayer = game.frames[frame][i].owner - 1;
+	    frameResult[currPlayer] += game.frames[frame][i].strength
+	}
+	result.push(frameResult)
+    }
+    return result;
+}
+
+getPlayerProductionData = function(game) {
+    var result = []
+    for (frame = 0; frame < game.frames.length; frame++) {
+	var frameResult = [];
+	for (p = 0; p < game.players.length; p++) {
+	    frameResult.push(0);
+	}
+	for (i = 0; i < game.width * game.height; i++) {
+	    var currPlayer = game.frames[frame][i].owner - 1;
+	    frameResult[currPlayer] += game.productions[i].production
+	}
+	result.push(frameResult)
+    }
+    return result;
+}
+
+
+getPlayerTerritoryData = function(game) {
+    var result = []
+    for (frame = 0; frame < game.frames.length; frame++) {
+	var frameResult = [];
+	for (p = 0; p < game.players.length; p++) {
+	    frameResult.push(0);
+	}
+	for (i = 0; i < game.width * game.height; i++) {
+	    var currPlayer = game.frames[frame][i].owner - 1;
+	    frameResult[currPlayer]++
+	}
+	result.push(frameResult)
+    }
+    return result;
+}
+
+
 showGame = function(game) {
+    console.log(game)
+    console.log(getPlayerStrengthData(game))
+    addPlot("Strength", getPlayerStrengthData(game));
+    addPlot("Territory", getPlayerTerritoryData(game));
+    addPlot("Production", getPlayerProductionData(game));
+
     var margin = {top: 20, right: 20, bottom: 20, left: 20},
 	width = 500 - margin.left - margin.right,
 	height = 500 - margin.top - margin.bottom;
@@ -17,10 +190,10 @@ showGame = function(game) {
 	.range([0, width]);
 
     var y = d3.scaleLinear()
-    	.domain([0, game.height])
+	.domain([0, game.height])
 	.range([height, 0]);
 
-    var svg = d3.select("body").append("svg")
+    var svg = d3.select("#gameArea").append("svg")
 	.attr("width", width + margin.left + margin.right)
 	.attr("height", height + margin.top + margin.bottom)
 	.append("g");
@@ -37,10 +210,10 @@ showGame = function(game) {
     var squareSize = Math.abs(x(1) - x(2))
 
     var playerMarkers;
-    setPlayerMarkers = function() {
+    setPlayerMarkers = function(turn) {
 	playerMarkers = svg.selectAll("circle")
 	    .data(game.frames[turn]).enter()
-    	    .append("circle")
+	    .append("circle")
 	    .attr("cx", function(d, i) {return x(0.5 + (i % game.width))})
 	    .attr("cy", function(d, i) {return y(-0.5 + ((i - (i % game.width)) / game.width))})
 	    .attr("r", function(d) {return 0.5 * squareSize * Math.sqrt(d.strength / 255)})
@@ -58,12 +231,21 @@ showGame = function(game) {
 	.style("fill", function(d) {return d3.rgb(0.5, 0.5, 0.5)})
 	.style("opacity", 0);
 
-    var turn = 0;
+    var t2 = d3.transition()
+	.delay(transitionDuration / 2)
+	.duration(transitionDuration / 3)
+	.ease(d3.easeLinear);
 
+    updateFunctions.push(function(turn) {
+	var prodTransition = productionSquares.transition(t2)
+	    .style("fill", function(d, i) {return (game.frames[turn][i].owner == 0 ?
+						   d3.rgb(1/2,1/2,1/2) :
+						   color(game.frames[turn][i].owner))})
+	    .style("opacity", function(d, i) {return 0.5 * d.production / maxProduction})
+    })
 
-    setPlayerMarkers();
-    moveMarkers = function () {
-	var transitionDuration = 700;
+    setPlayerMarkers(turn);
+    moveMarkers = function (turn) {
 	var t = d3.transition()
 	    .duration(transitionDuration)
 	    .ease(d3.easeCubicInOut);
@@ -86,26 +268,19 @@ showGame = function(game) {
 		    return y(-0.5 + ((i - (i % game.width)) / game.width))
 		}})
 
-	var t2 = d3.transition()
-	    .delay(transitionDuration / 2)
-	    .duration(transitionDuration / 3)
-	    .ease(d3.easeLinear);
-
-	var prodTransition = productionSquares.transition(t2)
-	    .style("fill", function(d, i) {return (game.frames[turn + 1][i].owner == 0 ?
-						   d3.rgb(1/2,1/2,1/2) :
-						   color(game.frames[turn + 1][i].owner))})
-	    .style("opacity", function(d, i) {return 0.5 * d.production / maxProduction})
-
-	endAll(moveTransition, function() {
-	    turn++;
-	    playerMarkers.remove()
-	    setPlayerMarkers();
-	    moveMarkers();
-	})
     }
-    moveMarkers()
+    updateFunctions.push(
+	function (turn) {
+	    setTimeout(function() {
+		playerMarkers.remove()
+		setPlayerMarkers(turn); }, transitionDuration + 10);
+
+	});
+    advanceFunctions.push(moveMarkers);
+    advanceTurn()
 }
+
+
 
 var dropZone = document.getElementById('dropZone');
 
@@ -125,7 +300,7 @@ dropZone.addEventListener('drop', function(e) {
 	var reader = new FileReader();
 
 	reader.onload = function(e2) { // finished reading file data.
-	    var dropSquare = d3.select("div")
+	    var dropSquare = d3.select("#dropZone")
 	    dropSquare.transition(d3.transition()
 				  .duration(500)
 				  .ease(d3.easeLinear))
