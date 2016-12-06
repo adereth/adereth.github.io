@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Colorful Equations with MathJax - adereth</title>
+  <title>Writing a Halite Bot in Clojure - adereth</title>
   <meta name="author" content="Matt Adereth">
 
   
-  <meta name="description" content="Stuart Riffle wrote up a great explanation of the Fourier transform. There are a number of great visualizations in his post, but the climax is his &hellip;">
+  <meta name="description" content="Halite is a new AI programming competition that was recently released by Two Sigma and Cornell Tech. It was designed and implemented by two interns &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://adereth.github.io/blog/2013/11/29/colorful-equations/">
+  <link rel="canonical" href="http://adereth.github.io/blog/2016/12/06/writing-a-halite-bot-in-clojure/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
    <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
@@ -112,7 +112,7 @@
   
   <header>
     
-      <h1 class="entry-title">Colorful Equations With MathJax</h1>
+      <h1 class="entry-title">Writing a Halite Bot in Clojure</h1>
     
     
       <p class="meta">
@@ -128,63 +128,96 @@
   
 
 
-<time datetime="2013-11-29T09:18:00-08:00" pubdate data-updated="true">Nov 29<span>th</span>, 2013</time>
+<time datetime="2016-12-06T10:42:00-08:00" pubdate data-updated="true">Dec 6<span>th</span>, 2016</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p><a href="http://www.altdevblogaday.com/author/stuart-riffle/">Stuart Riffle</a> wrote up <a href="http://www.altdevblogaday.com/2011/05/17/understanding-the-fourier-transform/">a great explanation of the Fourier transform</a>.  There are a number of great visualizations in his post, but the climax is his explanation of the inverse discrete Fourier transform formula:</p>
-
-<p><img class="center" src="/images/DerivedDFT.png"></p>
-
-<p>What a brilliant representation!  My first thought was that more equations should have such elegant explanations that focus on the comprehension of the reader.  I&rsquo;d love to be able to produce such clear explanations in this style, so I did a little experimenting with Octopress and <a href="http://www.mathjax.org/">MathJax</a> to see how easy it would be.</p>
-
-<p>It turns out to only require a few minor yak trimmings to get something nice:</p>
-
-<div style="font-size: 150%;">
-$$
-\definecolor{energy}{RGB}{114,0,172}
-\definecolor{freq}{RGB}{45,177,93}
-\definecolor{spin}{RGB}{251,0,29}
-\definecolor{signal}{RGB}{18,110,213}
-\definecolor{circle}{RGB}{217,86,16}
-\definecolor{average}{RGB}{203,23,206}
-\color{energy} X_{\color{freq} k} \color{black} =
-\color{average} \frac{1}{N} \sum_{n=0}^{N-1}
-\color{signal}x_n \color{spin}
-e^{\mathrm{i} \color{circle} 2\pi \color{freq}k \color{average} \frac{n}{N}}
-$$
+<div class="entry-content"><div>
+<script src="/javascripts/halite/pixi.min.js"></script>
+<script src="/javascripts/halite/parsereplay.js"></script>
+<script src="/javascripts/halite/visualizer.js"></script>
 </div>
 
 
-<blockquote><p>To find <font color="#7200AC">the energy</font> <font color="2DB15D">at a particular frequency</font>, <font color="#FB001D">spin</font> <font color="#126ED5">your signal</font> <font color="#D04400">around a circle</font> <font color="2DB15D">at that frequency</font>, and <font color="#CB17CE">average a bunch of points along that path</font>.</p></blockquote>
+<p><a href="https://halite.io"><img src="/images/halitehero.png" alt="Halite: May the Best Bot Win" /></a></p>
 
-<p>By using MathJax instead of including a .png we get some nice benefits:</p>
+<p><a href="https://halite.io">Halite</a> is a new AI programming competition that was recently released by <a href="https://www.twosigma.com/">Two Sigma</a> and <a href="https://tech.cornell.edu/">Cornell Tech</a>.  It was designed and implemented by two interns at Two Sigma and was run as the annual internal summer programming competition.</p>
+
+<p>While the rules are relatively simple, it proved to be a surprisingly deep challenge.  It&rsquo;s played on a 2D grid and a typical game looks like this:</p>
+
+<center>
+<div id="gameReplay" class="text-center"></div>
+</center>
+
+
+<div>
+
+  <script type="text/javascript">
+
+    var data = textFromURL("ar1478846062-2923329127.hlt", $("#gameReplay"), function(data) {
+        console.log(data)
+        if(data != null) {
+            showGame(data, $("#gameReplay"), null, 500, true, true);
+        }
+    });
+
+  </script>
+</div>
+
+
+<p>Each turn, all players simultaneously issue movement commands to each of their pieces:</p>
 
 <ol>
-<li>Accessibility via screen readers</li>
-<li>Scalable renderings that look awesome on Retina displays</li>
-<li>$\LaTeX$ source that is accessible by the audience (right click on the formula)</li>
-<li>Simplified page-build process and source management</li>
+<li>Move to an adjacent location and capture it if you are stronger than what&rsquo;s currently there.</li>
+<li>Stay put and build strength based on the production value of your current location.</li>
 </ol>
 
 
-<p>There are <a href="http://www.google.com/search?q=octopress%20mathjax">a bunch of guides on setting up MathJax with Octopress</a>, but I didn&rsquo;t mess with any of them because the <a href="https://github.com/bijumon/oct2">oct2 theme</a> ships with an alternative <code>head.html</code> that is preconfigured to support it.</p>
+<p>When two players&#8217; pieces are adjacent to each other, they automatically fight.  A much more detailed description is available on the <a href="https://halite.io/rules_game.php">Halite Game Rules page</a>.</p>
 
-<p>The only tweak I made was to load the <a href="http://docs.mathjax.org/en/latest/tex.html#color">Color extension for MathJax</a>:</p>
+<p>Bots are run as subprocesses that communicate with the game environment through <code>STDIN</code> and <code>STDOUT</code>, so it&rsquo;s very simple to create bots in the language of your choice.  While Python, Java, and C++ bot kits were all provided by the game developers, the community quickly produced kits for C#, Rust, Scala, Ruby, Go, PHP, Node.js, OCaml, C, and Clojure.  All the starter packages are available on the <a href="https://halite.io/downloads.php">Halite Downloads page</a>.</p>
+
+<h2>Clojure Bot Basics</h2>
+
+<p>The flow of all bots are the same:</p>
+
+<ol>
+<li>Read the initial state (your player ID and the starting game map conditions)</li>
+<li>Write your bot&rsquo;s name</li>
+<li>Read the current gam emap</li>
+<li>Write your moves</li>
+<li>GOTO #3</li>
+</ol>
+
+
+<p>The Clojure kit represents the game map as a 2D vector of <code>Site</code> records:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/x-mathjax-config&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>  <span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">Config</span><span class="p">({</span> <span class="nx">TeX</span><span class="o">:</span> <span class="p">{</span> <span class="nx">extensions</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;color.js&quot;</span><span class="p">]</span> <span class="p">}});</span>
-</span><span class='line'><span class="nt">&lt;/script&gt;</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defrecord </span><span class="nv">Site</span>
+</span><span class='line'>    <span class="p">[</span><span class="o">^</span><span class="nb">int </span><span class="nv">x</span>
+</span><span class='line'>     <span class="o">^</span><span class="nb">int </span><span class="nv">y</span>
+</span><span class='line'>     <span class="o">^</span><span class="nb">int </span><span class="nv">production</span>
+</span><span class='line'>     <span class="o">^</span><span class="nb">int </span><span class="nv">strength</span>
+</span><span class='line'>     <span class="o">^</span><span class="nb">int </span><span class="nv">owner</span><span class="p">])</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>After adding that, I was able to use the <code>\definecolor</code> and <code>\color</code> directives just like I would in a paper:</p>
+<p>And movement instructions are simple keywords:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">directions</span> <span class="p">[</span><span class="ss">:still</span> <span class="ss">:north</span> <span class="ss">:east</span> <span class="ss">:south</span> <span class="ss">:west</span><span class="p">])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A simple bot that finds all the sites you control and issues random moves would look like this:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -197,46 +230,37 @@ $$
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='latex'><span class='line'><span class="k">\definecolor</span><span class="nb">{</span>energy<span class="nb">}{</span>RGB<span class="nb">}{</span>114,0,172<span class="nb">}</span>
-</span><span class='line'><span class="k">\definecolor</span><span class="nb">{</span>freq<span class="nb">}{</span>RGB<span class="nb">}{</span>45,177,93<span class="nb">}</span>
-</span><span class='line'><span class="k">\definecolor</span><span class="nb">{</span>spin<span class="nb">}{</span>RGB<span class="nb">}{</span>251,0,29<span class="nb">}</span>
-</span><span class='line'><span class="k">\definecolor</span><span class="nb">{</span>signal<span class="nb">}{</span>RGB<span class="nb">}{</span>18,110,213<span class="nb">}</span>
-</span><span class='line'><span class="k">\definecolor</span><span class="nb">{</span>circle<span class="nb">}{</span>RGB<span class="nb">}{</span>217,86,16<span class="nb">}</span>
-</span><span class='line'><span class="k">\definecolor</span><span class="nb">{</span>average<span class="nb">}{</span>RGB<span class="nb">}{</span>203,23,206<span class="nb">}</span>
-</span><span class='line'><span class="k">\color</span><span class="nb">{</span>energy<span class="nb">}</span> X<span class="nb">_{</span><span class="k">\color</span><span class="nb">{</span>freq<span class="nb">}</span> k<span class="nb">}</span> <span class="k">\color</span><span class="nb">{</span>black<span class="nb">}</span> =
-</span><span class='line'><span class="k">\color</span><span class="nb">{</span>average<span class="nb">}</span> <span class="k">\frac</span><span class="nb">{</span>1<span class="nb">}{</span>N<span class="nb">}</span> <span class="k">\sum</span><span class="nb">_{</span>n=0<span class="nb">}^{</span>N-1<span class="nb">}</span>
-</span><span class='line'><span class="k">\color</span><span class="nb">{</span>signal<span class="nb">}</span>x<span class="nb">_</span>n <span class="k">\color</span><span class="nb">{</span>spin<span class="nb">}</span>
-</span><span class='line'>e<span class="nb">^{</span><span class="k">\mathrm</span><span class="nb">{</span>i<span class="nb">}</span> <span class="k">\color</span><span class="nb">{</span>circle<span class="nb">}</span> 2<span class="k">\pi</span> <span class="k">\color</span><span class="nb">{</span>freq<span class="nb">}</span>k
-</span><span class='line'><span class="k">\color</span><span class="nb">{</span>average<span class="nb">}</span> <span class="k">\frac</span><span class="nb">{</span>n<span class="nb">}{</span>N<span class="nb">}}</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">MyBot</span>
+</span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">game</span><span class="p">]</span> <span class="p">[</span><span class="nv">io</span><span class="p">])</span>
+</span><span class='line'>  <span class="p">(</span><span class="ss">:gen-class</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">random-moves</span>
+</span><span class='line'>  <span class="s">&quot;Takes your bot&#39;s ID and a 2D vector of Sites and returns a map from site to direction&quot;</span>
+</span><span class='line'>  <span class="p">[</span><span class="nv">my-id</span> <span class="nv">game-map</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">my-sites</span> <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">game-map</span>
+</span><span class='line'>                      <span class="nv">flatten</span>
+</span><span class='line'>                      <span class="p">(</span><span class="nb">filter </span><span class="o">#</span><span class="p">(</span><span class="nb">= </span><span class="p">(</span><span class="ss">:owner</span> <span class="nv">%</span><span class="p">)</span> <span class="nv">my-id</span><span class="p">)))]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">zipmap </span><span class="nv">my-sites</span> <span class="p">(</span><span class="nf">repeatedly</span> <span class="o">#</span><span class="p">(</span><span class="nf">rand-nth</span> <span class="nv">game/directions</span><span class="p">)))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">-main</span> <span class="p">[]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[{</span><span class="ss">:keys</span> <span class="p">[</span><span class="nv">my-id</span> <span class="nv">productions</span> <span class="nv">width</span> <span class="nv">height</span> <span class="nv">game-map</span><span class="p">]}</span> <span class="p">(</span><span class="nf">io/get-init!</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">println </span><span class="s">&quot;MyFirstClojureBot&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">doseq </span><span class="p">[</span><span class="nv">turn</span> <span class="p">(</span><span class="nf">range</span><span class="p">)]</span>
+</span><span class='line'>      <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">game-map</span> <span class="p">(</span><span class="nf">io/create-game-map</span> <span class="nv">width</span> <span class="nv">height</span> <span class="nv">productions</span> <span class="p">(</span><span class="nf">io/read-ints!</span><span class="p">))]</span>
+</span><span class='line'>        <span class="p">(</span><span class="nf">io/send-moves!</span> <span class="p">(</span><span class="nf">random-moves</span> <span class="nv">my-id</span> <span class="nv">game-map</span><span class="p">))))))</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>There were a couple issues:</p>
+<h2>Next Steps</h2>
 
-<ol>
-<li>As mentioned in several of the guides, the default markdown processor for Octopress will interfere with the <code>_</code> and <code>^</code> in your TeX.  I had originally worked around this by escaping them.  At the end, I wrapped the whole expression in a <code>&lt;div&gt;</code> to make the font larger, which had the side-effect of eliminating the need for escaping.</li>
-<li>MathJax&rsquo;s <code>\definecolor</code> doesn&rsquo;t seem to support the <code>HTML</code> color space, which lets you specify colors in hex codes.  I ended up manually converting the colors back and forth between decimal and hexidecimal for the prose below the equation:</li>
-</ol>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'>To find <span class="nt">&lt;font</span> <span class="na">color=</span><span class="s">&quot;#7200AC&quot;</span><span class="nt">&gt;</span>the energy<span class="nt">&lt;/font&gt;</span>
-</span><span class='line'><span class="nt">&lt;font</span> <span class="na">color=</span><span class="s">&quot;2DB15D&quot;</span><span class="nt">&gt;</span>at a particular frequency<span class="nt">&lt;/font&gt;</span>,
-</span><span class='line'><span class="nt">&lt;font</span> <span class="na">color=</span><span class="s">&quot;#FB001D&quot;</span><span class="nt">&gt;</span>spin<span class="nt">&lt;/font&gt;</span> <span class="nt">&lt;font</span> <span class="na">color=</span><span class="s">&quot;#126ED5&quot;</span><span class="nt">&gt;</span>your
-</span><span class='line'>signal<span class="nt">&lt;/font&gt;</span> <span class="nt">&lt;font</span> <span class="na">color=</span><span class="s">&quot;#D04400&quot;</span><span class="nt">&gt;</span>around a circle<span class="nt">&lt;/font&gt;</span>
-</span><span class='line'><span class="nt">&lt;font</span> <span class="na">color=</span><span class="s">&quot;2DB15D&quot;</span><span class="nt">&gt;</span>at that frequency<span class="nt">&lt;/font&gt;</span>, and
-</span><span class='line'><span class="nt">&lt;font</span> <span class="na">color=</span><span class="s">&quot;#CB17CE&quot;</span><span class="nt">&gt;</span>average a bunch of points along that
-</span><span class='line'>path<span class="nt">&lt;/font&gt;</span>.
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now I just need a formula to explain&hellip;</p>
+<p>There are currently almost 900 bots competing on the site, but <a href="https://halite.io/leaderboard.php?field=language&amp;value=Clojure&amp;heading=Clojure">there are only a handful written in Clojure</a>!  I&rsquo;m sure the Clojure community could do some interesting things here, so head over to <a href="https://halite.io">halite.io</a>, sign-up using your Github account, and <a href="https://halite.io/downloads/starterpackages/Halite-Clojure-Starter-Package.zip">download the Clojure starter kit</a>.</p>
 </div>
 
 
@@ -259,12 +283,12 @@ $$
   
 
 
-<time datetime="2013-11-29T09:18:00-08:00" pubdate data-updated="true">Nov 29<span>th</span>, 2013</time>
+<time datetime="2016-12-06T10:42:00-08:00" pubdate data-updated="true">Dec 6<span>th</span>, 2016</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/latex/'>latex</a>
+    <a class='category' href='/blog/categories/clojure/'>clojure</a>
   
 </span>
 
@@ -273,7 +297,7 @@ $$
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://adereth.github.io/blog/2013/11/29/colorful-equations/" data-via="adereth" data-counturl="http://adereth.github.io/blog/2013/11/29/colorful-equations/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://adereth.github.io/blog/2016/12/06/writing-a-halite-bot-in-clojure/" data-via="adereth" data-counturl="http://adereth.github.io/blog/2016/12/06/writing-a-halite-bot-in-clojure/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -286,10 +310,8 @@ $$
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/11/22/a-few-interesting-clojure-microbenchmarks/" title="Previous Post: A few interesting Clojure microbenchmarks">&laquo; A few interesting Clojure microbenchmarks</a>
+        <a class="basic-alignment left" href="/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too/" title="Previous Post: Bag of Little Bootstraps Presentation at PWL SF">&laquo; Bag of Little Bootstraps Presentation at PWL SF</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/12/08/most-frequently-enabled-emacs-packages/" title="Next Post: Most frequently enabled Emacs packages">Most frequently enabled Emacs packages &raquo;</a>
       
     </p>
   </footer>
@@ -437,8 +459,8 @@ $$
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://adereth.github.io/blog/2013/11/29/colorful-equations/';
-        var disqus_url = 'http://adereth.github.io/blog/2013/11/29/colorful-equations/';
+        var disqus_identifier = 'http://adereth.github.io/blog/2016/12/06/writing-a-halite-bot-in-clojure/';
+        var disqus_url = 'http://adereth.github.io/blog/2016/12/06/writing-a-halite-bot-in-clojure/';
         var disqus_script = 'embed.js';
       
     (function () {

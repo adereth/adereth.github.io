@@ -4,7 +4,7 @@
   <title><![CDATA[Category: clojure | adereth]]></title>
   <link href="http://adereth.github.io/blog/categories/clojure/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2016-11-11T08:16:48-08:00</updated>
+  <updated>2016-12-06T12:35:58-08:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -12,6 +12,123 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Writing a Halite Bot in Clojure]]></title>
+    <link href="http://adereth.github.io/blog/2016/12/06/writing-a-halite-bot-in-clojure/"/>
+    <updated>2016-12-06T10:42:00-08:00</updated>
+    <id>http://adereth.github.io/blog/2016/12/06/writing-a-halite-bot-in-clojure</id>
+    <content type="html"><![CDATA[<div>
+<script src="http://adereth.github.io/javascripts/halite/pixi.min.js"></script>
+<script src="http://adereth.github.io/javascripts/halite/parsereplay.js"></script>
+<script src="http://adereth.github.io/javascripts/halite/visualizer.js"></script>
+</div>
+
+
+<p><a href="https://halite.io"><img src="/images/halitehero.png" alt="Halite: May the Best Bot Win" /></a></p>
+
+<p><a href="https://halite.io">Halite</a> is a new AI programming competition that was recently released by <a href="https://www.twosigma.com/">Two Sigma</a> and <a href="https://tech.cornell.edu/">Cornell Tech</a>.  It was designed and implemented by two interns at Two Sigma and was run as the annual internal summer programming competition.</p>
+
+<p>While the rules are relatively simple, it proved to be a surprisingly deep challenge.  It&rsquo;s played on a 2D grid and a typical game looks like this:</p>
+
+<center>
+<div id="gameReplay" class="text-center"></div>
+</center>
+
+
+<div>
+
+  <script type="text/javascript">
+
+    var data = textFromURL("ar1478846062-2923329127.hlt", $("#gameReplay"), function(data) {
+        console.log(data)
+        if(data != null) {
+            showGame(data, $("#gameReplay"), null, 500, true, true);
+        }
+    });
+
+  </script>
+</div>
+
+
+<p>Each turn, all players simultaneously issue movement commands to each of their pieces:</p>
+
+<ol>
+<li>Move to an adjacent location and capture it if you are stronger than what&rsquo;s currently there.</li>
+<li>Stay put and build strength based on the production value of your current location.</li>
+</ol>
+
+
+<p>When two players' pieces are adjacent to each other, they automatically fight.  A much more detailed description is available on the <a href="https://halite.io/rules_game.php">Halite Game Rules page</a>.</p>
+
+<p>Bots are run as subprocesses that communicate with the game environment through <code>STDIN</code> and <code>STDOUT</code>, so it&rsquo;s very simple to create bots in the language of your choice.  While Python, Java, and C++ bot kits were all provided by the game developers, the community quickly produced kits for C#, Rust, Scala, Ruby, Go, PHP, Node.js, OCaml, C, and Clojure.  All the starter packages are available on the <a href="https://halite.io/downloads.php">Halite Downloads page</a>.</p>
+
+<h2>Clojure Bot Basics</h2>
+
+<p>The flow of all bots are the same:</p>
+
+<ol>
+<li>Read the initial state (your player ID and the starting game map conditions)</li>
+<li>Write your bot&rsquo;s name</li>
+<li>Read the current gam emap</li>
+<li>Write your moves</li>
+<li>GOTO #3</li>
+</ol>
+
+
+<p>The Clojure kit represents the game map as a 2D vector of <code>Site</code> records:</p>
+
+<p>```clojure
+(defrecord Site</p>
+
+<pre><code>[^int x
+ ^int y
+ ^int production
+ ^int strength
+ ^int owner])
+</code></pre>
+
+<p>```</p>
+
+<p>And movement instructions are simple keywords:</p>
+
+<p><code>clojure
+(def directions [:still :north :east :south :west])
+</code></p>
+
+<p>A simple bot that finds all the sites you control and issues random moves would look like this:</p>
+
+<p>```clojure
+(ns MyBot
+  (:require [game] [io])
+  (:gen-class))</p>
+
+<p>(defn random-moves
+  &ldquo;Takes your bot&rsquo;s ID and a 2D vector of Sites and returns a map from site to direction&rdquo;
+  [my-id game-map]
+  (let [my-sites (&ndash;>> game-map</p>
+
+<pre><code>                  flatten
+                  (filter #(= (:owner %) my-id)))]
+(zipmap my-sites (repeatedly #(rand-nth game/directions)))))
+</code></pre>
+
+<p>(defn -main []
+  (let [{:keys [my-id productions width height game-map]} (io/get-init!)]</p>
+
+<pre><code>(println "MyFirstClojureBot")
+(doseq [turn (range)]
+  (let [game-map (io/create-game-map width height productions (io/read-ints!))]
+    (io/send-moves! (random-moves my-id game-map))))))
+</code></pre>
+
+<p>```</p>
+
+<h2>Next Steps</h2>
+
+<p>There are currently almost 900 bots competing on the site, but <a href="https://halite.io/leaderboard.php?field=language&amp;value=Clojure&amp;heading=Clojure">there are only a handful written in Clojure</a>!  I&rsquo;m sure the Clojure community could do some interesting things here, so head over to <a href="https://halite.io">halite.io</a>, sign-up using your Github account, and <a href="https://halite.io/downloads/starterpackages/Halite-Clojure-Starter-Package.zip">download the Clojure starter kit</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Visualizing Girl Talk: Parsing with Clojure's Instaparse]]></title>
@@ -579,95 +696,6 @@ If invoked with a PREFIX argument, print the result in the current buffer.&rdquo
 <p>I find this simple pattern to be quite handy.  Also, when I&rsquo;m showing off the power of nrepl to the uninitiated, being able to invoke arbitrary functions on whatever is at my cursor looks like pure magic.</p>
 
 <p>I hope you find this useful and if you invent any useful bindings or alternative ways of implementing this pattern, please share!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[3D Printing with Clojure]]></title>
-    <link href="http://adereth.github.io/blog/2014/04/09/3d-printing-with-clojure/"/>
-    <updated>2014-04-09T07:02:00-07:00</updated>
-    <id>http://adereth.github.io/blog/2014/04/09/3d-printing-with-clojure</id>
-    <content type="html"><![CDATA[<p>I&rsquo;ve been doing some 3D printing for <a href="https://twitter.com/adereth/status/444145229109555200/photo/1">my next keyboard project</a> and I&rsquo;ve got a workflow that I&rsquo;m pretty happy with that I&rsquo;d like to share.</p>
-
-<p>When I first started trying to make models a month ago, I tried <a href="http://www.blender.org/">Blender</a>.  It&rsquo;s an amazing beast, but after a few hours of tutorials it was clear that it would take a while to get proficient with it.  Also, it is really designed for interactive modeling and I need something that I can programmatically tweak.</p>
-
-<h2>OpenSCAD</h2>
-
-<p><img src="/images/openscad.gif" alt="OpenSCAD Screenshot" /></p>
-
-<p>A couple of friends suggested <a href="http://www.openscad.org/">OpenSCAD</a>, which is touted as &ldquo;the programmers' solid 3D CAD modeler.&rdquo;  It provides a power set of primitive shapes and operations, but the language itself leaves a bit to be desired.  This isn&rsquo;t a beat-up-on-SCAD post, but a few of the things that irked me were:</p>
-
-<ul>
-<li>Strange function application syntax (parameters in parens after the function name with an expression or block following the closing paren)</li>
-<li>Unclear variable binding rules (multiple passes are made over the code and the results of changing a variable may affect things earlier in the code unexpectedly)</li>
-<li>No package/namespace management</li>
-<li>Multiple looping constructs that depend on what you are going to do with the results, not on how you want to loop</li>
-</ul>
-
-
-<h2>scad-clj</h2>
-
-<p>Fortunately, <a href="https://github.com/farrellm">Matt Farrell</a> has written <a href="https://github.com/farrellm/scad-clj">scad-clj</a>, an OpenSCAD DSL in Clojure.  It addresses every issue I had with OpenSCAD and lends itself to a really nice workflow with the Clojure REPL.</p>
-
-<p>To get started using it, add the dependency on <a href="https://clojars.org/scad-clj"><code>[scad-clj "0.1.0"]</code></a> to your <code>project.clj</code> and fire up your REPL.</p>
-
-<p>All of the functions for creating 3D models live in the <code>scad-clj.model</code> namespace.  There&rsquo;s no documentation yet, so in the beginning you&rsquo;ll have to look at the <a href="https://github.com/farrellm/scad-clj/blob/master/src/scad_clj/model.clj">source for <code>model.clj</code></a> and occassionally the <a href="http://www.openscad.org/documentation.html">OpenSCAD documentation</a>.  Fortunately, there really isn&rsquo;t much to learn and it&rsquo;s quite a revelation to discover that almost everything you&rsquo;ll want to do can be done with a handful of functions.</p>
-
-<p>Here&rsquo;s a simple model that showcases each of the primitive shapes:</p>
-
-<p><code>clojure
-(def primitives
-  (union
-   (cube 100 100 100)
-   (sphere 110)
-   (cylinder 10 150)))
-</code></p>
-
-<p>Evaluating this gives us a data structure that can be converted into an .scad file using <code>scad-clj.scad/write-scad</code> to generate a string and <code>spit</code>.</p>
-
-<p>```clojure
-(spit &ldquo;post-demo.scad&rdquo;</p>
-
-<pre><code>  (write-scad primitives))
-</code></pre>
-
-<p>```</p>
-
-<p>We&rsquo;re going to use OpenSCAD to view the results.  One feature of OpenSCAD that is super useful for this workflow is that it watches opened files and automatically refreshes the rendering when the file is updated.  This means that we can just re-evaluate our Clojure code and see the results immediately in another window:</p>
-
-<p><img src="/images/scad-primitives.png" alt="Primitives Screenshot" /></p>
-
-<p>scad-clj makes all new primitive shapes centered at the origin.  We can use the shape operator functions to move them around and deform them:</p>
-
-<p>```clojure
-(def primitives
-  (union
-   (&ndash;>> (cube 100 100 100)</p>
-
-<pre><code>    (rotate (/ Math/PI 4) [1 1 1])
-    (translate [150 0 0]))
-</code></pre>
-
-<p>   (&ndash;>> (sphere 70)</p>
-
-<pre><code>    (scale [1/2 1/2 2])
-    (translate [-150 0 0]))
-</code></pre>
-
-<p>   (cylinder 10 160)))
-```</p>
-
-<p><img src="/images/scad-operators.png" alt="Operator Screenshot" /></p>
-
-<p>I snuck <code>union</code> into those examples.  Shapes can also be combined using <code>intersection</code>, <code>difference</code>, and <code>hull</code>.  It&rsquo;s pretty incredible how much can be done with just these.  For example, here&rsquo;s the latest iteration of my keyboard design built using clj-scad:</p>
-
-<p><img src="/images/scad-keyboard.png" alt="Keyboard" /></p>
-
-<h2>3D Printing</h2>
-
-<p>Once your design is complete, you can use OpenSCAD to export it as an STL file which can then be imported to software like <a href="http://replicat.org/">ReplicatorG</a> or <a href="https://www.makerbot.com/makerware/">Makerware</a> for processing into an .x3g file that can be printed:</p>
-
-<p><img src="/images/printed.JPG" alt="Keyboard" /></p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[adereth]]></title>
   <link href="http://adereth.github.io/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2016-11-11T08:16:48-08:00</updated>
+  <updated>2016-12-06T12:35:58-08:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -12,6 +12,140 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Writing a Halite Bot in Clojure]]></title>
+    <link href="http://adereth.github.io/blog/2016/12/06/writing-a-halite-bot-in-clojure/"/>
+    <updated>2016-12-06T10:42:00-08:00</updated>
+    <id>http://adereth.github.io/blog/2016/12/06/writing-a-halite-bot-in-clojure</id>
+    <content type="html"><![CDATA[<div>
+<script src="http://adereth.github.io/javascripts/halite/pixi.min.js"></script>
+<script src="http://adereth.github.io/javascripts/halite/parsereplay.js"></script>
+<script src="http://adereth.github.io/javascripts/halite/visualizer.js"></script>
+</div>
+
+
+<p><a href="https://halite.io"><img src="http://adereth.github.io/images/halitehero.png" alt="Halite: May the Best Bot Win" /></a></p>
+
+<p><a href="https://halite.io">Halite</a> is a new AI programming competition that was recently released by <a href="https://www.twosigma.com/">Two Sigma</a> and <a href="https://tech.cornell.edu/">Cornell Tech</a>.  It was designed and implemented by two interns at Two Sigma and was run as the annual internal summer programming competition.</p>
+
+<p>While the rules are relatively simple, it proved to be a surprisingly deep challenge.  It&rsquo;s played on a 2D grid and a typical game looks like this:</p>
+
+<center>
+<div id="gameReplay" class="text-center"></div>
+</center>
+
+
+<div>
+
+  <script type="text/javascript">
+
+    var data = textFromURL("ar1478846062-2923329127.hlt", $("#gameReplay"), function(data) {
+        console.log(data)
+        if(data != null) {
+            showGame(data, $("#gameReplay"), null, 500, true, true);
+        }
+    });
+
+  </script>
+</div>
+
+
+<p>Each turn, all players simultaneously issue movement commands to each of their pieces:</p>
+
+<ol>
+<li>Move to an adjacent location and capture it if you are stronger than what&rsquo;s currently there.</li>
+<li>Stay put and build strength based on the production value of your current location.</li>
+</ol>
+
+
+<p>When two players&#8217; pieces are adjacent to each other, they automatically fight.  A much more detailed description is available on the <a href="https://halite.io/rules_game.php">Halite Game Rules page</a>.</p>
+
+<p>Bots are run as subprocesses that communicate with the game environment through <code>STDIN</code> and <code>STDOUT</code>, so it&rsquo;s very simple to create bots in the language of your choice.  While Python, Java, and C++ bot kits were all provided by the game developers, the community quickly produced kits for C#, Rust, Scala, Ruby, Go, PHP, Node.js, OCaml, C, and Clojure.  All the starter packages are available on the <a href="https://halite.io/downloads.php">Halite Downloads page</a>.</p>
+
+<h2>Clojure Bot Basics</h2>
+
+<p>The flow of all bots are the same:</p>
+
+<ol>
+<li>Read the initial state (your player ID and the starting game map conditions)</li>
+<li>Write your bot&rsquo;s name</li>
+<li>Read the current gam emap</li>
+<li>Write your moves</li>
+<li>GOTO #3</li>
+</ol>
+
+
+<p>The Clojure kit represents the game map as a 2D vector of <code>Site</code> records:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defrecord </span><span class="nv">Site</span>
+</span><span class='line'>    <span class="p">[</span><span class="o">^</span><span class="nb">int </span><span class="nv">x</span>
+</span><span class='line'>     <span class="o">^</span><span class="nb">int </span><span class="nv">y</span>
+</span><span class='line'>     <span class="o">^</span><span class="nb">int </span><span class="nv">production</span>
+</span><span class='line'>     <span class="o">^</span><span class="nb">int </span><span class="nv">strength</span>
+</span><span class='line'>     <span class="o">^</span><span class="nb">int </span><span class="nv">owner</span><span class="p">])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And movement instructions are simple keywords:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">directions</span> <span class="p">[</span><span class="ss">:still</span> <span class="ss">:north</span> <span class="ss">:east</span> <span class="ss">:south</span> <span class="ss">:west</span><span class="p">])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A simple bot that finds all the sites you control and issues random moves would look like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">ns </span><span class="nv">MyBot</span>
+</span><span class='line'>  <span class="p">(</span><span class="ss">:require</span> <span class="p">[</span><span class="nv">game</span><span class="p">]</span> <span class="p">[</span><span class="nv">io</span><span class="p">])</span>
+</span><span class='line'>  <span class="p">(</span><span class="ss">:gen-class</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">random-moves</span>
+</span><span class='line'>  <span class="s">&quot;Takes your bot&#39;s ID and a 2D vector of Sites and returns a map from site to direction&quot;</span>
+</span><span class='line'>  <span class="p">[</span><span class="nv">my-id</span> <span class="nv">game-map</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">my-sites</span> <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">game-map</span>
+</span><span class='line'>                      <span class="nv">flatten</span>
+</span><span class='line'>                      <span class="p">(</span><span class="nb">filter </span><span class="o">#</span><span class="p">(</span><span class="nb">= </span><span class="p">(</span><span class="ss">:owner</span> <span class="nv">%</span><span class="p">)</span> <span class="nv">my-id</span><span class="p">)))]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">zipmap </span><span class="nv">my-sites</span> <span class="p">(</span><span class="nf">repeatedly</span> <span class="o">#</span><span class="p">(</span><span class="nf">rand-nth</span> <span class="nv">game/directions</span><span class="p">)))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">-main</span> <span class="p">[]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[{</span><span class="ss">:keys</span> <span class="p">[</span><span class="nv">my-id</span> <span class="nv">productions</span> <span class="nv">width</span> <span class="nv">height</span> <span class="nv">game-map</span><span class="p">]}</span> <span class="p">(</span><span class="nf">io/get-init!</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">println </span><span class="s">&quot;MyFirstClojureBot&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">doseq </span><span class="p">[</span><span class="nv">turn</span> <span class="p">(</span><span class="nf">range</span><span class="p">)]</span>
+</span><span class='line'>      <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">game-map</span> <span class="p">(</span><span class="nf">io/create-game-map</span> <span class="nv">width</span> <span class="nv">height</span> <span class="nv">productions</span> <span class="p">(</span><span class="nf">io/read-ints!</span><span class="p">))]</span>
+</span><span class='line'>        <span class="p">(</span><span class="nf">io/send-moves!</span> <span class="p">(</span><span class="nf">random-moves</span> <span class="nv">my-id</span> <span class="nv">game-map</span><span class="p">))))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Next Steps</h2>
+
+<p>There are currently almost 900 bots competing on the site, but <a href="https://halite.io/leaderboard.php?field=language&amp;value=Clojure&amp;heading=Clojure">there are only a handful written in Clojure</a>!  I&rsquo;m sure the Clojure community could do some interesting things here, so head over to <a href="https://halite.io">halite.io</a>, sign-up using your Github account, and <a href="https://halite.io/downloads/starterpackages/Halite-Clojure-Starter-Package.zip">download the Clojure starter kit</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Bag of Little Bootstraps Presentation at PWL SF]]></title>
@@ -5276,25 +5410,6 @@ function position() {
 
 
 <p><i class="fa fa-star fa-2x"></i></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Font Awesome Easter Egg]]></title>
-    <link href="http://adereth.github.io/blog/2013/12/15/font-awesome-easter-egg/"/>
-    <updated>2013-12-15T12:45:00-08:00</updated>
-    <id>http://adereth.github.io/blog/2013/12/15/font-awesome-easter-egg</id>
-    <content type="html"><![CDATA[<p><a href="http://fontawesome.io/">Font Awesome</a> is a gorgeous icon font designed to play nicely with Bootstrap.  I was playing around with it today and noticed the highly detailed <a href="http://fontawesome.io/icon/barcode/">fa-barcode</a> character:</p>
-
-<p><i class="fa fa-barcode"></i></p>
-
-<p>If we make it a little larger, we can see that it really looks like a legit barcode:</p>
-
-<p><i class="fa fa-barcode fa-5x"></i></p>
-
-<p>I scanned it with a barcode reader and it&rsquo;s the code for <code>FA</code>.</p>
-
-<p><i class="fa fa-trophy"></i> Font Awesome wins at detail.</p>
 ]]></content>
   </entry>
   

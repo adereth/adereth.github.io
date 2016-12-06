@@ -163,16 +163,20 @@
         <lastmod>2016-04-19T20:24:55-07:00</lastmod>
     </url>
     <url>
+        <loc>http://adereth.github.io/blog/2016/12/06/writing-a-halite-bot-in-clojure/</loc>
+        <lastmod>2016-12-06T12:34:53-08:00</lastmod>
+    </url>
+    <url>
         <loc>http://adereth.github.io/blog/archives/</loc>
-        <lastmod>2016-04-19T20:24:55-07:00</lastmod>
+        <lastmod>2016-12-06T12:34:53-08:00</lastmod>
     </url>
     <url>
         <loc>http://adereth.github.io/blog/</loc>
-        <lastmod>2016-04-19T20:24:55-07:00</lastmod>
+        <lastmod>2016-12-06T12:34:53-08:00</lastmod>
     </url>
     <url>
         <loc>http://adereth.github.io/archives/</loc>
-        <lastmod>2016-04-19T20:24:55-07:00</lastmod>
+        <lastmod>2016-12-06T12:34:53-08:00</lastmod>
     </url>
     <url>
         <loc>http://adereth.github.io/oneoff/treemap-with-github-colors/</loc>
@@ -188,7 +192,7 @@
     </url>
     <url>
         <loc>http://adereth.github.io/</loc>
-        <lastmod>2016-04-19T20:24:55-07:00</lastmod>
+        <lastmod>2016-12-06T12:34:53-08:00</lastmod>
     </url>
     <url>
         <loc>http://adereth.github.io/clojure.xml</loc>
