@@ -1,0 +1,2695 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>adereth</title>
+  <meta name="author" content="Matt Adereth">
+
+  
+  <meta name="description" content="I love REPL Driven Development. My style is to write expressions directly in the file that I&rsquo;m working on and to use C-x C-e to view the value &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://adereth.github.io/blog/page/2/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+   <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="adereth" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic|Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+<link href="//fonts.googleapis.com/css?family=Crimson+Text:400italic,400,600italic,600,700italic,700" rel="stylesheet" type="text/css">
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ TeX: { extensions: ["color.js"] }});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript"
+        src="http://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-44572622-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <!-- <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:adereth.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav> -->
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/05/29/custom-clojure-evaluation-keybindings-in-emacs/">Custom Clojure Evaluation Keybindings in Emacs</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-29T06:28:00-07:00" pubdate data-updated="true">May 29<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I love <a href="http://blog.jayfields.com/2014/01/repl-driven-development.html">REPL Driven Development</a>.  My style is to write expressions directly in the file that I&rsquo;m working on and to use <code>C-x C-e</code> to view the value of the last command in the minibuffer.</p>
+
+<p>Being able to move my cursor to a sub-expression and see the value of that expression immediately feels like a superpower.  I love this ability and it&rsquo;s one of the things that keeps me locked into Clojure+Emacs as my preferred enviroment.</p>
+
+<p>This power can be taken to the next level by making custom evaluation commands that run whatever you want on the expression at your cursor.</p>
+
+<h2>The Basic Pattern</h2>
+
+<p>Let&rsquo;s start by looking at the Elisp that defines <code>cider-eval-last-sexp</code>, which is what gets invoked when we press <code>C-x C-e</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">cider-eval-last-sexp</span> <span class="p">(</span><span class="o">&amp;</span><span class="nv">optional</span> <span class="nv">prefix</span><span class="p">)</span>
+</span><span class='line'>  <span class="s">&quot;Evaluate the expression preceding point.</span>
+</span><span class='line'><span class="s">If invoked with a PREFIX argument, print the result in the current buffer.&quot;</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">interactive</span> <span class="s">&quot;P&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">if </span><span class="nv">prefix</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">cider-interactive-eval-print</span> <span class="p">(</span><span class="nf">cider-last-sexp</span><span class="p">))</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">cider-interactive-eval</span> <span class="p">(</span><span class="nf">cider-last-sexp</span><span class="p">))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The important part is that we can use <code>cider-last-sexp</code> to get the expression before the cursor as a string and we can evaluate a string by passing it to <code>cider-interactive-eval</code>.  We&rsquo;ll write some basic Elisp to make a new function that modifies the string before evaluation and then we&rsquo;ll bind this function to a new key sequence.</p>
+
+<p>The essential pattern we&rsquo;ll use is:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">custom-eval-last-sexp</span> <span class="p">()</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">interactive</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">cider-interactive-eval</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">format</span> <span class="s">&quot;(require &#39;some-namespace)</span>
+</span><span class='line'><span class="s">             (some-namespace/some-fn %s)&quot;</span>
+</span><span class='line'>            <span class="p">(</span><span class="nf">cider-last-sexp</span><span class="p">))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">define-key</span> <span class="nv">cider-mode-map</span> <span class="p">(</span><span class="nf">kbd</span> <span class="s">&quot;C-c c&quot;</span><span class="p">)</span> <span class="ss">&#39;custom-eval-last-sexp</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you happen to still be using Swank or nrepl.el, you should use <code>swank-interactive-eval</code> and <code>swank-last-sexp</code> or <code>swank-interactive-eval</code> and <code>nrepl-last-sexp</code>.</p>
+
+<p>Let&rsquo;s look at some of the useful things we can do with this&hellip;</p>
+
+<h2>Collections</h2>
+
+<p>I frequently deal with collections that are too big to display nicely in the minibuffer.  It&rsquo;s nice to be able to explore them with a couple keystrokes.  Here&rsquo;s a simple application of the pattern that gives us the size of the collection by just hitting <code>C-c c</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">count-last-expression</span> <span class="p">()</span>
+</span><span class='line'>       <span class="p">(</span><span class="nf">interactive</span><span class="p">)</span>
+</span><span class='line'>       <span class="p">(</span><span class="nf">cider-interactive-eval</span>
+</span><span class='line'>         <span class="p">(</span><span class="nf">format</span> <span class="s">&quot;(count %s)&quot;</span>
+</span><span class='line'>                 <span class="p">(</span><span class="nf">cider-last-expression</span><span class="p">))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">define-key</span> <span class="nv">cider-mode-map</span> <span class="p">(</span><span class="nf">kbd</span> <span class="s">&quot;C-c c&quot;</span><span class="p">)</span> <span class="ss">&#39;count-last-expression</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Another useful one is to just show the nth value.  This one is a little more interesting because it requires a parameter:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">nth-from-last-expression</span> <span class="p">(</span><span class="nf">n</span><span class="p">)</span>
+</span><span class='line'>       <span class="p">(</span><span class="nf">interactive</span> <span class="s">&quot;p&quot;</span><span class="p">)</span>
+</span><span class='line'>       <span class="p">(</span><span class="nf">cider-interactive-eval</span>
+</span><span class='line'>         <span class="p">(</span><span class="nf">format</span> <span class="s">&quot;(nth %s %s)&quot;</span>
+</span><span class='line'>                 <span class="p">(</span><span class="nf">cider-last-expression</span><span class="p">)</span> <span class="nv">n</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">define-key</span> <span class="nv">cider-mode-map</span> <span class="p">(</span><span class="nf">kbd</span> <span class="s">&quot;C-c n&quot;</span><span class="p">)</span> <span class="o">`</span><span class="nv">nth-from-last-expression</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you just use <code>C-c n</code>, Emacs defaults the parameter value to 1.  You can pass an argument using <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Arguments.html">Emacs&#8217; universal argument functionality</a>.  For example, to get the 0<sup>th</sup> element, you could either use <code>C-u 0 C-c n</code> or <code>M-0 C-c n</code>.</p>
+
+<h2>Write to File</h2>
+
+<p>Sometimes the best way to view a value is to look at it in an external program.  I&rsquo;ve used this pattern when working on Clojure code that generates SVG, HTML, and <a href="/blog/2014/04/09/3d-printing-with-clojure/">3D models</a>.  Here&rsquo;s what I use for 3D modeling:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">spit-scad-last-expression</span> <span class="p">()</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">interactive</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">cider-interactive-eval</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">format</span>    
+</span><span class='line'>      <span class="s">&quot;(require &#39;scad-clj.scad)</span>
+</span><span class='line'><span class="s">       (spit \&quot;eval.scad\&quot; (scad-clj.scad/write-scad %s))&quot;</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">cider-last-expression</span><span class="p">))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">define-key</span> <span class="nv">cider-mode-map</span> <span class="p">(</span><span class="nf">kbd</span> <span class="s">&quot;C-c 3&quot;</span><span class="p">)</span> <span class="ss">&#39;spit-scad-last-expression</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This writes the <code>eval.scad</code> file to the root directory of the project.  It&rsquo;s great because OpenSCAD watches open files and automatically refreshes when they change.  You can run this on an expression that defines a shape and immediately see the shape in another window.  I used this technique in <a href="http://www.meetup.com/Clojure-NYC/events/180303582/">my recent presentation on 3D printing at the Clojure NYC meetup</a> and I got feedback that this made the live demos easier to follow.</p>
+
+<p>Here&rsquo;s what it looks like when you <code>C-c 3</code> on a nested expression that defines a cube:</p>
+
+<p><img src="/images/show-scad.png" alt="OpenScad Screenshot" /></p>
+
+<h2>View Swing Components</h2>
+
+<p>If you have to use Swing, your pain can be slightly mitigated by having a quick way to view components.  This will give you a shortcut to pop up a new frame that contains what your expression evaluates to:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">frame-last-expression</span> <span class="p">()</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">interactive</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">cider-interactive-eval</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">format</span>    
+</span><span class='line'>     <span class="s">&quot;(doto (javax.swing.JFrame. \&quot;eval\&quot;)</span>
+</span><span class='line'><span class="s">        (.. (getContentPane) (add %s))</span>
+</span><span class='line'><span class="s">        (.pack)</span>
+</span><span class='line'><span class="s">        (.show))&quot;</span>
+</span><span class='line'>     <span class="p">(</span><span class="nf">cider-last-expression</span><span class="p">))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">define-key</span> <span class="nv">cider-mode-map</span> <span class="p">(</span><span class="nf">kbd</span> <span class="s">&quot;C-c f&quot;</span><span class="p">)</span> <span class="ss">&#39;frame-last-expression</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This plays nicely with <a href="https://github.com/daveray/seesaw">Seesaw</a>, but doesn&rsquo;t presume that you have it on your classpath.  Here&rsquo;s what it looks like when you <code>C-c f</code> at the end of an expression that defines a Swing component:</p>
+
+<p><img src="/images/show-frame.png" alt="JFrame Screenshot" /></p>
+
+<h2>Benchmarking with Criterium</h2>
+
+<p>In <a href="/blog/2013/11/22/a-few-interesting-clojure-microbenchmarks/">A Few Interesing Clojure Microbenchmarks</a>, I mentioned Hugo Duncan&rsquo;s <a href="https://github.com/hugoduncan/criterium">Criterium library</a>.  It&rsquo;s a reliable way of measuring the performance of an expression.  We can bring it closer to our fingertips by making a function for benchmarking an expression instead of just evaluating it:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">benchmark-last-expression</span> <span class="p">()</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">interactive</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">cider-interactive-eval</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">format</span> <span class="s">&quot;(require &#39;criterium.core)</span>
+</span><span class='line'><span class="s">             (criterium.core/quick-benchmark %s)&quot;</span>
+</span><span class='line'>            <span class="p">(</span><span class="nf">cider-last-expression</span><span class="p">))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">define-key</span> <span class="nv">cider-mode-map</span> <span class="p">(</span><span class="nf">kbd</span> <span class="s">&quot;C-c b&quot;</span><span class="p">)</span> <span class="ss">&#39;benchmark-last-expression</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Conclusion</h2>
+
+<p>I find this simple pattern to be quite handy.  Also, when I&rsquo;m showing off the power of nrepl to the uninitiated, being able to invoke arbitrary functions on whatever is at my cursor looks like pure magic.</p>
+
+<p>I hope you find this useful and if you invent any useful bindings or alternative ways of implementing this pattern, please share!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/04/30/java-dot-awt-dot-shapes-insidious-insideness/">java.awt.Shape&#8217;s Insidious Insideness</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-30T11:41:00-07:00" pubdate data-updated="true">Apr 30<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I recently added text support to the <a href="https://github.com/farrellm/scad-clj">scad-clj</a> 3D modeling library and encountered an interesting bug:</p>
+
+<p><img src="/images/bad4.png" alt="Poorly rendered 4" /></p>
+
+<p>See that 4?  No hole!  Why?!?  All the other holes are there&hellip;</p>
+
+<h2>Shape Outlines</h2>
+
+<p>First, let&rsquo;s look at how you get the outline of some text in a font in Java:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="n">FontRenderContext</span> <span class="n">frc</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FontRenderContext</span><span class="o">(</span>
+</span><span class='line'>        <span class="kc">null</span><span class="o">,</span>
+</span><span class='line'>        <span class="n">RenderingHints</span><span class="o">.</span><span class="na">VALUE_TEXT_ANTIALIAS_DEFAULT</span><span class="o">,</span>
+</span><span class='line'>        <span class="n">RenderingHints</span><span class="o">.</span><span class="na">VALUE_FRACTIONALMETRICS_DEFAULT</span><span class="o">);</span>
+</span><span class='line'><span class="n">Font</span> <span class="n">font</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Font</span><span class="o">(</span><span class="s2">&quot;Andale Mono&quot;</span><span class="o">,</span> <span class="n">Font</span><span class="o">.</span><span class="na">PLAIN</span><span class="o">,</span> <span class="mi">12</span><span class="o">);</span>
+</span><span class='line'><span class="n">String</span> <span class="n">myText</span> <span class="o">=</span> <span class="s2">&quot;1234567890&quot;</span><span class="o">;</span>
+</span><span class='line'><span class="n">PathIterator</span> <span class="n">path</span> <span class="o">=</span> <span class="n">font</span>
+</span><span class='line'>       <span class="o">.</span><span class="na">createGlyphVector</span><span class="o">(</span><span class="n">frc</span><span class="o">,</span> <span class="n">myText</span><span class="o">)</span>
+</span><span class='line'>       <span class="o">.</span><span class="na">getOutline</span><span class="o">()</span>
+</span><span class='line'>       <span class="o">.</span><span class="na">getPathIterator</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="mf">0.01d</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We end up with a <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/geom/PathIterator.html"><code>PathIterator</code></a> that traces along the outline of the character.  This code uses the version of <code>getPathIterator</code> that specifies &ldquo;flatness&rdquo;, which means that we get back a path strictly made up of straight line segments that approximate the curves.</p>
+
+<p>Characters that are made from a single filled polygon are relatively easy; there is a single path and the bounded area is what gets filled:</p>
+
+<p><img src="/images/one-path.png" alt="12357" /></p>
+
+<p>The complexity comes when the path crosses over itself or if it is discontinuous and contains multiple outlines:</p>
+
+<p><img src="/images/multiple-parts.png" alt="46890" /></p>
+
+<p>The <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/geom/PathIterator.html">JavaDocs for PathIterator</a> explain a bit about how to actually determine what is inside the path.  All of the fill areas are determined using the <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/geom/PathIterator.html#WIND_EVEN_ODD"><code>WIND_EVEN_ODD</code> rule</a>: <em>a point is in the fill area if it is contained by an odd number of paths.</em></p>
+
+<p>For example, the dotted zero is made up of three paths:</p>
+
+<ol>
+<li>The outline of the outside of the oval</li>
+<li>The outline of the inside of the oval</li>
+<li>The outline of the dot</li>
+</ol>
+
+
+<p>The points inside #1 but outside #2 are in 1 area and the points inside #3 are inside 3 areas.</p>
+
+<h2>Counting Areas</h2>
+
+<p>For each path, we need to count how many other paths contain it.  One way is to use <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/geom/Path2D.Double.html"><code>java.awt.geom.Path2D.Double</code></a> to make a Shape and then use the <code>contains(double x, double y)</code> method to see if any of the points from the other paths are in it.</p>
+
+<p>I incorrectly assumed that each Shape contained at least one of the points that define it&rsquo;s outline.  It usually does, which is why all the other holes were properly rendered, but it doesn&rsquo;t for some shapes, including triangles in certain orientations!</p>
+
+<p>The <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/Shape.html">JavaDoc for Shape</a> says that a point is considered to lie inside a Shape if and only if:</p>
+
+<ol>
+<li>It lies completely inside the Shape boundary or</li>
+<li>It lies exactly on the Shape boundary and the space immediately adjacent to the point in the increasing X direction is entirely inside the boundary or</li>
+<li>It lies exactly on a horizontal boundary segment and the space immediately adjacent to the point in the increasing Y direction is inside the boundary.</li>
+</ol>
+
+
+<p>The three points defining the triangle that form the hole in 4 don&rsquo;t meet any of these criteria, so instead of counting as being in 2 paths (itself and the outer outline), it was counted as being in 1.  The fix was to explicitly define a path as containing itself.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/04/09/3d-printing-with-clojure/">3D Printing With Clojure</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-09T07:02:00-07:00" pubdate data-updated="true">Apr 9<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&rsquo;ve been doing some 3D printing for <a href="https://twitter.com/adereth/status/444145229109555200/photo/1">my next keyboard project</a> and I&rsquo;ve got a workflow that I&rsquo;m pretty happy with that I&rsquo;d like to share.</p>
+
+<p>When I first started trying to make models a month ago, I tried <a href="http://www.blender.org/">Blender</a>.  It&rsquo;s an amazing beast, but after a few hours of tutorials it was clear that it would take a while to get proficient with it.  Also, it is really designed for interactive modeling and I need something that I can programmatically tweak.</p>
+
+<h2>OpenSCAD</h2>
+
+<p><img src="/images/openscad.gif" alt="OpenSCAD Screenshot" /></p>
+
+<p>A couple of friends suggested <a href="http://www.openscad.org/">OpenSCAD</a>, which is touted as &ldquo;the programmers&#8217; solid 3D CAD modeler.&rdquo;  It provides a power set of primitive shapes and operations, but the language itself leaves a bit to be desired.  This isn&rsquo;t a beat-up-on-SCAD post, but a few of the things that irked me were:</p>
+
+<ul>
+<li>Strange function application syntax (parameters in parens after the function name with an expression or block following the closing paren)</li>
+<li>Unclear variable binding rules (multiple passes are made over the code and the results of changing a variable may affect things earlier in the code unexpectedly)</li>
+<li>No package/namespace management</li>
+<li>Multiple looping constructs that depend on what you are going to do with the results, not on how you want to loop</li>
+</ul>
+
+
+<h2>scad-clj</h2>
+
+<p>Fortunately, <a href="https://github.com/farrellm">Matt Farrell</a> has written <a href="https://github.com/farrellm/scad-clj">scad-clj</a>, an OpenSCAD DSL in Clojure.  It addresses every issue I had with OpenSCAD and lends itself to a really nice workflow with the Clojure REPL.</p>
+
+<p>To get started using it, add the dependency on <a href="https://clojars.org/scad-clj"><code>[scad-clj "0.1.0"]</code></a> to your <code>project.clj</code> and fire up your REPL.</p>
+
+<p>All of the functions for creating 3D models live in the <code>scad-clj.model</code> namespace.  There&rsquo;s no documentation yet, so in the beginning you&rsquo;ll have to look at the <a href="https://github.com/farrellm/scad-clj/blob/master/src/scad_clj/model.clj">source for <code>model.clj</code></a> and occassionally the <a href="http://www.openscad.org/documentation.html">OpenSCAD documentation</a>.  Fortunately, there really isn&rsquo;t much to learn and it&rsquo;s quite a revelation to discover that almost everything you&rsquo;ll want to do can be done with a handful of functions.</p>
+
+<p>Here&rsquo;s a simple model that showcases each of the primitive shapes:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">primitives</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">union</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">cube</span> <span class="mi">100</span> <span class="mi">100</span> <span class="mi">100</span><span class="p">)</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">sphere</span> <span class="mi">110</span><span class="p">)</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">cylinder</span> <span class="mi">10</span> <span class="mi">150</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Evaluating this gives us a data structure that can be converted into an .scad file using <code>scad-clj.scad/write-scad</code> to generate a string and <code>spit</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">spit</span> <span class="s">&quot;post-demo.scad&quot;</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">write-scad</span> <span class="nv">primitives</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We&rsquo;re going to use OpenSCAD to view the results.  One feature of OpenSCAD that is super useful for this workflow is that it watches opened files and automatically refreshes the rendering when the file is updated.  This means that we can just re-evaluate our Clojure code and see the results immediately in another window:</p>
+
+<p><img src="/images/scad-primitives.png" alt="Primitives Screenshot" /></p>
+
+<p>scad-clj makes all new primitive shapes centered at the origin.  We can use the shape operator functions to move them around and deform them:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">primitives</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">union</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="p">(</span><span class="nf">cube</span> <span class="mi">100</span> <span class="mi">100</span> <span class="mi">100</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">(</span><span class="nf">rotate</span> <span class="p">(</span><span class="nb">/ </span><span class="nv">Math/PI</span> <span class="mi">4</span><span class="p">)</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span><span class="p">])</span>
+</span><span class='line'>        <span class="p">(</span><span class="nf">translate</span> <span class="p">[</span><span class="mi">150</span> <span class="mi">0</span> <span class="mi">0</span><span class="p">]))</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="p">(</span><span class="nf">sphere</span> <span class="mi">70</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">(</span><span class="nf">scale</span> <span class="p">[</span><span class="mi">1</span><span class="nv">/2</span> <span class="mi">1</span><span class="nv">/2</span> <span class="mi">2</span><span class="p">])</span>
+</span><span class='line'>        <span class="p">(</span><span class="nf">translate</span> <span class="p">[</span><span class="mi">-150</span> <span class="mi">0</span> <span class="mi">0</span><span class="p">]))</span>
+</span><span class='line'>   <span class="p">(</span><span class="nf">cylinder</span> <span class="mi">10</span> <span class="mi">160</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="/images/scad-operators.png" alt="Operator Screenshot" /></p>
+
+<p>I snuck <code>union</code> into those examples.  Shapes can also be combined using <code>intersection</code>, <code>difference</code>, and <code>hull</code>.  It&rsquo;s pretty incredible how much can be done with just these.  For example, here&rsquo;s the latest iteration of my keyboard design built using clj-scad:</p>
+
+<p><img src="/images/scad-keyboard.png" alt="Keyboard" /></p>
+
+<h2>3D Printing</h2>
+
+<p>Once your design is complete, you can use OpenSCAD to export it as an STL file which can then be imported to software like <a href="http://replicat.org/">ReplicatorG</a> or <a href="https://www.makerbot.com/makerware/">Makerware</a> for processing into an .x3g file that can be printed:</p>
+
+<p><img src="/images/printed.JPG" alt="Keyboard" /></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/02/27/finishing-up-the-ergodox/">Finishing Up the ErgoDox</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-27T22:43:00-08:00" pubdate data-updated="true">Feb 27<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&rsquo;ve been busy with a few other keyboard projects since <a href="/blog/2014/02/12/building-an-ergodox/">my last post on my ErgoDox build</a>.  While working on those projects, I&rsquo;ve gotten some parts and done a few more tweaks to the ErgoDox that I&rsquo;d like to share.</p>
+
+<h2>PBT DSA Keycaps</h2>
+
+<p>The biggest improvement was switching the keycaps.  Originally I had used keycaps from <a href="http://www.wasdkeyboards.com/index.php/">WASD Keyboards</a> that were designed to be used with a normal keyboard.  Typical keyboards use keycaps that are very similar to DCS profile caps, which have different profiles for different rows:</p>
+
+<p><img src="/images/dcs.jpg" alt="DCS Keycap Profile" /></p>
+
+<p><em>Source: <a href="http://keycapsdirect.com/key-caps.php">Signature Plastics</a></em></p>
+
+<p>In contrast, DSA keycaps have concave spherical tops and are uniform in profile:</p>
+
+<p><img src="/images/dsa.jpg" alt="DSA Keycap Profile" /></p>
+
+<p>I had ordered a set of DSA keycaps from Signature Plastics for another project and decided to try them out on the ErgoDox:</p>
+
+<p><img src="/images/full-ergo-green.jpeg" alt="Full keyboard" /></p>
+
+<p>I was surprised with how much better these felt, particularly on the thumb cluster.  I now realize that a lot of my discomfort reaching the upper keys on the the thumb cluster came from their relatively high profile.</p>
+
+<p>The DSA keycaps are also made out of PBT plastic instead of ABS.  They have a nice textured feel and the plastic is supposed to be much more robust.  As I said in my last post, <a href="http://keyshop.pimpmykeyboard.com/product/dsa-pbt-blank-sets">Pimp My Keyboard shop has PBT DCA blank sets for the ErgoDox</a> for $43, which is a great deal and is definitely the way to go if you&rsquo;re sourcing your own parts.</p>
+
+<h2>TRRS Connector</h2>
+
+<p><a href="http://www.digikey.com/">DigiKey</a> finally got the <a href="http://www.digikey.com/product-detail/en/SJ-43514/CP-43514-ND/368146">TRRS connectors</a> in stock and sent them to me.  I was concerned that they wouldn&rsquo;t fit in my lower profile case, but a little Dremel action made it work:</p>
+
+<p><img src="/images/TRRS.jpeg" alt="TRRS Connector" /></p>
+
+<p>The keyboard didn&rsquo;t work after I added the connector.  It worked fine if I just had the right side plugged in, but as soon as I connected the left side, neither worked.  I took the whole thing apart and used an ohmmeter to test the 4 connections between the two halves.  It turned out that all of the connections were there, but there was a little resistance on one of them.  I resoldered it more thoroughly and everything worked fine.</p>
+
+<h2>Sanding</h2>
+
+<p>Finally, I did a little experimentation with wet sanding the sides to remove some of the burn marks from the paper during the laser cutting and to give a more even finish.  I used 400 grit sandpaper and made a little progress:</p>
+
+<p><img src="/images/corner-zoom.jpeg" alt="corner" /></p>
+
+<p>Acrylic dust is nasty stuff!  It didn&rsquo;t make as much of a difference as I hoped.  I&rsquo;m going to do a little more experimentation sanding with acetone to see if I can melt it smoothly and make the 5 layers of acrylic look like one piece.</p>
+
+<h2>Next Steps</h2>
+
+<p>My next project is going to involve a lot of acrylic bending, so I&rsquo;m probably going to also take a stab at cutting and bending a stand for the ErgoDox that tents it at a better angle.  Any suggestions are appreciated!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/02/12/building-an-ergodox/">Sourcing and Building an ErgoDox Keyboard</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-12T07:25:00-08:00" pubdate data-updated="true">Feb 12<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The <a href="http://ergodox.org/">ErgoDox</a> is a split ergonomic keyboard project.  One of the most notable things about it is that you can&rsquo;t buy this keyboard &mdash; you have to build it yourself!  The <a href="http://ergodox.org/Hardware.aspx">parts list</a> is available on the site, along with the <a href="http://ergodox.org/Downloads.aspx">designs for the PCB and case</a>.</p>
+
+<p>I recently built one, sourcing the parts myself, and I&rsquo;d like to share what I&rsquo;ve learned.</p>
+
+<h2>Reference Build</h2>
+
+<p>The easiest way to build one is to get in on one of the <a href="https://www.massdrop.com/buy/ergodox">group-buys of full kits organized by Massdrop</a>.  Their kits have become the most common build, with options for different style <a href="http://www.keyboardco.com/blog/index.php/2012/12/an-introduction-to-cherry-mx-mechanical-switches/">Cherry keyswitches</a> and either a classic case or one with wrist rests.</p>
+
+<p><a href="https://www.massdrop.com/buy/ergodox"><img src="/images/massdrop-ergo.jpg" alt="Massdrop's ErgoDox" /></a></p>
+
+<p>After some investigation, I decided I could build something very similar without the kit.</p>
+
+<h2>Ordering the Parts</h2>
+
+<p>There are a few major things that you need to build an ErgoDox:</p>
+
+<ul>
+<li>Printed circuit boards (PCB)</li>
+<li>Teensy controller</li>
+<li>Keyswitches</li>
+<li>Key caps</li>
+<li>A bunch of little electronic components</li>
+<li>A case</li>
+</ul>
+
+
+<p>I obtained the PCB, Teensy, and keyswitches from <a href="http://mechanicalkeyboards.com/">Mechanical Keyboards</a>.</p>
+
+<p>I managed to pick up <a href="http://ergodox.org/Hardware.aspx">all the little electronic components</a> from <a href="http://www.digikey.com/">DigiKey</a>, except for the <a href="http://www.digikey.com/product-detail/en/SJ-43514/CP-43514-ND/368146">TRRS connectors</a> which are currently unavailable.  The TRRS connectors are the headphone-style jacks that are used to connect the two halves.  I decided to not use TRRS and to just solder basic wires directly onto the board.</p>
+
+<p>The PCBs were \$38, the keyswitches were \$49, the Teensy was \$22 (but can be bought for less), and the rest of the components came out to about \$20.  This \$129 covers everything needed except for the case and the keycaps.  For reference, the Massdrop group buy is \$199 for everything excluding the keycaps, so I had roughly $70 to spend on the case before it would have made financial sense to wait for another group buy opportunity.</p>
+
+<h2>Making the Case</h2>
+
+<p>There are really two options for making a case:</p>
+
+<ol>
+<li>3-D printing</li>
+<li>Laser cut acrylic</li>
+</ol>
+
+
+<p><a href="http://www.shapeways.com/shops/Dox">The designs for the case are available on Shapeways</a>, but it comes out to almost \$200, even when choosing the least expensive options for everything!  I considered printing it myself on the Makerbots at my office, but I was skeptical that the older models we have would result in acceptable quality.</p>
+
+<p>Laser cutting the acrylic seemed like the way to go, so I picked up 5 12&#8221;x12&#8221; sheets of 3mm opaque white acrylic from <a href="http://canalplastic.com/">Canal Plastics</a> for \$7 a sheet.  They can be ordered from Amazon for basically the same price.  The design used in Massdrop&rsquo;s kit uses 3mm sheets for the top and bottom and 5mm sheets for the middle 3 layers, but I believed (hoped!) that I could make it all fit in a slimmer case.</p>
+
+<p>I had never laser cut anything before, but my coworker <a href="http://trmm.net/Main_Page">Trammell</a> has a ton of experience with it and helped me out.  He&rsquo;s a member at <a href="http://www.nycresistor.com/">NYC Resistor</a> and they have a <a href="http://www.nycresistor.com/laser/">laser</a>!  We used Inkscape to generate PDFs and then used his <a href="http://trmm.net/Category:Laser_cutter#Command_line_laser_cutting">command line laser cutting tool</a> to send them over to the Epilog laser cutter.  We were able to get 2 layers out of each sheet, as you can see in these action shots:</p>
+
+<p><img src="/images/laser1.jpg" alt="Laser action shot 1" />
+<img src="/images/laser3.jpg" alt="Laser action shot 3" />
+<img src="/images/laser2.jpg" alt="Laser action shot 2" /></p>
+
+<p>And the final result:</p>
+
+<p><img src="/images/case.jpg" alt="Final cut" /></p>
+
+<p>It took just under 27 minutes of actual laser time, which at \$0.75/min came out to \$20.  \$55 for the case was a lot more than I expected, but it still kept the cost below \$199.  It seems like this is the part that would offer the most savings if done as part of a group buy.</p>
+
+<h2>Keycaps</h2>
+
+<p>Massdrop usually offers <a href="https://www.massdrop.com/buy/ergodox-keycap/talk">a separate group buy of PBT DCS keycaps</a> when they offer the full kit.  I decided to try using standard keycaps and to buy the missing ones separately.  This was a big mistake.  A proper set of keycaps for the ErgoDox requires 12 1.5x keycaps, which are way too expensive when bought separately.  Only later did I discover that the <a href="http://keyshop.pimpmykeyboard.com/product/dsa-pbt-blank-sets">Pimp My Keyboard shop has PBT DCA blank sets for the ErgoDox</a> for $43.</p>
+
+<p>I got my keycaps from <a href="http://www.wasdkeyboards.com/index.php/">WASD Keyboards</a>.  They have a <a href="http://www.wasdkeyboards.com/index.php/products/keycap-set/87-key-cherry-mx-keycap-set.html">pretty slick keycap designer</a>.  I used it with my kids and we came up with a design they were happy with (my 3 year-old is currently obsessed with rainbows):</p>
+
+<p><img src="/images/keys.jpeg" alt="Rainbow keys" /></p>
+
+<p>I decided to take advantage of their ability to print whichever letters I want on each key to make this be the <a href="http://colemak.com/">Colemak layout</a>.  I&rsquo;ve got the layout commited to muscle memory, but sometimes my kids want to type on my keyboard and it&rsquo;s annoying to switch to QWERTY so the keys match the letters printed on them.</p>
+
+<h2>Putting It Together</h2>
+
+<p>I did the actual soldering and assembly in the Hackerlab at <a href="http://www.twosigma.com">my office</a>:</p>
+
+<p><img src="/images/hackerspace.jpg" alt="TS Hackerspace" /></p>
+
+<p>To put it together, I mostly followed <a href="https://www.massdrop.com/ext/ergodox/assembly">Massdrop&rsquo;s assembly instructions</a>.  I did a decent job soldering (it&rsquo;s almost 400 solder points), but I wish that I had watched the <a href="http://t.co/jIltwbHDhQ">EEVblog videos on soldering</a> beforehand.  That guy knows what he&rsquo;s talking about.</p>
+
+<p>Because I used 3mm sheets instead of the recommended 5mm, there wasn&rsquo;t a lot of clearance and I had to get creative.  The keyswitches stuck out a little too far on the bottom of the PCBs, so I used flush cutters to trim the leads and the plastic nubs:</p>
+
+<p><img src="/images/flush-pcb.jpg" alt="flush pcb" /></p>
+
+<p>Originally, I used the recommended header pins to connect the Teensy to the PCB, but that brought the USB connector too high and prevented the top layer from fitting.  Instead, Trammell suggested I mount it directly on the PCB.  Desoldering the Teensy was really, really hard.  The throughholes are tiny and there are so many of them!  I ended up using the Dremel to clear some space around it and then used the cutting wheel to slice the header pins.  Unfortunately, I got the angle wrong one time and took out a nice chunk of the Teensy&rsquo;s bottom:</p>
+
+<p><img src="/images/busted-teensy.jpg" alt="Busted teensy" /></p>
+
+<p>I got a replacement Teensy.  With some electrical tape on the bottom, I put it directly on the PCB which got me the clearance I needed:</p>
+
+<p><img src="/images/sm-teensy.jpg" alt="Surface mounted teensy" /></p>
+
+<p>The mini-USB port on the back is about 5mm tall, so it also prevented the layers from fitting together nicely.  I remedied that by dremeling a little into the 4th layer.  It&rsquo;s not beautiful, but it&rsquo;s in the back and it&rsquo;s good enough.</p>
+
+<p><img src="/images/mini-usb.jpg" alt="Mini USB" /></p>
+
+<p>The Massdrop kit includes metal screws and nuts that are seriously sharp and will gouge the surface you put the ErgoDox on:</p>
+
+<p><img src="/images/massdrop-screws.jpg" alt="Massdrop screws" /></p>
+
+<p>I decided to go with <a href="http://www.amazon.com/gp/product/B000NHTPKQ/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B000NHTPKQ&amp;linkCode=as2&amp;tag=adereth-20">white nylon flat-head screws</a> and <a href="http://www.amazon.com/gp/product/B00FLM2WBC/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B00FLM2WBC&amp;linkCode=as2&amp;tag=adereth-20">nuts</a> for both aesthetics and the safety of my desk:</p>
+
+<p><a href="http://www.amazon.com/gp/product/B000NHTPKQ/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B000NHTPKQ&amp;linkCode=as2&amp;tag=adereth-20"><img src="/images/screw.jpg" alt="Flat-head screw" /></a>
+<a href="http://www.amazon.com/gp/product/B00FLM2WBC/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B00FLM2WBC&amp;linkCode=as2&amp;tag=adereth-20"><img src="/images/nut.jpg" alt="White nylon nut" /></a></p>
+
+<p>The Dremel came in handy again for making countersinks and for shortening the screws:</p>
+
+<p><img src="/images/countersink.jpg" alt="Countersink" /></p>
+
+<p><img src="/images/countersink-with-screw.jpg" alt="with screw" /></p>
+
+<p><img src="/images/trimmed-nut.jpeg" alt="trimmed nut" /></p>
+
+<p>The only other deviation from the original design was that I didn&rsquo;t use the audio jack style connector.  This was motivated by the fact that Digikey didn&rsquo;t have it in stock and that the jack would be too tall for the 3mm sheets.  I just soldered the wires directly onto the PCB:</p>
+
+<p><img src="/images/wires-on-pcb.jpg" alt="wires on pcb" /></p>
+
+<p><img src="/images/wires-out-back.jpg" alt="wires out the back" /></p>
+
+<h2>Programming the Teensy</h2>
+
+<p>I used the most excellent <a href="https://www.massdrop.com/ext/ergodox">ErgoDox Layout Configurator provided by Massdrop</a> to make my own modified layout that matches what I use on my Kinesis Advantage.  It was pretty straightforward.  I made one of the inner 1.5x keys switch to a QWERTY layer as a courtesy to anyone else who wants to try it out.</p>
+
+<h2>Final Product</h2>
+
+<p>Here&rsquo;s how it came out:</p>
+
+<p><img src="/images/final-build.jpeg" alt="Final build" /></p>
+
+<p><img src="/images/right-zoom.jpeg" alt="Next to Massdrop's" /></p>
+
+<p>Side-by-side comparison with one of my coworkers&#8217; build of Massdrop&rsquo;s kit with the palm rest:</p>
+
+<p><img src="/images/side-by-side.jpeg" alt="Next to Massdrop's" /></p>
+
+<p>And here you can see just how much thinner the case is with all 3mm sheets:</p>
+
+<p><img src="/images/height-comparison.jpg" alt="Next to Massdrop's" /></p>
+
+<p>The keycaps I used were taller than the <a href="https://www.massdrop.com/buy/ergodox-keycap/talk">PBT DCS ones sold by Massdrop</a>, so it ended up being close to the same height.</p>
+
+<h2>Review and Next Steps</h2>
+
+<p>The design and build were fun, but the real test is actually typing on it.  Like the Kinesis Advantage and Truly Ergonomic, the ErgoDox features a columnar layout with staggered keys, which is much more comfortable for me than the traditional layout.  Unfortunately, the PCB is flat and I find it to be less comfortable than the Kinesis&rsquo;s bowl shape.  It&rsquo;s hard to manufacture curved or flexible PCBs, so it&rsquo;s understandable that this DIY project wouldn&rsquo;t require it.</p>
+
+<p>A common complaint about the ErgoDox is that the thumb clusters are too close to the other keys.  This turned out to be a real problem for me as it requires a serious contortion for me to his the top keys of the thumb cluster.  On the Kinesis, I have these mapped to the oft used <code>Ctrl</code> and <code>Alt</code> keys.  It was so bad that I ended up having to remap the bottom corner keys to <code>Ctrl</code> and <code>Alt</code> and relegate the top 2 keys to less used ones.  I&rsquo;m not the only one who has struggled with this and the best solution I&rsquo;ve seen so far is <a href="http://geekhack.org/index.php?topic=44940.0">AcidFire&rsquo;s Grand Piano design</a>:</p>
+
+<p><a href="http://geekhack.org/index.php?topic=44940.0"><img src="/images/grand-ergo.jpg" alt="Grand Ergo" /></a></p>
+
+<p>Another issue is that I chose the wrong keyswitches.  My primary keyboard is the <a href="http://www.amazon.com/gp/product/B00IA6RDVK/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B00IA6RDVK&amp;linkCode=as2&amp;tag=adereth-20">Kinesis Advantage LF</a>, which uses Cherry MX reds.  I love them, but they are really hard to find at a reasonable price.  I wasn&rsquo;t about to spend $160 on the keyswitches, so I opted for Cherry MX blacks.  They are linear feel like the reds, but much stiffer, with an activation force of 60cN instead of 45cN.  This didn&rsquo;t seem like a big deal when I tried it out with individual switches from a sampler set, but it was a whole other experience when trying to type on a full set.  It&rsquo;s much harder to type on and I could feel my fingers straining very quickly.</p>
+
+<p>The last issue is that the ErgoDox really need to be tented at an angle for maximum comfort.  My plan was to use this as an ergonomic solution while traveling and I have some designs that would make it easy to attach to my laptop in a tented position.  Something like this:</p>
+
+<p><img src="/images/tented-laptop.jpg" alt="tented on laptop" /></p>
+
+<p>I decided to hold off on this until I have a solution for the other issues I listed.</p>
+
+<h2>Conclusion</h2>
+
+<p>Overall, this was an incredibly fun project and I learned a ton about how keyboards are made.  For anyone who&rsquo;s waiting for the next Massdrop group buy of a kit, you should know that it can be done by yourself for about the same price if you can get access to a laser cutter or CNC mill to make the case.  I&rsquo;m sure someone can be more creative and come up with an even more accessible solution.</p>
+
+<p>Unfortunately, I&rsquo;m not thrilled with the actual typing experience, so I can&rsquo;t recommend it over the Kinesis Advantage.  Some people love it, so try it out for yourself if you can or at least print out a stencil of it before committing.</p>
+
+<p>My plan is to take what I&rsquo;ve learned and to try and build something that&rsquo;s an even better fit for my travel usage.  Hopefully I can procure some Cherry reds for a reasonable price in the future&hellip;</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/02/03/where-lisp-fits/">Where LISP Fits</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-03T07:19:00-08:00" pubdate data-updated="true">Feb 3<span>rd</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>There are a lot of great essays about the power and joy of LISP.  I had read a bunch of them, but none convinced me to actually put the energy in to make it over those parentheses-shaped speed bumps.  A part of me always wanted to, mostly because I&rsquo;m convinced that our inevitable robot overlords will have to be programs that write programs and everything I had heard made me think that this would likely be done in a LISP.  It just makes sense to be prepared.</p>
+
+<p>Almost two years ago, a coworker showed me some gorgeous code that used Clojure&rsquo;s <a href="http://clojuredocs.org/clojure_core/clojure.core/-%3E">thrush macro</a> and I fell in love.  I found myself jonesing for <code>C-x C-e</code> whenever I tried going back to Java.  I devoured <a href="http://www.amazon.com/gp/product/1934356867/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1934356867&amp;linkCode=as2&amp;tag=adereth-20">Programming Clojure</a>, then <a href="http://www.amazon.com/gp/product/1935182641/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1935182641&amp;linkCode=as2&amp;tag=adereth-20">The Joy of Clojure</a>.  In search of a purer hit, I turned to the source: <a href="http://www-formal.stanford.edu/jmc/recursive.pdf">McCarthy&rsquo;s original paper on LISP</a>.  After reading it, I realized what someone could have told me that would have convinced me to invest the time 12 years earlier.</p>
+
+<p>There&rsquo;s a lot of interesting stuff in that paper, but what really struck me was that it felt like it fit into a theoretical framework that I thought I already knew reasonably well.  This post isn&rsquo;t about the power of LISP, which has been covered by others better than I could.  Rather, it&rsquo;s about where LISP fits in the world of computation.</p>
+
+<p><em>None of what I&rsquo;m about to say is novel or rigorous.  I&rsquo;m pretty sure that all the novel and rigorous stuff around this topic is 50 &ndash; 75 years old, but I just wasn&rsquo;t exposed to it as directly as I&rsquo;m going to try and lay out.</em></p>
+
+<h2>The Automaton Model of Computation</h2>
+
+<p>One of my favorite classes in school was <a href="http://www.cs.cmu.edu/~lblum/flac/index.htm">15-453: Formal Languages, Automata, and Computation</a>, which used <a href="http://www.amazon.com/gp/product/113318779X/ref=as_li_ss_il?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=113318779X&amp;linkCode=as2&amp;tag=adereth-20">Sipser&rsquo;s Introduction to the Theory of Computation</a>:</p>
+
+<p><a href="http://www.amazon.com/gp/product/113318779X/ref=as_li_ss_il?ie=UTF8&camp=1789&creative=390957&creativeASIN=113318779X&linkCode=as2&tag=adereth-20"><img src="/images/sipser.jpg" width="250"></a></p>
+
+<p>One aspect that I really enjoyed was that there was a narrative; we started with Finite State Automata (FSA), analyzed the additional power of Pushdown Automata (PDA), and saw it culminate in Turing Machines (TM).  Each of these models look very similar and have a natural connection: <em>they are each just state machines with different types of external memory.</em></p>
+
+<p>The tape in the Turing Machine can be viewed as two stacks, with one stack representing everything to the left of the current position and the other stack as the current position and everything to the right.  With this model, we can view the computational hierarchy (FSA &ndash;> PDA &ndash;> TM) as just state machines with 0, 1, or 2 stacks.  I think it&rsquo;s quite an elegant representation and it makes the progression seem quite natural.</p>
+
+<p>A key insight along the journey is that these machines are equivalent in power to other useful systems.  A sizable section in the chapter on Finite State Automata is dedicated to their equivalence with Regular Expressions (RegEx).  Context Free Grammars (CFG) are actually introduced <em>before</em> Pushdown Automata.  But when we get to Turing Machines, there&rsquo;s nothing but a couple paragraphs in a section called &ldquo;Equivalence with Other Models&rdquo;, which says:</p>
+
+<blockquote><p>Many [languages], such as Pascal and LISP, look quite different from one another in style and structure.  Can some algorithm be programmed in one of them and not the others?  Of course not &mdash; we can compile LISP into Pascal and Pascal into LISP, which means that the two languages describe <em>exactly</em> the same class of algorithms.  So do all other reasonable programming languages.</p></blockquote>
+
+<p>The book and class leave it at that and proceed onto the limits of computability, which is the real point of the material.  But there&rsquo;s a natural question that isn&rsquo;t presented in the book and which I never thought to ask:</p>
+
+<center>
+Finite State Automata <i class="fa fa-arrows-h"></i> Regular Expressions<br>
+Pushdown Automata <i class="fa fa-arrows-h"></i> Context Free Grammars<br>
+Turing Machines <i class="fa fa-arrows-h"></i> ?
+</center>
+
+
+<br>
+
+
+<p>While we know that there are many models that equal Turing Machines, we could also construct other models that equal FSAs or PDAs.  Why are RegExs and CFGs used as the parallel models of computation?  With the machine model, we were able to just add a stack to move up at each level &ndash; is there a natural connection between RegExs and CFGs that we extrapolate to find their next level that is Turing equivalent?</p>
+
+<h2>The Chomsky-Schützenberger Hierarchy</h2>
+
+<p>It turns out that the answers to these questions were well covered in the 1950&rsquo;s by the <a href="http://en.wikipedia.org/wiki/Chomsky_hierarchy#The_hierarchy">Chomsky-Schützenberger Hierarchy of Formal Grammars</a>.</p>
+
+<p>The left-hand side of the relations above are the automaton-based models and the right-hand side are the language-based models.  The language models are all implemented as production rules, where some symbols are converted to other symbols.  The different levels of computation just have different restrictions on what kind of replacements rules are allowed.</p>
+
+<p>For instance RegExs are all rules of the form $A \to a$ and $A \to aB$, where the uppercase letters are <a href="http://en.wikipedia.org/wiki/Terminal_and_nonterminal_symbols">non-terminal symbols</a> and the lowercase are terminal.  In CFGs, some of the restrictions on the right-hand side are lifted.  Allowing terminals to appear on the left-hand side lets us make rules that are conditional on what has already been replaced, which appropriately gets called &ldquo;Context Sensitive Grammars.&rdquo;  Finally, when all the rules are lifted, we get Recursively Enumerable languages, which are Turing equivalent.  The <a href="http://en.wikipedia.org/wiki/Chomsky_hierarchy#The_hierarchy">Wikipedia page</a> for the hierarchy and the respective levels is a good source for learning more.</p>
+
+<p>When you look at the definition of LISP in McCarthy&rsquo;s paper, it&rsquo;s much closer to being an applied version of Chomsky&rsquo;s style than Turing&rsquo;s.  This isn&rsquo;t surprising, given that they were contemporaries at MIT.  In McCarthy&rsquo;s <a href="http://www-formal.stanford.edu/jmc/history/lisp/node3.html#SECTION00030000000000000000">History of Lisp</a>, he expicitly states that making a usable version of this other side was his goal:</p>
+
+<blockquote><p>These simplifications made LISP into a way of describing computable functions much neater than the Turing machines or the general recursive definitions used in recursive function theory.  The fact that Turing machines constitute an awkward programming language doesn&rsquo;t much bother recursive function theorists, because they almost never have any reason to write particular recursive definitions, since the theory concerns recursive functions in general.  They often have reason to prove that recursive functions with specific properties exist, but this can be done by an informal argument without having to write them down explicitly.  In the early days of computing, some people developed programming languages based on Turing machines; perhaps it seemed more scientific.  Anyway, I decided to write a paper describing LISP both as a programming language and as a formalism for doing recursive function theory.</p></blockquote>
+
+<p>Here we have it straight from the source.  McCarthy was trying to capture the power of recursive definitions in a usable form.  Just like the automata theorists, once the linguists theorist hit Turing completeness, they focused on the limits instead of the usage.</p>
+
+<p>Theoreticians are more interested in the equality of the systems than the usability, but as practitioners we know that it matters that some problems are more readily solvable in different representations.  Sometimes it&rsquo;s more appropriate to use a RegEx and sometimes an FSA is better suited, even though you could apply either.  While nobody is busting out the Turing Machine to tackle real-world problems, some of our languages are more influenced by one side or the other.</p>
+
+<h2>Turing Machines Considered Harmful</h2>
+
+<p>If you track back the imperative/functional divide to Turing Machines and Chomsky&rsquo;s forms, some of the roots are showing.  Turing Machines are conducive to a couple things that are considered harmful in larger systems: GOTO-based<sup><a href="http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html">1</a></sup> and mutation-centric<sup><a href="https://www.google.com/search?q=mutable+state+considered+harmful">2</a></sup> thinking.  In a lot of cases, we&rsquo;re finding that the languages influenced by the language-side are better suited for our problems.  Paul Graham <a href="http://www.paulgraham.com/diff.html">argues</a> that the popular languages have been steadily evolving towards the LISPy side.</p>
+
+<p>Anyway, this is a connection that I wish I had been shown at the peak of my interest in automata theory because it would have gotten me a lot more excited about LISP sooner.  I think it&rsquo;s interesting to look at LISP as something that has the same theoretical underpinnings as these other tools (RegEx and CFG) that we already acknowledged as vital.</p>
+
+<p><em>Thanks to <a href="http://jliszka.github.io/">Jason Liszka</a> and my colleagues at <a href="http://www.twosigma.com">Two Sigma</a> for help with this post!</em></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/01/20/every-project-dot-clj/">Every project.clj</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-20T17:33:00-08:00" pubdate data-updated="true">Jan 20<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I was recently looking for an interesting relational dataset for another project and the idea of using the dependencies for every Clojure project on GitHub came up.  It turns out that it&rsquo;s possible to download almost every project.clj using <a href="https://github.com/Raynes/tentacles">Tentacles</a>, so I decided to&hellip;</p>
+
+<p><img src="/images/download-all.png" width="350"></p>
+
+<p>The most annoying part was dealing with GitHub&rsquo;s rate limits, but after waiting a few hours I had them all on local disk and was able to play around.  I haven&rsquo;t gotten to dig into the data for the actual project I&rsquo;m doing, but there were a couple simple queries that I thought were worth sharing.</p>
+
+<h2>Most frequently included packages</h2>
+
+<p>I was able to download 10770 project.clj files.  Here are the 50 most frequently included packages listed in their <code>:dependencies</code>:</p>
+
+<table>
+<thead>
+<tr>
+<th>Dependency </th>
+<th> Count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>org.clojure/clojure-contrib </td>
+<td> 1524</td>
+</tr>
+<tr>
+<td>compojure </td>
+<td> 1348</td>
+</tr>
+<tr>
+<td>hiccup </td>
+<td> 743</td>
+</tr>
+<tr>
+<td>clj-http </td>
+<td> 738</td>
+</tr>
+<tr>
+<td>ring/ring-jetty-adapter </td>
+<td> 607</td>
+</tr>
+<tr>
+<td>cheshire </td>
+<td> 558</td>
+</tr>
+<tr>
+<td>org.clojure/data.json </td>
+<td> 552</td>
+</tr>
+<tr>
+<td>clj-time </td>
+<td> 526</td>
+</tr>
+<tr>
+<td>org.clojure/tools.logging </td>
+<td> 490</td>
+</tr>
+<tr>
+<td>enlive </td>
+<td> 444</td>
+</tr>
+<tr>
+<td>noir </td>
+<td> 388</td>
+</tr>
+<tr>
+<td>ring/ring-core </td>
+<td> 375</td>
+</tr>
+<tr>
+<td>ring </td>
+<td> 361</td>
+</tr>
+<tr>
+<td>org.clojure/tools.cli </td>
+<td> 348</td>
+</tr>
+<tr>
+<td>org.clojure/java.jdbc </td>
+<td> 344</td>
+</tr>
+<tr>
+<td>org.clojure/clojurescript </td>
+<td> 339</td>
+</tr>
+<tr>
+<td>org.clojure/core.async </td>
+<td> 235</td>
+</tr>
+<tr>
+<td>midje </td>
+<td> 227</td>
+</tr>
+<tr>
+<td>org.clojure/math.numeric-tower </td>
+<td> 219</td>
+</tr>
+<tr>
+<td>korma </td>
+<td> 206</td>
+</tr>
+<tr>
+<td>incanter </td>
+<td> 202</td>
+</tr>
+<tr>
+<td>seesaw </td>
+<td> 195</td>
+</tr>
+<tr>
+<td>overtone </td>
+<td> 172</td>
+</tr>
+<tr>
+<td>slingshot </td>
+<td> 160</td>
+</tr>
+<tr>
+<td>quil </td>
+<td> 158</td>
+</tr>
+<tr>
+<td>com.taoensso/timbre </td>
+<td> 150</td>
+</tr>
+<tr>
+<td>http-kit </td>
+<td> 149</td>
+</tr>
+<tr>
+<td>ring/ring-devel </td>
+<td> 145</td>
+</tr>
+<tr>
+<td>org.clojure/math.combinatorics </td>
+<td> 145</td>
+</tr>
+<tr>
+<td>org.clojure/core.logic </td>
+<td> 138</td>
+</tr>
+<tr>
+<td>environ </td>
+<td> 132</td>
+</tr>
+<tr>
+<td>aleph </td>
+<td> 132</td>
+</tr>
+<tr>
+<td>log4j </td>
+<td> 131</td>
+</tr>
+<tr>
+<td>ch.qos.logback/logback-classic </td>
+<td> 125</td>
+</tr>
+<tr>
+<td>org.clojure/tools.nrepl </td>
+<td> 124</td>
+</tr>
+<tr>
+<td>congomongo </td>
+<td> 124</td>
+</tr>
+<tr>
+<td>com.datomic/datomic-free </td>
+<td> 123</td>
+</tr>
+<tr>
+<td>com.novemberain/monger </td>
+<td> 123</td>
+</tr>
+<tr>
+<td>lib-noir </td>
+<td> 121</td>
+</tr>
+<tr>
+<td>org.clojure/core.match </td>
+<td> 118</td>
+</tr>
+<tr>
+<td>ring/ring-json </td>
+<td> 111</td>
+</tr>
+<tr>
+<td>clojure </td>
+<td> 110</td>
+</tr>
+<tr>
+<td>org.clojure/data.xml </td>
+<td> 110</td>
+</tr>
+<tr>
+<td>log4j/log4j </td>
+<td> 109</td>
+</tr>
+<tr>
+<td>mysql/mysql-connector-java </td>
+<td> 109</td>
+</tr>
+<tr>
+<td>postgresql/postgresql </td>
+<td> 107</td>
+</tr>
+<tr>
+<td>org.clojure/data.csv </td>
+<td> 101</td>
+</tr>
+<tr>
+<td>org.clojure/tools.trace </td>
+<td> 98</td>
+</tr>
+<tr>
+<td>org.clojure/tools.namespace </td>
+<td> 92</td>
+</tr>
+<tr>
+<td>ring-server </td>
+<td> 92</td>
+</tr>
+</tbody>
+</table>
+
+
+<br/>
+
+
+<p>I think it makes a nice hit-list of projects to check out!</p>
+
+<p>A couple interesting things jumped out at me:</p>
+
+<ol>
+<li>12.5% of Clojure projects on GitHub are using Compojure.  Impressive.</li>
+<li>congomongo, com.novemberain/monger, com.datomic/datomic-free, mysql/mysql-connector-java, and postgresql/postgresql are all clustered together in the low 100&rsquo;s.</li>
+</ol>
+
+
+<h2>Most frequently applied licenses</h2>
+
+<p>Just over half of the project.clj&rsquo;s don&rsquo;t contain a <code>:license</code>.  Here are the most popular:</p>
+
+<table>
+<thead>
+<tr>
+<th>License </th>
+<th> Count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EPL </td>
+<td> 4430</td>
+</tr>
+<tr>
+<td>MIT </td>
+<td> 336</td>
+</tr>
+<tr>
+<td>Apache </td>
+<td> 106</td>
+</tr>
+<tr>
+<td>BSD </td>
+<td> 92</td>
+</tr>
+<tr>
+<td>GPL </td>
+<td> 90</td>
+</tr>
+<tr>
+<td>LGPL </td>
+<td> 25</td>
+</tr>
+<tr>
+<td>CC </td>
+<td> 21</td>
+</tr>
+<tr>
+<td>WTFPL </td>
+<td> 18</td>
+</tr>
+<tr>
+<td>AGPL </td>
+<td> 11</td>
+</tr>
+<tr>
+<td>Mozilla  </td>
+<td> 11</td>
+</tr>
+</tbody>
+</table>
+
+
+<br/>
+
+
+<p>The EPL&rsquo;s dominance doesn&rsquo;t come as a surprise, given Clojure&rsquo;s use of it for the core libraries.</p>
+
+<p>23 projects have &ldquo;WTF&rdquo; or &ldquo;fuck&rdquo; in their license string:</p>
+
+<table>
+<thead>
+<tr>
+<th>License </th>
+<th> Count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>WTFPL </td>
+<td> 18</td>
+</tr>
+<tr>
+<td>Do What The Fuck You Want To Public License </td>
+<td> 3</td>
+</tr>
+<tr>
+<td>DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE Version 2 </td>
+<td> 1</td>
+</tr>
+<tr>
+<td>All Rights Reserved Muthafucka </td>
+<td> 1</td>
+</tr>
+</tbody>
+</table>
+
+
+<h2>Conclusion</h2>
+
+<p>I&rsquo;d like to share a mirror of just the project.clj files wrapped up in a single download, but I want to be conscientious of the variety of licenses.  I&rsquo;ll clean up the code for pulling and summarizing all this data soon so others can play with it.  In the meantime, feel free to suggest other analyses that could be done on these&hellip;</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/01/08/quine-tweet-challenge/">Quine Tweet Challenge</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-08T07:49:00-08:00" pubdate data-updated="true">Jan 8<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>A <a href="http://en.wikipedia.org/wiki/Quine_(computing)">quine</a> is a program which takes no input and outputs a copy of its own source code.  There&rsquo;s a history of making challenges out of variants on the idea (shortest quine, <a href="http://en.wikipedia.org/wiki/Quine_(computing)#Ouroboros_Programs">Ouroboros Programs</a>, <a href="http://en.wikipedia.org/wiki/Quine_(computing)#Multiquines">Multiquines</a>).  I&rsquo;d like to propose a new variant for our modern social age: the Quine Tweet.</p>
+
+<h2>Inspiration</h2>
+
+<p>Last year I was working through <a href="http://www.4clojure.com/">4Clojure</a> and I had to reacquaint myself with how to implement one for <a href="http://www.4clojure.com/problem/125">Problem #125: Gus&rsquo;s Quinundrum</a>.</p>
+
+<p>A few months later, I saw this tweet from <a href="https://twitter.com/gtrakGT">Gary Trakhman</a>:</p>
+
+<blockquote class="twitter-tweet" lang="en"><p>So simple!&#10;(defn send-tweet&#10;  [tweet]&#10;  (api/statuses-update :oauth-creds my-creds&#10;                       :params {:status tweet}))</p>&mdash; Gary Trakhman (@gtrakGT) <a href="https://twitter.com/gtrakGT/statuses/403227496352862208">November 20, 2013</a></blockquote>
+
+
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<p>Seeing him tweet source code that tweets got me thinking about code that tweets its own source code.  Could a Quine Tweet be written?  I took a stab at adapting my Clojure code for Gus&rsquo;s Quinundrum, but I just couldn&rsquo;t make it fit in 140 characters.</p>
+
+<h2>Enter Wolfram</h2>
+
+<p>The next day, this came across my dash:</p>
+
+<blockquote class="twitter-tweet" data-partner="tweetdeck"><p>Hello world! &#8211; tweeting with <a href="https://twitter.com/search?q=%23wolframlang&amp;src=hash">#wolframlang</a> on <a href="https://twitter.com/Raspberry_Pi">@Raspberry_Pi</a> using Send[&quot;Twitter&quot;,&quot;Hello world!&quot; &#8230;]</p>&mdash; Stephen Wolfram (@stephen_wolfram) <a href="https://twitter.com/stephen_wolfram/statuses/403600114247565312">November 21, 2013</a></blockquote>
+
+
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<p>Maybe this will enable my impossible dream of a Quine Tweet&hellip;</p>
+
+<p>I finally got a Raspberry Pi running with the Wolfram Language and I made it happen:</p>
+
+<blockquote class="twitter-tweet" data-partner="tweetdeck"><p>\{o, c\} = FromCharacterCode\[\{\{92, 40\}, \{92, 41\}\}\] ; SendMessage\[&quot;Twitter&quot;, StringReplace\[InString\[$Line\], \{o -&gt; &quot;&quot;, c -&gt; &quot;&quot;\}\]\]</p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/statuses/420778395988135936">January 8, 2014</a></blockquote>
+
+
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<p>If you paste it into a notebook and evaluate, you&rsquo;ll get prompted for authorization and it&rsquo;ll post itself.  Here&rsquo;s a brief explanation of what it does:</p>
+
+<ol>
+<li><a href="http://reference.wolfram.com/mathematica/ref/$Line.html"><code>$Line</code></a> is the count of input expressions that have been evaluated.</li>
+<li><a href="http://reference.wolfram.com/mathematica/ref/InString.html"><code>InString</code></a> is a function that gets the input for the i<sup>th</sup> input expression.  It returns a string that has some extra escaped parentheses.</li>
+<li>92 is the ASCII code for <code>\\</code>. 40 and 41 are the codes for <code>(</code> and <code>)</code>.  <a href="http://reference.wolfram.com/mathematica/ref/FromCharacterCode.html"><code>FromCharacterCode</code></a> can take a list of lists of ASCII codes and return a list of strings.  The list is destructured into the variables <code>o</code> (open) and <code>c</code> (close).</li>
+<li><a href="http://reference.wolfram.com/mathematica/ref/StringReplace.html"><code>StringReplace</code></a> is then used to clean up the extra parentheses.</li>
+<li><code>SendMessage</code> is the new function in the Wolfram language that does all the hard work of posting.</li>
+</ol>
+
+
+<p>I don&rsquo;t think this is really in the true spirit of a quine, as having something like <code>InString</code> makes it a bit trivial, but you do what you must when you only have 140 characters!</p>
+
+<h2>The Challenge</h2>
+
+<p>So, can it be done in any other languages?  Here&rsquo;s what I think are fair restrictions:</p>
+
+<ol>
+<li>Any standard Twitter client library for your language can be linked using the language&rsquo;s normal methods (pom.xml, project.clj, etc.)</li>
+<li>The authorization token can be supplied outside of source, either interactively or through a text file.  I don&rsquo;t imagine anyone wants to be sharing that&hellip;</li>
+</ol>
+
+
+<p>Bonus points if you manage to make the tweet and source include <code>#quine</code>!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/01/06/benchmarking-mathematica-on-the-raspberry-pi/">Benchmarking Mathematica on the Raspberry Pi</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-06T07:23:00-08:00" pubdate data-updated="true">Jan 6<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&rsquo;m really excited about <a href="http://blog.wolfram.com/2013/11/21/putting-the-wolfram-language-and-mathematica-on-every-raspberry-pi/">Wolfram Research&rsquo;s announcement</a> that Mathematica and the Wolfram language are now available for free on the Raspberry Pi.</p>
+
+<p>In the announcement, Stephen Wolfram gave this disclaimer:</p>
+
+<blockquote><p>To be clear, the Raspberry Pi is perhaps 10 to 20 times slower at running the Wolfram Language than a typical current-model laptop (and sometimes even slower when it’s lacking architecture-specific internal libraries).</p></blockquote>
+
+<p>I&rsquo;ve got a laptop and a Raspberry Pi, so I decided to put this to the test.</p>
+
+<h2>MathematicaMark</h2>
+
+<p>Mathematica ships with <a href="http://reference.wolfram.com/mathematica/Benchmarking/tutorial/Benchmark.html">a benchmarking package called MathematicaMark</a>.  The latest version of the benchmark, <em>MathematicaMark9</em>, consists of 15 tests that use both numeric and symbolic functions.  The MathematicaMark score is the <a href="http://en.wikipedia.org/wiki/Geometric_mean">geometric mean</a> of the reciprocal of the timings, normalized against some reference system&rsquo;s timings:</p>
+
+<p>$$ \sqrt[15]{\prod_{i=1}^{15} \frac{t_{r,i}}{t_{s,i}}} $$</p>
+
+<p>&hellip;where $t_{s,i}$ is the timing for test $i$ on system $s$ and $r$ is the reference system.  For MathematicaMark9, the reference system is a 3.07 GHz Core i7-950 with 8 hyper-threaded cores running 64-bit Windows 7 Pro.  By definition, this system has a MathematicaMark9 score of 1.0.</p>
+
+<p>We can compare systems using the MathematicaMark score.  If a system were 10 to 20 times slower, we would expect its MathematicaMark score to be anywhere from 1/10<sup>th</sup> to 1/20<sup>th</sup> the value of the faster system.  The <a href="http://reference.wolfram.com/mathematica/Benchmarking/ref/Benchmark.html"><code>Benchmark[]</code> function</a> also provides the timings for the individual tests, so we can dig in and see which functions might be benefitting from the architecture-specific internal libraries Wolfram mentioned.</p>
+
+<h2>Raspberry Pi Configuration</h2>
+
+<p><img src="/images/rpi.png" width="350"></p>
+
+<p>I used a <a href="http://en.wikipedia.org/wiki/Raspberry_Pi#Specifications">Model B Raspberry Pi with 512MB of RAM</a>.  The tests were done after a fresh install of <a href="http://www.raspberrypi.org/archives/5580">NOOBS 1.3.3</a>, which includes Mathematica and the Wolfram Language installed by default.  <code>wolfram</code> was invoked from the commandline and nothing else was running on the system, most notably the X Window System and the <a href="http://reference.wolfram.com/mathematica/tutorial/UsingANotebookInterface.html">Mathematica Notebook interface</a>.</p>
+
+<h2>&ldquo;Typical Current-Model Laptop&rdquo;</h2>
+
+<p><img src="/images/mbp13.png" width="350"></p>
+
+<p>Mathematica ships with benchmark results for 15 different systems (including the reference system).  It&rsquo;s not clear which system to use for this comparison, so I conveniently chose my Early 2013 13-inch Retina MacBook Pro, which sports a 2.6 GHz Intel Core i5 processor (4 hyper-threaded cores) as a representative &ldquo;typical current-model laptop.&rdquo;  Based on the sea of glowing Apple logos I&rsquo;ve seen in the audiences of the conferences I attended this year, I think it&rsquo;s a fair selection.</p>
+
+<h2>MathematicaMark9 Scores</h2>
+
+<p>With the setup out of the way, let&rsquo;s take a look at the report comparing the MacBook, Raspberry Pi, and the 15 included systems:</p>
+
+<p><a href="/oneoff/mathematicamark9-20131231/"><img src="/images/MathematicaMark9.png" alt="MathematicaMark9 System Comparison Chart" /></a>
+<em>Click for full-sized report</em></p>
+
+<p>The MacBook Pro weighs in at a respectible 0.86, while the Raspberry Pi is actually getting rounded up to 0.01 from a true score of 0.005.  Running the benchmark takes 16 seconds on the laptop and <em>nearly 49 minutes</em> on the Raspberry Pi.</p>
+
+<p>Even the slowest machine in the included benchmarks score nearly 30x higher.  I don&rsquo;t think Wolfram would consider a pre-Intel Mac to be a &ldquo;typical current-model&rdquo; computer.  To see the numbers he&rsquo;s citing, we need to dig into the timings for the individual tests.</p>
+
+<h2>Performance on Individual Tests</h2>
+
+<p>The source for the 15 individual tests and the timings on a variety of reference systems is included in the <a href="/oneoff/mathematicamark9-20131231/#sources">full MathematicaMark9 Benchmark Report</a>.  Here are the timings on the Raspberry Pi and the Macbook Pro:</p>
+
+<table>
+<thead>
+<tr>
+<th>Test </th>
+<th align="right"> Pi Timing (s) </th>
+<th align="right"> Mac Timing (s) </th>
+<th align="right"> Ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Random Number Sort </td>
+<td align="right"> 25.13 </td>
+<td align="right"> 1.75 </td>
+<td align="right"> 14.4</td>
+</tr>
+<tr>
+<td>Digits of Pi </td>
+<td align="right"> 12.30 </td>
+<td align="right"> 0.78 </td>
+<td align="right"> 15.9</td>
+</tr>
+<tr>
+<td>Matrix Arithmetic </td>
+<td align="right"> 27.76 </td>
+<td align="right"> 1.25 </td>
+<td align="right"> 22.2</td>
+</tr>
+<tr>
+<td>Gamma Function </td>
+<td align="right"> 15.77 </td>
+<td align="right"> 0.63 </td>
+<td align="right"> 25.2</td>
+</tr>
+<tr>
+<td>Large Integer Multiplication </td>
+<td align="right"> 19.20 </td>
+<td align="right"> 0.58 </td>
+<td align="right"> 32.9</td>
+</tr>
+<tr>
+<td>Polynomial Expansion </td>
+<td align="right"> 4.55 </td>
+<td align="right"> 0.12 </td>
+<td align="right"> 36.4</td>
+</tr>
+<tr>
+<td>Numerical Integration </td>
+<td align="right"> 35.41 </td>
+<td align="right"> 0.96 </td>
+<td align="right"> 36.7</td>
+</tr>
+<tr>
+<td>Matrix Transpose </td>
+<td align="right"> 36.77 </td>
+<td align="right"> 0.95 </td>
+<td align="right"> 38.8</td>
+</tr>
+<tr>
+<td>Data Fitting </td>
+<td align="right"> 29.94 </td>
+<td align="right"> 0.66 </td>
+<td align="right"> 45.4</td>
+</tr>
+<tr>
+<td>Discrete Fourier Transform </td>
+<td align="right"> 79.28 </td>
+<td align="right"> 0.95 </td>
+<td align="right"> 83.4</td>
+</tr>
+<tr>
+<td>Elementary Functions </td>
+<td align="right"> 174.93 </td>
+<td align="right"> 1.31 </td>
+<td align="right"> 133.3</td>
+</tr>
+<tr>
+<td>Eigenvalues of a Matrix </td>
+<td align="right"> 136.87 </td>
+<td align="right"> 0.79 </td>
+<td align="right"> 174.1</td>
+</tr>
+<tr>
+<td>Singular Value Decomposition </td>
+<td align="right"> 433.08 </td>
+<td align="right"> 1.52 </td>
+<td align="right"> 284.0</td>
+</tr>
+<tr>
+<td>Solving a Linear System </td>
+<td align="right"> 745.53 </td>
+<td align="right"> 1.65 </td>
+<td align="right"> 452.1</td>
+</tr>
+<tr>
+<td>Matrix Multiplication </td>
+<td align="right"> 1136.51 </td>
+<td align="right"> 2.15 </td>
+<td align="right"> 528.9</td>
+</tr>
+</tbody>
+</table>
+
+
+<br/>
+
+
+<p>Sorting by the ratio reveals that there are definitely cases where the relative performance falls in the 10x &ndash; 20x range cited by Wolfram.</p>
+
+<p>It&rsquo;s interesting to note that the 4 worst performing tests by ratio are all linear algebra operations involving matrix decomposition or multiplication.  These are the types of operations that have probably gotten a lot of optimization love from Wolfram Research developers in the past because this is the area that potential users compare when deciding between Mathematica and its competitors, particularly Matlab.</p>
+
+<p>If you look through <a href="http://www.wolfram.com/mathematica/quick-revision-history.html">the revision history highlights of Mathematica</a>, you&rsquo;ll see that there was a sequence of releases where every version had at least one top-level mention of linear algebra performance improvements:</p>
+
+<ul>
+<li>Mathematica 5.0 &ndash; 2003
+
+<ul>
+<li>&ldquo;Record-breaking speed through processor-optimized numerical linear algebra&rdquo;</li>
+<li>&ldquo;Full support for high-speed sparse linear algebra&rdquo;</li>
+</ul>
+</li>
+<li>Mathematica 5.1 &ndash; 2004
+
+<ul>
+<li>&ldquo;Numerical linear algebra performance enhancements&rdquo;</li>
+</ul>
+</li>
+<li>Mathematica 5.2 &ndash; 2005
+
+<ul>
+<li>&ldquo;Multithreaded numerical linear algebra&rdquo;</li>
+<li>&ldquo;Vector-based performance enhancements&rdquo;</li>
+</ul>
+</li>
+</ul>
+
+
+<p>The 5<sup>th</sup> worst test by ratio, Elementary Functions, is also interesting to dig into.  Here&rsquo;s the source:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">Module</span><span class="p">[{</span><span class="nv">m1</span>, <span class="nv">m2</span><span class="p">}</span>,
+</span><span class='line'> <span class="nv">Timing</span><span class="p">[</span>
+</span><span class='line'>  <span class="nv">SeedRandom</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="c1">;</span>
+</span><span class='line'>  <span class="nv">m1</span> <span class="nb">= </span><span class="nv">RandomReal</span><span class="p">[{}</span>, <span class="p">{</span><span class="mf">2.2</span><span class="o">`</span><span class="nv">*</span><span class="o">^</span><span class="mi">6</span><span class="p">}]</span><span class="c1">;</span>
+</span><span class='line'>  <span class="nv">m2</span> <span class="nb">= </span><span class="nv">RandomReal</span><span class="p">[{}</span>, <span class="p">{</span><span class="mf">2.2</span><span class="o">`</span><span class="nv">*</span><span class="o">^</span><span class="mi">6</span><span class="p">}]</span><span class="c1">;</span>
+</span><span class='line'>  <span class="nv">Do</span><span class="p">[</span>
+</span><span class='line'>   <span class="nv">Exp</span><span class="p">[</span><span class="nv">m1</span><span class="p">]</span><span class="c1">;</span>
+</span><span class='line'>   <span class="nv">Sin</span><span class="p">[</span><span class="nv">m1</span><span class="p">]</span><span class="c1">;</span>
+</span><span class='line'>   <span class="nv">ArcTan</span><span class="p">[</span><span class="nv">m1</span>, <span class="nv">m2</span><span class="p">]</span>,
+</span><span class='line'>   <span class="p">{</span><span class="mi">30</span><span class="p">}]]]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It&rsquo;s computing $ e^x $, $ \sin{x} $, and $ \text{tan}^{-1} \frac{x}{y} $ for lists of 2,200,000 random numbers 30 times.  <code>Exp</code>, <code>Sin</code>, and <code>ArcTan</code> all have the <a href="http://reference.wolfram.com/mathematica/ref/Listable.html"><code>Listable</code> attribute</a>, which means that they are automatically mapped over lists that are passed in as arguments.  <code>Sin[list]</code> and <code>Map[Sin, list]</code> are functionally equivalent, but the former provides the implementation the opportunity to take an optimized path if there is a faster way of computing the sine of multiple numbers.</p>
+
+<p>We can verify that this is a case where architecture specific optimizations are in play by rewriting the test to use <code>Map</code> and <code>MapThread</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">Module</span><span class="p">[{</span><span class="nv">m1</span>, <span class="nv">m2</span><span class="p">}</span>,
+</span><span class='line'> <span class="nv">Timing</span><span class="p">[</span>
+</span><span class='line'>  <span class="nv">SeedRandom</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="c1">;</span>
+</span><span class='line'>  <span class="nv">m1</span> <span class="nb">= </span><span class="nv">RandomReal</span><span class="p">[{}</span>, <span class="p">{</span><span class="mf">2.2</span><span class="o">`</span><span class="nv">*</span><span class="o">^</span><span class="mi">6</span><span class="p">}]</span><span class="c1">;</span>
+</span><span class='line'>  <span class="nv">m2</span> <span class="nb">= </span><span class="nv">RandomReal</span><span class="p">[{}</span>, <span class="p">{</span><span class="mf">2.2</span><span class="o">`</span><span class="nv">*</span><span class="o">^</span><span class="mi">6</span><span class="p">}]</span><span class="c1">;</span>
+</span><span class='line'>  <span class="nv">Map</span><span class="p">[</span><span class="nv">Exp</span>, <span class="nv">m1</span><span class="p">]</span><span class="c1">;</span>
+</span><span class='line'>  <span class="nv">Map</span><span class="p">[</span><span class="nv">Sin</span>, <span class="nv">m1</span><span class="p">]</span><span class="c1">;</span>
+</span><span class='line'>  <span class="nv">MapThread</span><span class="p">[</span><span class="nv">ArcTan</span>, <span class="p">{</span><span class="nv">m1</span>, <span class="nv">m2</span><span class="p">}]</span><span class="c1">;]]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note that I&rsquo;m only running this once, as opposed to the 30 times in the original test, because the non-Listable version is so much slower.</p>
+
+<p>The version that doesn&rsquo;t take advantage of the Listable attribute takes 1.63 seconds on the Macbook Pro and 62.64 seconds on the Raspberry Pi.  This ratio of 38.2 (vs. 133.3 before) is much closer to the ratio we see from the other tests that don&rsquo;t take advantage of specifics of the architecture.</p>
+
+<h2>Conclusion</h2>
+
+<p>Even though Mathematica is much slower on the Raspberry Pi, it&rsquo;s a tremendous free gift and it still has many uses:</p>
+
+<ul>
+<li><p><a href="http://www.raspberrypi.org/archives/5623">A recent guest post from Wolfram Research on the Raspberry Pi blog</a> links to several projects that take advantage of the easy ways of controlling hardware using Mathematica on the Raspberry Pi.</p></li>
+<li><p>Much of what most people use Mathematica for doesn&rsquo;t require extreme performance.  For instance, getting the closed form of an integral or derivative is still practically instantaneous from a human&rsquo;s perspective.</p></li>
+<li><p>Just getting to experience the language and environment with only a $35 investment is worthwhile.  For developers, there is a lot to learn from the language, which is heavily influenced by <a href="http://en.wikipedia.org/wiki/M-expression">Lisp&rsquo;s M-expressions</a>, and the notebook enviroment, which is just starting to be replicated by iPython.  On top of that, the incredible interactive documentation for the language is something everyone should experience.</p></li>
+</ul>
+
+
+<p>Any questions, corrections, or suggestions are appreciated!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/12/23/counting-stars-on-github/">Counting Stars on GitHub</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-23T08:10:00-08:00" pubdate data-updated="true">Dec 23<span>rd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><script type="text/javascript" src="http://mbostock.github.com/d3/d3.min.js"></script>
+
+
+<p>I&rsquo;ve been working on a nerd ethnography project with the <a href="http://developer.github.com/v3/">GitHub API</a>.  There&rsquo;s so much fun data to play with there that it&rsquo;s inevitable that I&rsquo;ll get a little distracted&hellip;</p>
+
+<p>One distraction was the realization that I could use the search API to get a massive list of the top repos ordered by star count.  Once I started looking at the results, I realized that star data is an interesting alternative metric for evaluating language popularity.  Instead of looking at which languages people are actually writing new projects using, we can see which languages are used for the most popular projects.</p>
+
+<h2>What are stars?</h2>
+
+<p>In August 2012, GitHub <a href="https://github.com/blog/1204-notifications-stars">announced</a> a new version of their notification system that allowed users to easily mark a repository as interesting by &ldquo;starring&rdquo; it:</p>
+
+<p><img src="/images/github-star-ui.png" alt="GitHub star UI" /></p>
+
+<p>Stars are essentially lightweight bookmarks that are publicly visible.  Even though they were introduced just over a year ago, all &ldquo;watches&rdquo; were converted to stars so there&rsquo;s plenty of data.</p>
+
+<h2>Which are the most starred repos?</h2>
+
+<p>Let&rsquo;s start by looking at the top 20:</p>
+
+<table>
+<thead>
+<tr>
+<th> Rank </th>
+<th> Repository </th>
+<th> Language </th>
+<th> Stars</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> 1 </td>
+<td> <a href="http://github.com/twbs/bootstrap">twbs/bootstrap</a> </td>
+<td> JavaScript </td>
+<td> 62111</td>
+</tr>
+<tr>
+<td> 2 </td>
+<td> <a href="http://github.com/jquery/jquery">jquery/jquery</a> </td>
+<td> JavaScript </td>
+<td> 27082</td>
+</tr>
+<tr>
+<td> 3 </td>
+<td> <a href="http://github.com/joyent/node">joyent/node</a> </td>
+<td> JavaScript </td>
+<td> 26352</td>
+</tr>
+<tr>
+<td> 4 </td>
+<td> <a href="http://github.com/h5bp/html5-boilerplate">h5bp/html5-boilerplate</a> </td>
+<td> CSS </td>
+<td> 23355</td>
+</tr>
+<tr>
+<td> 5 </td>
+<td> <a href="http://github.com/mbostock/d3">mbostock/d3</a> </td>
+<td> JavaScript </td>
+<td> 20715</td>
+</tr>
+<tr>
+<td> 6 </td>
+<td> <a href="http://github.com/rails/rails">rails/rails</a> </td>
+<td> Ruby </td>
+<td> 20284</td>
+</tr>
+<tr>
+<td> 7 </td>
+<td> <a href="http://github.com/FortAwesome/Font-Awesome">FortAwesome/Font-Awesome</a> </td>
+<td> CSS </td>
+<td> 19506</td>
+</tr>
+<tr>
+<td> 8 </td>
+<td> <a href="http://github.com/bartaz/impress.js">bartaz/impress.js</a> </td>
+<td> JavaScript </td>
+<td> 18637</td>
+</tr>
+<tr>
+<td> 9 </td>
+<td> <a href="http://github.com/angular/angular.js">angular/angular.js</a> </td>
+<td> JavaScript </td>
+<td> 17994</td>
+</tr>
+<tr>
+<td> 10 </td>
+<td> <a href="http://github.com/jashkenas/backbone">jashkenas/backbone</a> </td>
+<td> JavaScript </td>
+<td> 16502</td>
+</tr>
+<tr>
+<td> 11 </td>
+<td> <a href="http://github.com/Homebrew/homebrew">Homebrew/homebrew</a> </td>
+<td> Ruby </td>
+<td> 15065</td>
+</tr>
+<tr>
+<td> 12 </td>
+<td> <a href="http://github.com/zurb/foundation">zurb/foundation</a> </td>
+<td> JavaScript </td>
+<td> 14944</td>
+</tr>
+<tr>
+<td> 13 </td>
+<td> <a href="http://github.com/blueimp/jQuery-File-Upload">blueimp/jQuery-File-Upload</a> </td>
+<td> JavaScript </td>
+<td> 14312</td>
+</tr>
+<tr>
+<td> 14 </td>
+<td> <a href="http://github.com/harvesthq/chosen">harvesthq/chosen</a> </td>
+<td> JavaScript </td>
+<td> 14232</td>
+</tr>
+<tr>
+<td> 15 </td>
+<td> <a href="http://github.com/mrdoob/three.js">mrdoob/three.js</a> </td>
+<td> JavaScript </td>
+<td> 13686</td>
+</tr>
+<tr>
+<td> 16 </td>
+<td> <a href="http://github.com/vhf/free-programming-books">vhf/free-programming-books</a> </td>
+<td> <em>Unknown</em> </td>
+<td> 13658</td>
+</tr>
+<tr>
+<td> 17 </td>
+<td> <a href="http://github.com/adobe/brackets">adobe/brackets</a> </td>
+<td> JavaScript </td>
+<td> 13557</td>
+</tr>
+<tr>
+<td> 18 </td>
+<td> <a href="http://github.com/robbyrussell/oh-my-zsh">robbyrussell/oh-my-zsh</a> </td>
+<td> Shell </td>
+<td> 13337</td>
+</tr>
+<tr>
+<td> 19 </td>
+<td> <a href="http://github.com/jekyll/jekyll">jekyll/jekyll</a> </td>
+<td> Ruby </td>
+<td> 13283</td>
+</tr>
+<tr>
+<td> 20 </td>
+<td> <a href="http://github.com/github/gitignore">github/gitignore</a> </td>
+<td> <em>Unknown</em> </td>
+<td> 13128</td>
+</tr>
+</tbody>
+</table>
+
+
+<br/>
+
+
+<p>If you want to play with the data yourself, I&rsquo;ve put a cache of the top 5000 repositories <a href="/data/top-5000-repos.20131219.csv">here</a>.  I&rsquo;ve also posted the Clojure code I wrote to collect the data at <a href="https://github.com/adereth/counting-stars">adereth/counting-stars</a>.</p>
+
+<h2>Which languages have the top spots?</h2>
+
+<p>In <a href="http://adambard.com/blog/top-github-languages-for-2013-so-far/">Adam Bard&rsquo;s Top Github Languages for 2013 (so far)</a>, he counted repo creation and found that JavaScript and Ruby were pretty close.  The top star counts tell a very different story, with JavaScript dominating 7 of the top 10 spots.  CSS was in 11th place in his analysis, but it&rsquo;s 2 of the top 10 spots.</p>
+
+<p>Observing that 7 of the top 10 spots are JavaScript gives a sense for both the volume and the relative ranking of JavaScript in that range of the leaderboard, but just seeing that another language is 50 of the top 5000 spots doesn&rsquo;t give nearly as much color.</p>
+
+<p>One approach is to look at the number of repos in different ranges for each language:</p>
+
+<table>
+<thead>
+<tr>
+<th>Language </th>
+<th> 1-10 </th>
+<th> 1-100 </th>
+<th> 1-1000 </th>
+<th> 1-5000 </th>
+<th> Top Repository</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JavaScript </td>
+<td> 7 </td>
+<td> 54 </td>
+<td> 385 </td>
+<td> 1605 </td>
+<td> <a href="http://github.com/twbs/bootstrap">twbs/bootstrap</a> (1)</td>
+</tr>
+<tr>
+<td>CSS </td>
+<td> 2 </td>
+<td> 8 </td>
+<td> 41 </td>
+<td> 174 </td>
+<td> <a href="http://github.com/h5bp/html5-boilerplate">h5bp/html5-boilerplate</a> (4)</td>
+</tr>
+<tr>
+<td>Ruby </td>
+<td> 1 </td>
+<td> 9 </td>
+<td> 153 </td>
+<td> 786 </td>
+<td> <a href="http://github.com/rails/rails">rails/rails</a> (6)</td>
+</tr>
+<tr>
+<td>Python </td>
+<td>  </td>
+<td> 5 </td>
+<td> 64 </td>
+<td> 420 </td>
+<td> <a href="http://github.com/django/django">django/django</a> (44)</td>
+</tr>
+<tr>
+<td><em>Unknown</em> </td>
+<td>  </td>
+<td> 5 </td>
+<td> 30 </td>
+<td> 138 </td>
+<td> <a href="http://github.com/vhf/free-programming-books">vhf/free-programming-books</a> (15)</td>
+</tr>
+<tr>
+<td>C++ </td>
+<td>  </td>
+<td> 4 </td>
+<td> 22 </td>
+<td> 108 </td>
+<td> <a href="http://github.com/textmate/textmate">textmate/textmate</a> (35)</td>
+</tr>
+<tr>
+<td>PHP </td>
+<td>  </td>
+<td> 3 </td>
+<td> 38 </td>
+<td> 248 </td>
+<td> <a href="http://github.com/symfony/symfony">symfony/symfony</a> (58)</td>
+</tr>
+<tr>
+<td>Shell </td>
+<td>  </td>
+<td> 3 </td>
+<td> 19 </td>
+<td> 89 </td>
+<td> <a href="http://github.com/robbyrussell/oh-my-zsh">robbyrussell/oh-my-zsh</a> (18)</td>
+</tr>
+<tr>
+<td>Objective-C </td>
+<td>  </td>
+<td> 2 </td>
+<td> 89 </td>
+<td> 495 </td>
+<td> <a href="http://github.com/AFNetworking/AFNetworking">AFNetworking/AFNetworking</a> (30)</td>
+</tr>
+<tr>
+<td>C </td>
+<td>  </td>
+<td> 2 </td>
+<td> 31 </td>
+<td> 185 </td>
+<td> <a href="http://github.com/torvalds/linux">torvalds/linux</a> (25)</td>
+</tr>
+<tr>
+<td>Go </td>
+<td>  </td>
+<td> 2 </td>
+<td> 13 </td>
+<td> 61 </td>
+<td> <a href="http://github.com/dotcloud/docker">dotcloud/docker</a> (45)</td>
+</tr>
+<tr>
+<td>Java </td>
+<td>  </td>
+<td> 1 </td>
+<td> 32 </td>
+<td> 255 </td>
+<td> <a href="http://github.com/nathanmarz/storm">nathanmarz/storm</a> (56)</td>
+</tr>
+<tr>
+<td>VimL </td>
+<td>  </td>
+<td> 1 </td>
+<td> 23 </td>
+<td> 66 </td>
+<td> <a href="http://github.com/mathiasbynens/dotfiles">mathiasbynens/dotfiles</a> (57)</td>
+</tr>
+<tr>
+<td>CoffeeScript </td>
+<td>  </td>
+<td> 1 </td>
+<td> 22 </td>
+<td> 80 </td>
+<td> <a href="http://github.com/jashkenas/coffee-script">jashkenas/coffee-script</a> (43)</td>
+</tr>
+<tr>
+<td>Scala </td>
+<td>  </td>
+<td>  </td>
+<td> 13 </td>
+<td> 46 </td>
+<td> <a href="http://github.com/playframework/playframework">playframework/playframework</a> (178)</td>
+</tr>
+<tr>
+<td>C# </td>
+<td>  </td>
+<td>  </td>
+<td> 8 </td>
+<td> 65 </td>
+<td> <a href="http://github.com/SignalR/SignalR">SignalR/SignalR</a> (205)</td>
+</tr>
+<tr>
+<td>Clojure </td>
+<td>  </td>
+<td>  </td>
+<td> 2 </td>
+<td> 37 </td>
+<td> <a href="http://github.com/technomancy/leiningen">technomancy/leiningen</a> (361)</td>
+</tr>
+<tr>
+<td>Perl </td>
+<td>  </td>
+<td>  </td>
+<td> 2 </td>
+<td> 26 </td>
+<td> <a href="http://github.com/sitaramc/gitolite">sitaramc/gitolite</a> (138)</td>
+</tr>
+<tr>
+<td>ActionScript </td>
+<td>  </td>
+<td>  </td>
+<td> 2 </td>
+<td> 10 </td>
+<td> <a href="http://github.com/mozilla/shumway">mozilla/shumway</a> (606)</td>
+</tr>
+<tr>
+<td>Emacs Lisp </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 20 </td>
+<td> <a href="http://github.com/technomancy/emacs-starter-kit">technomancy/emacs-starter-kit</a> (477)</td>
+</tr>
+<tr>
+<td>Erlang </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 15 </td>
+<td> <a href="http://github.com/erlang/otp">erlang/otp</a> (568)</td>
+</tr>
+<tr>
+<td>Haskell </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 12 </td>
+<td> <a href="http://github.com/jgm/pandoc">jgm/pandoc</a> (740)</td>
+</tr>
+<tr>
+<td>TypeScript </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 4 </td>
+<td> <a href="http://github.com/bitcoin/bitcoin">bitcoin/bitcoin</a> (161)</td>
+</tr>
+<tr>
+<td>Assembly </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 3 </td>
+<td> <a href="http://github.com/jmechner/Prince-of-Persia-Apple-II">jmechner/Prince-of-Persia-Apple-II</a> (269)</td>
+</tr>
+<tr>
+<td>Elixir </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 2 </td>
+<td> <a href="http://github.com/elixir-lang/elixir">elixir-lang/elixir</a> (666)</td>
+</tr>
+<tr>
+<td>Objective-J </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 2 </td>
+<td> <a href="http://github.com/cappuccino/cappuccino">cappuccino/cappuccino</a> (667)</td>
+</tr>
+<tr>
+<td>Rust </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> <a href="http://github.com/mozilla/rust">mozilla/rust</a> (225)</td>
+</tr>
+<tr>
+<td>Vala </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> <a href="http://github.com/p-e-w/finalterm">p-e-w/finalterm</a> (282)</td>
+</tr>
+<tr>
+<td>Julia </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> <a href="http://github.com/JuliaLang/julia">JuliaLang/julia</a> (356)</td>
+</tr>
+<tr>
+<td>Visual Basic </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> <a href="http://github.com/bmatzelle/gow">bmatzelle/gow</a> (800)</td>
+</tr>
+<tr>
+<td>TeX </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 6 </td>
+<td> <a href="http://github.com/ieure/sicp">ieure/sicp</a> (2441)</td>
+</tr>
+<tr>
+<td>R </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 5 </td>
+<td> <a href="http://github.com/johnmyleswhite/ML_for_Hackers">johnmyleswhite/ML_for_Hackers</a> (2125)</td>
+</tr>
+<tr>
+<td>Lua </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 4 </td>
+<td> <a href="http://github.com/leafo/moonscript">leafo/moonscript</a> (3351)</td>
+</tr>
+<tr>
+<td>PowerShell </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 3 </td>
+<td> <a href="http://github.com/chocolatey/chocolatey">chocolatey/chocolatey</a> (1580)</td>
+</tr>
+<tr>
+<td>Prolog </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 3 </td>
+<td> <a href="http://github.com/onyxfish/csvkit">onyxfish/csvkit</a> (3498)</td>
+</tr>
+<tr>
+<td>XSLT </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 2 </td>
+<td> <a href="http://github.com/wakaleo/game-of-life">wakaleo/game-of-life</a> (1093)</td>
+</tr>
+<tr>
+<td>Matlab </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 2 </td>
+<td> <a href="http://github.com/zk00006/OpenTLD">zk00006/OpenTLD</a> (1292)</td>
+</tr>
+<tr>
+<td>OCaml </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 2 </td>
+<td> <a href="http://github.com/MLstate/opalang">MLstate/opalang</a> (1380)</td>
+</tr>
+<tr>
+<td>Dart </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 2 </td>
+<td> <a href="http://github.com/dart-lang/spark">dart-lang/spark</a> (1463)</td>
+</tr>
+<tr>
+<td>Groovy </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 2 </td>
+<td> <a href="http://github.com/Netflix/asgard">Netflix/asgard</a> (1489)</td>
+</tr>
+<tr>
+<td>Lasso </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/symfony/symfony-docs">symfony/symfony-docs</a> (2047)</td>
+</tr>
+<tr>
+<td>LiveScript </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/gkz/LiveScript">gkz/LiveScript</a> (2226)</td>
+</tr>
+<tr>
+<td>Scheme </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/eholk/harlan">eholk/harlan</a> (2648)</td>
+</tr>
+<tr>
+<td>Common Lisp </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/google/lisp-koans">google/lisp-koans</a> (2889)</td>
+</tr>
+<tr>
+<td>XML </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/kswedberg/jquery-tmbundle">kswedberg/jquery-tmbundle</a> (2972)</td>
+</tr>
+<tr>
+<td>Mirah </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/mirah/mirah">mirah/mirah</a> (2985)</td>
+</tr>
+<tr>
+<td>Arc </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/arclanguage/anarki">arclanguage/anarki</a> (3389)</td>
+</tr>
+<tr>
+<td>DOT </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/cplusplus/draft">cplusplus/draft</a> (3583)</td>
+</tr>
+<tr>
+<td>Racket </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/plt/racket">plt/racket</a> (3761)</td>
+</tr>
+<tr>
+<td>F# </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/fsharp/fsharp">fsharp/fsharp</a> (4518)</td>
+</tr>
+<tr>
+<td>D </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/D-Programming-Language/phobos">D-Programming-Language/phobos</a> (4719)</td>
+</tr>
+<tr>
+<td>Ragel in Ruby Host </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/jgarber/redcloth">jgarber/redcloth</a> (4829)</td>
+</tr>
+<tr>
+<td>Puppet </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/ansible/ansible-examples">ansible/ansible-examples</a> (4979)</td>
+</tr>
+</tbody>
+</table>
+
+
+<br/>
+
+
+<p>The table is interesting, but it still doesn&rsquo;t give us a good sense for how the middle languages (C#, Scala, Clojure, Go) compare.  It also reveals that there are different star distributions within the languages.  For instance, CSS makes a showing in the top 10 but it has way fewer representatives (174) in the top 5000 than PHP (248), Objective C (495), or Java (255).</p>
+
+<p>Looking at the top repo for each language also exposes a weakness in the methodology: GitHub&rsquo;s language identification isn&rsquo;t perfect and there are number of polyglot projects.  The top Java repo is <a href="http://github.com/nathanmarz/storm">Storm</a>, which uses enough Clojure (20.1% by GitHub&rsquo;s measure) to make this identification questionable when you take into account Clojure&rsquo;s conciseness over Java&rsquo;s.</p>
+
+<h2>What about star counts?</h2>
+
+<p>Looking at the results after ranking obscures the actual distribution of stars.  Using a <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.36.6685&amp;rep=rep1&amp;type=pdf">squarified treemap</a> with star count for the size and no hierarchy is a compact way of visualizing the ranking while exposing details about the absolute popularity of each repo.  The squarified treemap algorithm roughly maintains the order going from one corner to the other.</p>
+
+<p>Here are the top 1000 repos, using stars for the size and language for the color:</p>
+
+<p><em>(Language and repository name shown on mouseover, click to visit repository.  A bit of a fail on touch devices right now.)</em></p>
+
+<div id='tm'></div>
+
+
+
+
+<!-- CSS Styles: -->
+
+
+<div>
+  <style type="text/css">
+.node {
+  border: solid 1px white;
+  font: 8px Lato;
+  line-height: 12px;
+  overflow: hidden;
+  position: absolute;
+  text-indent: 2px;
+}
+
+.tooltip{
+    display: inline;
+    position: relative;
+}
+
+.tooltip:hover:after{
+    background: #333;
+    background: rgba(0,0,0,.8);
+    border-radius: 5px;
+    bottom: 26px;
+    color: #fff;
+    content: attr(title);
+    left: 20%;
+    padding: 5px 15px;
+    position: absolute;
+    z-index: 98;
+    width: 220px;
+}
+
+.tooltip:hover:before{
+    border: solid;
+    border-color: #333 transparent;
+    border-width: 6px 6px 0 6px;
+    bottom: 20px;
+    content: &#8220;&#8221;;
+    left: 50%;
+    position: absolute;
+    z-index: 99;
+}
+
+  </style>
+</div>
+
+
+
+
+<script type="text/javascript">
+
+var color = d3.scale.category20();
+
+var margin = {top: 10, right: 0, bottom: 10, left: 0},
+    width = $('.entry-content').width(),
+    height = 500;
+
+var treemap = d3.layout.treemap()
+    .size([width, height])
+    .sticky(true)
+    .value(function(d) { return d.Stars; });
+
+var div = d3.select("#tm").append("div")
+    .style("position", "relative")
+    .style("width", (width + margin.left + margin.right) + "px")
+    .style("height", (height + margin.top + margin.bottom) + "px")
+    .style("left", margin.left + "px")
+    .style("top", margin.top + "px");
+
+d3.csv("/data/top-1000-repos.20131219.csv", function(repos) {
+  treemap.nodes({"children": repos});
+
+  var node = div.datum(repos).selectAll(".node")
+    .data(treemap.nodes)
+    .enter()
+      .append("a")
+      .attr("href", function(d) { return d.children ? null : ("http://github.com/" + d.Repository); })
+      .attr("class", function(d) { return d.children ? null : "tooltip"; })
+      .attr("title", function(d) { return d.children ? null : "Repository: " + d.Repository + "\nLanguage: " + d.Language + "\nStars: " + d.Stars; })
+      .append("div")
+    .attr("class", "node")
+    .call(position)
+    .style("background", function(d) { return d.children ? null : color(d.Language); });
+});
+
+function position() {
+  this.style("left", function(d) { return d.x + "px"; })
+      .style("top", function(d) { return d.y + "px"; })
+      .style("width", function(d) { return Math.max(0, d.dx - 1) + "px"; })
+      .style("height", function(d) { return Math.max(0, d.dy - 1) + "px"; });
+};
+
+</script>
+
+
+<p>Despite being a little chaotic, we can start to see some of the details of the distributions.  It still suffers from being difficult to glean information about the middling languages.  The comparisons become a little easier if we group the boxes by language.  That&rsquo;s pretty easy, since that&rsquo;s really the intended usage of treemaps.</p>
+
+<p>Here are the top 5000 grouped by language:</p>
+
+<div id='tm2'></div>
+
+
+
+
+<script type="text/javascript">
+
+var treemap2 = d3.layout.treemap()
+    .size([width, height])
+    .sticky(true)
+    .value(function(d) {return d.children ? null : d.stargazers_count; });
+
+var div2 = d3.select("#tm2").append("div")
+    .style("position", "relative")
+    .style("width", (width + margin.left + margin.right) + "px")
+    .style("height", (height + margin.top + margin.bottom) + "px")
+    .style("left", margin.left + "px")
+    .style("top", margin.top + "px");
+
+d3.json("/data/lang-map.json", function(root) {
+  var node = div2.datum(root).selectAll(".node")
+      .data(treemap2.nodes)
+      .enter()
+      .append("a")
+      .attr("href", function(d) { return d.children ? null : ("http://github.com/" + d.user + "/" + d.name); })
+      .attr("class", function(d) { return d.children ? null : "tooltip"; })
+      .attr("title", function(d) { return d.children ? null : "Repository: " + d.user + "/" + d.name + "\nLanguage: " + d.language + "\nStars: " + d.stargazers_count; })
+
+      .append("div")
+      .attr("class", "node")
+      .call(position)
+      .style("background", function(d) { return d.children ? color(d.name) : null; });
+
+  d3.selectAll("input").on("change", function change() {
+    var value = this.value === "count"
+        ? function() { return 1; }
+        : function(d) { return d.size; };
+
+    node
+        .data(treemap.value(value).nodes)
+      .transition()
+        .duration(1500)
+        .call(position);
+  });
+});
+
+
+function position() {
+  this.style("left", function(d) { return d.x + "px"; })
+      .style("top", function(d) { return d.y + "px"; })
+      .style("width", function(d) { return Math.max(0, d.dx - 1) + "px"; })
+      .style("height", function(d) { return Math.max(0, d.dy - 1) + "px"; });
+};
+
+</script>
+
+
+<p>Honestly, I&rsquo;m not really in love with this visualization, but it was a fun experiment.  I have some ideas for more effective representations, but I need to work on my d3.js-fu.  Hopefully it serves as an inspirational starting point for someone else&hellip;</p>
+
+<h2>Conclusion</h2>
+
+<p>Firstly, GitHub&rsquo;s API is really cool and can give you some insights that aren&rsquo;t exposed through their UI.  Like I said at the start of this post, I have another project that caused me to look at this API in the first place and I&rsquo;m really excited for the possibilities with this data.</p>
+
+<p>GitHub&rsquo;s current UI is really focused on using stars to expose what&rsquo;s trending and doesn&rsquo;t really make it easy to see the all-time greatest hits.  Perhaps the expectation is that everyone already knows these repos, but I certainly didn&rsquo;t and I&rsquo;ve discovered or rediscovered a few gems.  My <a href="/blog/2013/12/15/font-awesome-easter-egg/">previous post</a> came about because of my discovery of <a href="http://fontawesome.io/">Font Awesome</a> through this investigation.</p>
+
+<p>I&rsquo;ll close out with a couple questions (with no question marks) for the audience:</p>
+
+<ol>
+<li><p>Through this lens, JavaScript is <em>way</em> more popular than other metrics seem to indicate.  One hypothesis is that we all end up exposing things through the browser, so you end up doing something in JavaScript no matter what your language of choice is.  I&rsquo;m interested in other ideas and would also appreciate thoughts on how to validate them.</p></li>
+<li><p>It&rsquo;s not obvious to me how to best aggregate ranking data.  I&rsquo;d love to see someone else take this data and expose something more interesting.  Even if you&rsquo;re not going to do anything with the data, any ideas are appreciated.</p></li>
+</ol>
+
+
+<p><i class="fa fa-star fa-2x"></i></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/3/">&larr; Older</a>
+    
+    <a href="archives">Blog Archives</a>
+    
+    <a class="next" href="/blog/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <p>
+  <center><img src="/images/aleph.png"/></center>
+  <a href="http://adereth.github.io" alt="Home"><h1>Adereth&#8217;s Blog</h1></a>
+
+  <ul id="recent_posts">
+      <li class="post">
+	<a href="http://adereth.github.io"><i class="fa fa-home fa-fw"></i> Home</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.github.io/about/"><i class="fa fa-user fa-fw"></i> About Me</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.github.io/atom.xml"><i class="fa fa-rss fa-fw"></i> Feed</a>
+      </li>
+  </ul>
+
+  <h1>Connect</h1>
+
+  <ul id="recent_posts">
+      <li class="post">
+	<a href="https://twitter.com/adereth"><i class="fa fa-twitter fa-fw"></i> Twitter</a>
+      </li>
+      <li class="post">
+	<a href="https://github.com/adereth"><i class="fa fa-github fa-fw"></i> GitHub</a>
+      </li>
+      <li class="post">
+	<a href="http://www.linkedin.com/in/adereth/"><i class="fa fa-linkedin fa-fw"></i> LinkedIn</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.tumblr.com/"><i class="fa fa-tumblr fa-fw"></i> Tumblr</a>
+      </li>
+  </ul>
+
+
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/12/06/writing-a-halite-bot-in-clojure/">Writing a Halite Bot in Clojure</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too/">Bag of Little Bootstraps Presentation at PWL SF</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/20/visualizing-girl-talk-with-clojure-and-d3-dot-js/">Visualizing Girl Talk: Parsing with Clojure&#8217;s Instaparse</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/19/clojure-slash-conj-talk-on-3d-printing-keyboards/">Clojure/conj Talk on 3D Printing Keyboards</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love/">Presentation on The Mode Tree at Papers We Love Too</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/17/sa-profile-keys-on-a-kinesis-advantage/">SA Profile Keys on a Kinesis Advantage</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/02/poisonous-shapes/">Poisonous Shapes in Algebra and Graph Theory</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/12/silvermans-mode-detection-method-explained/">Silverman&#8217;s Mode Estimation Method Explained</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/29/computing-the-remedian-in-clojure/">Computing the Remedian in Clojure</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/14/typing-qwerty-on-a-dvorak-keyboard/">Typing Qwerty on a Dvorak Keyboard</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/adereth">@adereth</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'adereth',
+            count: 10,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - Matt Adereth -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = '1overn';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

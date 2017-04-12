@@ -1,0 +1,564 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: benchmarks | adereth]]></title>
+  <link href="http://adereth.github.io/blog/categories/benchmarks/atom.xml" rel="self"/>
+  <link href="http://adereth.github.io/"/>
+  <updated>2016-12-06T12:35:58-08:00</updated>
+  <id>http://adereth.github.io/</id>
+  <author>
+    <name><![CDATA[Matt Adereth]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Benchmarking Mathematica on the Raspberry Pi]]></title>
+    <link href="http://adereth.github.io/blog/2014/01/06/benchmarking-mathematica-on-the-raspberry-pi/"/>
+    <updated>2014-01-06T07:23:00-08:00</updated>
+    <id>http://adereth.github.io/blog/2014/01/06/benchmarking-mathematica-on-the-raspberry-pi</id>
+    <content type="html"><![CDATA[<p>I&rsquo;m really excited about <a href="http://blog.wolfram.com/2013/11/21/putting-the-wolfram-language-and-mathematica-on-every-raspberry-pi/">Wolfram Research&rsquo;s announcement</a> that Mathematica and the Wolfram language are now available for free on the Raspberry Pi.</p>
+
+<p>In the announcement, Stephen Wolfram gave this disclaimer:</p>
+
+<blockquote><p>To be clear, the Raspberry Pi is perhaps 10 to 20 times slower at running the Wolfram Language than a typical current-model laptop (and sometimes even slower when it’s lacking architecture-specific internal libraries).</p></blockquote>
+
+<p>I&rsquo;ve got a laptop and a Raspberry Pi, so I decided to put this to the test.</p>
+
+<h2>MathematicaMark</h2>
+
+<p>Mathematica ships with <a href="http://reference.wolfram.com/mathematica/Benchmarking/tutorial/Benchmark.html">a benchmarking package called MathematicaMark</a>.  The latest version of the benchmark, <em>MathematicaMark9</em>, consists of 15 tests that use both numeric and symbolic functions.  The MathematicaMark score is the <a href="http://en.wikipedia.org/wiki/Geometric_mean">geometric mean</a> of the reciprocal of the timings, normalized against some reference system&rsquo;s timings:</p>
+
+<p>$$ \sqrt[15]{\prod_{i=1}^{15} \frac{t_{r,i}}{t_{s,i}}} $$</p>
+
+<p>&hellip;where $t_{s,i}$ is the timing for test $i$ on system $s$ and $r$ is the reference system.  For MathematicaMark9, the reference system is a 3.07 GHz Core i7-950 with 8 hyper-threaded cores running 64-bit Windows 7 Pro.  By definition, this system has a MathematicaMark9 score of 1.0.</p>
+
+<p>We can compare systems using the MathematicaMark score.  If a system were 10 to 20 times slower, we would expect its MathematicaMark score to be anywhere from 1/10<sup>th</sup> to 1/20<sup>th</sup> the value of the faster system.  The <a href="http://reference.wolfram.com/mathematica/Benchmarking/ref/Benchmark.html"><code>Benchmark[]</code> function</a> also provides the timings for the individual tests, so we can dig in and see which functions might be benefitting from the architecture-specific internal libraries Wolfram mentioned.</p>
+
+<h2>Raspberry Pi Configuration</h2>
+
+<p><img src="/images/rpi.png" width="350"></p>
+
+<p>I used a <a href="http://en.wikipedia.org/wiki/Raspberry_Pi#Specifications">Model B Raspberry Pi with 512MB of RAM</a>.  The tests were done after a fresh install of <a href="http://www.raspberrypi.org/archives/5580">NOOBS 1.3.3</a>, which includes Mathematica and the Wolfram Language installed by default.  <code>wolfram</code> was invoked from the commandline and nothing else was running on the system, most notably the X Window System and the <a href="http://reference.wolfram.com/mathematica/tutorial/UsingANotebookInterface.html">Mathematica Notebook interface</a>.</p>
+
+<h2>&ldquo;Typical Current-Model Laptop&rdquo;</h2>
+
+<p><img src="/images/mbp13.png" width="350"></p>
+
+<p>Mathematica ships with benchmark results for 15 different systems (including the reference system).  It&rsquo;s not clear which system to use for this comparison, so I conveniently chose my Early 2013 13-inch Retina MacBook Pro, which sports a 2.6 GHz Intel Core i5 processor (4 hyper-threaded cores) as a representative &ldquo;typical current-model laptop.&rdquo;  Based on the sea of glowing Apple logos I&rsquo;ve seen in the audiences of the conferences I attended this year, I think it&rsquo;s a fair selection.</p>
+
+<h2>MathematicaMark9 Scores</h2>
+
+<p>With the setup out of the way, let&rsquo;s take a look at the report comparing the MacBook, Raspberry Pi, and the 15 included systems:</p>
+
+<p><a href="/oneoff/mathematicamark9-20131231/"><img src="/images/MathematicaMark9.png" alt="MathematicaMark9 System Comparison Chart" /></a>
+<em>Click for full-sized report</em></p>
+
+<p>The MacBook Pro weighs in at a respectible 0.86, while the Raspberry Pi is actually getting rounded up to 0.01 from a true score of 0.005.  Running the benchmark takes 16 seconds on the laptop and <em>nearly 49 minutes</em> on the Raspberry Pi.</p>
+
+<p>Even the slowest machine in the included benchmarks score nearly 30x higher.  I don&rsquo;t think Wolfram would consider a pre-Intel Mac to be a &ldquo;typical current-model&rdquo; computer.  To see the numbers he&rsquo;s citing, we need to dig into the timings for the individual tests.</p>
+
+<h2>Performance on Individual Tests</h2>
+
+<p>The source for the 15 individual tests and the timings on a variety of reference systems is included in the <a href="/oneoff/mathematicamark9-20131231/#sources">full MathematicaMark9 Benchmark Report</a>.  Here are the timings on the Raspberry Pi and the Macbook Pro:</p>
+
+<table>
+<thead>
+<tr>
+<th>Test </th>
+<th align="right"> Pi Timing (s) </th>
+<th align="right"> Mac Timing (s) </th>
+<th align="right"> Ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Random Number Sort </td>
+<td align="right"> 25.13 </td>
+<td align="right"> 1.75 </td>
+<td align="right"> 14.4</td>
+</tr>
+<tr>
+<td>Digits of Pi </td>
+<td align="right"> 12.30 </td>
+<td align="right"> 0.78 </td>
+<td align="right"> 15.9</td>
+</tr>
+<tr>
+<td>Matrix Arithmetic </td>
+<td align="right"> 27.76 </td>
+<td align="right"> 1.25 </td>
+<td align="right"> 22.2</td>
+</tr>
+<tr>
+<td>Gamma Function </td>
+<td align="right"> 15.77 </td>
+<td align="right"> 0.63 </td>
+<td align="right"> 25.2</td>
+</tr>
+<tr>
+<td>Large Integer Multiplication </td>
+<td align="right"> 19.20 </td>
+<td align="right"> 0.58 </td>
+<td align="right"> 32.9</td>
+</tr>
+<tr>
+<td>Polynomial Expansion </td>
+<td align="right"> 4.55 </td>
+<td align="right"> 0.12 </td>
+<td align="right"> 36.4</td>
+</tr>
+<tr>
+<td>Numerical Integration </td>
+<td align="right"> 35.41 </td>
+<td align="right"> 0.96 </td>
+<td align="right"> 36.7</td>
+</tr>
+<tr>
+<td>Matrix Transpose </td>
+<td align="right"> 36.77 </td>
+<td align="right"> 0.95 </td>
+<td align="right"> 38.8</td>
+</tr>
+<tr>
+<td>Data Fitting </td>
+<td align="right"> 29.94 </td>
+<td align="right"> 0.66 </td>
+<td align="right"> 45.4</td>
+</tr>
+<tr>
+<td>Discrete Fourier Transform </td>
+<td align="right"> 79.28 </td>
+<td align="right"> 0.95 </td>
+<td align="right"> 83.4</td>
+</tr>
+<tr>
+<td>Elementary Functions </td>
+<td align="right"> 174.93 </td>
+<td align="right"> 1.31 </td>
+<td align="right"> 133.3</td>
+</tr>
+<tr>
+<td>Eigenvalues of a Matrix </td>
+<td align="right"> 136.87 </td>
+<td align="right"> 0.79 </td>
+<td align="right"> 174.1</td>
+</tr>
+<tr>
+<td>Singular Value Decomposition </td>
+<td align="right"> 433.08 </td>
+<td align="right"> 1.52 </td>
+<td align="right"> 284.0</td>
+</tr>
+<tr>
+<td>Solving a Linear System </td>
+<td align="right"> 745.53 </td>
+<td align="right"> 1.65 </td>
+<td align="right"> 452.1</td>
+</tr>
+<tr>
+<td>Matrix Multiplication </td>
+<td align="right"> 1136.51 </td>
+<td align="right"> 2.15 </td>
+<td align="right"> 528.9</td>
+</tr>
+</tbody>
+</table>
+
+
+<br/>
+
+
+<p>Sorting by the ratio reveals that there are definitely cases where the relative performance falls in the 10x &ndash; 20x range cited by Wolfram.</p>
+
+<p>It&rsquo;s interesting to note that the 4 worst performing tests by ratio are all linear algebra operations involving matrix decomposition or multiplication.  These are the types of operations that have probably gotten a lot of optimization love from Wolfram Research developers in the past because this is the area that potential users compare when deciding between Mathematica and its competitors, particularly Matlab.</p>
+
+<p>If you look through <a href="http://www.wolfram.com/mathematica/quick-revision-history.html">the revision history highlights of Mathematica</a>, you&rsquo;ll see that there was a sequence of releases where every version had at least one top-level mention of linear algebra performance improvements:</p>
+
+<ul>
+<li>Mathematica 5.0 &ndash; 2003
+
+<ul>
+<li>&ldquo;Record-breaking speed through processor-optimized numerical linear algebra&rdquo;</li>
+<li>&ldquo;Full support for high-speed sparse linear algebra&rdquo;</li>
+</ul>
+</li>
+<li>Mathematica 5.1 &ndash; 2004
+
+<ul>
+<li>&ldquo;Numerical linear algebra performance enhancements&rdquo;</li>
+</ul>
+</li>
+<li>Mathematica 5.2 &ndash; 2005
+
+<ul>
+<li>&ldquo;Multithreaded numerical linear algebra&rdquo;</li>
+<li>&ldquo;Vector-based performance enhancements&rdquo;</li>
+</ul>
+</li>
+</ul>
+
+
+<p>The 5<sup>th</sup> worst test by ratio, Elementary Functions, is also interesting to dig into.  Here&rsquo;s the source:</p>
+
+<p><code>clojure
+Module[{m1, m2},
+ Timing[
+  SeedRandom[1];
+  m1 = RandomReal[{}, {2.2`*^6}];
+  m2 = RandomReal[{}, {2.2`*^6}];
+  Do[
+   Exp[m1];
+   Sin[m1];
+   ArcTan[m1, m2],
+   {30}]]]
+</code></p>
+
+<p>It&rsquo;s computing $ e^x $, $ \sin{x} $, and $ \text{tan}^{-1} \frac{x}{y} $ for lists of 2,200,000 random numbers 30 times.  <code>Exp</code>, <code>Sin</code>, and <code>ArcTan</code> all have the <a href="http://reference.wolfram.com/mathematica/ref/Listable.html"><code>Listable</code> attribute</a>, which means that they are automatically mapped over lists that are passed in as arguments.  <code>Sin[list]</code> and <code>Map[Sin, list]</code> are functionally equivalent, but the former provides the implementation the opportunity to take an optimized path if there is a faster way of computing the sine of multiple numbers.</p>
+
+<p>We can verify that this is a case where architecture specific optimizations are in play by rewriting the test to use <code>Map</code> and <code>MapThread</code>:</p>
+
+<p><code>clojure
+Module[{m1, m2},
+ Timing[
+  SeedRandom[1];
+  m1 = RandomReal[{}, {2.2`*^6}];
+  m2 = RandomReal[{}, {2.2`*^6}];
+  Map[Exp, m1];
+  Map[Sin, m1];
+  MapThread[ArcTan, {m1, m2}];]]
+</code></p>
+
+<p>Note that I&rsquo;m only running this once, as opposed to the 30 times in the original test, because the non-Listable version is so much slower.</p>
+
+<p>The version that doesn&rsquo;t take advantage of the Listable attribute takes 1.63 seconds on the Macbook Pro and 62.64 seconds on the Raspberry Pi.  This ratio of 38.2 (vs. 133.3 before) is much closer to the ratio we see from the other tests that don&rsquo;t take advantage of specifics of the architecture.</p>
+
+<h2>Conclusion</h2>
+
+<p>Even though Mathematica is much slower on the Raspberry Pi, it&rsquo;s a tremendous free gift and it still has many uses:</p>
+
+<ul>
+<li><p><a href="http://www.raspberrypi.org/archives/5623">A recent guest post from Wolfram Research on the Raspberry Pi blog</a> links to several projects that take advantage of the easy ways of controlling hardware using Mathematica on the Raspberry Pi.</p></li>
+<li><p>Much of what most people use Mathematica for doesn&rsquo;t require extreme performance.  For instance, getting the closed form of an integral or derivative is still practically instantaneous from a human&rsquo;s perspective.</p></li>
+<li><p>Just getting to experience the language and environment with only a $35 investment is worthwhile.  For developers, there is a lot to learn from the language, which is heavily influenced by <a href="http://en.wikipedia.org/wiki/M-expression">Lisp&rsquo;s M-expressions</a>, and the notebook enviroment, which is just starting to be replicated by iPython.  On top of that, the incredible interactive documentation for the language is something everyone should experience.</p></li>
+</ul>
+
+
+<p>Any questions, corrections, or suggestions are appreciated!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A few interesting Clojure microbenchmarks]]></title>
+    <link href="http://adereth.github.io/blog/2013/11/22/a-few-interesting-clojure-microbenchmarks/"/>
+    <updated>2013-11-22T07:50:00-08:00</updated>
+    <id>http://adereth.github.io/blog/2013/11/22/a-few-interesting-clojure-microbenchmarks</id>
+    <content type="html"><![CDATA[<script src="http://d3js.org/d3.v2.js"></script>
+
+
+<!--       font-family: Arial, sans-serif; "Menlo","Monaco","Andale Mono","lucida console","Courier New",monospace;-->
+
+
+<!-- CSS Styles: -->
+
+
+<div>
+  <style type="text/css">
+
+    .chart {
+      font-family: monospace;
+      font-size: 10px;
+      margin-top: -40px;
+    }
+
+    .bar {
+      fill: grey;
+    }
+
+    .axis path, .axis line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+    }
+
+  </style>
+</div>
+
+
+
+
+<!-- Global Variables and Handlers: -->
+
+
+<script type="text/javascript">
+
+  var margin = {top: 40, right: 40, bottom: 60, left: 110},
+      width = $('.entry-content').width();
+
+  $(window).resize(function() {
+    width = $('.entry-content').width();
+  });
+
+  function draw(data, chart, height) {
+
+    $(chart).empty();
+
+    var x = d3.scale.linear()
+        .domain([0, d3.max(data, function(d) { return d.mean})])
+        .range([0, width - margin.left - margin.right]);
+
+    var y = d3.scale.ordinal()
+        .domain(d3.range(data.length))
+        .rangeRoundBands([height - margin.top - margin.bottom, 0], 0.2);
+
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient('bottom')
+        .tickPadding(8)
+    .ticks(8);
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient('left')
+        .tickPadding(8)
+        .tickSize(0);
+
+    var svg = d3.select(chart).append('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .attr('class', 'chart')
+          .append('g')
+        .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+    svg.selectAll('.chart')
+        .data(data)
+    .enter().append('rect')
+        .attr('class', 'bar')
+        .attr('y', function(d, i) { return y(i) })
+        .attr('width', function(d) { return x(d.mean) })
+        .attr('height', y.rangeBand());
+
+    svg.append('g')
+        .attr('class', 'x axis')
+        .attr('transform', 'translate(0, ' + y.rangeExtent()[1] + ')')
+        .call(xAxis);
+
+    svg.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "end")
+        .attr("x", width / 2 - 45)
+        .attr("y", height - 60)
+        .text("nanoseconds");
+
+    svg.append('g')
+        .attr('class', 'y axis')
+        .call(yAxis)
+      .selectAll('text')
+        .text(function(d) { return data[d].code; });
+
+  }
+
+  function drawWithResize(data, chart, height) {
+    draw(data, chart, height);
+    $(window).resize(function() {draw(data, chart, height); })
+  }
+;
+
+
+</script>
+
+
+<p><a href="http://ideolalia.com/">Zach Tellman</a> delivered a really informative and practical unsession at <a href="http://clojure-conj.org/">Clojure Conj 2013</a> entitled &ldquo;Predictably Fast Clojure.&rdquo;  It was described as:</p>
+
+<blockquote><p>An exploration of some of the underlying mechanisms in Clojure, and how to build an intuition for how fast your code should run. Time permitting, we&rsquo;ll also explore how to work around these mechanisms, and exploit the full power of the JVM.</p></blockquote>
+
+<p>I&rsquo;d like to share a few interesting things that I learned from this talk and that I subsequently verified and explored.</p>
+
+<h2>How to benchmark</h2>
+
+<p>It turns out that benchmarking is hard and benchmarking on the JVM is even harder.  Fortunately, the folks at the Elliptic Group have thought long and hard about how to do it right and have written <a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?search_by=robust+java+benchmarking">a couple of great articles</a> on the matter.  Hugo Duncan&rsquo;s <a href="https://github.com/hugoduncan/criterium">Criterium library</a> makes it super easy to use these robust techniques.</p>
+
+<p>All the benchmarks in this post were run on my dual-core 2.6 GHz Intel Core i5 laptop.  The JVM was started with <code>lein with-profile production repl</code>, which enables more aggressive JIT action at the cost of slower start times.  If you try to use Criterium without this, you&rsquo;ll get warnings spewed for every benchmark you run.</p>
+
+<h2>Surprising operations on lists, vectors, and tuples</h2>
+
+<p>The first thing that he discussed was the relatively poor performance of <code>first</code> on vectors.</p>
+
+<p>For the tests, I made the some simple collections:
+<code>clojure
+(def ve [0 1 2])
+(def li '(0 1 2))
+(def tu (clj-tuple/tuple 0 1 2))
+</code></p>
+
+<p>And then I timed them each with <code>first</code> and <code>(nth coll 0)</code>:</p>
+
+<div id='chart-1'></div>
+
+
+<script type='text/javascript'>
+  var data = [
+      {code: "(first ve)", mean: 59.387551, lower: 56.557346, upper: 75.434730},
+      {code: "(first li)", mean: 11.814687, lower: 9.933760, upper: 17.651180},
+      {code: "(first tu)", mean: 12.026005, lower: 11.096498, upper: 17.716830},
+      {code: "(nth ve 0)", mean: 14.507457, lower: 13.379794, upper: 19.732508},
+      {code: "(nth li 0)", mean: 132.042247, lower: 123.849601, upper: 173.395438},
+      {code: "(nth tu 0)", mean: 11.240653, lower: 10.739338, upper: 12.333350},
+      ];
+  data.reverse();
+  drawWithResize(data, '#chart-1', 275);
+</script>
+
+
+<p>The <a href="http://clojuredocs.org/clojure_core/clojure.core/first">documentation</a> says that <code>first</code> &ldquo;calls seq on its argument.&rdquo;  This is effectively true, but if you look at the <a href="https://github.com/clojure/clojure/blob/1.5.x/src/jvm/clojure/lang/RT.java#L575">source</a> you&rsquo;ll see that if the collection implements <code>ISeq</code>, <code>seq</code> doesn&rsquo;t need to be called.  As a result, the performance of <code>first</code> on lists, which do implement <code>ISeq</code>, is much better than on vectors, which don&rsquo;t.  Zach took advantage of this observation in his <a href="https://github.com/ztellman/clj-tuple">clj-tuple</a> library and made sure that tuples implement <code>ISeq</code>.</p>
+
+<p>What&rsquo;s really interesting is that you can use <code>(nth coll 0)</code> to get the first element of a vector faster that you can with <code>first</code>.  Unfortunately, this only does well with vectors.  The performance is abysmal when applied to lists, so you should stick to <code>first</code> if you don&rsquo;t know the data structure you are operating on.</p>
+
+<p>The apparent slowness of <code>seq</code> on a vector made me wonder about the <code>empty?</code> function, which uses <code>seq</code> under the hood:</p>
+
+<p><code>clojure
+user=&gt; (source empty?)
+(defn empty?
+  "Returns true if coll has no items - same as (not (seq coll)).
+  Please use the idiom (seq x) rather than (not (empty? x))"
+  {:added "1.0"
+   :static true}
+  [coll] (not (seq coll)))
+</code></p>
+
+<p>If using <code>seq</code> is so slow, perhaps we can get better performance by just getting the count of elements and testing if it&rsquo;s zero:</p>
+
+<div id='chart-empty'></div>
+
+
+<script type='text/javascript'>
+  var dataE = [
+{code: "(empty? ve)", mean: 22.436542, lower: 22.052842, upper: 23.003189},
+{code: "(empty? li)", mean: 12.293540, lower: 11.680523, upper: 15.369996},
+{code: "(empty? tu)", mean: 18.512765, lower: 17.351246, upper: 22.757244},
+{code: "(= 0 (count ve))", mean: 11.209652, lower: 10.451370, upper: 15.123089},
+{code: "(= 0 (count li))", mean: 10.710336, lower: 10.417919, upper: 11.667121},
+{code: "(= 0 (count tu))", mean: 10.741061, lower: 10.396224, upper: 13.246183},
+      ];
+  dataE.reverse();
+  drawWithResize(dataE, '#chart-empty', 275);
+</script>
+
+
+<p>Of course, this is a bad idea for lazy sequences and should probably be avoided, as we&rsquo;ll incur a cost that is linear in the size of the sequence just to get the count.</p>
+
+<p>I don&rsquo;t think this will affect my day to day code, but it certainly is interesting and surfaced a bit more about how things actually work in Clojure.</p>
+
+<h2>Inconsistent protocol timings</h2>
+
+<p>This was a surprising one that also peeled back a layer on Clojure&rsquo;s implementation.  In Fogus&rsquo;s <a href="http://blog.fogus.me/2011/10/14/why-clojure-doesnt-need-invokedynamic-but-it-might-be-nice/">Why Clojure might not need invokedynamic, but it might be nice</a>, he explained:</p>
+
+<blockquote><p>Clojure&rsquo;s protocols are polymorphic on the type of the first argument. The protocol functions are call-site cached (with no per-call lookup cost if the target class remains stable). In other words, the implementation of Clojure&rsquo;s protocols are built on polymorphic inline caches.</p></blockquote>
+
+<p>The consequence of this is that we will see worse performance if the type of the first argument to a protocol&rsquo;s method keeps changing.  I made a simple test to see how significant this is:</p>
+
+<p>```clojure
+(defprotocol P
+  (f [x]))</p>
+
+<p>(extend-protocol P
+  String (f [<em>] 1)
+  Long (f [</em>] 2))</p>
+
+<p>(defn g [x y]
+  (+ (f x) (f y)))</p>
+
+<p>(def s0 &ldquo;foo&rdquo;)
+(def s1 &ldquo;bar&rdquo;)
+(def n0 0)
+(def n1 1)
+```</p>
+
+<p><code>g</code> calls <code>f</code> on both its arguments and we expect <code>f</code> to perform best when it&rsquo;s consistently called on a single type:</p>
+
+<div id='chart-2'></div>
+
+
+<script type='text/javascript'>
+  var data2 = [
+{code: "(g n0 n1)", mean: 21.597699},
+{code: "(g s0 s1)", mean: 22.550262},
+{code: "(g n0 s0)", mean: 37.527409}
+      ];
+  data2.reverse();
+  drawWithResize(data2, '#chart-2', 190);
+</script>
+
+
+<p>The expectation was correct.  There was some subsequent talk about whether the penalty of this cache miss was predictable.  Theoretically, the cost could be unbounded if you extend the protocol with enough types and have horrible luck with the hash codes of those types colliding, but my understanding of the caching logic is that it will usually be the small constant that we observed here.</p>
+
+<p>You can see why by taking a look at how the cache works in <a href="https://github.com/clojure/clojure/blob/1.5.x/src/jvm/clojure/lang/MethodImplCache.java#L76">MethodImplCache.java</a>.  The hash code of the class is shifted and masked by values that form a simple perfect hash, which is determined by the <a href="https://github.com/clojure/clojure/blob/1.5.x/src/clj/clojure/core.clj#L5971"><code>maybe-min-hash</code> function</a>.  The use of a perfect hash means that we should see consistent lookup times for even moderately large caches.</p>
+
+<p>In the rare case that a perfect hash can&rsquo;t be found by <code>maybe-min-hash</code>, the cache falls back to using a <code>PersistentArrayMap</code>, which can have slightly worse performance.  In any case, I don&rsquo;t think there&rsquo;s much to worry about here.</p>
+
+<p>One neat thing I discovered while testing all of this is that you don&rsquo;t suffer this cache-miss penalty if you declare that you support a protocol in your <code>deftype</code> or if you <code>reify</code>, but you do if you use <code>extend-protocol</code>:</p>
+
+<p>```clojure
+(deftype X []
+  P
+  (f [_] 3))
+(def dt (X.))</p>
+
+<p>(def re (reify P (f [_] 4)))</p>
+
+<p>(deftype Y [])
+(extend-protocol P
+  Y
+  (f [_] 5))
+(def ep (Y.))
+```</p>
+
+<div id='chart-3'></div>
+
+
+<script type='text/javascript'>
+  var data3 = [
+      {code: "(g s0 dt)", mean: 19.389459},
+      {code: "(g s0 re)", mean: 19.747690},
+      {code: "(g s0 ep)", mean: 76.890915},
+      ];
+  data3.reverse();
+  drawWithResize(data3, '#chart-3', 190);
+</script>
+
+
+<p>My understanding is that the declaration of a protocol results in the creation of function objects and in a corresponding interface.  When the function is called, the first thing it does when trying to dispatch is see if the first argument implements the interface for the protocol that declared the function in the first place.  If it did, the corresponding method on the object is called.  If it doesn&rsquo;t implement the interface, it next uses the MethodImplCache and has the potential to suffer from the cache miss.  What&rsquo;s great is that if the object does implement the interface, the most recent entry in the cache is unaffected.</p>
+
+<p>We can verify that the reified object and the instance of the type that was deftyped with the protocol both implement the interface and the other one doesn&rsquo;t:</p>
+
+<p>```clojure
+user=> (supers (type dt))</p>
+
+<h1>{user.P clojure.lang.IType java.lang.Object}</h1>
+
+<p>user=> (supers (type re))</p>
+
+<h1>{clojure.lang.IObj user.P java.lang.Object clojure.lang.IMeta}</h1>
+
+<p>user=> (supers (type ep))</p>
+
+<h1>{clojure.lang.IType java.lang.Object}</h1>
+
+<p>```</p>
+
+<h2>Determining if your type hints worked</h2>
+
+<p>Often when we want to squeeze every last bit of performance, we use type hints to avoid reflection and to force the use of primitives.  Zach demonstrated how to use Gary Trakhman&rsquo;s <a href="https://github.com/gtrak/no.disassemble">no.disassemble</a> to inspect the byte code of a function directly from the REPL.</p>
+
+<p>I haven&rsquo;t gotten to play with it yet, but the ability to quickly compare the byte code between two implementations in the REPL looked amazing.</p>
+
+<h2>Thanks</h2>
+
+<p>Thanks to Zach Tellman for the informative presentation that motivated this and to David Greenberg for help investigating the protocol performance issues.</p>
+
+<p>If there&rsquo;s anything I got wrong, please let me know in the comments&hellip; thanks!</p>
+]]></content>
+  </entry>
+  
+</feed>

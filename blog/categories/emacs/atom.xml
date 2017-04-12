@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: emacs | adereth]]></title>
+  <link href="http://adereth.github.io/blog/categories/emacs/atom.xml" rel="self"/>
+  <link href="http://adereth.github.io/"/>
+  <updated>2016-12-06T12:35:58-08:00</updated>
+  <id>http://adereth.github.io/</id>
+  <author>
+    <name><![CDATA[Matt Adereth]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Custom Clojure Evaluation Keybindings in Emacs]]></title>
+    <link href="http://adereth.github.io/blog/2014/05/29/custom-clojure-evaluation-keybindings-in-emacs/"/>
+    <updated>2014-05-29T06:28:00-07:00</updated>
+    <id>http://adereth.github.io/blog/2014/05/29/custom-clojure-evaluation-keybindings-in-emacs</id>
+    <content type="html"><![CDATA[<p>I love <a href="http://blog.jayfields.com/2014/01/repl-driven-development.html">REPL Driven Development</a>.  My style is to write expressions directly in the file that I&rsquo;m working on and to use <code>C-x C-e</code> to view the value of the last command in the minibuffer.</p>
+
+<p>Being able to move my cursor to a sub-expression and see the value of that expression immediately feels like a superpower.  I love this ability and it&rsquo;s one of the things that keeps me locked into Clojure+Emacs as my preferred enviroment.</p>
+
+<p>This power can be taken to the next level by making custom evaluation commands that run whatever you want on the expression at your cursor.</p>
+
+<h2>The Basic Pattern</h2>
+
+<p>Let&rsquo;s start by looking at the Elisp that defines <code>cider-eval-last-sexp</code>, which is what gets invoked when we press <code>C-x C-e</code>:</p>
+
+<p>```clojure
+(defun cider-eval-last-sexp (&amp;optional prefix)
+  &ldquo;Evaluate the expression preceding point.
+If invoked with a PREFIX argument, print the result in the current buffer.&rdquo;
+  (interactive &ldquo;P&rdquo;)
+  (if prefix</p>
+
+<pre><code>  (cider-interactive-eval-print (cider-last-sexp))
+(cider-interactive-eval (cider-last-sexp))))
+</code></pre>
+
+<p>```</p>
+
+<p>The important part is that we can use <code>cider-last-sexp</code> to get the expression before the cursor as a string and we can evaluate a string by passing it to <code>cider-interactive-eval</code>.  We&rsquo;ll write some basic Elisp to make a new function that modifies the string before evaluation and then we&rsquo;ll bind this function to a new key sequence.</p>
+
+<p>The essential pattern we&rsquo;ll use is:</p>
+
+<p>```clojure
+(defun custom-eval-last-sexp ()
+  (interactive)
+  (cider-interactive-eval</p>
+
+<pre><code>(format "(require 'some-namespace)
+         (some-namespace/some-fn %s)"
+        (cider-last-sexp))))
+</code></pre>
+
+<p>(define-key cider-mode-map (kbd &ldquo;C-c c&rdquo;) &lsquo;custom-eval-last-sexp)
+```</p>
+
+<p>If you happen to still be using Swank or nrepl.el, you should use <code>swank-interactive-eval</code> and <code>swank-last-sexp</code> or <code>swank-interactive-eval</code> and <code>nrepl-last-sexp</code>.</p>
+
+<p>Let&rsquo;s look at some of the useful things we can do with this&hellip;</p>
+
+<h2>Collections</h2>
+
+<p>I frequently deal with collections that are too big to display nicely in the minibuffer.  It&rsquo;s nice to be able to explore them with a couple keystrokes.  Here&rsquo;s a simple application of the pattern that gives us the size of the collection by just hitting <code>C-c c</code>:</p>
+
+<p>```clojure
+(defun count-last-expression ()</p>
+
+<pre><code>   (interactive)
+   (cider-interactive-eval
+     (format "(count %s)"
+             (cider-last-expression))))
+</code></pre>
+
+<p>(define-key cider-mode-map (kbd &ldquo;C-c c&rdquo;) &lsquo;count-last-expression)
+```</p>
+
+<p>Another useful one is to just show the nth value.  This one is a little more interesting because it requires a parameter:</p>
+
+<p>```clojure
+(defun nth-from-last-expression (n)</p>
+
+<pre><code>   (interactive "p")
+   (cider-interactive-eval
+     (format "(nth %s %s)"
+             (cider-last-expression) n)))
+</code></pre>
+
+<p>(define-key cider-mode-map (kbd &ldquo;C-c n&rdquo;) `nth-from-last-expression)
+```</p>
+
+<p>If you just use <code>C-c n</code>, Emacs defaults the parameter value to 1.  You can pass an argument using <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Arguments.html">Emacs' universal argument functionality</a>.  For example, to get the 0<sup>th</sup> element, you could either use <code>C-u 0 C-c n</code> or <code>M-0 C-c n</code>.</p>
+
+<h2>Write to File</h2>
+
+<p>Sometimes the best way to view a value is to look at it in an external program.  I&rsquo;ve used this pattern when working on Clojure code that generates SVG, HTML, and <a href="/blog/2014/04/09/3d-printing-with-clojure/">3D models</a>.  Here&rsquo;s what I use for 3D modeling:</p>
+
+<p>```clojure
+(defun spit-scad-last-expression ()
+  (interactive)
+  (cider-interactive-eval</p>
+
+<pre><code>(format 
+  "(require 'scad-clj.scad)
+   (spit \"eval.scad\" (scad-clj.scad/write-scad %s))"
+  (cider-last-expression))))
+</code></pre>
+
+<p>(define-key cider-mode-map (kbd &ldquo;C-c 3&rdquo;) &lsquo;spit-scad-last-expression)
+```</p>
+
+<p>This writes the <code>eval.scad</code> file to the root directory of the project.  It&rsquo;s great because OpenSCAD watches open files and automatically refreshes when they change.  You can run this on an expression that defines a shape and immediately see the shape in another window.  I used this technique in <a href="http://www.meetup.com/Clojure-NYC/events/180303582/">my recent presentation on 3D printing at the Clojure NYC meetup</a> and I got feedback that this made the live demos easier to follow.</p>
+
+<p>Here&rsquo;s what it looks like when you <code>C-c 3</code> on a nested expression that defines a cube:</p>
+
+<p><img src="/images/show-scad.png" alt="OpenScad Screenshot" /></p>
+
+<h2>View Swing Components</h2>
+
+<p>If you have to use Swing, your pain can be slightly mitigated by having a quick way to view components.  This will give you a shortcut to pop up a new frame that contains what your expression evaluates to:</p>
+
+<p>```clojure
+(defun frame-last-expression ()
+  (interactive)
+  (cider-interactive-eval</p>
+
+<pre><code>(format 
+ "(doto (javax.swing.JFrame. \"eval\")
+    (.. (getContentPane) (add %s))
+    (.pack)
+    (.show))"
+ (cider-last-expression))))
+</code></pre>
+
+<p>(define-key cider-mode-map (kbd &ldquo;C-c f&rdquo;) &lsquo;frame-last-expression)
+```</p>
+
+<p>This plays nicely with <a href="https://github.com/daveray/seesaw">Seesaw</a>, but doesn&rsquo;t presume that you have it on your classpath.  Here&rsquo;s what it looks like when you <code>C-c f</code> at the end of an expression that defines a Swing component:</p>
+
+<p><img src="/images/show-frame.png" alt="JFrame Screenshot" /></p>
+
+<h2>Benchmarking with Criterium</h2>
+
+<p>In <a href="/blog/2013/11/22/a-few-interesting-clojure-microbenchmarks/">A Few Interesing Clojure Microbenchmarks</a>, I mentioned Hugo Duncan&rsquo;s <a href="https://github.com/hugoduncan/criterium">Criterium library</a>.  It&rsquo;s a reliable way of measuring the performance of an expression.  We can bring it closer to our fingertips by making a function for benchmarking an expression instead of just evaluating it:</p>
+
+<p>```clojure
+(defun benchmark-last-expression ()
+  (interactive)
+  (cider-interactive-eval</p>
+
+<pre><code>(format "(require 'criterium.core)
+         (criterium.core/quick-benchmark %s)"
+        (cider-last-expression))))
+</code></pre>
+
+<p>(define-key cider-mode-map (kbd &ldquo;C-c b&rdquo;) &lsquo;benchmark-last-expression)
+```</p>
+
+<h2>Conclusion</h2>
+
+<p>I find this simple pattern to be quite handy.  Also, when I&rsquo;m showing off the power of nrepl to the uninitiated, being able to invoke arbitrary functions on whatever is at my cursor looks like pure magic.</p>
+
+<p>I hope you find this useful and if you invent any useful bindings or alternative ways of implementing this pattern, please share!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Most frequently enabled Emacs packages]]></title>
+    <link href="http://adereth.github.io/blog/2013/12/08/most-frequently-enabled-emacs-packages/"/>
+    <updated>2013-12-08T20:38:00-08:00</updated>
+    <id>http://adereth.github.io/blog/2013/12/08/most-frequently-enabled-emacs-packages</id>
+    <content type="html"><![CDATA[<p>As part of the Emacs-24.4 release, emacs-devel is conducting <a href="http://www.emacswiki.org/emacs/FrequentlyEnabledPackages_Emacs244_Survey">a survey</a> to find out which vanilla GnuEmacs packages/modes people enable by default.  The responses are in one big plain-text alphabetical list which isn&rsquo;t really conducive to browsing.</p>
+
+<p>I&rsquo;ve gone through the most frequently enabled ones to see what they do.  I figured others might be interested, so I&rsquo;ve put the top ones in order of popularity, along with brief descriptions and links to the related pages if one exists.  Enjoy!</p>
+
+<ul>
+<li><p><code>uniquify</code> &ndash; <a href="http://www.emacswiki.org/emacs/uniquify">Uniquify</a> overrides the default mechanism for making buffer names unique (using suffixes like <code>&lt;2&gt;</code>, <code>&lt;3&gt;</code> etc.) with a more sensible behaviour which use parts of the file names to make the buffer names distinguishable.  This will be turned on by default in 24.4.</p></li>
+<li><p><code>column-number-mode</code> &ndash; Displays which column the cursor is currently on in the mode line.</p></li>
+<li><p><code>show-paren-mode</code> &ndash; <a href="http://www.emacswiki.org/emacs/ShowParenMode">show-paren-mode</a> allows you to see matching pairs of parentheses and other characters. When the cursor is on one of the paired characters, the other is highlighted.</p></li>
+<li><p><code>ido-mode</code> &ndash; <a href="http://www.emacswiki.org/emacs/InteractivelyDoThings">Ido</a> lets you interactively do things with buffers and files.  The <a href="http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/">Introduction to Ido Mode</a> on <a href="http://www.masteringemacs.org/">Mastering Emacs</a> does a much better job of explaining why and how you should use it.</p></li>
+<li><p><code>transient-mark-mode</code> &ndash; <a href="http://www.emacswiki.org/emacs/TransientMarkMode">Transient Mark mode</a> gives you much of the standard selection-highlighting behavior of other editors.  This is on by default in recent Emacsen.</p></li>
+<li><p><code>ibuffer</code> &ndash; <a href="http://www.emacswiki.org/emacs/IbufferMode">Ibuffer</a> is an advanced replacement for BufferMenu, which lets you operate on buffers much in the same manner as Dired.</p></li>
+<li><p><code>blink-cursor-mode</code> &ndash; Toggle cursor blinking.  This is on by default.</p></li>
+<li><p><code>flyspell-mode</code> &ndash; <a href="http://www.emacswiki.org/emacs/FlySpell">Flyspell</a> enables on-the-fly spell checking in Emacs by the means of a minor mode.</p></li>
+<li><p><code>recentf-mode</code> &ndash; <a href="http://www.emacswiki.org/emacs/RecentFiles">Recentf</a> is a minor mode that builds a list of recently opened files. This list is is automatically saved across Emacs sessions. You can then access this list through a menu.</p></li>
+<li><p><code>eldoc-mode</code> &ndash; <a href="http://www.emacswiki.org/emacs/ElDoc">Eldoc-mode</a> is a MinorMode which shows you, in the echo area, the argument list of the function call you are currently writing.</p></li>
+<li><p><code>dired-x</code> &ndash; <a href="http://www.emacswiki.org/emacs/DiredExtra">Dired X</a> provides extra functionality for DiredMode.</p></li>
+<li><p><code>windmove</code> &ndash; <a href="http://www.emacswiki.org/emacs/WindMove">Wind Move</a> lets you move point from window to window using Shift and the arrow keys.</p></li>
+<li><p><code>line-number-mode</code> &ndash; <a href="http://www.emacswiki.org/emacs/LineNumbers">Line Numbers</a> displays line numbers in a buffer, or otherwise indicates line numbers, without actually changing the buffer content.</p></li>
+<li><p><code>winner-mode</code> &ndash; <a href="http://www.emacswiki.org/emacs/WinnerMode">Winner Mode</a> allows you to undo and redo changes in the window configuration with the key commands <code>C-c left</code> and <code>C-c right</code>.</p></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

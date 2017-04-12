@@ -1,0 +1,702 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: clojure | adereth]]></title>
+  <link href="http://adereth.github.io/blog/categories/clojure/atom.xml" rel="self"/>
+  <link href="http://adereth.github.io/"/>
+  <updated>2016-12-06T12:35:58-08:00</updated>
+  <id>http://adereth.github.io/</id>
+  <author>
+    <name><![CDATA[Matt Adereth]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Writing a Halite Bot in Clojure]]></title>
+    <link href="http://adereth.github.io/blog/2016/12/06/writing-a-halite-bot-in-clojure/"/>
+    <updated>2016-12-06T10:42:00-08:00</updated>
+    <id>http://adereth.github.io/blog/2016/12/06/writing-a-halite-bot-in-clojure</id>
+    <content type="html"><![CDATA[<div>
+<script src="http://adereth.github.io/javascripts/halite/pixi.min.js"></script>
+<script src="http://adereth.github.io/javascripts/halite/parsereplay.js"></script>
+<script src="http://adereth.github.io/javascripts/halite/visualizer.js"></script>
+</div>
+
+
+<p><a href="https://halite.io"><img src="/images/halitehero.png" alt="Halite: May the Best Bot Win" /></a></p>
+
+<p><a href="https://halite.io">Halite</a> is a new AI programming competition that was recently released by <a href="https://www.twosigma.com/">Two Sigma</a> and <a href="https://tech.cornell.edu/">Cornell Tech</a>.  It was designed and implemented by two interns at Two Sigma and was run as the annual internal summer programming competition.</p>
+
+<p>While the rules are relatively simple, it proved to be a surprisingly deep challenge.  It&rsquo;s played on a 2D grid and a typical game looks like this:</p>
+
+<center>
+<div id="gameReplay" class="text-center"></div>
+</center>
+
+
+<div>
+
+  <script type="text/javascript">
+
+    var data = textFromURL("ar1478846062-2923329127.hlt", $("#gameReplay"), function(data) {
+        console.log(data)
+        if(data != null) {
+            showGame(data, $("#gameReplay"), null, 500, true, true);
+        }
+    });
+
+  </script>
+</div>
+
+
+<p>Each turn, all players simultaneously issue movement commands to each of their pieces:</p>
+
+<ol>
+<li>Move to an adjacent location and capture it if you are stronger than what&rsquo;s currently there.</li>
+<li>Stay put and build strength based on the production value of your current location.</li>
+</ol>
+
+
+<p>When two players' pieces are adjacent to each other, they automatically fight.  A much more detailed description is available on the <a href="https://halite.io/rules_game.php">Halite Game Rules page</a>.</p>
+
+<p>Bots are run as subprocesses that communicate with the game environment through <code>STDIN</code> and <code>STDOUT</code>, so it&rsquo;s very simple to create bots in the language of your choice.  While Python, Java, and C++ bot kits were all provided by the game developers, the community quickly produced kits for C#, Rust, Scala, Ruby, Go, PHP, Node.js, OCaml, C, and Clojure.  All the starter packages are available on the <a href="https://halite.io/downloads.php">Halite Downloads page</a>.</p>
+
+<h2>Clojure Bot Basics</h2>
+
+<p>The flow of all bots are the same:</p>
+
+<ol>
+<li>Read the initial state (your player ID and the starting game map conditions)</li>
+<li>Write your bot&rsquo;s name</li>
+<li>Read the current gam emap</li>
+<li>Write your moves</li>
+<li>GOTO #3</li>
+</ol>
+
+
+<p>The Clojure kit represents the game map as a 2D vector of <code>Site</code> records:</p>
+
+<p>```clojure
+(defrecord Site</p>
+
+<pre><code>[^int x
+ ^int y
+ ^int production
+ ^int strength
+ ^int owner])
+</code></pre>
+
+<p>```</p>
+
+<p>And movement instructions are simple keywords:</p>
+
+<p><code>clojure
+(def directions [:still :north :east :south :west])
+</code></p>
+
+<p>A simple bot that finds all the sites you control and issues random moves would look like this:</p>
+
+<p>```clojure
+(ns MyBot
+  (:require [game] [io])
+  (:gen-class))</p>
+
+<p>(defn random-moves
+  &ldquo;Takes your bot&rsquo;s ID and a 2D vector of Sites and returns a map from site to direction&rdquo;
+  [my-id game-map]
+  (let [my-sites (&ndash;>> game-map</p>
+
+<pre><code>                  flatten
+                  (filter #(= (:owner %) my-id)))]
+(zipmap my-sites (repeatedly #(rand-nth game/directions)))))
+</code></pre>
+
+<p>(defn -main []
+  (let [{:keys [my-id productions width height game-map]} (io/get-init!)]</p>
+
+<pre><code>(println "MyFirstClojureBot")
+(doseq [turn (range)]
+  (let [game-map (io/create-game-map width height productions (io/read-ints!))]
+    (io/send-moves! (random-moves my-id game-map))))))
+</code></pre>
+
+<p>```</p>
+
+<h2>Next Steps</h2>
+
+<p>There are currently almost 900 bots competing on the site, but <a href="https://halite.io/leaderboard.php?field=language&amp;value=Clojure&amp;heading=Clojure">there are only a handful written in Clojure</a>!  I&rsquo;m sure the Clojure community could do some interesting things here, so head over to <a href="https://halite.io">halite.io</a>, sign-up using your Github account, and <a href="https://halite.io/downloads/starterpackages/Halite-Clojure-Starter-Package.zip">download the Clojure starter kit</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Visualizing Girl Talk: Parsing with Clojure's Instaparse]]></title>
+    <link href="http://adereth.github.io/blog/2016/01/20/visualizing-girl-talk-with-clojure-and-d3-dot-js/"/>
+    <updated>2016-01-20T06:10:00-08:00</updated>
+    <id>http://adereth.github.io/blog/2016/01/20/visualizing-girl-talk-with-clojure-and-d3-dot-js</id>
+    <content type="html"><![CDATA[<p>Greg Gillis, also known as Girl Talk, is an impressive DJ who creates mega-mashups consisting of hundreds of samples.  His sample selections span 7 decades and dozens of genres.  Listening to his albums is a bit like having a concentrated dump of music history injected right into your brain.</p>
+
+<p><img src="/images/popculture.png" alt="Neo: &quot;I know pop culture&quot;" /></p>
+
+<p>I became a little obsessed with his work last year and I wanted a better way to experience his albums, so I created an annotated player using Clojure and d3 that shows relevant data and links about every track as it plays:</p>
+
+<p><a href="http://adereth.github.io/oneoff/girltalk-v2/"><img src="/images/girltalkplayer.png" alt="Image of player" /></a></p>
+
+<p>I have versions of this player for his two most recent albums:</p>
+
+<ul>
+<li><a href="http://adereth.github.io/oneoff/girltalk-v2/">All Day</a></li>
+<li><a href="http://adereth.github.io/oneoff/girltalk-v2/fta.html">Feed The Animals</a></li>
+</ul>
+
+
+<p>Unfortunately, they only really work on the desktop right now.</p>
+
+<h2>Parsing Track Data</h2>
+
+<p>I&rsquo;ve released <a href="http://github.com/adereth/girltalk-visualization">all the code</a> that I used to collect the data and to generate the visualizations, but in this post I&rsquo;m just going to talk about the first stage of the process: getting the details of which tracks were sampled at each time.</p>
+
+<p>There&rsquo;s an excellent (totally legal!) crowd-sourced wiki called <a href="http://illegal-tracklist.net/Tracklists/">Illegal Tracklist</a> that has information about most of the samples displayed like this:</p>
+
+<ol><li>"Oh No" - 5:39</li>
+<ul><li>0:03 - 2:08 <a class='urllink' href='http://en.wikipedia.org/wiki/Black%20Sabbath' rel='nofollow'>Black Sabbath</a> - "<a class='urllink' href='http://en.wikipedia.org/wiki/War%20Pigs' rel='nofollow'>War Pigs</a>"
+</li><li>0:13 - 0:15 <a class='urllink' href='http://en.wikipedia.org/wiki/Tupac_Shakur' rel='nofollow'>2Pac</a> featuring <a class='urllink' href='http://en.wikipedia.org/wiki/K-Ci%20&amp;%20JoJo' rel='nofollow'>K-Ci &amp; JoJo</a> - "<a class='urllink' href='http://en.wikipedia.org/wiki/How%20Do%20U%20Want%20It' rel='nofollow'>How Do U Want It</a>"
+</li><li>0:15 - 0:15 <a class='urllink' href='http://en.wikipedia.org/wiki/Jay-Z' rel='nofollow'>Jay-Z</a> - "<a class='urllink' href='http://en.wikipedia.org/wiki/99%20Problems' rel='nofollow'>99 Problems</a>"
+</li><li>0:20 - 2:02 <a class='urllink' href='http://en.wikipedia.org/wiki/Ludacris' rel='nofollow'>Ludacris</a> featuring <a class='urllink' href='http://en.wikipedia.org/wiki/Mystikal' rel='nofollow'>Mystikal</a> and <a class='urllink' href='http://en.wikipedia.org/wiki/I-20%20%28rapper%29' rel='nofollow'>I-20</a> - "<a class='urllink' href='http://en.wikipedia.org/wiki/Move%20Bitch' rel='nofollow'>Move Bitch</a>"
+</li>
+⋮
+<li>4:45 - 4:55 <a class='urllink' href='http://en.wikipedia.org/wiki/Trina' rel='nofollow'>Trina</a> featuring <a class='urllink' href='http://en.wikipedia.org/wiki/Killer%20Mike' rel='nofollow'>Killer Mike</a> - "Look Back at Me"
+</li><li>4:53 - 4:53 <a class='urllink' href='http://en.wikipedia.org/wiki/N.W.A' rel='nofollow'>N.W.A</a> - "Appetite for Destruction" (portion sampled samples "Get Me Back on Time, Engine #9" by <a class='urllink' href='http://en.wikipedia.org/wiki/Wilson_Pickett' rel='nofollow'>Wilson Pickett</a>)
+</li><li>4:56 - 5:39 <a class='urllink' href='http://en.wikipedia.org/wiki/Missy%20Elliott' rel='nofollow'>Missy Elliott</a> - "<a class='urllink' href='http://en.wikipedia.org/wiki/Get%20Ur%20Freak%20On' rel='nofollow'>Get Ur Freak On</a>"
+</li></ul>
+
+<li>"Let It Out" - 6:29</li>
+<ul><li>0:00 - 0:01 <a class='urllink' href='http://en.wikipedia.org/wiki/Ramones' rel='nofollow'>Ramones</a> - "<a class='urllink' href='http://en.wikipedia.org/wiki/Blitzkrieg%20Bop' rel='nofollow'>Blitzkrieg Bop</a>"
+</li><li>0:00 - 0:05 <a class='urllink' href='http://en.wikipedia.org/wiki/Missy%20Elliott' rel='nofollow'>Missy Elliott</a> - "<a class='urllink' href='http://en.wikipedia.org/wiki/Get%20Ur%20Freak%20On' rel='nofollow'>Get Ur Freak On</a>"
+</li><li>0:00 - 0:10 <a class='urllink' href='http://en.wikipedia.org/wiki/Busta%20Rhymes' rel='nofollow'>Busta Rhymes</a> featuring <a class='urllink' href='http://en.wikipedia.org/wiki/Sean%20Paul' rel='nofollow'>Sean Paul</a> and Spliff Star - "<a class='urllink' href='http://en.wikipedia.org/wiki/Make%20It%20Clap' rel='nofollow'>Make It Clap</a>"
+</li>
+⋮
+</ul>
+</ol>
+
+
+<p>At first, I used Enlive to suck down the HTML versions of the wiki pages, but I realized it might be cleaner to operate off the raw wiki markup which looks like this:</p>
+
+<p><code>
+!! 1. "Oh No" - 5:39
+* 0:03 - 2:08 [[http://en.wikipedia.org/wiki/Black%20Sabbath | Black Sabbath]] - "[[http://en.wikipedia.org/wiki/War%20Pigs | War Pigs]]"
+* 0:13 - 0:15 [[http://en.wikipedia.org/wiki/Tupac_Shakur | 2Pac]] featuring [[http://en.wikipedia.org/wiki/K-Ci%20&amp;%20JoJo | K-Ci &amp; JoJo]] - "[[http://en.wikipedia.org/wiki/How%20Do%20U%20Want%20It | How Do U Want It]]"
+* 0:15 - 0:15 [[http://en.wikipedia.org/wiki/Jay-Z | Jay-Z]] - "[[http://en.wikipedia.org/wiki/99%20Problems | 99 Problems]]"
+* 0:20 - 2:02 [[http://en.wikipedia.org/wiki/Ludacris | Ludacris]] featuring [[http://en.wikipedia.org/wiki/Mystikal | Mystikal]] and [[http://en.wikipedia.org/wiki/I-20%20%28rapper%29 | I-20]] - "[[http://en.wikipedia.org/wiki/Move%20Bitch | Move Bitch]]"
+* 0:20 - 0:54 JC featuring [[http://en.wikipedia.org/wiki/Yung%20Joc | Yung Joc]] - "Vote 4 Me"
+</code></p>
+
+<p>I wrote a few specialized functions to pull the details out of the strings and into a data structure, but it quickly became unwieldy and unreadable.  I then saw that this was a perfect opportunity to use <a href="https://github.com/Engelberg/instaparse">Instaparse</a>.  Instaparse is a library that makes it easy to build parsers in Clojure by writing context-free grammars.</p>
+
+<p>Here&rsquo;s the Instaparse grammar that I used that parses the Illegal Tracklists' markup format:</p>
+
+<p>`&ldquo;clojure
+wiki-line = title-track-line | sample-track-line | &lt;&rdquo;></p>
+
+<p>title-track-line = &lt;&lsquo;!! &rsquo;> track-number &lt;&lsquo;. &rsquo;> track-name &lt;&lsquo; &ndash; &rsquo;> track-time
+track-number = #&lsquo;\d+&rsquo;
+track-name = #&lsquo;[^&ndash;]+(?= &ndash; )&rsquo;
+track-time = time</p>
+
+<p>sample-track-line = &lt;&lsquo;<em> &rsquo;> start-time &lt;&lsquo; &ndash; &rsquo;> end-time &lt;&lsquo; &rsquo;> artist-name &lt;&lsquo; &ndash; &rsquo;> sample-name
+artist-name = (link | artist-plain-text)</em>
+artist-plain-text = #&lsquo;[^\[]+(?= &ndash; )&rsquo; | #&lsquo;[^\[]+(?=\[)&rsquo;</p>
+
+<p>sample-name = (link | sample-plain-text)<em>
+sample-plain-text = #&lsquo;[^\[]</em>&rsquo;</p>
+
+<p>link = &lt;&lsquo;[[&rsquo;> url &lt;&lsquo; | &rsquo;> text &lt;&lsquo;]]&rsquo;>
+url = #&lsquo;[^|]+(?= | )&rsquo;
+text = #&lsquo;[^]]*&rsquo;</p>
+
+<p>start-time = time
+end-time = time
+<time> = #&lsquo;\d+:\d+&rsquo;
+```</p>
+
+<p>The high level structure is practically self-documenting: each line in the wiki source is either a title track line, a sample track line, or a blank line and each type of line is pretty clearly broken down into named components that are separated by string literals to be ignored in the output.  It does, however, become a bit nasty when you get to the terminal rules that are defined as regular expressions.  Instaparse truly delivers on its tagline:</p>
+
+<blockquote><p>What if context-free grammars were as easy to use as regular expressions?</p></blockquote>
+
+<p>The only problem is that regular expressions <em>aren&rsquo;t</em> always easy to use, especially when you have to start worrying about not greedily matching the text that is going to be used by Instaparse.</p>
+
+<blockquote class="twitter-tweet" lang="en"><p>Some people, when confronted with a problem, think “I know, I&#39;ll use Instaparse.” Now they have three problems. <a href="https://twitter.com/hashtag/clojure?src=hash">#clojure</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/525670531396165632">October 24, 2014</a></blockquote>
+
+
+<script async src="http://adereth.github.io//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<p>Despite some of the pain of regular expressions and grammar debugging, Instaparse was awesome for this part of the project and I would definitely use it again.  I love the organization that it brought to the code and the structure I got out was very usable:</p>
+
+<p>```clojure
+({:tag :wiki-line,
+  :content
+  ({:tag :title-track-line,</p>
+
+<pre><code>:content
+({:tag :track-number, :content ("1")}
+ {:tag :track-name, :content ("\"Oh No\" ")}
+ {:tag :track-time, :content ("5:39")})})}
+</code></pre>
+
+<p> {:tag :wiki-line,
+  :content
+  ({:tag :sample-track-line,</p>
+
+<pre><code>:content
+({:tag :start-time, :content ("0:03")}
+ {:tag :end-time, :content ("2:08")}
+ {:tag :artist-name,
+  :content
+  ({:tag :link,
+    :content
+    ({:tag :url,
+      :content ("http://en.wikipedia.org/wiki/Black%20Sabbath")}
+     {:tag :text, :content ("Black Sabbath")})})}
+ {:tag :sample-name,
+  :content
+  ({:tag :sample-plain-text, :content ("\"")}
+   {:tag :link,
+    :content
+    ({:tag :url,
+      :content ("http://en.wikipedia.org/wiki/War%20Pigs")}
+     {:tag :text, :content ("War Pigs")})}
+   {:tag :sample-plain-text, :content ("\"")})})})}
+</code></pre>
+
+<p> {:tag :wiki-line,
+  :content
+  ({:tag :sample-track-line,</p>
+
+<pre><code>:content
+({:tag :start-time, :content ("0:13")}
+ {:tag :end-time, :content ("0:15")}
+ {:tag :artist-name,
+  :content
+  ({:tag :link,
+    :content
+    ({:tag :url,
+      :content ("http://en.wikipedia.org/wiki/Tupac_Shakur")}
+     {:tag :text, :content ("2Pac")})}
+   {:tag :artist-plain-text, :content (" featuring ")}
+   {:tag :link,
+    :content
+    ({:tag :url,
+      :content ("http://en.wikipedia.org/wiki/K-Ci%20&amp;%20JoJo")}
+     {:tag :text, :content ("K-Ci &amp; JoJo")})})}
+ {:tag :sample-name,
+  :content
+  ({:tag :sample-plain-text, :content ("\"")}
+   {:tag :link,
+    :content
+    ({:tag :url,
+      :content
+      ("http://en.wikipedia.org/wiki/How%20Do%20U%20Want%20It")}
+     {:tag :text, :content ("How Do U Want It")})}
+   {:tag :sample-plain-text, :content ("\"")})})})}
+   ...
+</code></pre>
+
+<p>```</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Clojure/conj Talk on 3D Printing Keyboards]]></title>
+    <link href="http://adereth.github.io/blog/2015/11/19/clojure-slash-conj-talk-on-3d-printing-keyboards/"/>
+    <updated>2015-11-19T15:05:00-08:00</updated>
+    <id>http://adereth.github.io/blog/2015/11/19/clojure-slash-conj-talk-on-3d-printing-keyboards</id>
+    <content type="html"><![CDATA[<p>I gave a talk on building an ergonomic keyboard using Clojure at <a href="http://clojure-conj.org/">Clojure/conj 2015</a>:</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/uk3A41U0iO4" frameborder="0" allowfullscreen></iframe>
+
+
+<p>Here&rsquo;s a complete list of the references from the talk, in order of appearance:</p>
+
+<ul>
+<li><a href="https://twitter.com/ftrain">@ftrain</a>&rsquo;s <a href="https://twitter.com/ftrain/status/577205992406065152">Tweet</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Typewriter">Typewriter (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Computer_keyboard">Computer keyboard (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Sholes_and_Glidden_typewriter">Sholes and Glidden typewriter (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Hansen_Writing_Ball">Hansen Writing Ball (WIkipedia)</a></li>
+<li><a href="http://www.malling-hansen.org/friedrich-nietzsche-and-his-typewriter-a-malling-hansen-writing-ball.html">Friedrich Nietzsche and his typewriter</a></li>
+<li><a href="https://en.wikipedia.org/wiki/E._Remington_and_Sons#Remington_Typewriter_Company">E. Remington and Sons (Wikipedia)</a></li>
+<li><a href="http://deskthority.net/wiki/Staggering">Staggering (Deskthority Wiki)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/QWERTY">QWERTY (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/IBM_Selectric_typewriter">IBM Selectric typewriter (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/IBM_2741">IBM 2741 (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/ADM-3A">ADM-3A (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Space-cadet_keyboard">Space-cadet keyboard (Wikipedia)</a></li>
+<li><a href="https://www.flickr.com/photos/obra/sets/72157635353286814/">Jesse Vincent&rsquo;s Space Cadet Keyboard Photo Album</a></li>
+<li><a href="http://www.maltron.com/">Maltron (Official Site)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Maltron">Maltron (Wikipedia)</a></li>
+<li><a href="http://www.amazon.com/Mothers-Daughters-Invention-Revised-Technology/dp/0813521971">Mother&rsquo;s and Daughters of Invention: Notes for a Revised History of Technology</a></li>
+<li><a href="http://www.kinesis-ergo.com/">Kinesis (Official Site)</a></li>
+<li><a href="https://www.pjrc.com/teensy/">Teensy USB Development Board</a></li>
+<li><a href="http://deskthority.net/">Deskthority</a></li>
+<li><a href="https://geekhack.org/">Geekhack</a></li>
+<li><a href="http://www.makerbot.com/">Makerbot</a></li>
+<li><a href="https://www.inventables.com/technologies/x-carve">X-Carve</a></li>
+<li><a href="http://ergodox.org/">ErgoDox (Official Site)</a></li>
+<li><a href="https://www.massdrop.com/buy/ergodox">ErgoDox (Massdrop)</a></li>
+<li><a href="/blog/2014/02/12/building-an-ergodox/">Sourcing and Building an ErgoDox Keyboard</a></li>
+<li><a href="http://atreus.technomancy.us/">Atreus</a></li>
+<li><a href="http://keyboard.io">Keyboard.io</a></li>
+<li><a href="http://www.openscad.org/">OpenSCAD</a></li>
+<li><a href="https://github.com/openscad/openscad/issues/522#issuecomment-27741699">OpenSCAD Namespace Issue (Github)</a></li>
+<li><a href="https://github.com/farrellm/scad-clj">scad-clj (Github)</a></li>
+<li><a href="/blog/2014/04/09/3d-printing-with-clojure/">3D Printing with Clojure</a></li>
+<li><a href="/blog/2014/05/29/custom-clojure-evaluation-keybindings-in-emacs/">Custom Clojure Evaluation Keybindings in Emacs</a></li>
+<li><a href="https://github.com/adereth/dactyl-cave">Dactyl Keyboard (Github)</a></li>
+<li><a href="https://www.shapeways.com/">Shapeways</a></li>
+<li><a href="https://www.shapeways.com/shops/bespokeys">Full Dactyl Keyboard (Shapeways)</a></li>
+<li><a href="http://www.smokingresistor.com/product/pyralux-lf9120r/">Pyralux LF9120R &ndash; Flexible PCB Material (Smoking Resistor)</a></li>
+<li><a href="https://github.com/benblazak/ergodox-firmware/blob/master/src/keyboard/ergodox/circuit-diagram.svg">ErgoDox Circuit Diagram (Github)</a></li>
+<li><a href="http://www.instructables.com/id/Is-the-best-PCB-etchant-in-every-kitchen-/">Is the best PCB etchant in every kitchen? (Instructables)</a></li>
+<li><a href="http://pimpmykeyboard.com/">Signature Plastics Keycap Shop</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Computing the Remedian in Clojure]]></title>
+    <link href="http://adereth.github.io/blog/2014/09/29/computing-the-remedian-in-clojure/"/>
+    <updated>2014-09-29T09:03:00-07:00</updated>
+    <id>http://adereth.github.io/blog/2014/09/29/computing-the-remedian-in-clojure</id>
+    <content type="html"><![CDATA[<p>The remedian is an approximation of the <a href="http://en.wikipedia.org/wiki/Median">median</a> that can be computed using only $O(\log{n})$ storage.  The algorithm was originally presented in <a href="http://web.ipac.caltech.edu/staff/fmasci/home/statistics_refs/Remedian.pdf">The Remedian: A Robust Averaging Method for Large Data Sets by Rousseeuw and Bassett</a> (1990).  The core of it is on the first page:</p>
+
+<blockquote><p>Let us assume that $n = b^k$, where $b$ and $k$ are integers (the case where $n$ is not of this form will be treated in Sec. 7.  The <em>remedian</em> with base $b$ proceeds by computing medians of groups of $b$ observations, yielding $b^{k-1}$ estimates on which this procedure is iterated, and so on, until only a single estimate remains.  When implemented properly, this method merely needs $k$ arrays of size $b$ that are continuously reused.</p></blockquote>
+
+<p>The implementation of this part in Clojure is so nice that I just had to share.</p>
+
+<p>First, we need a vanilla implementation of the median function.  We&rsquo;re always going to be computing the median of sets of size $b$, where $b$ is relatively small, so there&rsquo;s no need to get fancy with a linear time algorithm.</p>
+
+<p>```clojure
+(defn median [coll]
+  (let [size (count coll)</p>
+
+<pre><code>    sorted (sort coll)]
+(if (odd? size)
+  (nth sorted (int (/ size 2)))
+  (/ (+ (nth sorted (int (/ size 2)))
+        (nth sorted (dec (int (/ size 2)))))
+     2))))
+</code></pre>
+
+<p>```</p>
+
+<p>Now we can implement the actual algorithm.  We group, compute the median of each group, and recur, with the base case being when we&rsquo;re left with a single element in the collection:</p>
+
+<p>```clojure
+(defn remedian [b coll]
+  (if (next coll)</p>
+
+<pre><code>(-&gt;&gt; coll
+     (partition-all b)
+     (map median)
+     (recur b))
+(first coll)))
+</code></pre>
+
+<p>```</p>
+
+<p>Because <code>partition-all</code> and <code>map</code> both operate on and return lazy sequences, we maintain the property of only using $O(b \log_{b}{n})$ memory at any point in time.</p>
+
+<p>While this implementation is simple and elegant, it only works if the size of the collection is a power of $b$.  If we don&rsquo;t have $n = b^k$ where $b$ and $k$ are integers, we&rsquo;ll over-weight the observations that get grouped into the last groups of size $&lt; b$.</p>
+
+<p>Section 7 of the original paper describes the weighting scheme you should use to compute the median if you&rsquo;re left with incomplete groupings:</p>
+
+<blockquote><p>How should we proceed when the sample size $n$ is less than $b^k$? The remedian algorithm then ends up with $n_1$ numbers in the first array, $n_2$ numbers in the second array, and $n_k$ numbers in the last array, such that $n = n_1 + n_{2}b + &hellip; + n_k b^{k-1}$.  For our final estimate we then compute a weighted median in which the $n_1$, numbers in the first array have weight 1, the $n_2$ numbers in the second array have weight $b$, and the $n_k$ numbers in the last array have weight $b^{k-1}$. This final computation does not need much storage because there are fewer than $bk$ numbers and they only have to be ranked in increasing order, after which their weights must be added until the sum is at least $n/2$.</p></blockquote>
+
+<p>It&rsquo;s a bit difficult to directly translate this to the recursive solution I gave above because in the final step we&rsquo;re going to do a computation on a mixture of values from the different recursive sequences.  Let&rsquo;s give it a shot.</p>
+
+<p>We need some way of bubbling up the incomplete groups for the final weighted median computation.  Instead of having each recursive sequence <em>always</em> compute the median of each group, we can add a check to see if the group is smaller than $b$ and, if so, just return the incomplete group:</p>
+
+<p>```clojure
+(defn remedian-with-leftovers [b coll]
+  (let [incomplete-group? #(or (&lt; (count %) b)</p>
+
+<pre><code>                           (seq? (last %)))]
+(loop [coll coll]
+  (if (next coll)
+    (-&gt;&gt; coll
+         (partition-all b)
+         (map #(if (incomplete-group? %) % (median %)))
+         (recur))
+    coll))))
+</code></pre>
+
+<p>```</p>
+
+<p>For example, if we were using the mutable array implementation proposed in the original paper to compute the remedian of <code>(range 26)</code> with $b = 3$, the final state of the arrays would be:</p>
+
+<table>
+<thead>
+<tr>
+<th>Array  </th>
+<th> $i_0$ </th>
+<th> $i_1$   </th>
+<th> $i_2$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0      </td>
+<td> 24 </td>
+<td> 25 </td>
+<td> <em>empty</em></td>
+</tr>
+<tr>
+<td>1      </td>
+<td> 19 </td>
+<td> 22 </td>
+<td> <em>empty</em></td>
+</tr>
+<tr>
+<td>2      </td>
+<td> 4  </td>
+<td> 13 </td>
+<td> <em>empty</em></td>
+</tr>
+</tbody>
+</table>
+
+
+<br/>
+
+
+<p>In our sequence based solution, the final sequence will be <code>((4 13 (19 22 (24 25))))</code>.</p>
+
+<p>Now, we need to convert these nested sequences into <code>[value weight]</code> pairs that could be fed into a weighted median function:</p>
+
+<p>```clojure
+(defn weight-leftovers [b nested-elements]
+  (loop [vw-pairs []</p>
+
+<pre><code>     nested-elements nested-elements
+     weight 1]
+(let [element (first nested-elements)]
+  (cond
+   (next nested-elements) (recur (conj vw-pairs [element weight])
+                                 (next nested-elements)
+                                 weight)
+   (seq? element) (recur vw-pairs
+                         element
+                         (/ weight b))
+   :else (conj vw-pairs [element weight])))))
+</code></pre>
+
+<p>```
+Instead of weighting the values in array $j$ with weight $b^{j-1}$, we&rsquo;re weighting it at $\frac{b^{j-1}}{b^{k}}$.  Dividing all the weights by a constant will give us the same result and this is slightly easier to compute recursively, as we can just start at 1 and divide by $b$ as we descend into each nested sequence.</p>
+
+<p>If we run this on the <code>(range 26)</code> with $b = 3$, we get:</p>
+
+<p>```clojure
+user> (&ndash;>> (range 26)</p>
+
+<pre><code>       (remedian-with-leftovers 3)
+       (weight-leftovers 3))
+</code></pre>
+
+<p>[[4 1/3] [13 1/3] [19 1/9] [22 1/9] [24 1/27] [25 1/27]]
+```</p>
+
+<p>Finally, we&rsquo;re going to need a weighted median function.  This operates on a collection of <code>[value weight]</code> pairs:</p>
+
+<p>```clojure
+(defn weighted-median [vw-pairs]
+  (let [total-weight (&ndash;>> vw-pairs</p>
+
+<pre><code>                      (map second)
+                      (reduce +))
+    middle-weight (/ total-weight 2)
+    sorted-pairs (sort-by first vw-pairs)
+    sorted-pairs-cum-weight (reductions (fn [[_ cum-weight] [v w]]
+                                          [v (+ cum-weight w)])
+                                        sorted-pairs)]
+(-&gt;&gt; sorted-pairs-cum-weight
+     (filter #(&lt;= middle-weight (second %)))
+     (ffirst))))
+</code></pre>
+
+<p>```</p>
+
+<p>We can put it all together and redefine the remedian function to deal with the case where $n$ isn&rsquo;t a power of $b$:</p>
+
+<p>```clojure
+(defn remedian [b coll]
+  (&ndash;>> coll</p>
+
+<pre><code>   (remedian-with-leftovers b)
+   (weight-leftovers b)
+   (weighted-median)))
+</code></pre>
+
+<p>```</p>
+
+<p>The remedian is fun, but in practice I prefer to use the approximate quantile methods that were invented a few years later and presented in <a href="http://www.cs.umd.edu/~samir/498/manku.pdf">Approximate Medians and other Quantiles in One Pass and with Limited Memory by Manku, Rajagopalan, and Lindsay</a> (1998).  There&rsquo;s a high-quality implementation you can use in Clojure via Java interop in Parallel Colt&rsquo;s <a href="http://incanter.org/docs/parallelcolt/api/cern/jet/stat/tdouble/quantile/DoubleQuantileFinderFactory.html">DoubleQuantileFinderFactory</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Custom Clojure Evaluation Keybindings in Emacs]]></title>
+    <link href="http://adereth.github.io/blog/2014/05/29/custom-clojure-evaluation-keybindings-in-emacs/"/>
+    <updated>2014-05-29T06:28:00-07:00</updated>
+    <id>http://adereth.github.io/blog/2014/05/29/custom-clojure-evaluation-keybindings-in-emacs</id>
+    <content type="html"><![CDATA[<p>I love <a href="http://blog.jayfields.com/2014/01/repl-driven-development.html">REPL Driven Development</a>.  My style is to write expressions directly in the file that I&rsquo;m working on and to use <code>C-x C-e</code> to view the value of the last command in the minibuffer.</p>
+
+<p>Being able to move my cursor to a sub-expression and see the value of that expression immediately feels like a superpower.  I love this ability and it&rsquo;s one of the things that keeps me locked into Clojure+Emacs as my preferred enviroment.</p>
+
+<p>This power can be taken to the next level by making custom evaluation commands that run whatever you want on the expression at your cursor.</p>
+
+<h2>The Basic Pattern</h2>
+
+<p>Let&rsquo;s start by looking at the Elisp that defines <code>cider-eval-last-sexp</code>, which is what gets invoked when we press <code>C-x C-e</code>:</p>
+
+<p>```clojure
+(defun cider-eval-last-sexp (&amp;optional prefix)
+  &ldquo;Evaluate the expression preceding point.
+If invoked with a PREFIX argument, print the result in the current buffer.&rdquo;
+  (interactive &ldquo;P&rdquo;)
+  (if prefix</p>
+
+<pre><code>  (cider-interactive-eval-print (cider-last-sexp))
+(cider-interactive-eval (cider-last-sexp))))
+</code></pre>
+
+<p>```</p>
+
+<p>The important part is that we can use <code>cider-last-sexp</code> to get the expression before the cursor as a string and we can evaluate a string by passing it to <code>cider-interactive-eval</code>.  We&rsquo;ll write some basic Elisp to make a new function that modifies the string before evaluation and then we&rsquo;ll bind this function to a new key sequence.</p>
+
+<p>The essential pattern we&rsquo;ll use is:</p>
+
+<p>```clojure
+(defun custom-eval-last-sexp ()
+  (interactive)
+  (cider-interactive-eval</p>
+
+<pre><code>(format "(require 'some-namespace)
+         (some-namespace/some-fn %s)"
+        (cider-last-sexp))))
+</code></pre>
+
+<p>(define-key cider-mode-map (kbd &ldquo;C-c c&rdquo;) &lsquo;custom-eval-last-sexp)
+```</p>
+
+<p>If you happen to still be using Swank or nrepl.el, you should use <code>swank-interactive-eval</code> and <code>swank-last-sexp</code> or <code>swank-interactive-eval</code> and <code>nrepl-last-sexp</code>.</p>
+
+<p>Let&rsquo;s look at some of the useful things we can do with this&hellip;</p>
+
+<h2>Collections</h2>
+
+<p>I frequently deal with collections that are too big to display nicely in the minibuffer.  It&rsquo;s nice to be able to explore them with a couple keystrokes.  Here&rsquo;s a simple application of the pattern that gives us the size of the collection by just hitting <code>C-c c</code>:</p>
+
+<p>```clojure
+(defun count-last-expression ()</p>
+
+<pre><code>   (interactive)
+   (cider-interactive-eval
+     (format "(count %s)"
+             (cider-last-expression))))
+</code></pre>
+
+<p>(define-key cider-mode-map (kbd &ldquo;C-c c&rdquo;) &lsquo;count-last-expression)
+```</p>
+
+<p>Another useful one is to just show the nth value.  This one is a little more interesting because it requires a parameter:</p>
+
+<p>```clojure
+(defun nth-from-last-expression (n)</p>
+
+<pre><code>   (interactive "p")
+   (cider-interactive-eval
+     (format "(nth %s %s)"
+             (cider-last-expression) n)))
+</code></pre>
+
+<p>(define-key cider-mode-map (kbd &ldquo;C-c n&rdquo;) `nth-from-last-expression)
+```</p>
+
+<p>If you just use <code>C-c n</code>, Emacs defaults the parameter value to 1.  You can pass an argument using <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Arguments.html">Emacs' universal argument functionality</a>.  For example, to get the 0<sup>th</sup> element, you could either use <code>C-u 0 C-c n</code> or <code>M-0 C-c n</code>.</p>
+
+<h2>Write to File</h2>
+
+<p>Sometimes the best way to view a value is to look at it in an external program.  I&rsquo;ve used this pattern when working on Clojure code that generates SVG, HTML, and <a href="/blog/2014/04/09/3d-printing-with-clojure/">3D models</a>.  Here&rsquo;s what I use for 3D modeling:</p>
+
+<p>```clojure
+(defun spit-scad-last-expression ()
+  (interactive)
+  (cider-interactive-eval</p>
+
+<pre><code>(format 
+  "(require 'scad-clj.scad)
+   (spit \"eval.scad\" (scad-clj.scad/write-scad %s))"
+  (cider-last-expression))))
+</code></pre>
+
+<p>(define-key cider-mode-map (kbd &ldquo;C-c 3&rdquo;) &lsquo;spit-scad-last-expression)
+```</p>
+
+<p>This writes the <code>eval.scad</code> file to the root directory of the project.  It&rsquo;s great because OpenSCAD watches open files and automatically refreshes when they change.  You can run this on an expression that defines a shape and immediately see the shape in another window.  I used this technique in <a href="http://www.meetup.com/Clojure-NYC/events/180303582/">my recent presentation on 3D printing at the Clojure NYC meetup</a> and I got feedback that this made the live demos easier to follow.</p>
+
+<p>Here&rsquo;s what it looks like when you <code>C-c 3</code> on a nested expression that defines a cube:</p>
+
+<p><img src="/images/show-scad.png" alt="OpenScad Screenshot" /></p>
+
+<h2>View Swing Components</h2>
+
+<p>If you have to use Swing, your pain can be slightly mitigated by having a quick way to view components.  This will give you a shortcut to pop up a new frame that contains what your expression evaluates to:</p>
+
+<p>```clojure
+(defun frame-last-expression ()
+  (interactive)
+  (cider-interactive-eval</p>
+
+<pre><code>(format 
+ "(doto (javax.swing.JFrame. \"eval\")
+    (.. (getContentPane) (add %s))
+    (.pack)
+    (.show))"
+ (cider-last-expression))))
+</code></pre>
+
+<p>(define-key cider-mode-map (kbd &ldquo;C-c f&rdquo;) &lsquo;frame-last-expression)
+```</p>
+
+<p>This plays nicely with <a href="https://github.com/daveray/seesaw">Seesaw</a>, but doesn&rsquo;t presume that you have it on your classpath.  Here&rsquo;s what it looks like when you <code>C-c f</code> at the end of an expression that defines a Swing component:</p>
+
+<p><img src="/images/show-frame.png" alt="JFrame Screenshot" /></p>
+
+<h2>Benchmarking with Criterium</h2>
+
+<p>In <a href="/blog/2013/11/22/a-few-interesting-clojure-microbenchmarks/">A Few Interesing Clojure Microbenchmarks</a>, I mentioned Hugo Duncan&rsquo;s <a href="https://github.com/hugoduncan/criterium">Criterium library</a>.  It&rsquo;s a reliable way of measuring the performance of an expression.  We can bring it closer to our fingertips by making a function for benchmarking an expression instead of just evaluating it:</p>
+
+<p>```clojure
+(defun benchmark-last-expression ()
+  (interactive)
+  (cider-interactive-eval</p>
+
+<pre><code>(format "(require 'criterium.core)
+         (criterium.core/quick-benchmark %s)"
+        (cider-last-expression))))
+</code></pre>
+
+<p>(define-key cider-mode-map (kbd &ldquo;C-c b&rdquo;) &lsquo;benchmark-last-expression)
+```</p>
+
+<h2>Conclusion</h2>
+
+<p>I find this simple pattern to be quite handy.  Also, when I&rsquo;m showing off the power of nrepl to the uninitiated, being able to invoke arbitrary functions on whatever is at my cursor looks like pure magic.</p>
+
+<p>I hope you find this useful and if you invent any useful bindings or alternative ways of implementing this pattern, please share!</p>
+]]></content>
+  </entry>
+  
+</feed>

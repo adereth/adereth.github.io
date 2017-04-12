@@ -1,0 +1,54 @@
+==================================================================
+https://keybase.io/adereth
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://adereth.github.io
+  * I am adereth (https://keybase.io/adereth) on keybase.
+  * I have a public key ASCV8I83aaqnV7iPSI10h1xMAVkIotz_sDBpRVzDmNNkmAo
+
+To do so, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "eldest_kid": "0120fd4703b01a0298fe54558522c8d341716c6f5110388d721ebc5539eab509dfa50a",
+            "host": "keybase.io",
+            "kid": "012095f08f3769aaa757b88f488d74875c4c015908a2dcffb03069455cc398d364980a",
+            "uid": "bb9f70437442a3a3af50232aab6ca119",
+            "username": "adereth"
+        },
+        "service": {
+            "hostname": "adereth.github.io",
+            "protocol": "https:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "client": {
+        "name": "keybase.io go client",
+        "version": "1.0.18"
+    },
+    "ctime": 1486945551,
+    "expire_in": 504576000,
+    "merkle_root": {
+        "ctime": 1486945479,
+        "hash": "8abee58f67489ca03c98a98547f9a8edb703bf4103fc3b5a29af7b4874ea03d7ca99840c2f488ba714f4f76edf8bfcc64c111aab1db6006cf91313d2ba4ef8cf",
+        "seqno": 882115
+    },
+    "prev": "33c5ed319df93db04725ecbdc56b8abc03b9da563892c81e21ea5eb1f6ea047d",
+    "seqno": 12,
+    "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEglfCPN2mqp1e4j0iNdIdcTAFZCKLc/7AwaUVcw5jTZJgKp3BheWxvYWTFAvl7ImJvZHkiOnsia2V5Ijp7ImVsZGVzdF9raWQiOiIwMTIwZmQ0NzAzYjAxYTAyOThmZTU0NTU4NTIyYzhkMzQxNzE2YzZmNTExMDM4OGQ3MjFlYmM1NTM5ZWFiNTA5ZGZhNTBhIiwiaG9zdCI6ImtleWJhc2UuaW8iLCJraWQiOiIwMTIwOTVmMDhmMzc2OWFhYTc1N2I4OGY0ODhkNzQ4NzVjNGMwMTU5MDhhMmRjZmZiMDMwNjk0NTVjYzM5OGQzNjQ5ODBhIiwidWlkIjoiYmI5ZjcwNDM3NDQyYTNhM2FmNTAyMzJhYWI2Y2ExMTkiLCJ1c2VybmFtZSI6ImFkZXJldGgifSwic2VydmljZSI6eyJob3N0bmFtZSI6ImFkZXJldGguZ2l0aHViLmlvIiwicHJvdG9jb2wiOiJodHRwczoifSwidHlwZSI6IndlYl9zZXJ2aWNlX2JpbmRpbmciLCJ2ZXJzaW9uIjoxfSwiY2xpZW50Ijp7Im5hbWUiOiJrZXliYXNlLmlvIGdvIGNsaWVudCIsInZlcnNpb24iOiIxLjAuMTgifSwiY3RpbWUiOjE0ODY5NDU1NTEsImV4cGlyZV9pbiI6NTA0NTc2MDAwLCJtZXJrbGVfcm9vdCI6eyJjdGltZSI6MTQ4Njk0NTQ3OSwiaGFzaCI6IjhhYmVlNThmNjc0ODljYTAzYzk4YTk4NTQ3ZjlhOGVkYjcwM2JmNDEwM2ZjM2I1YTI5YWY3YjQ4NzRlYTAzZDdjYTk5ODQwYzJmNDg4YmE3MTRmNGY3NmVkZjhiZmNjNjRjMTExYWFiMWRiNjAwNmNmOTEzMTNkMmJhNGVmOGNmIiwic2Vxbm8iOjg4MjExNX0sInByZXYiOiIzM2M1ZWQzMTlkZjkzZGIwNDcyNWVjYmRjNTZiOGFiYzAzYjlkYTU2Mzg5MmM4MWUyMWVhNWViMWY2ZWEwNDdkIiwic2Vxbm8iOjEyLCJ0YWciOiJzaWduYXR1cmUifaNzaWfEQCBJc3TPYYpYmSTxdaiwN4DqgTHfST5xQrtXIBMusEkuFrOnsaU1chubj8VIfi7l8eRPYkiSn9jGGQSz/dRQBQ6oc2lnX3R5cGUgpGhhc2iCpHR5cGUIpXZhbHVlxCB/dmgooOBA+oqgLon9WpLko1KNdzcnSNZ2U6qSyjIBSKN0YWfNAgKndmVyc2lvbgE=
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/adereth
+
+==================================================================

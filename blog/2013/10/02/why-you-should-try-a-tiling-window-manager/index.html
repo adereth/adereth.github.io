@@ -1,0 +1,441 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Why you should try a tiling window manager - adereth</title>
+  <meta name="author" content="Matt Adereth">
+
+  
+  <meta name="description" content="What is a tiling window manager? Window managers control the placement and appearance of programs on your screen. Most popular window managers are &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://adereth.github.io/blog/2013/10/02/why-you-should-try-a-tiling-window-manager/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+   <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="adereth" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic|Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+<link href="//fonts.googleapis.com/css?family=Crimson+Text:400italic,400,600italic,600,700italic,700" rel="stylesheet" type="text/css">
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ TeX: { extensions: ["color.js"] }});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript"
+        src="http://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-44572622-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <!-- <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:adereth.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav> -->
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Why You Should Try a Tiling Window Manager</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-02T07:39:00-07:00" pubdate data-updated="true">Oct 2<span>nd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>What is a tiling window manager?</h2>
+
+<p>Window managers control the placement and appearance of programs on your screen.</p>
+
+<p><img src="/images/desk.png" title="Messy Desk" ></p>
+
+<p>Most popular window managers are what are called &ldquo;<a href="http://en.wikipedia.org/wiki/Compositing_window_manager">compositing window managers</a>,&rdquo; which is what you are using by default in Microsoft Windows, OSX, Gnome, and KDE. They use the desktop metaphor, where each program is treated like a re-sizable piece of paper. You can move them around freely, change their size, and cause them to overlap.</p>
+
+<p><img src="/images/drawersopen.gif" title="Organized Drawers" ></p>
+
+<p>In contrast, a <a href="http://en.wikipedia.org/wiki/Tiling_window_manager">tiling window manager</a> is more like a well-organized drawer than a desk. The entire surface is divided into non-overlapping buckets where windows are displayed. If you&rsquo;ve used pretty much any IDE, like Eclipse or Visual Studio, or a terminal multiplexer, like screen or tmux, you&rsquo;re already familiar with this approach.</p>
+
+<h2>Why should I use one?</h2>
+
+<h3>They&rsquo;re efficient</h3>
+
+<p>Unlike most popular compositing window managers, tiling window managers really make an attempt at managing your windows for you. Instead of having you constantly reorganize the individual windows on your screen, you specify at a high level how you want windows to be placed and the window manager does it for you. New windows are intelligently placed based on the high-level directives you&rsquo;ve already given.</p>
+
+<p>Tiling also lends itself well to really efficient keyboard shortcuts. Because there&rsquo;s an unambiguous arrangement, you can quickly do things like switch focus to the window immediately to the left, right, top, or bottom, as opposed to most compositing window managers where the best keyboard option is Alt-Tabbing through a linear list of all your windows:</p>
+
+<p><a href="http://blogs.technet.com/b/drey/archive/2010/01/04/windows-7-what-happens-with-a-lot-of-windows-and-alt-tab.aspx"><img src="/images/alt-tab.jpg" title="Windows Switcher" ></a></p>
+
+<h3>They scale</h3>
+
+<p>With innovative features like tags (Awesome) and nested workspaces (ion3/notion), it&rsquo;s possible to sanely deal with huge numbers of windows and workflows. You&rsquo;re able to group and manipulate windows together in more sophisticated ways than you can in traditional window managers that limit operations to all instances of a single application or everything on a virtual desktop.</p>
+
+<h3>They&rsquo;re customizable</h3>
+
+<p>Most tiling window managers are written by developers for developers. They tend to provide rich, well-documented APIs that expose hooks for everything you could want.</p>
+
+<h2>Which one should I use?</h2>
+
+<p>There are <a href="http://en.wikipedia.org/wiki/Tiling_window_manager#List_of_tiling_window_managers_for_X">a number popular tiling window managers to choose from</a>, but the most popular (based my totally unscientific polling) are:</p>
+
+<ul>
+<li><a href="http://xmonad.org/">xmonad</a></li>
+<li><a href="http://notion.sourceforge.net/">notion</a>, a fork of the controversial and now defunct ion3</li>
+<li><a href="http://awesome.naquadah.org/">awesome</a></li>
+<li><a href="http://dwm.suckless.org/">dwm</a></li>
+</ul>
+
+
+<p>My preferred window manager is notion and it&rsquo;s what I recommend for anyone wanting to dip their toes into the world of tiling window managers. The main reasons I suggest it are:</p>
+
+<ul>
+<li><p>Like most of the other options, it&rsquo;s designed for keyboard use, but it has the best mouse support. You can resize frames, move windows across frames, and access context menus in the expected ways with the mouse. Eventually, you probably will stop relying on these things and do everything with the keyboard, but it really makes the transition easier.</p></li>
+<li><p>Multiple applications can be put into the same frame and are made into tabs. This is possible with some tweaks to the others, most notably xmonad, but it&rsquo;s built-in with notion and there are great shortcuts for switching between tabs. Do you remember what a revelation it was when tabbed browsing was introduced? Having the ability to use tabs to group and switch between heterogeneous applications is equally incredible.</p></li>
+<li><p>It&rsquo;s very stable. I&rsquo;m still using 3 year old builds of ion3 on some of my machines and I never have any problems.</p></li>
+</ul>
+
+
+<p>As of Ubuntu 12.10, you can simply <code>apt-get install notion</code> to install it. It&rsquo;s also available in the repositories of a number of other distributions.</p>
+
+<p>In some follow-up posts, I&rsquo;m going to detail the tweaks that I&rsquo;ve made to <a href="https://github.com/adereth/notion-config">my notion configuration</a> to improve my workflow.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Matt Adereth</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-02T07:39:00-07:00" pubdate data-updated="true">Oct 2<span>nd</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/notion/'>notion</a>, <a class='category' href='/blog/categories/wm/'>wm</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://adereth.github.io/blog/2013/10/02/why-you-should-try-a-tiling-window-manager/" data-via="adereth" data-counturl="http://adereth.github.io/blog/2013/10/02/why-you-should-try-a-tiling-window-manager/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2011/02/02/tweaking-my-favorite-programming-font/" title="Previous Post: Tweaking my favorite programming font">&laquo; Tweaking my favorite programming font</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/10/10/add-it-up/" title="Next Post: Add it up (properly)">Add it up (properly) &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <p>
+  <center><img src="/images/aleph.png"/></center>
+  <a href="http://adereth.github.io" alt="Home"><h1>Adereth's Blog</h1></a>
+
+  <ul id="recent_posts">
+      <li class="post">
+	<a href="http://adereth.github.io"><i class="fa fa-home fa-fw"></i> Home</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.github.io/about/"><i class="fa fa-user fa-fw"></i> About Me</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.github.io/atom.xml"><i class="fa fa-rss fa-fw"></i> Feed</a>
+      </li>
+  </ul>
+
+  <h1>Connect</h1>
+
+  <ul id="recent_posts">
+      <li class="post">
+	<a href="https://twitter.com/adereth"><i class="fa fa-twitter fa-fw"></i> Twitter</a>
+      </li>
+      <li class="post">
+	<a href="https://github.com/adereth"><i class="fa fa-github fa-fw"></i> GitHub</a>
+      </li>
+      <li class="post">
+	<a href="http://www.linkedin.com/in/adereth/"><i class="fa fa-linkedin fa-fw"></i> LinkedIn</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.tumblr.com/"><i class="fa fa-tumblr fa-fw"></i> Tumblr</a>
+      </li>
+  </ul>
+
+
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/12/06/writing-a-halite-bot-in-clojure/">Writing a Halite Bot in Clojure</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too/">Bag of Little Bootstraps Presentation at PWL SF</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/20/visualizing-girl-talk-with-clojure-and-d3-dot-js/">Visualizing Girl Talk: Parsing with Clojure's Instaparse</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/19/clojure-slash-conj-talk-on-3d-printing-keyboards/">Clojure/conj Talk on 3D Printing Keyboards</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love/">Presentation on The Mode Tree at Papers We Love Too</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/17/sa-profile-keys-on-a-kinesis-advantage/">SA Profile Keys on a Kinesis Advantage</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/02/poisonous-shapes/">Poisonous Shapes in Algebra and Graph Theory</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/12/silvermans-mode-detection-method-explained/">Silverman's Mode Estimation Method Explained</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/29/computing-the-remedian-in-clojure/">Computing the Remedian in Clojure</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/14/typing-qwerty-on-a-dvorak-keyboard/">Typing Qwerty on a Dvorak Keyboard</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/adereth">@adereth</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'adereth',
+            count: 10,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - Matt Adereth -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = '1overn';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://adereth.github.io/blog/2013/10/02/why-you-should-try-a-tiling-window-manager/';
+        var disqus_url = 'http://adereth.github.io/blog/2013/10/02/why-you-should-try-a-tiling-window-manager/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

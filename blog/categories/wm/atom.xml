@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: wm | adereth]]></title>
+  <link href="http://adereth.github.io/blog/categories/wm/atom.xml" rel="self"/>
+  <link href="http://adereth.github.io/"/>
+  <updated>2016-12-06T12:35:58-08:00</updated>
+  <id>http://adereth.github.io/</id>
+  <author>
+    <name><![CDATA[Matt Adereth]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Why you should try a tiling window manager]]></title>
+    <link href="http://adereth.github.io/blog/2013/10/02/why-you-should-try-a-tiling-window-manager/"/>
+    <updated>2013-10-02T07:39:00-07:00</updated>
+    <id>http://adereth.github.io/blog/2013/10/02/why-you-should-try-a-tiling-window-manager</id>
+    <content type="html"><![CDATA[<h2>What is a tiling window manager?</h2>
+
+<p>Window managers control the placement and appearance of programs on your screen.</p>
+
+<p><img src="/images/desk.png" title="Messy Desk" ></p>
+
+<p>Most popular window managers are what are called &ldquo;<a href="http://en.wikipedia.org/wiki/Compositing_window_manager">compositing window managers</a>,&rdquo; which is what you are using by default in Microsoft Windows, OSX, Gnome, and KDE. They use the desktop metaphor, where each program is treated like a re-sizable piece of paper. You can move them around freely, change their size, and cause them to overlap.</p>
+
+<p><img src="/images/drawersopen.gif" title="Organized Drawers" ></p>
+
+<p>In contrast, a <a href="http://en.wikipedia.org/wiki/Tiling_window_manager">tiling window manager</a> is more like a well-organized drawer than a desk. The entire surface is divided into non-overlapping buckets where windows are displayed. If you&rsquo;ve used pretty much any IDE, like Eclipse or Visual Studio, or a terminal multiplexer, like screen or tmux, you&rsquo;re already familiar with this approach.</p>
+
+<h2>Why should I use one?</h2>
+
+<h3>They&rsquo;re efficient</h3>
+
+<p>Unlike most popular compositing window managers, tiling window managers really make an attempt at managing your windows for you. Instead of having you constantly reorganize the individual windows on your screen, you specify at a high level how you want windows to be placed and the window manager does it for you. New windows are intelligently placed based on the high-level directives you&rsquo;ve already given.</p>
+
+<p>Tiling also lends itself well to really efficient keyboard shortcuts. Because there&rsquo;s an unambiguous arrangement, you can quickly do things like switch focus to the window immediately to the left, right, top, or bottom, as opposed to most compositing window managers where the best keyboard option is Alt-Tabbing through a linear list of all your windows:</p>
+
+<p><a href="http://blogs.technet.com/b/drey/archive/2010/01/04/windows-7-what-happens-with-a-lot-of-windows-and-alt-tab.aspx"><img src="/images/alt-tab.jpg" title="Windows Switcher" ></a></p>
+
+<h3>They scale</h3>
+
+<p>With innovative features like tags (Awesome) and nested workspaces (ion3/notion), it&rsquo;s possible to sanely deal with huge numbers of windows and workflows. You&rsquo;re able to group and manipulate windows together in more sophisticated ways than you can in traditional window managers that limit operations to all instances of a single application or everything on a virtual desktop.</p>
+
+<h3>They&rsquo;re customizable</h3>
+
+<p>Most tiling window managers are written by developers for developers. They tend to provide rich, well-documented APIs that expose hooks for everything you could want.</p>
+
+<h2>Which one should I use?</h2>
+
+<p>There are <a href="http://en.wikipedia.org/wiki/Tiling_window_manager#List_of_tiling_window_managers_for_X">a number popular tiling window managers to choose from</a>, but the most popular (based my totally unscientific polling) are:</p>
+
+<ul>
+<li><a href="http://xmonad.org/">xmonad</a></li>
+<li><a href="http://notion.sourceforge.net/">notion</a>, a fork of the controversial and now defunct ion3</li>
+<li><a href="http://awesome.naquadah.org/">awesome</a></li>
+<li><a href="http://dwm.suckless.org/">dwm</a></li>
+</ul>
+
+
+<p>My preferred window manager is notion and it&rsquo;s what I recommend for anyone wanting to dip their toes into the world of tiling window managers. The main reasons I suggest it are:</p>
+
+<ul>
+<li><p>Like most of the other options, it&rsquo;s designed for keyboard use, but it has the best mouse support. You can resize frames, move windows across frames, and access context menus in the expected ways with the mouse. Eventually, you probably will stop relying on these things and do everything with the keyboard, but it really makes the transition easier.</p></li>
+<li><p>Multiple applications can be put into the same frame and are made into tabs. This is possible with some tweaks to the others, most notably xmonad, but it&rsquo;s built-in with notion and there are great shortcuts for switching between tabs. Do you remember what a revelation it was when tabbed browsing was introduced? Having the ability to use tabs to group and switch between heterogeneous applications is equally incredible.</p></li>
+<li><p>It&rsquo;s very stable. I&rsquo;m still using 3 year old builds of ion3 on some of my machines and I never have any problems.</p></li>
+</ul>
+
+
+<p>As of Ubuntu 12.10, you can simply <code>apt-get install notion</code> to install it. It&rsquo;s also available in the repositories of a number of other distributions.</p>
+
+<p>In some follow-up posts, I&rsquo;m going to detail the tweaks that I&rsquo;ve made to <a href="https://github.com/adereth/notion-config">my notion configuration</a> to improve my workflow.</p>
+]]></content>
+  </entry>
+  
+</feed>

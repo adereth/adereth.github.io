@@ -1,0 +1,575 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Custom Clojure Evaluation Keybindings in Emacs - adereth</title>
+  <meta name="author" content="Matt Adereth">
+
+  
+  <meta name="description" content="I love REPL Driven Development. My style is to write expressions directly in the file that I&rsquo;m working on and to use C-x C-e to view the value &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://adereth.github.io/blog/2014/05/29/custom-clojure-evaluation-keybindings-in-emacs/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+   <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="adereth" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic|Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+<link href="//fonts.googleapis.com/css?family=Crimson+Text:400italic,400,600italic,600,700italic,700" rel="stylesheet" type="text/css">
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ TeX: { extensions: ["color.js"] }});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript"
+        src="http://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-44572622-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <!-- <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:adereth.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav> -->
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Custom Clojure Evaluation Keybindings in Emacs</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-29T06:28:00-07:00" pubdate data-updated="true">May 29<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I love <a href="http://blog.jayfields.com/2014/01/repl-driven-development.html">REPL Driven Development</a>.  My style is to write expressions directly in the file that I&rsquo;m working on and to use <code>C-x C-e</code> to view the value of the last command in the minibuffer.</p>
+
+<p>Being able to move my cursor to a sub-expression and see the value of that expression immediately feels like a superpower.  I love this ability and it&rsquo;s one of the things that keeps me locked into Clojure+Emacs as my preferred enviroment.</p>
+
+<p>This power can be taken to the next level by making custom evaluation commands that run whatever you want on the expression at your cursor.</p>
+
+<h2>The Basic Pattern</h2>
+
+<p>Let&rsquo;s start by looking at the Elisp that defines <code>cider-eval-last-sexp</code>, which is what gets invoked when we press <code>C-x C-e</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">cider-eval-last-sexp</span> <span class="p">(</span><span class="o">&amp;</span><span class="nv">optional</span> <span class="nv">prefix</span><span class="p">)</span>
+</span><span class='line'>  <span class="s">&quot;Evaluate the expression preceding point.</span>
+</span><span class='line'><span class="s">If invoked with a PREFIX argument, print the result in the current buffer.&quot;</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">interactive</span> <span class="s">&quot;P&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">if </span><span class="nv">prefix</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">cider-interactive-eval-print</span> <span class="p">(</span><span class="nf">cider-last-sexp</span><span class="p">))</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">cider-interactive-eval</span> <span class="p">(</span><span class="nf">cider-last-sexp</span><span class="p">))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The important part is that we can use <code>cider-last-sexp</code> to get the expression before the cursor as a string and we can evaluate a string by passing it to <code>cider-interactive-eval</code>.  We&rsquo;ll write some basic Elisp to make a new function that modifies the string before evaluation and then we&rsquo;ll bind this function to a new key sequence.</p>
+
+<p>The essential pattern we&rsquo;ll use is:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">custom-eval-last-sexp</span> <span class="p">()</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">interactive</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">cider-interactive-eval</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">format</span> <span class="s">&quot;(require &#39;some-namespace)</span>
+</span><span class='line'><span class="s">             (some-namespace/some-fn %s)&quot;</span>
+</span><span class='line'>            <span class="p">(</span><span class="nf">cider-last-sexp</span><span class="p">))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">define-key</span> <span class="nv">cider-mode-map</span> <span class="p">(</span><span class="nf">kbd</span> <span class="s">&quot;C-c c&quot;</span><span class="p">)</span> <span class="ss">&#39;custom-eval-last-sexp</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you happen to still be using Swank or nrepl.el, you should use <code>swank-interactive-eval</code> and <code>swank-last-sexp</code> or <code>swank-interactive-eval</code> and <code>nrepl-last-sexp</code>.</p>
+
+<p>Let&rsquo;s look at some of the useful things we can do with this&hellip;</p>
+
+<h2>Collections</h2>
+
+<p>I frequently deal with collections that are too big to display nicely in the minibuffer.  It&rsquo;s nice to be able to explore them with a couple keystrokes.  Here&rsquo;s a simple application of the pattern that gives us the size of the collection by just hitting <code>C-c c</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">count-last-expression</span> <span class="p">()</span>
+</span><span class='line'>       <span class="p">(</span><span class="nf">interactive</span><span class="p">)</span>
+</span><span class='line'>       <span class="p">(</span><span class="nf">cider-interactive-eval</span>
+</span><span class='line'>         <span class="p">(</span><span class="nf">format</span> <span class="s">&quot;(count %s)&quot;</span>
+</span><span class='line'>                 <span class="p">(</span><span class="nf">cider-last-expression</span><span class="p">))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">define-key</span> <span class="nv">cider-mode-map</span> <span class="p">(</span><span class="nf">kbd</span> <span class="s">&quot;C-c c&quot;</span><span class="p">)</span> <span class="ss">&#39;count-last-expression</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Another useful one is to just show the nth value.  This one is a little more interesting because it requires a parameter:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">nth-from-last-expression</span> <span class="p">(</span><span class="nf">n</span><span class="p">)</span>
+</span><span class='line'>       <span class="p">(</span><span class="nf">interactive</span> <span class="s">&quot;p&quot;</span><span class="p">)</span>
+</span><span class='line'>       <span class="p">(</span><span class="nf">cider-interactive-eval</span>
+</span><span class='line'>         <span class="p">(</span><span class="nf">format</span> <span class="s">&quot;(nth %s %s)&quot;</span>
+</span><span class='line'>                 <span class="p">(</span><span class="nf">cider-last-expression</span><span class="p">)</span> <span class="nv">n</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">define-key</span> <span class="nv">cider-mode-map</span> <span class="p">(</span><span class="nf">kbd</span> <span class="s">&quot;C-c n&quot;</span><span class="p">)</span> <span class="o">`</span><span class="nv">nth-from-last-expression</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you just use <code>C-c n</code>, Emacs defaults the parameter value to 1.  You can pass an argument using <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Arguments.html">Emacs&#8217; universal argument functionality</a>.  For example, to get the 0<sup>th</sup> element, you could either use <code>C-u 0 C-c n</code> or <code>M-0 C-c n</code>.</p>
+
+<h2>Write to File</h2>
+
+<p>Sometimes the best way to view a value is to look at it in an external program.  I&rsquo;ve used this pattern when working on Clojure code that generates SVG, HTML, and <a href="/blog/2014/04/09/3d-printing-with-clojure/">3D models</a>.  Here&rsquo;s what I use for 3D modeling:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">spit-scad-last-expression</span> <span class="p">()</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">interactive</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">cider-interactive-eval</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">format</span>    
+</span><span class='line'>      <span class="s">&quot;(require &#39;scad-clj.scad)</span>
+</span><span class='line'><span class="s">       (spit \&quot;eval.scad\&quot; (scad-clj.scad/write-scad %s))&quot;</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">cider-last-expression</span><span class="p">))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">define-key</span> <span class="nv">cider-mode-map</span> <span class="p">(</span><span class="nf">kbd</span> <span class="s">&quot;C-c 3&quot;</span><span class="p">)</span> <span class="ss">&#39;spit-scad-last-expression</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This writes the <code>eval.scad</code> file to the root directory of the project.  It&rsquo;s great because OpenSCAD watches open files and automatically refreshes when they change.  You can run this on an expression that defines a shape and immediately see the shape in another window.  I used this technique in <a href="http://www.meetup.com/Clojure-NYC/events/180303582/">my recent presentation on 3D printing at the Clojure NYC meetup</a> and I got feedback that this made the live demos easier to follow.</p>
+
+<p>Here&rsquo;s what it looks like when you <code>C-c 3</code> on a nested expression that defines a cube:</p>
+
+<p><img src="/images/show-scad.png" alt="OpenScad Screenshot" /></p>
+
+<h2>View Swing Components</h2>
+
+<p>If you have to use Swing, your pain can be slightly mitigated by having a quick way to view components.  This will give you a shortcut to pop up a new frame that contains what your expression evaluates to:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">frame-last-expression</span> <span class="p">()</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">interactive</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">cider-interactive-eval</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">format</span>    
+</span><span class='line'>     <span class="s">&quot;(doto (javax.swing.JFrame. \&quot;eval\&quot;)</span>
+</span><span class='line'><span class="s">        (.. (getContentPane) (add %s))</span>
+</span><span class='line'><span class="s">        (.pack)</span>
+</span><span class='line'><span class="s">        (.show))&quot;</span>
+</span><span class='line'>     <span class="p">(</span><span class="nf">cider-last-expression</span><span class="p">))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">define-key</span> <span class="nv">cider-mode-map</span> <span class="p">(</span><span class="nf">kbd</span> <span class="s">&quot;C-c f&quot;</span><span class="p">)</span> <span class="ss">&#39;frame-last-expression</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This plays nicely with <a href="https://github.com/daveray/seesaw">Seesaw</a>, but doesn&rsquo;t presume that you have it on your classpath.  Here&rsquo;s what it looks like when you <code>C-c f</code> at the end of an expression that defines a Swing component:</p>
+
+<p><img src="/images/show-frame.png" alt="JFrame Screenshot" /></p>
+
+<h2>Benchmarking with Criterium</h2>
+
+<p>In <a href="/blog/2013/11/22/a-few-interesting-clojure-microbenchmarks/">A Few Interesing Clojure Microbenchmarks</a>, I mentioned Hugo Duncan&rsquo;s <a href="https://github.com/hugoduncan/criterium">Criterium library</a>.  It&rsquo;s a reliable way of measuring the performance of an expression.  We can bring it closer to our fingertips by making a function for benchmarking an expression instead of just evaluating it:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">defun</span> <span class="nv">benchmark-last-expression</span> <span class="p">()</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">interactive</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">cider-interactive-eval</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">format</span> <span class="s">&quot;(require &#39;criterium.core)</span>
+</span><span class='line'><span class="s">             (criterium.core/quick-benchmark %s)&quot;</span>
+</span><span class='line'>            <span class="p">(</span><span class="nf">cider-last-expression</span><span class="p">))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">define-key</span> <span class="nv">cider-mode-map</span> <span class="p">(</span><span class="nf">kbd</span> <span class="s">&quot;C-c b&quot;</span><span class="p">)</span> <span class="ss">&#39;benchmark-last-expression</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Conclusion</h2>
+
+<p>I find this simple pattern to be quite handy.  Also, when I&rsquo;m showing off the power of nrepl to the uninitiated, being able to invoke arbitrary functions on whatever is at my cursor looks like pure magic.</p>
+
+<p>I hope you find this useful and if you invent any useful bindings or alternative ways of implementing this pattern, please share!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Matt Adereth</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-29T06:28:00-07:00" pubdate data-updated="true">May 29<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/clojure/'>clojure</a>, <a class='category' href='/blog/categories/emacs/'>emacs</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://adereth.github.io/blog/2014/05/29/custom-clojure-evaluation-keybindings-in-emacs/" data-via="adereth" data-counturl="http://adereth.github.io/blog/2014/05/29/custom-clojure-evaluation-keybindings-in-emacs/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/04/30/java-dot-awt-dot-shapes-insidious-insideness/" title="Previous Post: java.awt.Shape's Insidious Insideness">&laquo; java.awt.Shape's Insidious Insideness</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/08/14/typing-qwerty-on-a-dvorak-keyboard/" title="Next Post: Typing Qwerty on a Dvorak Keyboard">Typing Qwerty on a Dvorak Keyboard &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <p>
+  <center><img src="/images/aleph.png"/></center>
+  <a href="http://adereth.github.io" alt="Home"><h1>Adereth's Blog</h1></a>
+
+  <ul id="recent_posts">
+      <li class="post">
+	<a href="http://adereth.github.io"><i class="fa fa-home fa-fw"></i> Home</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.github.io/about/"><i class="fa fa-user fa-fw"></i> About Me</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.github.io/atom.xml"><i class="fa fa-rss fa-fw"></i> Feed</a>
+      </li>
+  </ul>
+
+  <h1>Connect</h1>
+
+  <ul id="recent_posts">
+      <li class="post">
+	<a href="https://twitter.com/adereth"><i class="fa fa-twitter fa-fw"></i> Twitter</a>
+      </li>
+      <li class="post">
+	<a href="https://github.com/adereth"><i class="fa fa-github fa-fw"></i> GitHub</a>
+      </li>
+      <li class="post">
+	<a href="http://www.linkedin.com/in/adereth/"><i class="fa fa-linkedin fa-fw"></i> LinkedIn</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.tumblr.com/"><i class="fa fa-tumblr fa-fw"></i> Tumblr</a>
+      </li>
+  </ul>
+
+
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/12/06/writing-a-halite-bot-in-clojure/">Writing a Halite Bot in Clojure</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too/">Bag of Little Bootstraps Presentation at PWL SF</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/20/visualizing-girl-talk-with-clojure-and-d3-dot-js/">Visualizing Girl Talk: Parsing with Clojure's Instaparse</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/19/clojure-slash-conj-talk-on-3d-printing-keyboards/">Clojure/conj Talk on 3D Printing Keyboards</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love/">Presentation on The Mode Tree at Papers We Love Too</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/17/sa-profile-keys-on-a-kinesis-advantage/">SA Profile Keys on a Kinesis Advantage</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/02/poisonous-shapes/">Poisonous Shapes in Algebra and Graph Theory</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/12/silvermans-mode-detection-method-explained/">Silverman's Mode Estimation Method Explained</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/29/computing-the-remedian-in-clojure/">Computing the Remedian in Clojure</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/14/typing-qwerty-on-a-dvorak-keyboard/">Typing Qwerty on a Dvorak Keyboard</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/adereth">@adereth</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'adereth',
+            count: 10,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - Matt Adereth -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = '1overn';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://adereth.github.io/blog/2014/05/29/custom-clojure-evaluation-keybindings-in-emacs/';
+        var disqus_url = 'http://adereth.github.io/blog/2014/05/29/custom-clojure-evaluation-keybindings-in-emacs/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

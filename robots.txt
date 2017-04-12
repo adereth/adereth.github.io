@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: 
+
+Sitemap: http://adereth.github.io/sitemap.xml 

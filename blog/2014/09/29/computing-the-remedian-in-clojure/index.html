@@ -1,0 +1,598 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Computing the Remedian in Clojure - adereth</title>
+  <meta name="author" content="Matt Adereth">
+
+  
+  <meta name="description" content="The remedian is an approximation of the median that can be computed using only $O(\log{n})$ storage. The algorithm was originally presented in The &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://adereth.github.io/blog/2014/09/29/computing-the-remedian-in-clojure/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+   <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="adereth" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic|Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+<link href="//fonts.googleapis.com/css?family=Crimson+Text:400italic,400,600italic,600,700italic,700" rel="stylesheet" type="text/css">
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ TeX: { extensions: ["color.js"] }});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript"
+        src="http://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-44572622-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <!-- <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:adereth.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav> -->
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Computing the Remedian in Clojure</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-09-29T09:03:00-07:00" pubdate data-updated="true">Sep 29<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>The remedian is an approximation of the <a href="http://en.wikipedia.org/wiki/Median">median</a> that can be computed using only $O(\log{n})$ storage.  The algorithm was originally presented in <a href="http://web.ipac.caltech.edu/staff/fmasci/home/statistics_refs/Remedian.pdf">The Remedian: A Robust Averaging Method for Large Data Sets by Rousseeuw and Bassett</a> (1990).  The core of it is on the first page:</p>
+
+<blockquote><p>Let us assume that $n = b^k$, where $b$ and $k$ are integers (the case where $n$ is not of this form will be treated in Sec. 7.  The <em>remedian</em> with base $b$ proceeds by computing medians of groups of $b$ observations, yielding $b^{k-1}$ estimates on which this procedure is iterated, and so on, until only a single estimate remains.  When implemented properly, this method merely needs $k$ arrays of size $b$ that are continuously reused.</p></blockquote>
+
+<p>The implementation of this part in Clojure is so nice that I just had to share.</p>
+
+<p>First, we need a vanilla implementation of the median function.  We&rsquo;re always going to be computing the median of sets of size $b$, where $b$ is relatively small, so there&rsquo;s no need to get fancy with a linear time algorithm.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">median</span> <span class="p">[</span><span class="nv">coll</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">size</span> <span class="p">(</span><span class="nb">count </span><span class="nv">coll</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">sorted</span> <span class="p">(</span><span class="nb">sort </span><span class="nv">coll</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">odd?</span> <span class="nv">size</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">(</span><span class="nb">nth </span><span class="nv">sorted</span> <span class="p">(</span><span class="nb">int </span><span class="p">(</span><span class="nb">/ </span><span class="nv">size</span> <span class="mi">2</span><span class="p">)))</span>
+</span><span class='line'>      <span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nb">+ </span><span class="p">(</span><span class="nb">nth </span><span class="nv">sorted</span> <span class="p">(</span><span class="nb">int </span><span class="p">(</span><span class="nb">/ </span><span class="nv">size</span> <span class="mi">2</span><span class="p">)))</span>
+</span><span class='line'>            <span class="p">(</span><span class="nb">nth </span><span class="nv">sorted</span> <span class="p">(</span><span class="nb">dec </span><span class="p">(</span><span class="nb">int </span><span class="p">(</span><span class="nb">/ </span><span class="nv">size</span> <span class="mi">2</span><span class="p">)))))</span>
+</span><span class='line'>         <span class="mi">2</span><span class="p">))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now we can implement the actual algorithm.  We group, compute the median of each group, and recur, with the base case being when we&rsquo;re left with a single element in the collection:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">remedian</span> <span class="p">[</span><span class="nv">b</span> <span class="nv">coll</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">next </span><span class="nv">coll</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">coll</span>
+</span><span class='line'>         <span class="p">(</span><span class="nf">partition-all</span> <span class="nv">b</span><span class="p">)</span>
+</span><span class='line'>         <span class="p">(</span><span class="nb">map </span><span class="nv">median</span><span class="p">)</span>
+</span><span class='line'>         <span class="p">(</span><span class="nf">recur</span> <span class="nv">b</span><span class="p">))</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">first </span><span class="nv">coll</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Because <code>partition-all</code> and <code>map</code> both operate on and return lazy sequences, we maintain the property of only using $O(b \log_{b}{n})$ memory at any point in time.</p>
+
+<p>While this implementation is simple and elegant, it only works if the size of the collection is a power of $b$.  If we don&rsquo;t have $n = b^k$ where $b$ and $k$ are integers, we&rsquo;ll over-weight the observations that get grouped into the last groups of size $&lt; b$.</p>
+
+<p>Section 7 of the original paper describes the weighting scheme you should use to compute the median if you&rsquo;re left with incomplete groupings:</p>
+
+<blockquote><p>How should we proceed when the sample size $n$ is less than $b^k$? The remedian algorithm then ends up with $n_1$ numbers in the first array, $n_2$ numbers in the second array, and $n_k$ numbers in the last array, such that $n = n_1 + n_{2}b + &hellip; + n_k b^{k-1}$.  For our final estimate we then compute a weighted median in which the $n_1$, numbers in the first array have weight 1, the $n_2$ numbers in the second array have weight $b$, and the $n_k$ numbers in the last array have weight $b^{k-1}$. This final computation does not need much storage because there are fewer than $bk$ numbers and they only have to be ranked in increasing order, after which their weights must be added until the sum is at least $n/2$.</p></blockquote>
+
+<p>It&rsquo;s a bit difficult to directly translate this to the recursive solution I gave above because in the final step we&rsquo;re going to do a computation on a mixture of values from the different recursive sequences.  Let&rsquo;s give it a shot.</p>
+
+<p>We need some way of bubbling up the incomplete groups for the final weighted median computation.  Instead of having each recursive sequence <em>always</em> compute the median of each group, we can add a check to see if the group is smaller than $b$ and, if so, just return the incomplete group:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">remedian-with-leftovers</span> <span class="p">[</span><span class="nv">b</span> <span class="nv">coll</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">incomplete-group?</span> <span class="o">#</span><span class="p">(</span><span class="nb">or </span><span class="p">(</span><span class="nb">&lt; </span><span class="p">(</span><span class="nb">count </span><span class="nv">%</span><span class="p">)</span> <span class="nv">b</span><span class="p">)</span>
+</span><span class='line'>                               <span class="p">(</span><span class="nb">seq? </span><span class="p">(</span><span class="nb">last </span><span class="nv">%</span><span class="p">)))]</span>
+</span><span class='line'>    <span class="p">(</span><span class="k">loop </span><span class="p">[</span><span class="nv">coll</span> <span class="nv">coll</span><span class="p">]</span>
+</span><span class='line'>      <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">next </span><span class="nv">coll</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">coll</span>
+</span><span class='line'>             <span class="p">(</span><span class="nf">partition-all</span> <span class="nv">b</span><span class="p">)</span>
+</span><span class='line'>             <span class="p">(</span><span class="nb">map </span><span class="o">#</span><span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">incomplete-group?</span> <span class="nv">%</span><span class="p">)</span> <span class="nv">%</span> <span class="p">(</span><span class="nf">median</span> <span class="nv">%</span><span class="p">)))</span>
+</span><span class='line'>             <span class="p">(</span><span class="nf">recur</span><span class="p">))</span>
+</span><span class='line'>        <span class="nv">coll</span><span class="p">))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For example, if we were using the mutable array implementation proposed in the original paper to compute the remedian of <code>(range 26)</code> with $b = 3$, the final state of the arrays would be:</p>
+
+<table>
+<thead>
+<tr>
+<th>Array  </th>
+<th> $i_0$ </th>
+<th> $i_1$   </th>
+<th> $i_2$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0      </td>
+<td> 24 </td>
+<td> 25 </td>
+<td> <em>empty</em></td>
+</tr>
+<tr>
+<td>1      </td>
+<td> 19 </td>
+<td> 22 </td>
+<td> <em>empty</em></td>
+</tr>
+<tr>
+<td>2      </td>
+<td> 4  </td>
+<td> 13 </td>
+<td> <em>empty</em></td>
+</tr>
+</tbody>
+</table>
+
+
+<br/>
+
+
+<p>In our sequence based solution, the final sequence will be <code>((4 13 (19 22 (24 25))))</code>.</p>
+
+<p>Now, we need to convert these nested sequences into <code>[value weight]</code> pairs that could be fed into a weighted median function:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">weight-leftovers</span> <span class="p">[</span><span class="nv">b</span> <span class="nv">nested-elements</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">loop </span><span class="p">[</span><span class="nv">vw-pairs</span> <span class="p">[]</span>
+</span><span class='line'>         <span class="nv">nested-elements</span> <span class="nv">nested-elements</span>
+</span><span class='line'>         <span class="nv">weight</span> <span class="mi">1</span><span class="p">]</span>
+</span><span class='line'>    <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">element</span> <span class="p">(</span><span class="nb">first </span><span class="nv">nested-elements</span><span class="p">)]</span>
+</span><span class='line'>      <span class="p">(</span><span class="nf">cond</span>
+</span><span class='line'>       <span class="p">(</span><span class="nb">next </span><span class="nv">nested-elements</span><span class="p">)</span> <span class="p">(</span><span class="nf">recur</span> <span class="p">(</span><span class="nb">conj </span><span class="nv">vw-pairs</span> <span class="p">[</span><span class="nv">element</span> <span class="nv">weight</span><span class="p">])</span>
+</span><span class='line'>                                     <span class="p">(</span><span class="nb">next </span><span class="nv">nested-elements</span><span class="p">)</span>
+</span><span class='line'>                                     <span class="nv">weight</span><span class="p">)</span>
+</span><span class='line'>       <span class="p">(</span><span class="nb">seq? </span><span class="nv">element</span><span class="p">)</span> <span class="p">(</span><span class="nf">recur</span> <span class="nv">vw-pairs</span>
+</span><span class='line'>                             <span class="nv">element</span>
+</span><span class='line'>                             <span class="p">(</span><span class="nb">/ </span><span class="nv">weight</span> <span class="nv">b</span><span class="p">))</span>
+</span><span class='line'>       <span class="ss">:else</span> <span class="p">(</span><span class="nb">conj </span><span class="nv">vw-pairs</span> <span class="p">[</span><span class="nv">element</span> <span class="nv">weight</span><span class="p">])))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Instead of weighting the values in array $j$ with weight $b^{j-1}$, we&rsquo;re weighting it at $\frac{b^{j-1}}{b^{k}}$.  Dividing all the weights by a constant will give us the same result and this is slightly easier to compute recursively, as we can just start at 1 and divide by $b$ as we descend into each nested sequence.</p>
+
+<p>If we run this on the <code>(range 26)</code> with $b = 3$, we get:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">user&gt;</span> <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="p">(</span><span class="nb">range </span><span class="mi">26</span><span class="p">)</span>
+</span><span class='line'>           <span class="p">(</span><span class="nf">remedian-with-leftovers</span> <span class="mi">3</span><span class="p">)</span>
+</span><span class='line'>           <span class="p">(</span><span class="nf">weight-leftovers</span> <span class="mi">3</span><span class="p">))</span>
+</span><span class='line'><span class="p">[[</span><span class="mi">4</span> <span class="mi">1</span><span class="nv">/3</span><span class="p">]</span> <span class="p">[</span><span class="mi">13</span> <span class="mi">1</span><span class="nv">/3</span><span class="p">]</span> <span class="p">[</span><span class="mi">19</span> <span class="mi">1</span><span class="nv">/9</span><span class="p">]</span> <span class="p">[</span><span class="mi">22</span> <span class="mi">1</span><span class="nv">/9</span><span class="p">]</span> <span class="p">[</span><span class="mi">24</span> <span class="mi">1</span><span class="nv">/27</span><span class="p">]</span> <span class="p">[</span><span class="mi">25</span> <span class="mi">1</span><span class="nv">/27</span><span class="p">]]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, we&rsquo;re going to need a weighted median function.  This operates on a collection of <code>[value weight]</code> pairs:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">weighted-median</span> <span class="p">[</span><span class="nv">vw-pairs</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">total-weight</span> <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">vw-pairs</span>
+</span><span class='line'>                          <span class="p">(</span><span class="nb">map </span><span class="nv">second</span><span class="p">)</span>
+</span><span class='line'>                          <span class="p">(</span><span class="nb">reduce </span><span class="nv">+</span><span class="p">))</span>
+</span><span class='line'>        <span class="nv">middle-weight</span> <span class="p">(</span><span class="nb">/ </span><span class="nv">total-weight</span> <span class="mi">2</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">sorted-pairs</span> <span class="p">(</span><span class="nb">sort-by first </span><span class="nv">vw-pairs</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">sorted-pairs-cum-weight</span> <span class="p">(</span><span class="nf">reductions</span> <span class="p">(</span><span class="k">fn </span><span class="p">[[</span><span class="nv">_</span> <span class="nv">cum-weight</span><span class="p">]</span> <span class="p">[</span><span class="nv">v</span> <span class="nv">w</span><span class="p">]]</span>
+</span><span class='line'>                                              <span class="p">[</span><span class="nv">v</span> <span class="p">(</span><span class="nb">+ </span><span class="nv">cum-weight</span> <span class="nv">w</span><span class="p">)])</span>
+</span><span class='line'>                                            <span class="nv">sorted-pairs</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">sorted-pairs-cum-weight</span>
+</span><span class='line'>         <span class="p">(</span><span class="nb">filter </span><span class="o">#</span><span class="p">(</span><span class="nb">&lt;= </span><span class="nv">middle-weight</span> <span class="p">(</span><span class="nb">second </span><span class="nv">%</span><span class="p">)))</span>
+</span><span class='line'>         <span class="p">(</span><span class="nf">ffirst</span><span class="p">))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can put it all together and redefine the remedian function to deal with the case where $n$ isn&rsquo;t a power of $b$:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">remedian</span> <span class="p">[</span><span class="nv">b</span> <span class="nv">coll</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">coll</span>
+</span><span class='line'>       <span class="p">(</span><span class="nf">remedian-with-leftovers</span> <span class="nv">b</span><span class="p">)</span>
+</span><span class='line'>       <span class="p">(</span><span class="nf">weight-leftovers</span> <span class="nv">b</span><span class="p">)</span>
+</span><span class='line'>       <span class="p">(</span><span class="nf">weighted-median</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The remedian is fun, but in practice I prefer to use the approximate quantile methods that were invented a few years later and presented in <a href="http://www.cs.umd.edu/~samir/498/manku.pdf">Approximate Medians and other Quantiles in One Pass and with Limited Memory by Manku, Rajagopalan, and Lindsay</a> (1998).  There&rsquo;s a high-quality implementation you can use in Clojure via Java interop in Parallel Colt&rsquo;s <a href="http://incanter.org/docs/parallelcolt/api/cern/jet/stat/tdouble/quantile/DoubleQuantileFinderFactory.html">DoubleQuantileFinderFactory</a>.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Matt Adereth</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-09-29T09:03:00-07:00" pubdate data-updated="true">Sep 29<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/algorithms/'>algorithms</a>, <a class='category' href='/blog/categories/clojure/'>clojure</a>, <a class='category' href='/blog/categories/math/'>math</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://adereth.github.io/blog/2014/09/29/computing-the-remedian-in-clojure/" data-via="adereth" data-counturl="http://adereth.github.io/blog/2014/09/29/computing-the-remedian-in-clojure/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/08/14/typing-qwerty-on-a-dvorak-keyboard/" title="Previous Post: Typing Qwerty on a Dvorak Keyboard">&laquo; Typing Qwerty on a Dvorak Keyboard</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/10/12/silvermans-mode-detection-method-explained/" title="Next Post: Silverman's Mode Estimation Method Explained">Silverman's Mode Estimation Method Explained &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <p>
+  <center><img src="/images/aleph.png"/></center>
+  <a href="http://adereth.github.io" alt="Home"><h1>Adereth's Blog</h1></a>
+
+  <ul id="recent_posts">
+      <li class="post">
+	<a href="http://adereth.github.io"><i class="fa fa-home fa-fw"></i> Home</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.github.io/about/"><i class="fa fa-user fa-fw"></i> About Me</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.github.io/atom.xml"><i class="fa fa-rss fa-fw"></i> Feed</a>
+      </li>
+  </ul>
+
+  <h1>Connect</h1>
+
+  <ul id="recent_posts">
+      <li class="post">
+	<a href="https://twitter.com/adereth"><i class="fa fa-twitter fa-fw"></i> Twitter</a>
+      </li>
+      <li class="post">
+	<a href="https://github.com/adereth"><i class="fa fa-github fa-fw"></i> GitHub</a>
+      </li>
+      <li class="post">
+	<a href="http://www.linkedin.com/in/adereth/"><i class="fa fa-linkedin fa-fw"></i> LinkedIn</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.tumblr.com/"><i class="fa fa-tumblr fa-fw"></i> Tumblr</a>
+      </li>
+  </ul>
+
+
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/12/06/writing-a-halite-bot-in-clojure/">Writing a Halite Bot in Clojure</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too/">Bag of Little Bootstraps Presentation at PWL SF</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/20/visualizing-girl-talk-with-clojure-and-d3-dot-js/">Visualizing Girl Talk: Parsing with Clojure's Instaparse</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/19/clojure-slash-conj-talk-on-3d-printing-keyboards/">Clojure/conj Talk on 3D Printing Keyboards</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love/">Presentation on The Mode Tree at Papers We Love Too</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/17/sa-profile-keys-on-a-kinesis-advantage/">SA Profile Keys on a Kinesis Advantage</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/02/poisonous-shapes/">Poisonous Shapes in Algebra and Graph Theory</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/12/silvermans-mode-detection-method-explained/">Silverman's Mode Estimation Method Explained</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/29/computing-the-remedian-in-clojure/">Computing the Remedian in Clojure</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/14/typing-qwerty-on-a-dvorak-keyboard/">Typing Qwerty on a Dvorak Keyboard</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/adereth">@adereth</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'adereth',
+            count: 10,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - Matt Adereth -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = '1overn';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://adereth.github.io/blog/2014/09/29/computing-the-remedian-in-clojure/';
+        var disqus_url = 'http://adereth.github.io/blog/2014/09/29/computing-the-remedian-in-clojure/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

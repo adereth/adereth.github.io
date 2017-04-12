@@ -1,0 +1,593 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>treemap with github colors - adereth</title>
+  <meta name="author" content="Matt Adereth">
+
+  
+  <meta name="description" content="Treemap With Github Colors Dec 23rd, 2013 kbar13 suggested it might be cool to use GitHub&rsquo;s colors for each language in the treemap. &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://adereth.github.io/oneoff/treemap-with-github-colors/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+   <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="adereth" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic|Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+<link href="//fonts.googleapis.com/css?family=Crimson+Text:400italic,400,600italic,600,700italic,700" rel="stylesheet" type="text/css">
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ TeX: { extensions: ["color.js"] }});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript"
+        src="http://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-44572622-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <!-- <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:adereth.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav> -->
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Treemap With Github Colors</h1>
+    <p class="meta">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-23T11:15:00-08:00" pubdate data-updated="true">Dec 23<span>rd</span>, 2013</time></p>
+  </header>
+  
+  <p>kbar13 suggested it might be cool to use GitHub&rsquo;s colors for each language in the treemap.  Fortunately, <a href="https://github.com/doda/github-language-colors">doda/github-language-colors</a> has this mapping readily available, so it was easy to try&hellip;</p>
+
+<script type="text/javascript" src="http://mbostock.github.com/d3/d3.min.js"></script>
+
+
+<p>Here are the top 1000 repos, using stars for the size and language for the color:</p>
+
+<!-- CSS Styles: -->
+
+
+<div>
+  <style type="text/css">
+.node {
+  border: solid 1px white;
+  font: 8px Lato;
+  line-height: 12px;
+  overflow: hidden;
+  position: absolute;
+  text-indent: 2px;
+}
+
+.tooltip{
+    display: inline;
+    position: relative;
+}
+
+.tooltip:hover:after{
+    background: #333;
+    background: rgba(0,0,0,.8);
+    border-radius: 5px;
+    bottom: 26px;
+    color: #fff;
+    content: attr(title);
+    left: 20%;
+    padding: 5px 15px;
+    position: absolute;
+    z-index: 98;
+    width: 220px;
+}
+
+.tooltip:hover:before{
+    border: solid;
+    border-color: #333 transparent;
+    border-width: 6px 6px 0 6px;
+    bottom: 20px;
+    content: &#8220;&#8221;;
+    left: 50%;
+    position: absolute;
+    z-index: 99;
+}
+
+  </style>
+</div>
+
+
+<div id='tm'></div>
+
+
+
+
+<script type="text/javascript">
+
+//var color = d3.scale.category20();
+var color = {
+    "Arduino": "#bd79d1",
+    "Java": "#b07219",
+    "VHDL": "#543978",
+    "Scala": "#7dd3b0",
+    "Emacs Lisp": "#c065db",
+    "Delphi": "#b0ce4e",
+    "Ada": "#02f88c",
+    "VimL": "#199c4b",
+    "Perl": "#0298c3",
+    "Lua": "#fa1fa1",
+    "Rebol": "#358a5b",
+    "Verilog": "#848bf3",
+    "Factor": "#636746",
+    "Ioke": "#078193",
+    "R": "#198ce7",
+    "Erlang": "#949e0e",
+    "Nu": "#c9df40",
+    "AutoHotkey": "#6594b9",
+    "Clojure": "#db5855",
+    "Shell": "#5861ce",
+    "Assembly": "#a67219",
+    "Parrot": "#f3ca0a",
+    "C#": "#5a25a2",
+    "Turing": "#45f715",
+    "AppleScript": "#3581ba",
+    "Eiffel": "#946d57",
+    "Common Lisp": "#3fb68b",
+    "Dart": "#cccccc",
+    "SuperCollider": "#46390b",
+    "CoffeeScript": "#244776",
+    "XQuery": "#2700e2",
+    "Haskell": "#29b544",
+    "Racket": "#ae17ff",
+    "Elixir": "#6e4a7e",
+    "HaXe": "#346d51",
+    "Ruby": "#701516",
+    "Self": "#0579aa",
+    "Fantom": "#dbded5",
+    "Groovy": "#e69f56",
+    "C": "#555",
+    "JavaScript": "#f15501",
+    "D": "#fcd46d",
+    "ooc": "#b0b77e",
+    "C++": "#f34b7d",
+    "Dylan": "#3ebc27",
+    "Nimrod": "#37775b",
+    "Standard ML": "#dc566d",
+    "Objective-C": "#f15501",
+    "Nemerle": "#0d3c6e",
+    "Mirah": "#c7a938",
+    "Boo": "#d4bec1",
+    "Objective-J": "#ff0c5a",
+    "Rust": "#dea584",
+    "Prolog": "#74283c",
+    "Ecl": "#8a1267",
+    "Gosu": "#82937f",
+    "FORTRAN": "#4d41b1",
+    "ColdFusion": "#ed2cd6",
+    "OCaml": "#3be133",
+    "Fancy": "#7b9db4",
+    "Pure Data": "#f15501",
+    "Python": "#3581ba",
+    "Tcl": "#e4cc98",
+    "Arc": "#ca2afe",
+    "Puppet": "#cc5555",
+    "Io": "#a9188d",
+    "Max": "#ce279c",
+    "Go": "#8d04eb",
+    "ASP": "#6a40fd",
+    "Visual Basic": "#945db7",
+    "PHP": "#6e03c1",
+    "Scheme": "#1e4aec",
+    "Vala": "#3581ba",
+    "Smalltalk": "#596706",
+    "Matlab": "#bb92ac",
+    "C#": "#bb92af",
+    "CSS": "#000000"
+}
+
+var margin = {top: 10, right: 0, bottom: 10, left: 0},
+    width = $('.entry-title').width(),
+    height = 500;
+
+var treemap = d3.layout.treemap()
+    .size([width, height])
+    .sticky(true)
+    .value(function(d) { return d.Stars; });
+
+var div = d3.select("#tm").append("div")
+    .style("position", "relative")
+    .style("width", (width + margin.left + margin.right) + "px")
+    .style("height", (height + margin.top + margin.bottom) + "px")
+    .style("left", margin.left + "px")
+    .style("top", margin.top + "px");
+
+d3.csv("/data/top-1000-repos.20131219.csv", function(repos) {
+  treemap.nodes({"children": repos});
+
+  var node = div.datum(repos).selectAll(".node")
+    .data(treemap.nodes)
+    .enter()
+      .append("a")
+      .attr("href", function(d) { return d.children ? null : ("http://github.com/" + d.Repository); })
+      .attr("class", function(d) { return d.children ? null : "tooltip"; })
+      .attr("title", function(d) { return d.children ? null : "Repository: " + d.Repository + "\nLanguage: " + d.Language + "\nStars: " + d.Stars; })
+      .append("div")
+    .attr("class", "node")
+    .call(position)
+    .style("background", function(d) { return d.children ? null : color[d.Language]; });
+});
+
+function position() {
+  this.style("left", function(d) { return d.x + "px"; })
+      .style("top", function(d) { return d.y + "px"; })
+      .style("width", function(d) { return Math.max(0, d.dx - 1) + "px"; })
+      .style("height", function(d) { return Math.max(0, d.dy - 1) + "px"; });
+};
+
+</script>
+
+
+<p>Here are the top 5000 grouped by language:</p>
+
+<div id='tm2'></div>
+
+
+
+
+<script type="text/javascript">
+
+var treemap2 = d3.layout.treemap()
+    .size([width, height])
+    .sticky(true)
+    .value(function(d) {return d.children ? null : d.stargazers_count; });
+
+var div2 = d3.select("#tm2").append("div")
+    .style("position", "relative")
+    .style("width", (width + margin.left + margin.right) + "px")
+    .style("height", (height + margin.top + margin.bottom) + "px")
+    .style("left", margin.left + "px")
+    .style("top", margin.top + "px");
+
+d3.json("/data/lang-map.json", function(root) {
+  var node = div2.datum(root).selectAll(".node")
+      .data(treemap2.nodes)
+      .enter()
+      .append("a")
+      .attr("href", function(d) { return d.children ? null : ("http://github.com/" + d.user + "/" + d.name); })
+      .attr("class", function(d) { return d.children ? null : "tooltip"; })
+      .attr("title", function(d) { return d.children ? null : "Repository: " + d.user + "/" + d.name + "\nLanguage: " + d.language + "\nStars: " + d.stargazers_count; })
+
+      .append("div")
+      .attr("class", "node")
+      .call(position)
+      .style("background", function(d) { return d.children ? color[d.name] : null; });
+
+  d3.selectAll("input").on("change", function change() {
+    var value = this.value === "count"
+        ? function() { return 1; }
+        : function(d) { return d.size; };
+
+    node
+        .data(treemap.value(value).nodes)
+      .transition()
+        .duration(1500)
+        .call(position);
+  });
+});
+
+
+function position() {
+  this.style("left", function(d) { return d.x + "px"; })
+      .style("top", function(d) { return d.y + "px"; })
+      .style("width", function(d) { return Math.max(0, d.dx - 1) + "px"; })
+      .style("height", function(d) { return Math.max(0, d.dy - 1) + "px"; });
+};
+
+</script>
+
+
+  
+    <footer>
+      <p class="meta">
+        
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-23T11:15:00-08:00" pubdate data-updated="true">Dec 23<span>rd</span>, 2013</time>
+        
+      </p>
+      
+        <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://adereth.github.io/oneoff/treemap-with-github-colors/index.html" data-via="adereth" data-counturl="http://adereth.github.io/oneoff/treemap-with-github-colors/index.html" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <p>
+  <center><img src="/images/aleph.png"/></center>
+  <a href="http://adereth.github.io" alt="Home"><h1>Adereth's Blog</h1></a>
+
+  <ul id="recent_posts">
+      <li class="post">
+	<a href="http://adereth.github.io"><i class="fa fa-home fa-fw"></i> Home</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.github.io/about/"><i class="fa fa-user fa-fw"></i> About Me</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.github.io/atom.xml"><i class="fa fa-rss fa-fw"></i> Feed</a>
+      </li>
+  </ul>
+
+  <h1>Connect</h1>
+
+  <ul id="recent_posts">
+      <li class="post">
+	<a href="https://twitter.com/adereth"><i class="fa fa-twitter fa-fw"></i> Twitter</a>
+      </li>
+      <li class="post">
+	<a href="https://github.com/adereth"><i class="fa fa-github fa-fw"></i> GitHub</a>
+      </li>
+      <li class="post">
+	<a href="http://www.linkedin.com/in/adereth/"><i class="fa fa-linkedin fa-fw"></i> LinkedIn</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.tumblr.com/"><i class="fa fa-tumblr fa-fw"></i> Tumblr</a>
+      </li>
+  </ul>
+
+
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/12/06/writing-a-halite-bot-in-clojure/">Writing a Halite Bot in Clojure</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too/">Bag of Little Bootstraps Presentation at PWL SF</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/20/visualizing-girl-talk-with-clojure-and-d3-dot-js/">Visualizing Girl Talk: Parsing with Clojure's Instaparse</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/19/clojure-slash-conj-talk-on-3d-printing-keyboards/">Clojure/conj Talk on 3D Printing Keyboards</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love/">Presentation on The Mode Tree at Papers We Love Too</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/17/sa-profile-keys-on-a-kinesis-advantage/">SA Profile Keys on a Kinesis Advantage</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/02/poisonous-shapes/">Poisonous Shapes in Algebra and Graph Theory</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/12/silvermans-mode-detection-method-explained/">Silverman's Mode Estimation Method Explained</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/29/computing-the-remedian-in-clojure/">Computing the Remedian in Clojure</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/14/typing-qwerty-on-a-dvorak-keyboard/">Typing Qwerty on a Dvorak Keyboard</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/adereth">@adereth</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'adereth',
+            count: 10,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - Matt Adereth -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = '1overn';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

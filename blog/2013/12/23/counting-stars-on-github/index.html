@@ -1,0 +1,1187 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Counting Stars on GitHub - adereth</title>
+  <meta name="author" content="Matt Adereth">
+
+  
+  <meta name="description" content="I&rsquo;ve been working on a nerd ethnography project with the GitHub API. There&rsquo;s so much fun data to play with there that it&rsquo;s &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://adereth.github.io/blog/2013/12/23/counting-stars-on-github/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+   <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="adereth" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic|Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+<link href="//fonts.googleapis.com/css?family=Crimson+Text:400italic,400,600italic,600,700italic,700" rel="stylesheet" type="text/css">
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ TeX: { extensions: ["color.js"] }});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript"
+        src="http://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-44572622-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <!-- <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:adereth.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav> -->
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Counting Stars on GitHub</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-23T08:10:00-08:00" pubdate data-updated="true">Dec 23<span>rd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><script type="text/javascript" src="http://mbostock.github.com/d3/d3.min.js"></script>
+
+
+<p>I&rsquo;ve been working on a nerd ethnography project with the <a href="http://developer.github.com/v3/">GitHub API</a>.  There&rsquo;s so much fun data to play with there that it&rsquo;s inevitable that I&rsquo;ll get a little distracted&hellip;</p>
+
+<p>One distraction was the realization that I could use the search API to get a massive list of the top repos ordered by star count.  Once I started looking at the results, I realized that star data is an interesting alternative metric for evaluating language popularity.  Instead of looking at which languages people are actually writing new projects using, we can see which languages are used for the most popular projects.</p>
+
+<h2>What are stars?</h2>
+
+<p>In August 2012, GitHub <a href="https://github.com/blog/1204-notifications-stars">announced</a> a new version of their notification system that allowed users to easily mark a repository as interesting by &ldquo;starring&rdquo; it:</p>
+
+<p><img src="/images/github-star-ui.png" alt="GitHub star UI" /></p>
+
+<p>Stars are essentially lightweight bookmarks that are publicly visible.  Even though they were introduced just over a year ago, all &ldquo;watches&rdquo; were converted to stars so there&rsquo;s plenty of data.</p>
+
+<h2>Which are the most starred repos?</h2>
+
+<p>Let&rsquo;s start by looking at the top 20:</p>
+
+<table>
+<thead>
+<tr>
+<th> Rank </th>
+<th> Repository </th>
+<th> Language </th>
+<th> Stars</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> 1 </td>
+<td> <a href="http://github.com/twbs/bootstrap">twbs/bootstrap</a> </td>
+<td> JavaScript </td>
+<td> 62111</td>
+</tr>
+<tr>
+<td> 2 </td>
+<td> <a href="http://github.com/jquery/jquery">jquery/jquery</a> </td>
+<td> JavaScript </td>
+<td> 27082</td>
+</tr>
+<tr>
+<td> 3 </td>
+<td> <a href="http://github.com/joyent/node">joyent/node</a> </td>
+<td> JavaScript </td>
+<td> 26352</td>
+</tr>
+<tr>
+<td> 4 </td>
+<td> <a href="http://github.com/h5bp/html5-boilerplate">h5bp/html5-boilerplate</a> </td>
+<td> CSS </td>
+<td> 23355</td>
+</tr>
+<tr>
+<td> 5 </td>
+<td> <a href="http://github.com/mbostock/d3">mbostock/d3</a> </td>
+<td> JavaScript </td>
+<td> 20715</td>
+</tr>
+<tr>
+<td> 6 </td>
+<td> <a href="http://github.com/rails/rails">rails/rails</a> </td>
+<td> Ruby </td>
+<td> 20284</td>
+</tr>
+<tr>
+<td> 7 </td>
+<td> <a href="http://github.com/FortAwesome/Font-Awesome">FortAwesome/Font-Awesome</a> </td>
+<td> CSS </td>
+<td> 19506</td>
+</tr>
+<tr>
+<td> 8 </td>
+<td> <a href="http://github.com/bartaz/impress.js">bartaz/impress.js</a> </td>
+<td> JavaScript </td>
+<td> 18637</td>
+</tr>
+<tr>
+<td> 9 </td>
+<td> <a href="http://github.com/angular/angular.js">angular/angular.js</a> </td>
+<td> JavaScript </td>
+<td> 17994</td>
+</tr>
+<tr>
+<td> 10 </td>
+<td> <a href="http://github.com/jashkenas/backbone">jashkenas/backbone</a> </td>
+<td> JavaScript </td>
+<td> 16502</td>
+</tr>
+<tr>
+<td> 11 </td>
+<td> <a href="http://github.com/Homebrew/homebrew">Homebrew/homebrew</a> </td>
+<td> Ruby </td>
+<td> 15065</td>
+</tr>
+<tr>
+<td> 12 </td>
+<td> <a href="http://github.com/zurb/foundation">zurb/foundation</a> </td>
+<td> JavaScript </td>
+<td> 14944</td>
+</tr>
+<tr>
+<td> 13 </td>
+<td> <a href="http://github.com/blueimp/jQuery-File-Upload">blueimp/jQuery-File-Upload</a> </td>
+<td> JavaScript </td>
+<td> 14312</td>
+</tr>
+<tr>
+<td> 14 </td>
+<td> <a href="http://github.com/harvesthq/chosen">harvesthq/chosen</a> </td>
+<td> JavaScript </td>
+<td> 14232</td>
+</tr>
+<tr>
+<td> 15 </td>
+<td> <a href="http://github.com/mrdoob/three.js">mrdoob/three.js</a> </td>
+<td> JavaScript </td>
+<td> 13686</td>
+</tr>
+<tr>
+<td> 16 </td>
+<td> <a href="http://github.com/vhf/free-programming-books">vhf/free-programming-books</a> </td>
+<td> <em>Unknown</em> </td>
+<td> 13658</td>
+</tr>
+<tr>
+<td> 17 </td>
+<td> <a href="http://github.com/adobe/brackets">adobe/brackets</a> </td>
+<td> JavaScript </td>
+<td> 13557</td>
+</tr>
+<tr>
+<td> 18 </td>
+<td> <a href="http://github.com/robbyrussell/oh-my-zsh">robbyrussell/oh-my-zsh</a> </td>
+<td> Shell </td>
+<td> 13337</td>
+</tr>
+<tr>
+<td> 19 </td>
+<td> <a href="http://github.com/jekyll/jekyll">jekyll/jekyll</a> </td>
+<td> Ruby </td>
+<td> 13283</td>
+</tr>
+<tr>
+<td> 20 </td>
+<td> <a href="http://github.com/github/gitignore">github/gitignore</a> </td>
+<td> <em>Unknown</em> </td>
+<td> 13128</td>
+</tr>
+</tbody>
+</table>
+
+
+<br/>
+
+
+<p>If you want to play with the data yourself, I&rsquo;ve put a cache of the top 5000 repositories <a href="/data/top-5000-repos.20131219.csv">here</a>.  I&rsquo;ve also posted the Clojure code I wrote to collect the data at <a href="https://github.com/adereth/counting-stars">adereth/counting-stars</a>.</p>
+
+<h2>Which languages have the top spots?</h2>
+
+<p>In <a href="http://adambard.com/blog/top-github-languages-for-2013-so-far/">Adam Bard&rsquo;s Top Github Languages for 2013 (so far)</a>, he counted repo creation and found that JavaScript and Ruby were pretty close.  The top star counts tell a very different story, with JavaScript dominating 7 of the top 10 spots.  CSS was in 11th place in his analysis, but it&rsquo;s 2 of the top 10 spots.</p>
+
+<p>Observing that 7 of the top 10 spots are JavaScript gives a sense for both the volume and the relative ranking of JavaScript in that range of the leaderboard, but just seeing that another language is 50 of the top 5000 spots doesn&rsquo;t give nearly as much color.</p>
+
+<p>One approach is to look at the number of repos in different ranges for each language:</p>
+
+<table>
+<thead>
+<tr>
+<th>Language </th>
+<th> 1-10 </th>
+<th> 1-100 </th>
+<th> 1-1000 </th>
+<th> 1-5000 </th>
+<th> Top Repository</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JavaScript </td>
+<td> 7 </td>
+<td> 54 </td>
+<td> 385 </td>
+<td> 1605 </td>
+<td> <a href="http://github.com/twbs/bootstrap">twbs/bootstrap</a> (1)</td>
+</tr>
+<tr>
+<td>CSS </td>
+<td> 2 </td>
+<td> 8 </td>
+<td> 41 </td>
+<td> 174 </td>
+<td> <a href="http://github.com/h5bp/html5-boilerplate">h5bp/html5-boilerplate</a> (4)</td>
+</tr>
+<tr>
+<td>Ruby </td>
+<td> 1 </td>
+<td> 9 </td>
+<td> 153 </td>
+<td> 786 </td>
+<td> <a href="http://github.com/rails/rails">rails/rails</a> (6)</td>
+</tr>
+<tr>
+<td>Python </td>
+<td>  </td>
+<td> 5 </td>
+<td> 64 </td>
+<td> 420 </td>
+<td> <a href="http://github.com/django/django">django/django</a> (44)</td>
+</tr>
+<tr>
+<td><em>Unknown</em> </td>
+<td>  </td>
+<td> 5 </td>
+<td> 30 </td>
+<td> 138 </td>
+<td> <a href="http://github.com/vhf/free-programming-books">vhf/free-programming-books</a> (15)</td>
+</tr>
+<tr>
+<td>C++ </td>
+<td>  </td>
+<td> 4 </td>
+<td> 22 </td>
+<td> 108 </td>
+<td> <a href="http://github.com/textmate/textmate">textmate/textmate</a> (35)</td>
+</tr>
+<tr>
+<td>PHP </td>
+<td>  </td>
+<td> 3 </td>
+<td> 38 </td>
+<td> 248 </td>
+<td> <a href="http://github.com/symfony/symfony">symfony/symfony</a> (58)</td>
+</tr>
+<tr>
+<td>Shell </td>
+<td>  </td>
+<td> 3 </td>
+<td> 19 </td>
+<td> 89 </td>
+<td> <a href="http://github.com/robbyrussell/oh-my-zsh">robbyrussell/oh-my-zsh</a> (18)</td>
+</tr>
+<tr>
+<td>Objective-C </td>
+<td>  </td>
+<td> 2 </td>
+<td> 89 </td>
+<td> 495 </td>
+<td> <a href="http://github.com/AFNetworking/AFNetworking">AFNetworking/AFNetworking</a> (30)</td>
+</tr>
+<tr>
+<td>C </td>
+<td>  </td>
+<td> 2 </td>
+<td> 31 </td>
+<td> 185 </td>
+<td> <a href="http://github.com/torvalds/linux">torvalds/linux</a> (25)</td>
+</tr>
+<tr>
+<td>Go </td>
+<td>  </td>
+<td> 2 </td>
+<td> 13 </td>
+<td> 61 </td>
+<td> <a href="http://github.com/dotcloud/docker">dotcloud/docker</a> (45)</td>
+</tr>
+<tr>
+<td>Java </td>
+<td>  </td>
+<td> 1 </td>
+<td> 32 </td>
+<td> 255 </td>
+<td> <a href="http://github.com/nathanmarz/storm">nathanmarz/storm</a> (56)</td>
+</tr>
+<tr>
+<td>VimL </td>
+<td>  </td>
+<td> 1 </td>
+<td> 23 </td>
+<td> 66 </td>
+<td> <a href="http://github.com/mathiasbynens/dotfiles">mathiasbynens/dotfiles</a> (57)</td>
+</tr>
+<tr>
+<td>CoffeeScript </td>
+<td>  </td>
+<td> 1 </td>
+<td> 22 </td>
+<td> 80 </td>
+<td> <a href="http://github.com/jashkenas/coffee-script">jashkenas/coffee-script</a> (43)</td>
+</tr>
+<tr>
+<td>Scala </td>
+<td>  </td>
+<td>  </td>
+<td> 13 </td>
+<td> 46 </td>
+<td> <a href="http://github.com/playframework/playframework">playframework/playframework</a> (178)</td>
+</tr>
+<tr>
+<td>C# </td>
+<td>  </td>
+<td>  </td>
+<td> 8 </td>
+<td> 65 </td>
+<td> <a href="http://github.com/SignalR/SignalR">SignalR/SignalR</a> (205)</td>
+</tr>
+<tr>
+<td>Clojure </td>
+<td>  </td>
+<td>  </td>
+<td> 2 </td>
+<td> 37 </td>
+<td> <a href="http://github.com/technomancy/leiningen">technomancy/leiningen</a> (361)</td>
+</tr>
+<tr>
+<td>Perl </td>
+<td>  </td>
+<td>  </td>
+<td> 2 </td>
+<td> 26 </td>
+<td> <a href="http://github.com/sitaramc/gitolite">sitaramc/gitolite</a> (138)</td>
+</tr>
+<tr>
+<td>ActionScript </td>
+<td>  </td>
+<td>  </td>
+<td> 2 </td>
+<td> 10 </td>
+<td> <a href="http://github.com/mozilla/shumway">mozilla/shumway</a> (606)</td>
+</tr>
+<tr>
+<td>Emacs Lisp </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 20 </td>
+<td> <a href="http://github.com/technomancy/emacs-starter-kit">technomancy/emacs-starter-kit</a> (477)</td>
+</tr>
+<tr>
+<td>Erlang </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 15 </td>
+<td> <a href="http://github.com/erlang/otp">erlang/otp</a> (568)</td>
+</tr>
+<tr>
+<td>Haskell </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 12 </td>
+<td> <a href="http://github.com/jgm/pandoc">jgm/pandoc</a> (740)</td>
+</tr>
+<tr>
+<td>TypeScript </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 4 </td>
+<td> <a href="http://github.com/bitcoin/bitcoin">bitcoin/bitcoin</a> (161)</td>
+</tr>
+<tr>
+<td>Assembly </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 3 </td>
+<td> <a href="http://github.com/jmechner/Prince-of-Persia-Apple-II">jmechner/Prince-of-Persia-Apple-II</a> (269)</td>
+</tr>
+<tr>
+<td>Elixir </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 2 </td>
+<td> <a href="http://github.com/elixir-lang/elixir">elixir-lang/elixir</a> (666)</td>
+</tr>
+<tr>
+<td>Objective-J </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 2 </td>
+<td> <a href="http://github.com/cappuccino/cappuccino">cappuccino/cappuccino</a> (667)</td>
+</tr>
+<tr>
+<td>Rust </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> <a href="http://github.com/mozilla/rust">mozilla/rust</a> (225)</td>
+</tr>
+<tr>
+<td>Vala </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> <a href="http://github.com/p-e-w/finalterm">p-e-w/finalterm</a> (282)</td>
+</tr>
+<tr>
+<td>Julia </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> <a href="http://github.com/JuliaLang/julia">JuliaLang/julia</a> (356)</td>
+</tr>
+<tr>
+<td>Visual Basic </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> 1 </td>
+<td> <a href="http://github.com/bmatzelle/gow">bmatzelle/gow</a> (800)</td>
+</tr>
+<tr>
+<td>TeX </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 6 </td>
+<td> <a href="http://github.com/ieure/sicp">ieure/sicp</a> (2441)</td>
+</tr>
+<tr>
+<td>R </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 5 </td>
+<td> <a href="http://github.com/johnmyleswhite/ML_for_Hackers">johnmyleswhite/ML_for_Hackers</a> (2125)</td>
+</tr>
+<tr>
+<td>Lua </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 4 </td>
+<td> <a href="http://github.com/leafo/moonscript">leafo/moonscript</a> (3351)</td>
+</tr>
+<tr>
+<td>PowerShell </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 3 </td>
+<td> <a href="http://github.com/chocolatey/chocolatey">chocolatey/chocolatey</a> (1580)</td>
+</tr>
+<tr>
+<td>Prolog </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 3 </td>
+<td> <a href="http://github.com/onyxfish/csvkit">onyxfish/csvkit</a> (3498)</td>
+</tr>
+<tr>
+<td>XSLT </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 2 </td>
+<td> <a href="http://github.com/wakaleo/game-of-life">wakaleo/game-of-life</a> (1093)</td>
+</tr>
+<tr>
+<td>Matlab </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 2 </td>
+<td> <a href="http://github.com/zk00006/OpenTLD">zk00006/OpenTLD</a> (1292)</td>
+</tr>
+<tr>
+<td>OCaml </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 2 </td>
+<td> <a href="http://github.com/MLstate/opalang">MLstate/opalang</a> (1380)</td>
+</tr>
+<tr>
+<td>Dart </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 2 </td>
+<td> <a href="http://github.com/dart-lang/spark">dart-lang/spark</a> (1463)</td>
+</tr>
+<tr>
+<td>Groovy </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 2 </td>
+<td> <a href="http://github.com/Netflix/asgard">Netflix/asgard</a> (1489)</td>
+</tr>
+<tr>
+<td>Lasso </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/symfony/symfony-docs">symfony/symfony-docs</a> (2047)</td>
+</tr>
+<tr>
+<td>LiveScript </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/gkz/LiveScript">gkz/LiveScript</a> (2226)</td>
+</tr>
+<tr>
+<td>Scheme </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/eholk/harlan">eholk/harlan</a> (2648)</td>
+</tr>
+<tr>
+<td>Common Lisp </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/google/lisp-koans">google/lisp-koans</a> (2889)</td>
+</tr>
+<tr>
+<td>XML </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/kswedberg/jquery-tmbundle">kswedberg/jquery-tmbundle</a> (2972)</td>
+</tr>
+<tr>
+<td>Mirah </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/mirah/mirah">mirah/mirah</a> (2985)</td>
+</tr>
+<tr>
+<td>Arc </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/arclanguage/anarki">arclanguage/anarki</a> (3389)</td>
+</tr>
+<tr>
+<td>DOT </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/cplusplus/draft">cplusplus/draft</a> (3583)</td>
+</tr>
+<tr>
+<td>Racket </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/plt/racket">plt/racket</a> (3761)</td>
+</tr>
+<tr>
+<td>F# </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/fsharp/fsharp">fsharp/fsharp</a> (4518)</td>
+</tr>
+<tr>
+<td>D </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/D-Programming-Language/phobos">D-Programming-Language/phobos</a> (4719)</td>
+</tr>
+<tr>
+<td>Ragel in Ruby Host </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/jgarber/redcloth">jgarber/redcloth</a> (4829)</td>
+</tr>
+<tr>
+<td>Puppet </td>
+<td>  </td>
+<td>  </td>
+<td>  </td>
+<td> 1 </td>
+<td> <a href="http://github.com/ansible/ansible-examples">ansible/ansible-examples</a> (4979)</td>
+</tr>
+</tbody>
+</table>
+
+
+<br/>
+
+
+<p>The table is interesting, but it still doesn&rsquo;t give us a good sense for how the middle languages (C#, Scala, Clojure, Go) compare.  It also reveals that there are different star distributions within the languages.  For instance, CSS makes a showing in the top 10 but it has way fewer representatives (174) in the top 5000 than PHP (248), Objective C (495), or Java (255).</p>
+
+<p>Looking at the top repo for each language also exposes a weakness in the methodology: GitHub&rsquo;s language identification isn&rsquo;t perfect and there are number of polyglot projects.  The top Java repo is <a href="http://github.com/nathanmarz/storm">Storm</a>, which uses enough Clojure (20.1% by GitHub&rsquo;s measure) to make this identification questionable when you take into account Clojure&rsquo;s conciseness over Java&rsquo;s.</p>
+
+<h2>What about star counts?</h2>
+
+<p>Looking at the results after ranking obscures the actual distribution of stars.  Using a <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.36.6685&amp;rep=rep1&amp;type=pdf">squarified treemap</a> with star count for the size and no hierarchy is a compact way of visualizing the ranking while exposing details about the absolute popularity of each repo.  The squarified treemap algorithm roughly maintains the order going from one corner to the other.</p>
+
+<p>Here are the top 1000 repos, using stars for the size and language for the color:</p>
+
+<p><em>(Language and repository name shown on mouseover, click to visit repository.  A bit of a fail on touch devices right now.)</em></p>
+
+<div id='tm'></div>
+
+
+
+
+<!-- CSS Styles: -->
+
+
+<div>
+  <style type="text/css">
+.node {
+  border: solid 1px white;
+  font: 8px Lato;
+  line-height: 12px;
+  overflow: hidden;
+  position: absolute;
+  text-indent: 2px;
+}
+
+.tooltip{
+    display: inline;
+    position: relative;
+}
+
+.tooltip:hover:after{
+    background: #333;
+    background: rgba(0,0,0,.8);
+    border-radius: 5px;
+    bottom: 26px;
+    color: #fff;
+    content: attr(title);
+    left: 20%;
+    padding: 5px 15px;
+    position: absolute;
+    z-index: 98;
+    width: 220px;
+}
+
+.tooltip:hover:before{
+    border: solid;
+    border-color: #333 transparent;
+    border-width: 6px 6px 0 6px;
+    bottom: 20px;
+    content: &#8220;&#8221;;
+    left: 50%;
+    position: absolute;
+    z-index: 99;
+}
+
+  </style>
+</div>
+
+
+
+
+<script type="text/javascript">
+
+var color = d3.scale.category20();
+
+var margin = {top: 10, right: 0, bottom: 10, left: 0},
+    width = $('.entry-content').width(),
+    height = 500;
+
+var treemap = d3.layout.treemap()
+    .size([width, height])
+    .sticky(true)
+    .value(function(d) { return d.Stars; });
+
+var div = d3.select("#tm").append("div")
+    .style("position", "relative")
+    .style("width", (width + margin.left + margin.right) + "px")
+    .style("height", (height + margin.top + margin.bottom) + "px")
+    .style("left", margin.left + "px")
+    .style("top", margin.top + "px");
+
+d3.csv("/data/top-1000-repos.20131219.csv", function(repos) {
+  treemap.nodes({"children": repos});
+
+  var node = div.datum(repos).selectAll(".node")
+    .data(treemap.nodes)
+    .enter()
+      .append("a")
+      .attr("href", function(d) { return d.children ? null : ("http://github.com/" + d.Repository); })
+      .attr("class", function(d) { return d.children ? null : "tooltip"; })
+      .attr("title", function(d) { return d.children ? null : "Repository: " + d.Repository + "\nLanguage: " + d.Language + "\nStars: " + d.Stars; })
+      .append("div")
+    .attr("class", "node")
+    .call(position)
+    .style("background", function(d) { return d.children ? null : color(d.Language); });
+});
+
+function position() {
+  this.style("left", function(d) { return d.x + "px"; })
+      .style("top", function(d) { return d.y + "px"; })
+      .style("width", function(d) { return Math.max(0, d.dx - 1) + "px"; })
+      .style("height", function(d) { return Math.max(0, d.dy - 1) + "px"; });
+};
+
+</script>
+
+
+<p>Despite being a little chaotic, we can start to see some of the details of the distributions.  It still suffers from being difficult to glean information about the middling languages.  The comparisons become a little easier if we group the boxes by language.  That&rsquo;s pretty easy, since that&rsquo;s really the intended usage of treemaps.</p>
+
+<p>Here are the top 5000 grouped by language:</p>
+
+<div id='tm2'></div>
+
+
+
+
+<script type="text/javascript">
+
+var treemap2 = d3.layout.treemap()
+    .size([width, height])
+    .sticky(true)
+    .value(function(d) {return d.children ? null : d.stargazers_count; });
+
+var div2 = d3.select("#tm2").append("div")
+    .style("position", "relative")
+    .style("width", (width + margin.left + margin.right) + "px")
+    .style("height", (height + margin.top + margin.bottom) + "px")
+    .style("left", margin.left + "px")
+    .style("top", margin.top + "px");
+
+d3.json("/data/lang-map.json", function(root) {
+  var node = div2.datum(root).selectAll(".node")
+      .data(treemap2.nodes)
+      .enter()
+      .append("a")
+      .attr("href", function(d) { return d.children ? null : ("http://github.com/" + d.user + "/" + d.name); })
+      .attr("class", function(d) { return d.children ? null : "tooltip"; })
+      .attr("title", function(d) { return d.children ? null : "Repository: " + d.user + "/" + d.name + "\nLanguage: " + d.language + "\nStars: " + d.stargazers_count; })
+
+      .append("div")
+      .attr("class", "node")
+      .call(position)
+      .style("background", function(d) { return d.children ? color(d.name) : null; });
+
+  d3.selectAll("input").on("change", function change() {
+    var value = this.value === "count"
+        ? function() { return 1; }
+        : function(d) { return d.size; };
+
+    node
+        .data(treemap.value(value).nodes)
+      .transition()
+        .duration(1500)
+        .call(position);
+  });
+});
+
+
+function position() {
+  this.style("left", function(d) { return d.x + "px"; })
+      .style("top", function(d) { return d.y + "px"; })
+      .style("width", function(d) { return Math.max(0, d.dx - 1) + "px"; })
+      .style("height", function(d) { return Math.max(0, d.dy - 1) + "px"; });
+};
+
+</script>
+
+
+<p>Honestly, I&rsquo;m not really in love with this visualization, but it was a fun experiment.  I have some ideas for more effective representations, but I need to work on my d3.js-fu.  Hopefully it serves as an inspirational starting point for someone else&hellip;</p>
+
+<h2>Conclusion</h2>
+
+<p>Firstly, GitHub&rsquo;s API is really cool and can give you some insights that aren&rsquo;t exposed through their UI.  Like I said at the start of this post, I have another project that caused me to look at this API in the first place and I&rsquo;m really excited for the possibilities with this data.</p>
+
+<p>GitHub&rsquo;s current UI is really focused on using stars to expose what&rsquo;s trending and doesn&rsquo;t really make it easy to see the all-time greatest hits.  Perhaps the expectation is that everyone already knows these repos, but I certainly didn&rsquo;t and I&rsquo;ve discovered or rediscovered a few gems.  My <a href="/blog/2013/12/15/font-awesome-easter-egg/">previous post</a> came about because of my discovery of <a href="http://fontawesome.io/">Font Awesome</a> through this investigation.</p>
+
+<p>I&rsquo;ll close out with a couple questions (with no question marks) for the audience:</p>
+
+<ol>
+<li><p>Through this lens, JavaScript is <em>way</em> more popular than other metrics seem to indicate.  One hypothesis is that we all end up exposing things through the browser, so you end up doing something in JavaScript no matter what your language of choice is.  I&rsquo;m interested in other ideas and would also appreciate thoughts on how to validate them.</p></li>
+<li><p>It&rsquo;s not obvious to me how to best aggregate ranking data.  I&rsquo;d love to see someone else take this data and expose something more interesting.  Even if you&rsquo;re not going to do anything with the data, any ideas are appreciated.</p></li>
+</ol>
+
+
+<p><i class="fa fa-star fa-2x"></i></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Matt Adereth</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-23T08:10:00-08:00" pubdate data-updated="true">Dec 23<span>rd</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/clojure/'>clojure</a>, <a class='category' href='/blog/categories/data/'>data</a>, <a class='category' href='/blog/categories/github/'>github</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://adereth.github.io/blog/2013/12/23/counting-stars-on-github/" data-via="adereth" data-counturl="http://adereth.github.io/blog/2013/12/23/counting-stars-on-github/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/12/15/font-awesome-easter-egg/" title="Previous Post: Font Awesome Easter Egg">&laquo; Font Awesome Easter Egg</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/01/06/benchmarking-mathematica-on-the-raspberry-pi/" title="Next Post: Benchmarking Mathematica on the Raspberry Pi">Benchmarking Mathematica on the Raspberry Pi &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <p>
+  <center><img src="/images/aleph.png"/></center>
+  <a href="http://adereth.github.io" alt="Home"><h1>Adereth's Blog</h1></a>
+
+  <ul id="recent_posts">
+      <li class="post">
+	<a href="http://adereth.github.io"><i class="fa fa-home fa-fw"></i> Home</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.github.io/about/"><i class="fa fa-user fa-fw"></i> About Me</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.github.io/atom.xml"><i class="fa fa-rss fa-fw"></i> Feed</a>
+      </li>
+  </ul>
+
+  <h1>Connect</h1>
+
+  <ul id="recent_posts">
+      <li class="post">
+	<a href="https://twitter.com/adereth"><i class="fa fa-twitter fa-fw"></i> Twitter</a>
+      </li>
+      <li class="post">
+	<a href="https://github.com/adereth"><i class="fa fa-github fa-fw"></i> GitHub</a>
+      </li>
+      <li class="post">
+	<a href="http://www.linkedin.com/in/adereth/"><i class="fa fa-linkedin fa-fw"></i> LinkedIn</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.tumblr.com/"><i class="fa fa-tumblr fa-fw"></i> Tumblr</a>
+      </li>
+  </ul>
+
+
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/12/06/writing-a-halite-bot-in-clojure/">Writing a Halite Bot in Clojure</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too/">Bag of Little Bootstraps Presentation at PWL SF</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/20/visualizing-girl-talk-with-clojure-and-d3-dot-js/">Visualizing Girl Talk: Parsing with Clojure's Instaparse</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/19/clojure-slash-conj-talk-on-3d-printing-keyboards/">Clojure/conj Talk on 3D Printing Keyboards</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love/">Presentation on The Mode Tree at Papers We Love Too</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/17/sa-profile-keys-on-a-kinesis-advantage/">SA Profile Keys on a Kinesis Advantage</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/02/poisonous-shapes/">Poisonous Shapes in Algebra and Graph Theory</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/12/silvermans-mode-detection-method-explained/">Silverman's Mode Estimation Method Explained</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/29/computing-the-remedian-in-clojure/">Computing the Remedian in Clojure</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/14/typing-qwerty-on-a-dvorak-keyboard/">Typing Qwerty on a Dvorak Keyboard</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/adereth">@adereth</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'adereth',
+            count: 10,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - Matt Adereth -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = '1overn';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://adereth.github.io/blog/2013/12/23/counting-stars-on-github/';
+        var disqus_url = 'http://adereth.github.io/blog/2013/12/23/counting-stars-on-github/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

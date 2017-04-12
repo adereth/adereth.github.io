@@ -1,0 +1,633 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Benchmarking Mathematica on the Raspberry Pi - adereth</title>
+  <meta name="author" content="Matt Adereth">
+
+  
+  <meta name="description" content="I&rsquo;m really excited about Wolfram Research&rsquo;s announcement that Mathematica and the Wolfram language are now available for free on the &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://adereth.github.io/blog/2014/01/06/benchmarking-mathematica-on-the-raspberry-pi/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+   <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="adereth" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic|Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+<link href="//fonts.googleapis.com/css?family=Crimson+Text:400italic,400,600italic,600,700italic,700" rel="stylesheet" type="text/css">
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ TeX: { extensions: ["color.js"] }});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript"
+        src="http://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-44572622-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <!-- <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:adereth.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav> -->
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Benchmarking Mathematica on the Raspberry Pi</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-06T07:23:00-08:00" pubdate data-updated="true">Jan 6<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I&rsquo;m really excited about <a href="http://blog.wolfram.com/2013/11/21/putting-the-wolfram-language-and-mathematica-on-every-raspberry-pi/">Wolfram Research&rsquo;s announcement</a> that Mathematica and the Wolfram language are now available for free on the Raspberry Pi.</p>
+
+<p>In the announcement, Stephen Wolfram gave this disclaimer:</p>
+
+<blockquote><p>To be clear, the Raspberry Pi is perhaps 10 to 20 times slower at running the Wolfram Language than a typical current-model laptop (and sometimes even slower when it’s lacking architecture-specific internal libraries).</p></blockquote>
+
+<p>I&rsquo;ve got a laptop and a Raspberry Pi, so I decided to put this to the test.</p>
+
+<h2>MathematicaMark</h2>
+
+<p>Mathematica ships with <a href="http://reference.wolfram.com/mathematica/Benchmarking/tutorial/Benchmark.html">a benchmarking package called MathematicaMark</a>.  The latest version of the benchmark, <em>MathematicaMark9</em>, consists of 15 tests that use both numeric and symbolic functions.  The MathematicaMark score is the <a href="http://en.wikipedia.org/wiki/Geometric_mean">geometric mean</a> of the reciprocal of the timings, normalized against some reference system&rsquo;s timings:</p>
+
+<p>$$ \sqrt[15]{\prod_{i=1}^{15} \frac{t_{r,i}}{t_{s,i}}} $$</p>
+
+<p>&hellip;where $t_{s,i}$ is the timing for test $i$ on system $s$ and $r$ is the reference system.  For MathematicaMark9, the reference system is a 3.07 GHz Core i7-950 with 8 hyper-threaded cores running 64-bit Windows 7 Pro.  By definition, this system has a MathematicaMark9 score of 1.0.</p>
+
+<p>We can compare systems using the MathematicaMark score.  If a system were 10 to 20 times slower, we would expect its MathematicaMark score to be anywhere from 1/10<sup>th</sup> to 1/20<sup>th</sup> the value of the faster system.  The <a href="http://reference.wolfram.com/mathematica/Benchmarking/ref/Benchmark.html"><code>Benchmark[]</code> function</a> also provides the timings for the individual tests, so we can dig in and see which functions might be benefitting from the architecture-specific internal libraries Wolfram mentioned.</p>
+
+<h2>Raspberry Pi Configuration</h2>
+
+<p><img src="/images/rpi.png" width="350"></p>
+
+<p>I used a <a href="http://en.wikipedia.org/wiki/Raspberry_Pi#Specifications">Model B Raspberry Pi with 512MB of RAM</a>.  The tests were done after a fresh install of <a href="http://www.raspberrypi.org/archives/5580">NOOBS 1.3.3</a>, which includes Mathematica and the Wolfram Language installed by default.  <code>wolfram</code> was invoked from the commandline and nothing else was running on the system, most notably the X Window System and the <a href="http://reference.wolfram.com/mathematica/tutorial/UsingANotebookInterface.html">Mathematica Notebook interface</a>.</p>
+
+<h2>&ldquo;Typical Current-Model Laptop&rdquo;</h2>
+
+<p><img src="/images/mbp13.png" width="350"></p>
+
+<p>Mathematica ships with benchmark results for 15 different systems (including the reference system).  It&rsquo;s not clear which system to use for this comparison, so I conveniently chose my Early 2013 13-inch Retina MacBook Pro, which sports a 2.6 GHz Intel Core i5 processor (4 hyper-threaded cores) as a representative &ldquo;typical current-model laptop.&rdquo;  Based on the sea of glowing Apple logos I&rsquo;ve seen in the audiences of the conferences I attended this year, I think it&rsquo;s a fair selection.</p>
+
+<h2>MathematicaMark9 Scores</h2>
+
+<p>With the setup out of the way, let&rsquo;s take a look at the report comparing the MacBook, Raspberry Pi, and the 15 included systems:</p>
+
+<p><a href="/oneoff/mathematicamark9-20131231/"><img src="/images/MathematicaMark9.png" alt="MathematicaMark9 System Comparison Chart" /></a>
+<em>Click for full-sized report</em></p>
+
+<p>The MacBook Pro weighs in at a respectible 0.86, while the Raspberry Pi is actually getting rounded up to 0.01 from a true score of 0.005.  Running the benchmark takes 16 seconds on the laptop and <em>nearly 49 minutes</em> on the Raspberry Pi.</p>
+
+<p>Even the slowest machine in the included benchmarks score nearly 30x higher.  I don&rsquo;t think Wolfram would consider a pre-Intel Mac to be a &ldquo;typical current-model&rdquo; computer.  To see the numbers he&rsquo;s citing, we need to dig into the timings for the individual tests.</p>
+
+<h2>Performance on Individual Tests</h2>
+
+<p>The source for the 15 individual tests and the timings on a variety of reference systems is included in the <a href="/oneoff/mathematicamark9-20131231/#sources">full MathematicaMark9 Benchmark Report</a>.  Here are the timings on the Raspberry Pi and the Macbook Pro:</p>
+
+<table>
+<thead>
+<tr>
+<th>Test </th>
+<th align="right"> Pi Timing (s) </th>
+<th align="right"> Mac Timing (s) </th>
+<th align="right"> Ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Random Number Sort </td>
+<td align="right"> 25.13 </td>
+<td align="right"> 1.75 </td>
+<td align="right"> 14.4</td>
+</tr>
+<tr>
+<td>Digits of Pi </td>
+<td align="right"> 12.30 </td>
+<td align="right"> 0.78 </td>
+<td align="right"> 15.9</td>
+</tr>
+<tr>
+<td>Matrix Arithmetic </td>
+<td align="right"> 27.76 </td>
+<td align="right"> 1.25 </td>
+<td align="right"> 22.2</td>
+</tr>
+<tr>
+<td>Gamma Function </td>
+<td align="right"> 15.77 </td>
+<td align="right"> 0.63 </td>
+<td align="right"> 25.2</td>
+</tr>
+<tr>
+<td>Large Integer Multiplication </td>
+<td align="right"> 19.20 </td>
+<td align="right"> 0.58 </td>
+<td align="right"> 32.9</td>
+</tr>
+<tr>
+<td>Polynomial Expansion </td>
+<td align="right"> 4.55 </td>
+<td align="right"> 0.12 </td>
+<td align="right"> 36.4</td>
+</tr>
+<tr>
+<td>Numerical Integration </td>
+<td align="right"> 35.41 </td>
+<td align="right"> 0.96 </td>
+<td align="right"> 36.7</td>
+</tr>
+<tr>
+<td>Matrix Transpose </td>
+<td align="right"> 36.77 </td>
+<td align="right"> 0.95 </td>
+<td align="right"> 38.8</td>
+</tr>
+<tr>
+<td>Data Fitting </td>
+<td align="right"> 29.94 </td>
+<td align="right"> 0.66 </td>
+<td align="right"> 45.4</td>
+</tr>
+<tr>
+<td>Discrete Fourier Transform </td>
+<td align="right"> 79.28 </td>
+<td align="right"> 0.95 </td>
+<td align="right"> 83.4</td>
+</tr>
+<tr>
+<td>Elementary Functions </td>
+<td align="right"> 174.93 </td>
+<td align="right"> 1.31 </td>
+<td align="right"> 133.3</td>
+</tr>
+<tr>
+<td>Eigenvalues of a Matrix </td>
+<td align="right"> 136.87 </td>
+<td align="right"> 0.79 </td>
+<td align="right"> 174.1</td>
+</tr>
+<tr>
+<td>Singular Value Decomposition </td>
+<td align="right"> 433.08 </td>
+<td align="right"> 1.52 </td>
+<td align="right"> 284.0</td>
+</tr>
+<tr>
+<td>Solving a Linear System </td>
+<td align="right"> 745.53 </td>
+<td align="right"> 1.65 </td>
+<td align="right"> 452.1</td>
+</tr>
+<tr>
+<td>Matrix Multiplication </td>
+<td align="right"> 1136.51 </td>
+<td align="right"> 2.15 </td>
+<td align="right"> 528.9</td>
+</tr>
+</tbody>
+</table>
+
+
+<br/>
+
+
+<p>Sorting by the ratio reveals that there are definitely cases where the relative performance falls in the 10x &ndash; 20x range cited by Wolfram.</p>
+
+<p>It&rsquo;s interesting to note that the 4 worst performing tests by ratio are all linear algebra operations involving matrix decomposition or multiplication.  These are the types of operations that have probably gotten a lot of optimization love from Wolfram Research developers in the past because this is the area that potential users compare when deciding between Mathematica and its competitors, particularly Matlab.</p>
+
+<p>If you look through <a href="http://www.wolfram.com/mathematica/quick-revision-history.html">the revision history highlights of Mathematica</a>, you&rsquo;ll see that there was a sequence of releases where every version had at least one top-level mention of linear algebra performance improvements:</p>
+
+<ul>
+<li>Mathematica 5.0 &ndash; 2003
+
+<ul>
+<li>&ldquo;Record-breaking speed through processor-optimized numerical linear algebra&rdquo;</li>
+<li>&ldquo;Full support for high-speed sparse linear algebra&rdquo;</li>
+</ul>
+</li>
+<li>Mathematica 5.1 &ndash; 2004
+
+<ul>
+<li>&ldquo;Numerical linear algebra performance enhancements&rdquo;</li>
+</ul>
+</li>
+<li>Mathematica 5.2 &ndash; 2005
+
+<ul>
+<li>&ldquo;Multithreaded numerical linear algebra&rdquo;</li>
+<li>&ldquo;Vector-based performance enhancements&rdquo;</li>
+</ul>
+</li>
+</ul>
+
+
+<p>The 5<sup>th</sup> worst test by ratio, Elementary Functions, is also interesting to dig into.  Here&rsquo;s the source:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">Module</span><span class="p">[{</span><span class="nv">m1</span>, <span class="nv">m2</span><span class="p">}</span>,
+</span><span class='line'> <span class="nv">Timing</span><span class="p">[</span>
+</span><span class='line'>  <span class="nv">SeedRandom</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="c1">;</span>
+</span><span class='line'>  <span class="nv">m1</span> <span class="nb">= </span><span class="nv">RandomReal</span><span class="p">[{}</span>, <span class="p">{</span><span class="mf">2.2</span><span class="o">`</span><span class="nv">*</span><span class="o">^</span><span class="mi">6</span><span class="p">}]</span><span class="c1">;</span>
+</span><span class='line'>  <span class="nv">m2</span> <span class="nb">= </span><span class="nv">RandomReal</span><span class="p">[{}</span>, <span class="p">{</span><span class="mf">2.2</span><span class="o">`</span><span class="nv">*</span><span class="o">^</span><span class="mi">6</span><span class="p">}]</span><span class="c1">;</span>
+</span><span class='line'>  <span class="nv">Do</span><span class="p">[</span>
+</span><span class='line'>   <span class="nv">Exp</span><span class="p">[</span><span class="nv">m1</span><span class="p">]</span><span class="c1">;</span>
+</span><span class='line'>   <span class="nv">Sin</span><span class="p">[</span><span class="nv">m1</span><span class="p">]</span><span class="c1">;</span>
+</span><span class='line'>   <span class="nv">ArcTan</span><span class="p">[</span><span class="nv">m1</span>, <span class="nv">m2</span><span class="p">]</span>,
+</span><span class='line'>   <span class="p">{</span><span class="mi">30</span><span class="p">}]]]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It&rsquo;s computing $ e^x $, $ \sin{x} $, and $ \text{tan}^{-1} \frac{x}{y} $ for lists of 2,200,000 random numbers 30 times.  <code>Exp</code>, <code>Sin</code>, and <code>ArcTan</code> all have the <a href="http://reference.wolfram.com/mathematica/ref/Listable.html"><code>Listable</code> attribute</a>, which means that they are automatically mapped over lists that are passed in as arguments.  <code>Sin[list]</code> and <code>Map[Sin, list]</code> are functionally equivalent, but the former provides the implementation the opportunity to take an optimized path if there is a faster way of computing the sine of multiple numbers.</p>
+
+<p>We can verify that this is a case where architecture specific optimizations are in play by rewriting the test to use <code>Map</code> and <code>MapThread</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="nv">Module</span><span class="p">[{</span><span class="nv">m1</span>, <span class="nv">m2</span><span class="p">}</span>,
+</span><span class='line'> <span class="nv">Timing</span><span class="p">[</span>
+</span><span class='line'>  <span class="nv">SeedRandom</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="c1">;</span>
+</span><span class='line'>  <span class="nv">m1</span> <span class="nb">= </span><span class="nv">RandomReal</span><span class="p">[{}</span>, <span class="p">{</span><span class="mf">2.2</span><span class="o">`</span><span class="nv">*</span><span class="o">^</span><span class="mi">6</span><span class="p">}]</span><span class="c1">;</span>
+</span><span class='line'>  <span class="nv">m2</span> <span class="nb">= </span><span class="nv">RandomReal</span><span class="p">[{}</span>, <span class="p">{</span><span class="mf">2.2</span><span class="o">`</span><span class="nv">*</span><span class="o">^</span><span class="mi">6</span><span class="p">}]</span><span class="c1">;</span>
+</span><span class='line'>  <span class="nv">Map</span><span class="p">[</span><span class="nv">Exp</span>, <span class="nv">m1</span><span class="p">]</span><span class="c1">;</span>
+</span><span class='line'>  <span class="nv">Map</span><span class="p">[</span><span class="nv">Sin</span>, <span class="nv">m1</span><span class="p">]</span><span class="c1">;</span>
+</span><span class='line'>  <span class="nv">MapThread</span><span class="p">[</span><span class="nv">ArcTan</span>, <span class="p">{</span><span class="nv">m1</span>, <span class="nv">m2</span><span class="p">}]</span><span class="c1">;]]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note that I&rsquo;m only running this once, as opposed to the 30 times in the original test, because the non-Listable version is so much slower.</p>
+
+<p>The version that doesn&rsquo;t take advantage of the Listable attribute takes 1.63 seconds on the Macbook Pro and 62.64 seconds on the Raspberry Pi.  This ratio of 38.2 (vs. 133.3 before) is much closer to the ratio we see from the other tests that don&rsquo;t take advantage of specifics of the architecture.</p>
+
+<h2>Conclusion</h2>
+
+<p>Even though Mathematica is much slower on the Raspberry Pi, it&rsquo;s a tremendous free gift and it still has many uses:</p>
+
+<ul>
+<li><p><a href="http://www.raspberrypi.org/archives/5623">A recent guest post from Wolfram Research on the Raspberry Pi blog</a> links to several projects that take advantage of the easy ways of controlling hardware using Mathematica on the Raspberry Pi.</p></li>
+<li><p>Much of what most people use Mathematica for doesn&rsquo;t require extreme performance.  For instance, getting the closed form of an integral or derivative is still practically instantaneous from a human&rsquo;s perspective.</p></li>
+<li><p>Just getting to experience the language and environment with only a $35 investment is worthwhile.  For developers, there is a lot to learn from the language, which is heavily influenced by <a href="http://en.wikipedia.org/wiki/M-expression">Lisp&rsquo;s M-expressions</a>, and the notebook enviroment, which is just starting to be replicated by iPython.  On top of that, the incredible interactive documentation for the language is something everyone should experience.</p></li>
+</ul>
+
+
+<p>Any questions, corrections, or suggestions are appreciated!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Matt Adereth</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-06T07:23:00-08:00" pubdate data-updated="true">Jan 6<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/benchmarks/'>benchmarks</a>, <a class='category' href='/blog/categories/mathematica/'>mathematica</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://adereth.github.io/blog/2014/01/06/benchmarking-mathematica-on-the-raspberry-pi/" data-via="adereth" data-counturl="http://adereth.github.io/blog/2014/01/06/benchmarking-mathematica-on-the-raspberry-pi/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/12/23/counting-stars-on-github/" title="Previous Post: Counting Stars on GitHub">&laquo; Counting Stars on GitHub</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/01/08/quine-tweet-challenge/" title="Next Post: Quine Tweet Challenge">Quine Tweet Challenge &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <p>
+  <center><img src="/images/aleph.png"/></center>
+  <a href="http://adereth.github.io" alt="Home"><h1>Adereth's Blog</h1></a>
+
+  <ul id="recent_posts">
+      <li class="post">
+	<a href="http://adereth.github.io"><i class="fa fa-home fa-fw"></i> Home</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.github.io/about/"><i class="fa fa-user fa-fw"></i> About Me</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.github.io/atom.xml"><i class="fa fa-rss fa-fw"></i> Feed</a>
+      </li>
+  </ul>
+
+  <h1>Connect</h1>
+
+  <ul id="recent_posts">
+      <li class="post">
+	<a href="https://twitter.com/adereth"><i class="fa fa-twitter fa-fw"></i> Twitter</a>
+      </li>
+      <li class="post">
+	<a href="https://github.com/adereth"><i class="fa fa-github fa-fw"></i> GitHub</a>
+      </li>
+      <li class="post">
+	<a href="http://www.linkedin.com/in/adereth/"><i class="fa fa-linkedin fa-fw"></i> LinkedIn</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.tumblr.com/"><i class="fa fa-tumblr fa-fw"></i> Tumblr</a>
+      </li>
+  </ul>
+
+
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/12/06/writing-a-halite-bot-in-clojure/">Writing a Halite Bot in Clojure</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too/">Bag of Little Bootstraps Presentation at PWL SF</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/20/visualizing-girl-talk-with-clojure-and-d3-dot-js/">Visualizing Girl Talk: Parsing with Clojure's Instaparse</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/19/clojure-slash-conj-talk-on-3d-printing-keyboards/">Clojure/conj Talk on 3D Printing Keyboards</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love/">Presentation on The Mode Tree at Papers We Love Too</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/17/sa-profile-keys-on-a-kinesis-advantage/">SA Profile Keys on a Kinesis Advantage</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/02/poisonous-shapes/">Poisonous Shapes in Algebra and Graph Theory</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/12/silvermans-mode-detection-method-explained/">Silverman's Mode Estimation Method Explained</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/29/computing-the-remedian-in-clojure/">Computing the Remedian in Clojure</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/14/typing-qwerty-on-a-dvorak-keyboard/">Typing Qwerty on a Dvorak Keyboard</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/adereth">@adereth</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'adereth',
+            count: 10,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - Matt Adereth -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = '1overn';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://adereth.github.io/blog/2014/01/06/benchmarking-mathematica-on-the-raspberry-pi/';
+        var disqus_url = 'http://adereth.github.io/blog/2014/01/06/benchmarking-mathematica-on-the-raspberry-pi/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
