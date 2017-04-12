@@ -181,7 +181,7 @@ font-family: 'Arvo', serif;
 <br>
     </div>
     <iframe id="sc-widget"
-            src="https://w.soundcloud.com/player/?url=https://soundcloud.com/sotd-songoftheday/girl-talk-all-day"
+	    src="https://w.soundcloud.com/player/?url=https://soundcloud.com/sotd-songoftheday/girl-talk-all-day"
             width="100%"
             height="165"
             scrolling="no"
@@ -325,13 +325,11 @@ font-family: 'Arvo', serif;
        mediaBodies.append("p")
                   .html(function(d) {return htmlify(d["song"])});
 
+
        mediaBodies.append("a")
                   .attr("href", function(d) {return d["itunes-link"] ? (d["itunes-link"] + "&at=10lNCN") : null})
-                  .attr("target", "_blank")
-                  .append("img")
-                  .attr("src", function(d) {return d["itunes-link"] ? "https://linkmaker.itunes.apple.com/htmlResources/assets//images/web/linkmaker/badge_itunes-sm.png" : null})
-                  .style("border", "0");
-
+     .attr("target", "_blank")
+     .attr("style", "display:inline-block;overflow:hidden;background:url(//linkmaker.itunes.apple.com/assets/shared/badges/en-us/music-sm.svg) no-repeat;width:70px;height:15px;background-size:contain;");
 
        activeTracks.style("display", "none");
 
