@@ -4,7 +4,7 @@
   <title><![CDATA[Category: math | adereth]]></title>
   <link href="http://adereth.github.io/blog/categories/math/atom.xml" rel="self"/>
   <link href="http://adereth.github.io/"/>
-  <updated>2017-07-06T07:35:55-07:00</updated>
+  <updated>2017-11-02T15:26:30-07:00</updated>
   <id>http://adereth.github.io/</id>
   <author>
     <name><![CDATA[Matt Adereth]]></name>
@@ -12,6 +12,313 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Playing with Wolfram Playing Cards]]></title>
+    <link href="http://adereth.github.io/blog/2017/11/02/playing-with-wolfram-playing-cards/"/>
+    <updated>2017-11-02T14:10:00-07:00</updated>
+    <id>http://adereth.github.io/blog/2017/11/02/playing-with-wolfram-playing-cards</id>
+    <content type="html"><![CDATA[<p>A few weeks ago, I knocked my favorite mug off the counter and it shattered.  RIP:</p>
+
+<p><img src="/images/mug.jpg" alt="I Heart Mathematica Mug" /></p>
+
+<p>Like a good consumer, I immediately went to the <a href="https://store.wolfram.com/view/misc/">Wolfram store</a> to buy a replacement, but they no longer make it.  They did have a deck of playing cards which promised a unique illustration and generating code on each card.  How could I pass it up?</p>
+
+<p>The cards arrived a few days ago and they were way cooler than I imagined.  As I flipped through the deck, I realized a lot of the cards would be really interesting as starting points for animations.  I&rsquo;ve been going to town with them and posting to Twitter in an <a href="https://twitter.com/adereth/status/924409121033428992">epic thread</a>.</p>
+
+<p>I&rsquo;ll lay them out here grouped by concept&hellip; enjoy!</p>
+
+<h2>Just Rotating Squares</h2>
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">4♠️ <a href="https://t.co/5dM7m8Y22I">pic.twitter.com/5dM7m8Y22I</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924436924592304128?ref_src=twsrc%5Etfw">October 29, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/K0XqS4dldv">pic.twitter.com/K0XqS4dldv</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924437154054381568?ref_src=twsrc%5Etfw">October 29, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">A♦️ <a href="https://t.co/xkdKj1COEa">pic.twitter.com/xkdKj1COEa</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924773153921843200?ref_src=twsrc%5Etfw">October 29, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/CkfYKAaNsY">pic.twitter.com/CkfYKAaNsY</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924773351377137664?ref_src=twsrc%5Etfw">October 29, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<h2>Imaginary Numbers</h2>
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">2♦️ <a href="https://t.co/0ts8QGsWiD">pic.twitter.com/0ts8QGsWiD</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924828198369505280?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">Varying the exponent from 1/5 -&gt; 5. 3 on the card. <a href="https://t.co/REzLlOAUau">pic.twitter.com/REzLlOAUau</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924828552704401408?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">Jumping back to the 2♦️. Each (a,b) is a fixed color and is positioned at the complex coordinates of (a+bⅈ)ⁿ for n ∈ [½, 5] <a href="https://t.co/idbrCcCro7">pic.twitter.com/idbrCcCro7</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924842259744407552?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">A♠️ <a href="https://t.co/SxXAyZopE5">pic.twitter.com/SxXAyZopE5</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924440913044049922?ref_src=twsrc%5Etfw">October 29, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">ok, this one is expensive.  Just going to make a deeper version... <a href="https://t.co/UE6Z97cKo3">pic.twitter.com/UE6Z97cKo3</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924441133949665280?ref_src=twsrc%5Etfw">October 29, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">4♣️ (Another shockingly complex but structured one from time code) <a href="https://t.co/2odoWUtCAb">pic.twitter.com/2odoWUtCAb</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/926103944832598016?ref_src=twsrc%5Etfw">November 2, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">Here it is with more detail in DarkRainbow <a href="https://t.co/anX6X6kskO">pic.twitter.com/anX6X6kskO</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/926104171736055814?ref_src=twsrc%5Etfw">November 2, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">ZOOMING <a href="https://t.co/JtkmbcTJDd">pic.twitter.com/JtkmbcTJDd</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/926104884801298432?ref_src=twsrc%5Etfw">November 2, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">These playing cards are inspirational... starting with the 2♥️ <a href="https://t.co/2qMovSbPPw">pic.twitter.com/2qMovSbPPw</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924409121033428992?ref_src=twsrc%5Etfw">October 28, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">...and tweaking the Pi/6 value: <a href="https://t.co/7UkNEB4EN7">pic.twitter.com/7UkNEB4EN7</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924409333269409797?ref_src=twsrc%5Etfw">October 28, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">7♠️ <a href="https://t.co/scPwDCaPPD">pic.twitter.com/scPwDCaPPD</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924831970646835200?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">This one is just very surprising. The card doesn&#39;t capture the progression of the curve... <a href="https://t.co/hBPR35cxSN">pic.twitter.com/hBPR35cxSN</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924833015699615744?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<h2>Trigonometry</h2>
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">7♣️ <a href="https://t.co/CL3s9sMeT2">pic.twitter.com/CL3s9sMeT2</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/925930489977847808?ref_src=twsrc%5Etfw">November 2, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/ziMoWH7doA">pic.twitter.com/ziMoWH7doA</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/925930734036041728?ref_src=twsrc%5Etfw">November 2, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">10♦️ <a href="https://t.co/OQzC6gbwrD">pic.twitter.com/OQzC6gbwrD</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924412632706162688?ref_src=twsrc%5Etfw">October 28, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/En3lOG01bW">pic.twitter.com/En3lOG01bW</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924412789497643009?ref_src=twsrc%5Etfw">October 28, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">3♦️ <a href="https://t.co/ql5LSGuxGP">pic.twitter.com/ql5LSGuxGP</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924426032244965377?ref_src=twsrc%5Etfw">October 29, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/6NAzWTAUvE">pic.twitter.com/6NAzWTAUvE</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924426193369120769?ref_src=twsrc%5Etfw">October 29, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">8♣️ <a href="https://t.co/6jeVkd9yet">pic.twitter.com/6jeVkd9yet</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924692880114909184?ref_src=twsrc%5Etfw">October 29, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/SioTaVZ4Rd">pic.twitter.com/SioTaVZ4Rd</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924692980526546944?ref_src=twsrc%5Etfw">October 29, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<h2>Miscellaneous</h2>
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">4♥️ (Hot take: this is surprisingly bad code. Side effects? Unnecessary call to Image in the loop? Should be a single expression!) <a href="https://t.co/XsJUHM67El">pic.twitter.com/XsJUHM67El</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/925030749857652736?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">Anyway... here are the intermediate tranformations: <a href="https://t.co/Azq0CPU1rB">pic.twitter.com/Azq0CPU1rB</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/925031090250584064?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">Inverted is better <a href="https://t.co/vzP5MmLdE2">pic.twitter.com/vzP5MmLdE2</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/925032658941308928?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">9❤️, gotta cc <a href="https://twitter.com/KnitYak?ref_src=twsrc%5Etfw">@KnitYak</a> for this one <a href="https://t.co/cNoGJMbgZ4">pic.twitter.com/cNoGJMbgZ4</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924854571670761472?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/1DZWWQsb0J">pic.twitter.com/1DZWWQsb0J</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924854816722976768?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">10♣️ <a href="https://t.co/3OojtNlD6Z">pic.twitter.com/3OojtNlD6Z</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924827151362174976?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/G3qTuneuyv">pic.twitter.com/G3qTuneuyv</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924827305343516672?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">6♦️ <a href="https://t.co/ambOdlfJhT">pic.twitter.com/ambOdlfJhT</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924846505684475904?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/ZzhlPFsRTS">pic.twitter.com/ZzhlPFsRTS</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924846654410301441?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">3♣️ <a href="https://t.co/wrMuS4g2yz">pic.twitter.com/wrMuS4g2yz</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924851247475187713?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/Ra8pjtENp3">pic.twitter.com/Ra8pjtENp3</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924851443332399105?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">10♠️ <a href="https://t.co/93HolEaQNC">pic.twitter.com/93HolEaQNC</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924856311736442880?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">gooey <a href="https://t.co/jPgMhKhozw">pic.twitter.com/jPgMhKhozw</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924857405619429376?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">9♦️ <a href="https://t.co/0uA6FmjIUb">pic.twitter.com/0uA6FmjIUb</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924864434077515778?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/JmPdvoUyOZ">pic.twitter.com/JmPdvoUyOZ</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924864537911738368?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">3♥️ <a href="https://t.co/0eX4FL7NDZ">pic.twitter.com/0eX4FL7NDZ</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/925174812997070848?ref_src=twsrc%5Etfw">October 31, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/ZQ8b6o0ND2">pic.twitter.com/ZQ8b6o0ND2</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/925174978344976384?ref_src=twsrc%5Etfw">October 31, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<h2>Grand Finale</h2>
+
+<p>Thanks for making it this far!  Your reward is the K♣:</p>
+
+<p><img src="/images/wolfram.jpg" alt="King of Clubs" /></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Bag of Little Bootstraps Presentation at PWL SF]]></title>
@@ -2368,186 +2675,6 @@ drawSummedDistributionsWithResize(data, '#chart-6', 300, 0.005);
 <p>One of the biggest weaknesses in Silverman&rsquo;s technique is that the critical width is a global parameter, so it may run into trouble if our underlying distribution is a mixture of low and high variance component distributions.  For an actual implementation of mode detection in a benchmarking package, I&rsquo;d consider using something that doesn&rsquo;t have this issue, like the technique described in <a href="http://private.igf.edu.pl/~jnn/Literatura_tematu/Minnotte_1997.pdf">Nonparametric Testing of the Existence of Modes (Minnotte, 1997)</a>.</p>
 
 <p>I hope this is correct and helpful.  If I misinterpreted anything in the original paper, please let me know.  Thanks!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Computing the Remedian in Clojure]]></title>
-    <link href="http://adereth.github.io/blog/2014/09/29/computing-the-remedian-in-clojure/"/>
-    <updated>2014-09-29T09:03:00-07:00</updated>
-    <id>http://adereth.github.io/blog/2014/09/29/computing-the-remedian-in-clojure</id>
-    <content type="html"><![CDATA[<p>The remedian is an approximation of the <a href="http://en.wikipedia.org/wiki/Median">median</a> that can be computed using only $O(\log{n})$ storage.  The algorithm was originally presented in <a href="http://web.ipac.caltech.edu/staff/fmasci/home/statistics_refs/Remedian.pdf">The Remedian: A Robust Averaging Method for Large Data Sets by Rousseeuw and Bassett</a> (1990).  The core of it is on the first page:</p>
-
-<blockquote><p>Let us assume that $n = b^k$, where $b$ and $k$ are integers (the case where $n$ is not of this form will be treated in Sec. 7.  The <em>remedian</em> with base $b$ proceeds by computing medians of groups of $b$ observations, yielding $b^{k-1}$ estimates on which this procedure is iterated, and so on, until only a single estimate remains.  When implemented properly, this method merely needs $k$ arrays of size $b$ that are continuously reused.</p></blockquote>
-
-<p>The implementation of this part in Clojure is so nice that I just had to share.</p>
-
-<p>First, we need a vanilla implementation of the median function.  We&rsquo;re always going to be computing the median of sets of size $b$, where $b$ is relatively small, so there&rsquo;s no need to get fancy with a linear time algorithm.</p>
-
-<p>```clojure
-(defn median [coll]
-  (let [size (count coll)</p>
-
-<pre><code>    sorted (sort coll)]
-(if (odd? size)
-  (nth sorted (int (/ size 2)))
-  (/ (+ (nth sorted (int (/ size 2)))
-        (nth sorted (dec (int (/ size 2)))))
-     2))))
-</code></pre>
-
-<p>```</p>
-
-<p>Now we can implement the actual algorithm.  We group, compute the median of each group, and recur, with the base case being when we&rsquo;re left with a single element in the collection:</p>
-
-<p>```clojure
-(defn remedian [b coll]
-  (if (next coll)</p>
-
-<pre><code>(-&gt;&gt; coll
-     (partition-all b)
-     (map median)
-     (recur b))
-(first coll)))
-</code></pre>
-
-<p>```</p>
-
-<p>Because <code>partition-all</code> and <code>map</code> both operate on and return lazy sequences, we maintain the property of only using $O(b \log_{b}{n})$ memory at any point in time.</p>
-
-<p>While this implementation is simple and elegant, it only works if the size of the collection is a power of $b$.  If we don&rsquo;t have $n = b^k$ where $b$ and $k$ are integers, we&rsquo;ll over-weight the observations that get grouped into the last groups of size $&lt; b$.</p>
-
-<p>Section 7 of the original paper describes the weighting scheme you should use to compute the median if you&rsquo;re left with incomplete groupings:</p>
-
-<blockquote><p>How should we proceed when the sample size $n$ is less than $b^k$? The remedian algorithm then ends up with $n_1$ numbers in the first array, $n_2$ numbers in the second array, and $n_k$ numbers in the last array, such that $n = n_1 + n_{2}b + &hellip; + n_k b^{k-1}$.  For our final estimate we then compute a weighted median in which the $n_1$, numbers in the first array have weight 1, the $n_2$ numbers in the second array have weight $b$, and the $n_k$ numbers in the last array have weight $b^{k-1}$. This final computation does not need much storage because there are fewer than $bk$ numbers and they only have to be ranked in increasing order, after which their weights must be added until the sum is at least $n/2$.</p></blockquote>
-
-<p>It&rsquo;s a bit difficult to directly translate this to the recursive solution I gave above because in the final step we&rsquo;re going to do a computation on a mixture of values from the different recursive sequences.  Let&rsquo;s give it a shot.</p>
-
-<p>We need some way of bubbling up the incomplete groups for the final weighted median computation.  Instead of having each recursive sequence <em>always</em> compute the median of each group, we can add a check to see if the group is smaller than $b$ and, if so, just return the incomplete group:</p>
-
-<p>```clojure
-(defn remedian-with-leftovers [b coll]
-  (let [incomplete-group? #(or (&lt; (count %) b)</p>
-
-<pre><code>                           (seq? (last %)))]
-(loop [coll coll]
-  (if (next coll)
-    (-&gt;&gt; coll
-         (partition-all b)
-         (map #(if (incomplete-group? %) % (median %)))
-         (recur))
-    coll))))
-</code></pre>
-
-<p>```</p>
-
-<p>For example, if we were using the mutable array implementation proposed in the original paper to compute the remedian of <code>(range 26)</code> with $b = 3$, the final state of the arrays would be:</p>
-
-<table>
-<thead>
-<tr>
-<th>Array  </th>
-<th> $i_0$ </th>
-<th> $i_1$   </th>
-<th> $i_2$</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0      </td>
-<td> 24 </td>
-<td> 25 </td>
-<td> <em>empty</em></td>
-</tr>
-<tr>
-<td>1      </td>
-<td> 19 </td>
-<td> 22 </td>
-<td> <em>empty</em></td>
-</tr>
-<tr>
-<td>2      </td>
-<td> 4  </td>
-<td> 13 </td>
-<td> <em>empty</em></td>
-</tr>
-</tbody>
-</table>
-
-
-<br/>
-
-
-<p>In our sequence based solution, the final sequence will be <code>((4 13 (19 22 (24 25))))</code>.</p>
-
-<p>Now, we need to convert these nested sequences into <code>[value weight]</code> pairs that could be fed into a weighted median function:</p>
-
-<p>```clojure
-(defn weight-leftovers [b nested-elements]
-  (loop [vw-pairs []</p>
-
-<pre><code>     nested-elements nested-elements
-     weight 1]
-(let [element (first nested-elements)]
-  (cond
-   (next nested-elements) (recur (conj vw-pairs [element weight])
-                                 (next nested-elements)
-                                 weight)
-   (seq? element) (recur vw-pairs
-                         element
-                         (/ weight b))
-   :else (conj vw-pairs [element weight])))))
-</code></pre>
-
-<p>```
-Instead of weighting the values in array $j$ with weight $b^{j-1}$, we&rsquo;re weighting it at $\frac{b^{j-1}}{b^{k}}$.  Dividing all the weights by a constant will give us the same result and this is slightly easier to compute recursively, as we can just start at 1 and divide by $b$ as we descend into each nested sequence.</p>
-
-<p>If we run this on the <code>(range 26)</code> with $b = 3$, we get:</p>
-
-<p>```clojure
-user> (&ndash;>> (range 26)</p>
-
-<pre><code>       (remedian-with-leftovers 3)
-       (weight-leftovers 3))
-</code></pre>
-
-<p>[[4 1/3] [13 1/3] [19 1/9] [22 1/9] [24 1/27] [25 1/27]]
-```</p>
-
-<p>Finally, we&rsquo;re going to need a weighted median function.  This operates on a collection of <code>[value weight]</code> pairs:</p>
-
-<p>```clojure
-(defn weighted-median [vw-pairs]
-  (let [total-weight (&ndash;>> vw-pairs</p>
-
-<pre><code>                      (map second)
-                      (reduce +))
-    middle-weight (/ total-weight 2)
-    sorted-pairs (sort-by first vw-pairs)
-    sorted-pairs-cum-weight (reductions (fn [[_ cum-weight] [v w]]
-                                          [v (+ cum-weight w)])
-                                        sorted-pairs)]
-(-&gt;&gt; sorted-pairs-cum-weight
-     (filter #(&lt;= middle-weight (second %)))
-     (ffirst))))
-</code></pre>
-
-<p>```</p>
-
-<p>We can put it all together and redefine the remedian function to deal with the case where $n$ isn&rsquo;t a power of $b$:</p>
-
-<p>```clojure
-(defn remedian [b coll]
-  (&ndash;>> coll</p>
-
-<pre><code>   (remedian-with-leftovers b)
-   (weight-leftovers b)
-   (weighted-median)))
-</code></pre>
-
-<p>```</p>
-
-<p>The remedian is fun, but in practice I prefer to use the approximate quantile methods that were invented a few years later and presented in <a href="http://www.cs.umd.edu/~samir/498/manku.pdf">Approximate Medians and other Quantiles in One Pass and with Limited Memory by Manku, Rajagopalan, and Lindsay</a> (1998).  There&rsquo;s a high-quality implementation you can use in Clojure via Java interop in Parallel Colt&rsquo;s <a href="http://incanter.org/docs/parallelcolt/api/cern/jet/stat/tdouble/quantile/DoubleQuantileFinderFactory.html">DoubleQuantileFinderFactory</a>.</p>
 ]]></content>
   </entry>
   
