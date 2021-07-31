@@ -1,0 +1,710 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>adereth</title>
+  <meta name="author" content="Matt Adereth">
+
+  
+  <meta name="description" content="What is a tiling window manager? Window managers control the placement and appearance of programs on your screen. Most popular window managers are &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://adereth.github.io/blog/page/4/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+   <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="adereth" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic|Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+<link href="//fonts.googleapis.com/css?family=Crimson+Text:400italic,400,600italic,600,700italic,700" rel="stylesheet" type="text/css">
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ TeX: { extensions: ["color.js"] }});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript"
+        src="http://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-44572622-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <!-- <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:adereth.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav> -->
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/02/why-you-should-try-a-tiling-window-manager/">Why You Should Try a Tiling Window Manager</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-02T07:39:00-07:00" pubdate data-updated="true">Oct 2<span>nd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>What is a tiling window manager?</h2>
+
+<p>Window managers control the placement and appearance of programs on your screen.</p>
+
+<p><img src="/images/desk.png" title="Messy Desk" ></p>
+
+<p>Most popular window managers are what are called &ldquo;<a href="http://en.wikipedia.org/wiki/Compositing_window_manager">compositing window managers</a>,&rdquo; which is what you are using by default in Microsoft Windows, OSX, Gnome, and KDE. They use the desktop metaphor, where each program is treated like a re-sizable piece of paper. You can move them around freely, change their size, and cause them to overlap.</p>
+
+<p><img src="/images/drawersopen.gif" title="Organized Drawers" ></p>
+
+<p>In contrast, a <a href="http://en.wikipedia.org/wiki/Tiling_window_manager">tiling window manager</a> is more like a well-organized drawer than a desk. The entire surface is divided into non-overlapping buckets where windows are displayed. If you&rsquo;ve used pretty much any IDE, like Eclipse or Visual Studio, or a terminal multiplexer, like screen or tmux, you&rsquo;re already familiar with this approach.</p>
+
+<h2>Why should I use one?</h2>
+
+<h3>They&rsquo;re efficient</h3>
+
+<p>Unlike most popular compositing window managers, tiling window managers really make an attempt at managing your windows for you. Instead of having you constantly reorganize the individual windows on your screen, you specify at a high level how you want windows to be placed and the window manager does it for you. New windows are intelligently placed based on the high-level directives you&rsquo;ve already given.</p>
+
+<p>Tiling also lends itself well to really efficient keyboard shortcuts. Because there&rsquo;s an unambiguous arrangement, you can quickly do things like switch focus to the window immediately to the left, right, top, or bottom, as opposed to most compositing window managers where the best keyboard option is Alt-Tabbing through a linear list of all your windows:</p>
+
+<p><a href="http://blogs.technet.com/b/drey/archive/2010/01/04/windows-7-what-happens-with-a-lot-of-windows-and-alt-tab.aspx"><img src="/images/alt-tab.jpg" title="Windows Switcher" ></a></p>
+
+<h3>They scale</h3>
+
+<p>With innovative features like tags (Awesome) and nested workspaces (ion3/notion), it&rsquo;s possible to sanely deal with huge numbers of windows and workflows. You&rsquo;re able to group and manipulate windows together in more sophisticated ways than you can in traditional window managers that limit operations to all instances of a single application or everything on a virtual desktop.</p>
+
+<h3>They&rsquo;re customizable</h3>
+
+<p>Most tiling window managers are written by developers for developers. They tend to provide rich, well-documented APIs that expose hooks for everything you could want.</p>
+
+<h2>Which one should I use?</h2>
+
+<p>There are <a href="http://en.wikipedia.org/wiki/Tiling_window_manager#List_of_tiling_window_managers_for_X">a number popular tiling window managers to choose from</a>, but the most popular (based my totally unscientific polling) are:</p>
+
+<ul>
+<li><a href="http://xmonad.org/">xmonad</a></li>
+<li><a href="http://notion.sourceforge.net/">notion</a>, a fork of the controversial and now defunct ion3</li>
+<li><a href="http://awesome.naquadah.org/">awesome</a></li>
+<li><a href="http://dwm.suckless.org/">dwm</a></li>
+</ul>
+
+
+<p>My preferred window manager is notion and it&rsquo;s what I recommend for anyone wanting to dip their toes into the world of tiling window managers. The main reasons I suggest it are:</p>
+
+<ul>
+<li><p>Like most of the other options, it&rsquo;s designed for keyboard use, but it has the best mouse support. You can resize frames, move windows across frames, and access context menus in the expected ways with the mouse. Eventually, you probably will stop relying on these things and do everything with the keyboard, but it really makes the transition easier.</p></li>
+<li><p>Multiple applications can be put into the same frame and are made into tabs. This is possible with some tweaks to the others, most notably xmonad, but it&rsquo;s built-in with notion and there are great shortcuts for switching between tabs. Do you remember what a revelation it was when tabbed browsing was introduced? Having the ability to use tabs to group and switch between heterogeneous applications is equally incredible.</p></li>
+<li><p>It&rsquo;s very stable. I&rsquo;m still using 3 year old builds of ion3 on some of my machines and I never have any problems.</p></li>
+</ul>
+
+
+<p>As of Ubuntu 12.10, you can simply <code>apt-get install notion</code> to install it. It&rsquo;s also available in the repositories of a number of other distributions.</p>
+
+<p>In some follow-up posts, I&rsquo;m going to detail the tweaks that I&rsquo;ve made to <a href="https://github.com/adereth/notion-config">my notion configuration</a> to improve my workflow.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/02/02/tweaking-my-favorite-programming-font/">Tweaking My Favorite Programming Font</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-02T07:47:00-08:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>After trying out every monospaced font I could get my hands on, I decided that <a href="http://www.ms-studio.com/index.html">Mark Simonson</a>‘s <a href="http://www.ms-studio.com/FontSales/anonymouspro.html">Anonymous Pro</a> is the one for me:</p>
+
+<p><a href="http://www.ms-studio.com/FontSales/anonymouspro.html"><img src="http://www.marksimonson.com/assets/content/fonts/anonymouspro_banner.png" alt="Anonymous Pro Sample" /></a></p>
+
+<p>After using it in my IDE for months, I decided to start using it in my terminals. Unfortunately, this revealed a subtle flaw in the font.  Take a look:</p>
+
+<p><img src="/images/anonymous12.png" alt="terminal sample" /></p>
+
+<p>Notice anything?  Those forward slashes seem a bit too far to the right. While this wasn&rsquo;t a problem when writing code, it became a major eye sore when working with lots of paths in a terminal.</p>
+
+<p>One interesting thing is that this issue only shows up when using the font at 12pt without anti-aliasing. This is because Anonymous Pro is a <a href="http://en.wikipedia.org/wiki/TrueType">TrueType font</a>. TrueType is an <a href="http://en.wikipedia.org/wiki/Outline_font#Outline_fonts">outline font</a>, which means the designer draws each character by specifying vectors that define the shape.  By using vectors, the font can be scaled cleanly to any size. At smaller sizes, the scaling of the vector outline may result in an image that isn&rsquo;t as clear as desired. To give the font designer complete control of the display, TrueType fonts can also have bitmapped versions of each character for specific point sizes.</p>
+
+<p>Armed with this knowledge and a font editor (like <a href="http://fontforge.sourceforge.net/">FontForge</a>), we can crack open the .ttf and see exactly what&rsquo;s going on with the forward slash:</p>
+
+<p><img src="/images/slashbitmaporiginal.png" alt="original" /></p>
+
+<p>The green outline shows the vector representation of the character, while the dark squares show the pixels used in the bitmapped version. I think that the pixels should be shifted to the left by 1, so I went ahead and did it:</p>
+
+<p><img src="/images/slashbitmapmodified.png" alt="modified" /></p>
+
+<p>Now everything looks good in my terminal:</p>
+
+<p><img src="/images/anonymous12slashfixed.png" alt="fixed terminal" /></p>
+
+<p>I&rsquo;ve informed Mark Simonson of this and it looks like this fix may be available in the next version of Anonymous Pro.</p>
+
+<p>When you consider how many characters there are to define and the various point sizes, it&rsquo;s clear that designing a font is a monumental task. We should all be grateful that such talented designers are out there and that some of them are generous enough to provide such useful, beautiful fonts for free.</p>
+
+<p>On top of giving it away free, Mark Simonson has released Anonymous Pro under the <a href="http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&amp;id=OFL">SIL Open Font License</a>. This means that you can enjoy my trivial tweak with minimal effort, because I&rsquo;m allowed to redistribute my modified version. I&rsquo;d prefer to call it something like “Anonymous Pro with Shifted Slash” or something equally descriptive, but condition 3 of the OFL says that I need to use a different name.</p>
+
+<p>So, without further ado, I present <a href="https://s3.amazonaws.com/1overBlog/programming_fonts/NamelessAmateur.zip">Nameless Amateur</a>! As soon as the update of Anonymous Pro is available, I&rsquo;ll remove this link and direct people to the new version.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/01/31/Iterating-on-Font-Pair-Comparisons/">Iterating on Font Pair Comparisons</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-01-31T20:58:00-08:00" pubdate data-updated="true">Jan 31<span>st</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The previous post generated some great suggestions in the <a href="http://news.ycombinator.com/item?id=2147834">Hacker News discussion</a>.  I&rsquo;ve incorporated some of the feedback and here’s a summary of the changes:</p>
+
+<ul>
+<li>Changed the colors to improve contrast</li>
+<li>Fixed the issue with the operator symbols (Thanks MMA_Pope!)</li>
+<li>Increased the size of the characters and reduced the horizontal spacing</li>
+<li>Added additional fonts</li>
+</ul>
+
+
+<p>Here’s the current list of fonts included in the comparison:</p>
+
+<p><img src="/images/fontlist2.png" alt="Full font list" /></p>
+
+<p>Take a look at the new version:</p>
+
+<p><a href="/images/dejavusansmonodroidsansmono1.png"><img src="/images/dejavusansmonodroidsansmono1.png" alt="dejavusansmonodroidsansmono1.png" /></a>
+(Click for full size version)</p>
+
+<p>If you’re interested in seeing the results for every pair, you can <a href="https://s3.amazonaws.com/1overBlog/programming_fonts/AllFontComparisonsV2.zip">download them all</a>.</p>
+
+<p>The updated Mathematica code is available for <a href="https://s3.amazonaws.com/1overBlog/programming_fonts/PairCompareV2.nb">download</a>.</p>
+
+<p>I’m open to suggestions for future investigations… thanks!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/01/26/Comparing-Programming-Font-Pairs/">Comparing Programming Font Pairs</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-01-26T22:46:00-08:00" pubdate data-updated="true">Jan 26<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I really like this visualization of the difference between Deja Vu Sans Mono and Apple Menlo:</p>
+
+<p><img src="http://typophile.com/files/menlovsdejavusansmono_6131.png" alt="Menlo vs. Deja Vu Sans Mono" /></p>
+
+<p>(Credit to <a href="http://www.down10.com">Jesse Burgheimer</a>)</p>
+
+<p>I decided to take a stab at programmatically generating a similar comparison for all the fonts I’ve been looking at.  <a href="/assets/paircompare.nb">Here’s the Mathematica code</a>.</p>
+
+<p><a href="images/dejavusansmonodroidsansmono.png"><img src="images/dejavusansmonodroidsansmono.png" alt="Menlo vs. Deja Vu Sans Mono in Mathematica" /></a>
+(Click for full size version)</p>
+
+<p>It was then easy to generate this for every pair of fonts:</p>
+
+<p><img src="/images/MapCompareFontPair.png" alt="CompareFontPair /@ Subsets[monospacedFonts, {2}]" /></p>
+
+<p>I went through them all and picked out the ones I thought were most interesting:</p>
+
+<p><a href="/images/consolasinconsolata.png"><img src="/images/consolasinconsolata.png" alt="consolasinconsolata" /></a>
+<a href="/images/dejavusansmonodroidsansmono.png"><img src="/images/dejavusansmonodroidsansmono.png" alt="dejavusansmonodroidsansmono" /></a>
+<a href="/images/dejavusansmonopanicsans.png"><img src="/images/dejavusansmonopanicsans.png" alt="dejavusansmonopanicsans" /></a>
+<a href="/images/droidsansmonoinconsolata.png"><img src="/images/droidsansmonoinconsolata.png" alt="droidsansmonoinconsolata" /></a>
+<a href="/images/envycoderterminus.png"><img src="/images/envycoderterminus.png" alt="envycoderterminus" /></a>
+<a href="/images/inconsolatamonofur.png"><img src="/images/inconsolatamonofur.png" alt="inconsolatamonofur" /></a></p>
+
+<p>If you’re interested in seeing the results for every pair, you can <a href="https://s3.amazonaws.com/1overBlog/programming_fonts/AllFontPairComparisons.zip">download them all</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/01/26/Comparing-Troublesome-Groups/">Comparing Troublesome Groups</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-01-26T10:47:00-08:00" pubdate data-updated="true">Jan 26<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>One of the comments on the <a href="http://www.reddit.com/r/programming/comments/f8nzc/programmatic_programming_font_comparison_101_vs/">reddit discussion</a> of my first post suggested looking at groups of characters that might be troublesome:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>1l|i!
+</span><span class='line'>`',;:.
+</span><span class='line'>oO0Q
+</span><span class='line'>(){}[]
+</span><span class='line'>5S</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As a quick test, I wrote something to compare every pair of characters in a list:</p>
+
+<p><img src="/images/tallskinnycode.png" alt="Mathematica code for comparing groups" /></p>
+
+<p>Click to see the full-sized result:</p>
+
+<p><a href="/images/tallskinnycomparison.png"><img src="/images/tallskinnycomparison.png" alt="Comparison results" /></a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/01/25/101-vs-lol%E2%80%93More-Fonts/">101 vs. Lol - More Fonts</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-01-25T12:07:00-08:00" pubdate data-updated="true">Jan 25<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>As requested in the <a href="http://www.reddit.com/r/programming/comments/f8nzc/programmatic_programming_font_comparison_101_vs/">reddit discussion</a>, here are Envy Code R, Liberation Mono, and Terminus:</p>
+
+<p><img src="/images/envy-code-r.png" alt="Envy Code R" />
+<img src="/images/liberation-mono.png" alt="Liberation Mono" />
+<img src="/images/terminus.png" alt="Terminus" /></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/01/24/101-vs-lol/">101 vs. Lol</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-01-24T12:07:00-08:00" pubdate data-updated="true">Jan 24<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>One of the subtle details of fonts that programmers often care about is how easy it is to distinguish between O’s, 0′s, l’s, and 1′s.  Using Mathematica, we can programmatically generate the comparison for several of the most popular programming fonts:</p>
+
+<p><img src="/images/101code.png" alt="101 Code" /></p>
+
+<p><img src="/images/1sand0s.png" alt="1s and 0s" /></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+    <a href="archives">Blog Archives</a>
+    
+    <a class="next" href="/blog/page/3/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <p>
+  <center><img src="/images/aleph.png"/></center>
+  <a href="http://adereth.github.io" alt="Home"><h1>Adereth&#8217;s Blog</h1></a>
+
+  <ul id="recent_posts">
+      <li class="post">
+	<a href="http://adereth.github.io"><i class="fa fa-home fa-fw"></i> Home</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.github.io/about/"><i class="fa fa-user fa-fw"></i> About Me</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.github.io/atom.xml"><i class="fa fa-rss fa-fw"></i> Feed</a>
+      </li>
+  </ul>
+
+  <h1>Connect</h1>
+
+  <ul id="recent_posts">
+      <li class="post">
+	<a href="https://twitter.com/adereth"><i class="fa fa-twitter fa-fw"></i> Twitter</a>
+      </li>
+      <li class="post">
+	<a href="https://github.com/adereth"><i class="fa fa-github fa-fw"></i> GitHub</a>
+      </li>
+      <li class="post">
+	<a href="http://www.linkedin.com/in/adereth/"><i class="fa fa-linkedin fa-fw"></i> LinkedIn</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.tumblr.com/"><i class="fa fa-tumblr fa-fw"></i> Tumblr</a>
+      </li>
+  </ul>
+
+
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/01/03/distributed-black-box-optimization-talk-at-qconny/">Distributed Black-Box Optimization Talk at QCon</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/11/02/playing-with-wolfram-playing-cards/">Playing with Wolfram Playing Cards</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/12/06/writing-a-halite-bot-in-clojure/">Writing a Halite Bot in Clojure</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too/">Bag of Little Bootstraps Presentation at PWL SF</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/20/visualizing-girl-talk-with-clojure-and-d3-dot-js/">Visualizing Girl Talk: Parsing with Clojure&#8217;s Instaparse</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/19/clojure-slash-conj-talk-on-3d-printing-keyboards/">Clojure/conj Talk on 3D Printing Keyboards</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love/">Presentation on The Mode Tree at Papers We Love Too</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/17/sa-profile-keys-on-a-kinesis-advantage/">SA Profile Keys on a Kinesis Advantage</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/02/poisonous-shapes/">Poisonous Shapes in Algebra and Graph Theory</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/12/silvermans-mode-detection-method-explained/">Silverman&#8217;s Mode Estimation Method Explained</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/adereth">@adereth</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'adereth',
+            count: 10,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2021 - Matt Adereth -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = '1overn';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

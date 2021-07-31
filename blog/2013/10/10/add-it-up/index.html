@@ -1,0 +1,537 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Add it up (properly) - adereth</title>
+  <meta name="author" content="Matt Adereth">
+
+  
+  <meta name="description" content="Floating point arithmetic can sometimes be frustratingly unstable, particularly when applied to large datasets. Even though the classic What Every &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://adereth.github.io/blog/2013/10/10/add-it-up/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+   <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="adereth" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic|Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+<link href="//fonts.googleapis.com/css?family=Crimson+Text:400italic,400,600italic,600,700italic,700" rel="stylesheet" type="text/css">
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ TeX: { extensions: ["color.js"] }});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript"
+        src="http://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-44572622-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <!-- <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:adereth.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav> -->
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Add It Up (Properly)</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-10T22:14:00-07:00" pubdate data-updated="true">Oct 10<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Floating point arithmetic can sometimes be frustratingly <a href="https://en.wikipedia.org/wiki/Numerical_stability">unstable</a>, particularly when applied to large datasets.  Even though the classic <a href="http://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html">What Every Computer Scientist Should Know About Floating-Point Arithmetic</a> seems to make the front page of of Hacker News on a yearly basis (<a href="https://news.ycombinator.com/item?id=4815399">1</a>, <a href="https://news.ycombinator.com/item?id=1982332">2</a>, <a href="http://news.ycombinator.com/item?id=1937182">3</a>, <a href="http://news.ycombinator.com/item?id=1746797">4</a>, <a href="http://news.ycombinator.com/item?id=687604">5</a>,
+<a href="http://news.ycombinator.com/item?id=453396">6</a>), I have never seen any big data package actually apply one of the simplest and cheapest recommendations from it.</p>
+
+<p>I&rsquo;m talking about the <a href="https://en.wikipedia.org/wiki/Kahan_summation_algorithm">Kahan Summation algorithm</a>.  Maybe it gets ignored because it&rsquo;s covered <a href="http://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html#1076">half-way through the paper</a>.  Despite being buried, you can tell it&rsquo;s important because the author uses uncharacteristally strong language at the end of the section on the algorithm:</p>
+
+<blockquote><p>Since these bounds hold for almost all commercial hardware, it would be foolish for numerical programmers to ignore such algorithms, and it would be irresponsible for compiler writers to destroy these algorithms by pretending that floating-point variables have real number semantics.</p></blockquote>
+
+<p>Whoa.  Let&rsquo;s not be foolish!</p>
+
+<h2>Example: The Harmonic Series in Clojure</h2>
+
+<p>We&rsquo;re going to be computing a partial sum of the <a href="https://en.wikipedia.org/wiki/Harmonic_series_(mathematics)">Harmonic Series</a>:</p>
+
+<p><img src="http://upload.wikimedia.org/math/9/4/0/9402cf0c5599afa1a47d12d4a704e3de.png" title="\sum_{n=1}^\infty\,\frac{1}{n} \;\;=\;\; 1 \,+\, \frac{1}{2} \,+\, \frac{1}{3} \,+\, \frac{1}{4} \,+\, \frac{1}{5} \,+\, \cdots.\" ></p>
+
+<p>It&rsquo;s another nice example because it contains terms that can&rsquo;t be represented precisely in floating point and the true sum diverges.</p>
+
+<p>Let&rsquo;s start by computing the sum with infinite precision.  Clojure&rsquo;s <a href="https://github.com/clojure/clojure/blob/229bf8fe9a751e4f48bb2b7ea57e27ebc43d26ae/src/jvm/clojure/lang/Ratio.java"><code>Ratio</code></a> class represents values internally using <a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html"><code>BigInteger</code></a> to separately store the numerator and denominator.  The summation happens using the grade-school style of making the denominators match and summing the numerators, so we have the exact running sum throughout.  At the very end, we convert the number to a floating point double:</p>
+
+<figure class='code'><figcaption><span>Infinite Precision </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">harmonic-ratios</span> <span class="p">(</span><span class="nb">map / </span><span class="p">(</span><span class="nb">rest </span><span class="p">(</span><span class="nf">range</span><span class="p">))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nb">take </span><span class="mi">6</span> <span class="nv">harmonic-ratios</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;; (1 1/2 1/3 1/4 1/5 1/6)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">harmonic-ratios</span> <span class="p">(</span><span class="nb">take </span><span class="mi">10000</span><span class="p">)</span> <span class="p">(</span><span class="nb">reduce </span><span class="nv">+</span><span class="p">)</span> <span class="nv">double</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;; 9.787606036044382</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For the first 10,000 elements, we&rsquo;ll see numerical differences starting at the 14th decimal place, so just focus on the <em>last two digits</em> in the results.</p>
+
+<p>As expected, we see a slightly different result if we compute the sum of doubles:</p>
+
+<figure class='code'><figcaption><span>Double Precision </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">harmonic-doubles</span> <span class="p">(</span><span class="nb">map double </span><span class="nv">harmonic-ratios</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nb">take </span><span class="mi">6</span> <span class="nv">harmonic-doubles</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;; (1.0 0.5 0.3333333333333333 0.25 0.2 0.1666666666666667)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">harmonic-doubles</span> <span class="p">(</span><span class="nb">take </span><span class="mi">10000</span><span class="p">)</span> <span class="p">(</span><span class="nb">reduce </span><span class="nv">+</span><span class="p">))</span>
+</span><span class='line'><span class="c1">;; 9.787606036044348 (48 vs. 82 with infinite precision)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>One approach that will get more accurate results is to use an arbitrary precision representation of the numbers, like <a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigDecimal.html"><code>BigDecimal</code></a>.  If we naively try to convert <code>harmonic-ratios</code> to <code>BigDecimal</code>, we get an <code>ArithmeticException</code> as soon as we hit 1/3:</p>
+
+<figure class='code'><figcaption><span>Converting Fractions to BigDecimals </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">bigdec</span> <span class="mi">1</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;; 1M</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">bigdec</span> <span class="mi">1</span><span class="nv">/2</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;; 0.5M</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">bigdec</span> <span class="mi">1</span><span class="nv">/3</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;; java.lang.ArithmeticException: Non-terminating decimal expansion; no exact representable decimal result.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We need to explicitly set the precision that we want using a <a href="http://docs.oracle.com/javase/7/docs/api/java/math/MathContext.html"><code>MathContext</code></a>.  Let&rsquo;s use 32 decimal places for good measure:</p>
+
+<figure class='code'><figcaption><span>32 Decimal Place Precision </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">inverse-bigdec</span> <span class="p">[</span><span class="nv">n</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">context</span> <span class="p">(</span><span class="nf">java.math.MathContext.</span> <span class="mi">32</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">.divide</span> <span class="p">(</span><span class="nf">bigdec</span> <span class="mi">1</span><span class="p">)</span> <span class="p">(</span><span class="nf">bigdec</span> <span class="nv">n</span><span class="p">)</span> <span class="nv">context</span><span class="p">)))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="k">def </span><span class="nv">harmonic-bigdecs</span> <span class="p">(</span><span class="nb">map </span><span class="nv">inverse-bigdec</span> <span class="p">(</span><span class="nb">rest </span><span class="p">(</span><span class="nf">range</span><span class="p">))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nb">take </span><span class="mi">6</span> <span class="nv">harmonic-bigdecs</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;; (1M 0.5M 0.33333333333333333333333333333333M 0.25M 0.2M 0.16666666666666666666666666666667M)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">harmonic-bigdecs</span> <span class="p">(</span><span class="nb">take </span><span class="mi">10000</span><span class="p">)</span> <span class="p">(</span><span class="nb">reduce </span><span class="nv">+</span><span class="p">)</span> <span class="nv">double</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;; 9.787606036044382 (perfectly matches infinite precision result)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, let&rsquo;s see how <a href="https://en.wikipedia.org/wiki/Kahan_summation_algorithm">Kahan Summation algorithm</a> performs on doubles:</p>
+
+<figure class='code'><figcaption><span>Double Precision with Kahan Summation </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">kahan-sum</span> <span class="p">[</span><span class="nv">coll</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">loop </span><span class="p">[[</span><span class="nv">x</span> <span class="o">&amp;</span> <span class="nv">xs</span><span class="p">]</span> <span class="nv">coll</span> <span class="nv">sum</span> <span class="mf">0.0</span> <span class="nv">carry</span> <span class="mf">0.0</span><span class="p">]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">if-not </span><span class="nv">x</span> <span class="nv">sum</span>
+</span><span class='line'>      <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">y</span> <span class="p">(</span><span class="nb">- </span><span class="nv">x</span> <span class="nv">carry</span><span class="p">)</span> <span class="nv">t</span> <span class="p">(</span><span class="nb">+ </span><span class="nv">y</span> <span class="nv">sum</span><span class="p">)]</span>
+</span><span class='line'>        <span class="p">(</span><span class="nf">recur</span> <span class="nv">xs</span> <span class="nv">t</span> <span class="p">(</span><span class="nb">- </span><span class="nv">t</span> <span class="nv">sum</span> <span class="nv">y</span><span class="p">))))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">harmonic-doubles</span> <span class="p">(</span><span class="nb">take </span><span class="mi">10000</span><span class="p">)</span> <span class="nv">kahan-sum</span><span class="p">)</span>
+</span><span class='line'><span class="c1">;; 9.787606036044382 (perfectly matches infinite precision result)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Everything but vanilla summation of doubles has given us the same answer!</p>
+
+<p>To be fair to doubles, we are summing them in what intuitively is a poor order.  The smallest values are being added to the largest intermediate sums, preventing their low-order bits from accumulating.  We can try to remedy this by reversing the order:</p>
+
+<figure class='code'><figcaption><span>Double Precision Reversed </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">harmonic-doubles</span> <span class="p">(</span><span class="nb">take </span><span class="mi">10000</span><span class="p">)</span> <span class="nb">reverse </span><span class="p">(</span><span class="nb">reduce </span><span class="nv">+</span><span class="p">))</span>
+</span><span class='line'><span class="c1">;; 9.787606036044386</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Well, that&rsquo;s different.  This is the first time we&rsquo;re seeing the floating point noise lead to something larger than the infinite precision answer.</p>
+
+<h2>Conclusion</h2>
+
+<p>For just a couple additional floating point operations per element, we get a result that competes with the more expensive arbitrary precision solutions.  It also does better than the naive approach of pre-sorting, which is both more expensive and eliminates the ability to deal with the data in a streaming fashion.</p>
+
+<p>In a subsequent post, I plan on covering how Kahan Summation can be used effectively in a map-reduce framework.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Matt Adereth</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-10T22:14:00-07:00" pubdate data-updated="true">Oct 10<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/clojure/'>clojure</a>, <a class='category' href='/blog/categories/math/'>math</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://adereth.github.io/blog/2013/10/10/add-it-up/" data-via="adereth" data-counturl="http://adereth.github.io/blog/2013/10/10/add-it-up/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/10/02/why-you-should-try-a-tiling-window-manager/" title="Previous Post: Why you should try a tiling window manager">&laquo; Why you should try a tiling window manager</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/10/13/unicode-math-0-dot-2-0-released/" title="Next Post: unicode-math 0.2.0 released">unicode-math 0.2.0 released &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <p>
+  <center><img src="/images/aleph.png"/></center>
+  <a href="http://adereth.github.io" alt="Home"><h1>Adereth's Blog</h1></a>
+
+  <ul id="recent_posts">
+      <li class="post">
+	<a href="http://adereth.github.io"><i class="fa fa-home fa-fw"></i> Home</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.github.io/about/"><i class="fa fa-user fa-fw"></i> About Me</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.github.io/atom.xml"><i class="fa fa-rss fa-fw"></i> Feed</a>
+      </li>
+  </ul>
+
+  <h1>Connect</h1>
+
+  <ul id="recent_posts">
+      <li class="post">
+	<a href="https://twitter.com/adereth"><i class="fa fa-twitter fa-fw"></i> Twitter</a>
+      </li>
+      <li class="post">
+	<a href="https://github.com/adereth"><i class="fa fa-github fa-fw"></i> GitHub</a>
+      </li>
+      <li class="post">
+	<a href="http://www.linkedin.com/in/adereth/"><i class="fa fa-linkedin fa-fw"></i> LinkedIn</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.tumblr.com/"><i class="fa fa-tumblr fa-fw"></i> Tumblr</a>
+      </li>
+  </ul>
+
+
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/01/03/distributed-black-box-optimization-talk-at-qconny/">Distributed Black-Box Optimization Talk at QCon</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/11/02/playing-with-wolfram-playing-cards/">Playing with Wolfram Playing Cards</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/12/06/writing-a-halite-bot-in-clojure/">Writing a Halite Bot in Clojure</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too/">Bag of Little Bootstraps Presentation at PWL SF</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/20/visualizing-girl-talk-with-clojure-and-d3-dot-js/">Visualizing Girl Talk: Parsing with Clojure's Instaparse</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/19/clojure-slash-conj-talk-on-3d-printing-keyboards/">Clojure/conj Talk on 3D Printing Keyboards</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love/">Presentation on The Mode Tree at Papers We Love Too</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/17/sa-profile-keys-on-a-kinesis-advantage/">SA Profile Keys on a Kinesis Advantage</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/02/poisonous-shapes/">Poisonous Shapes in Algebra and Graph Theory</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/12/silvermans-mode-detection-method-explained/">Silverman's Mode Estimation Method Explained</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/adereth">@adereth</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'adereth',
+            count: 10,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2021 - Matt Adereth -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = '1overn';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://adereth.github.io/blog/2013/10/10/add-it-up/';
+        var disqus_url = 'http://adereth.github.io/blog/2013/10/10/add-it-up/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

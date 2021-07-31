@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: latex | adereth]]></title>
+  <link href="http://adereth.github.io/blog/categories/latex/atom.xml" rel="self"/>
+  <link href="http://adereth.github.io/"/>
+  <updated>2021-07-31T10:59:35-07:00</updated>
+  <id>http://adereth.github.io/</id>
+  <author>
+    <name><![CDATA[Matt Adereth]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Presentation on The Mode Tree at Papers We Love Too]]></title>
+    <link href="http://adereth.github.io/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love/"/>
+    <updated>2015-04-06T20:10:00-07:00</updated>
+    <id>http://adereth.github.io/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love</id>
+    <content type="html"><![CDATA[<script src="http://d3js.org/d3.v2.js"></script>
+
+
+<div>
+<style type="text/css">
+
+.chart {
+  font-size: 10px;
+  margin-top: -40px;
+}
+
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2;
+  shape-rendering: crispEdges;
+}
+
+.area {
+  fill: indianred;
+  fill-opacity: 0.25;
+  stroke: #000;
+  stroke-opacity: 0.5;
+}
+
+.point {
+  fill: #126ED5;
+  fill-opacity: 0.75;
+  stroke: none;
+  stroke-width: 1
+  stroke-opacity: 0.5;
+}
+
+.kernelline {
+  fill: none;
+  stroke: #D04400;
+  stroke-width: 1;
+  stroke-opacity: 0.75;
+}
+
+.kdeline {
+  fill: none;
+  stroke: #CB17CE;
+  stroke-opacity: 0.75;
+  stroke-width: 4
+}
+
+.summedarea {
+  fill: steelblue;
+  fill-opacity: 0.75;
+  stroke: #000;
+  stroke-opacity: 0.5;
+}
+
+.bar rect {
+  fill: steelblue;
+  fill-opacity: 0.75;
+  shape-rendering: crispEdges;
+  stroke: #000;
+  stroke-opacity: 0.5;
+
+}
+
+.bar text {
+  fill: #fff;
+}
+
+.equation {
+  opacity: 0;
+}
+
+.kernelwidth {
+  stroke: #2DB15D;
+  stroke-width: 4;
+}
+
+.treeline {
+  fill: none;
+  stroke: #000;
+  stroke-opacity: 0.75;
+  stroke-width: 2
+}
+
+.treeconnector {
+  fill: none;
+  stroke: #999;
+  stroke-opacity: 0.75;
+  stroke-width: 2
+}
+
+</style>
+</div>
+
+
+<p>I recently gave a mini talk on <a href="http://adereth.github.io/oneoff/Mode%20Trees.pdf">The Mode Tree: A Tool for Visualization of Nonparametric Density Features</a> at <a href="http://www.meetup.com/papers-we-love-too/">Papers We Love Too</a> in San Francisco.  The talk is just the first 10 minutes:</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/T3Bt9Tn6P5c" frameborder="0" allowfullscreen></iframe>
+
+
+<p>I did the entire presentation as one huge sequence of animations using <a href="http://d3js.org/">D3.js</a>.  The Youtube video doesn&rsquo;t capture the glory that is SVG, so <a href="/oneoff/pwl-draft/scratch.html">I&rsquo;ve posted the slides</a>.</p>
+
+<p>I also finally got to apply the technique that I wrote about in my <a href="/blog/2013/11/29/colorful-equations/">Colorful Equations with MathJax post</a> from over a year ago, only instead of coloring explanatory text, the colors in the accompanying chart match:</p>
+
+<div style="font-size: 100%;">
+$$
+\definecolor{kernel}{RGB}{217,86,16}
+\definecolor{kde}{RGB}{203,23,206}
+\definecolor{point}{RGB}{18,110,213}
+\definecolor{width}{RGB}{45,177,93}
+\color{kde}\hat{f}_{\color{width}h}\color{black}(x) \color{black} = \frac{1}{n\color{width}h}\color{black}\sum\limits_{i=1}^n \color{kernel}K\color{black}(\frac{x-\color{point}X_i}{\color{width}h})
+$$
+</div>
+
+
+<div id='chart-1'></div>
+
+
+<script type='text/javascript'>
+var data = [
+{value: 13.1138}, {value: 10.6519}, {value: 20.5735}, {value: 7.89327}, {value: 9.02554}, {value: 20.8411}, {value: 8.84072}, {value: 10.6273}, {value: 13.5194}, {value: 17.9757}, {value: 10.1086}, {value: 8.68131}, {value: 7.16192}, {value: 19.9496}, {value: 8.77111}, {value: 19.5314}, {value: 9.40915}, {value: 12.8664}, {value: 23.1322}, {value: 13.5008}];
+
+function drawChart(data,chart,height) {
+$(chart).empty();
+var margin = {top: 50, right: 40, bottom: 40, left: 60};
+var width = $('.entry-content').width();
+var x = d3.scale.linear().domain([0, 30]).range([0, width - margin.left - margin.right]);
+
+           var xAxis = d3.svg.axis()
+                         .scale(x)
+                         .orient('bottom')
+                         .tickPadding(8)
+                         .ticks(8);
+
+           var svg = d3.select(chart).append('svg')
+                       .attr('width', width)
+                       .attr('height', height)
+                       .attr('class', 'chart')
+                       .append('g')
+                       .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+           svg.append("g")
+              .attr("class", "x axis")
+              .attr("transform", "translate(0," + (height - margin.top - margin.bottom) + ")")
+              .call(xAxis);
+
+           var y0 = height - margin.top - margin.bottom;
+
+
+               var points = svg.selectAll('.chart')
+                               .data(data)
+                           .enter().append('circle')
+                               .classed('point', true)
+                               .attr("id", function(d, i) { return "point" + i })
+                               .attr('cx', function(d, i) { return x(d.value) })
+                               .attr('cy', y0)
+                               .attr('r', 3.25);
+
+               var y = d3.scale.linear()
+                         .domain([0, 1])
+                         .range([height - margin.top - margin.bottom, 0]);
+
+               function subpoints(d, stddev) {
+                   return d3.range(d.value - 7, d.value + 7, 0.1).map(
+                       function (d2,i,a) {
+                           return {value: d2, height: gaussian(d2, d.value, stddev)};
+                       });
+               }
+
+               var widthLine = svg.append('path')
+                   .attr('class', 'kernelwidth')
+                   .attr("d", d3.svg.line()([[x(data[0].value - 1), y(0) + 2,],[x(data[0].value), y(0) + 2]]))
+                   .style('opacity', 0);
+
+               widthLine.transition().duration(1000).style('opacity', 1);
+
+var stddev = 1;
+
+           var scale = 0.5 / Math.sqrt(2 * Math.PI) / 2;
+           function gaussian(x, mean, sigma) {
+               var z = (x - mean) / sigma;
+               return scale * Math.exp(-0.5 * z * z) / sigma;
+           };
+
+
+               var kernels = data.sort(function(x,y){return x.value - y.value}).map(function(d, i) {
+                   var line = d3.svg.line()
+                                .x(function(d) { return x(d.value); })
+                                .y(function(d) { return y(d.height) });
+
+                   return svg.append('path')
+                             .attr('class', 'kernelline')
+                             .attr("d", line(subpoints(d, stddev)))
+                             .style('opacity', 1);
+
+               });
+
+                   var intermediateAreaPoints =
+                       d3.range(0, 30, 0.01).concat(data.map(function(x) {return x.value}))
+                                      .sort(function(a,b){return a-b})
+                                      .map(
+                                          function (x,i2,a) {
+                                              var y = 0;
+                                              //console.log(x)
+                                              data.forEach(function(d) {
+                                                  y += gaussian(x, d.value, stddev)
+                                              });
+                                              return {value: x, height: y};
+                                          }
+                                      );
+                   var line = d3.svg.line()
+                                .x(function(d) { return x(d.value); })
+                                .y(function(d) { return y(d.height); });
+
+
+        var summedArea = svg.append('path')
+            .attr('class', 'kdeline')
+                .attr("d", line(intermediateAreaPoints));
+
+
+
+}
+
+function drawChartWithResize(data, chart, height) {
+    drawChart(data, chart, height);
+        $(window).resize(function() {drawChart(data, chart, height); })
+};
+
+
+drawChartWithResize(data, '#chart-1', 300);
+
+
+</script>
+
+
+<p>Any questions or feedback on the presentation are welcome&hellip; thanks!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Colorful Equations with MathJax]]></title>
+    <link href="http://adereth.github.io/blog/2013/11/29/colorful-equations/"/>
+    <updated>2013-11-29T09:18:00-08:00</updated>
+    <id>http://adereth.github.io/blog/2013/11/29/colorful-equations</id>
+    <content type="html"><![CDATA[<p><a href="http://www.altdevblogaday.com/author/stuart-riffle/">Stuart Riffle</a> wrote up <a href="http://www.altdevblogaday.com/2011/05/17/understanding-the-fourier-transform/">a great explanation of the Fourier transform</a>.  There are a number of great visualizations in his post, but the climax is his explanation of the inverse discrete Fourier transform formula:</p>
+
+<p><img class="center" src="/images/DerivedDFT.png"></p>
+
+<p>What a brilliant representation!  My first thought was that more equations should have such elegant explanations that focus on the comprehension of the reader.  I&rsquo;d love to be able to produce such clear explanations in this style, so I did a little experimenting with Octopress and <a href="http://www.mathjax.org/">MathJax</a> to see how easy it would be.</p>
+
+<p>It turns out to only require a few minor yak trimmings to get something nice:</p>
+
+<div style="font-size: 150%;">
+$$
+\definecolor{energy}{RGB}{114,0,172}
+\definecolor{freq}{RGB}{45,177,93}
+\definecolor{spin}{RGB}{251,0,29}
+\definecolor{signal}{RGB}{18,110,213}
+\definecolor{circle}{RGB}{217,86,16}
+\definecolor{average}{RGB}{203,23,206}
+\color{energy} X_{\color{freq} k} \color{black} =
+\color{average} \frac{1}{N} \sum_{n=0}^{N-1}
+\color{signal}x_n \color{spin}
+e^{\mathrm{i} \color{circle} 2\pi \color{freq}k \color{average} \frac{n}{N}}
+$$
+</div>
+
+
+<blockquote><p>To find <font color="#7200AC">the energy</font> <font color="2DB15D">at a particular frequency</font>, <font color="#FB001D">spin</font> <font color="#126ED5">your signal</font> <font color="#D04400">around a circle</font> <font color="2DB15D">at that frequency</font>, and <font color="#CB17CE">average a bunch of points along that path</font>.</p></blockquote>
+
+<p>By using MathJax instead of including a .png we get some nice benefits:</p>
+
+<ol>
+<li>Accessibility via screen readers</li>
+<li>Scalable renderings that look awesome on Retina displays</li>
+<li>$\LaTeX$ source that is accessible by the audience (right click on the formula)</li>
+<li>Simplified page-build process and source management</li>
+</ol>
+
+
+<p>There are <a href="http://www.google.com/search?q=octopress%20mathjax">a bunch of guides on setting up MathJax with Octopress</a>, but I didn&rsquo;t mess with any of them because the <a href="https://github.com/bijumon/oct2">oct2 theme</a> ships with an alternative <code>head.html</code> that is preconfigured to support it.</p>
+
+<p>The only tweak I made was to load the <a href="http://docs.mathjax.org/en/latest/tex.html#color">Color extension for MathJax</a>:</p>
+
+<p>```html</p>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ TeX: { extensions: ["color.js"] }});
+</script>
+
+
+<p>```</p>
+
+<p>After adding that, I was able to use the <code>\definecolor</code> and <code>\color</code> directives just like I would in a paper:</p>
+
+<p><code>latex
+\definecolor{energy}{RGB}{114,0,172}
+\definecolor{freq}{RGB}{45,177,93}
+\definecolor{spin}{RGB}{251,0,29}
+\definecolor{signal}{RGB}{18,110,213}
+\definecolor{circle}{RGB}{217,86,16}
+\definecolor{average}{RGB}{203,23,206}
+\color{energy} X_{\color{freq} k} \color{black} =
+\color{average} \frac{1}{N} \sum_{n=0}^{N-1}
+\color{signal}x_n \color{spin}
+e^{\mathrm{i} \color{circle} 2\pi \color{freq}k
+\color{average} \frac{n}{N}}
+</code></p>
+
+<p>There were a couple issues:</p>
+
+<ol>
+<li>As mentioned in several of the guides, the default markdown processor for Octopress will interfere with the <code>_</code> and <code>^</code> in your TeX.  I had originally worked around this by escaping them.  At the end, I wrapped the whole expression in a <code>&lt;div&gt;</code> to make the font larger, which had the side-effect of eliminating the need for escaping.</li>
+<li>MathJax&rsquo;s <code>\definecolor</code> doesn&rsquo;t seem to support the <code>HTML</code> color space, which lets you specify colors in hex codes.  I ended up manually converting the colors back and forth between decimal and hexidecimal for the prose below the equation:</li>
+</ol>
+
+
+<p><code>html
+To find &lt;font color="#7200AC"&gt;the energy&lt;/font&gt;
+&lt;font color="2DB15D"&gt;at a particular frequency&lt;/font&gt;,
+&lt;font color="#FB001D"&gt;spin&lt;/font&gt; &lt;font color="#126ED5"&gt;your
+signal&lt;/font&gt; &lt;font color="#D04400"&gt;around a circle&lt;/font&gt;
+&lt;font color="2DB15D"&gt;at that frequency&lt;/font&gt;, and
+&lt;font color="#CB17CE"&gt;average a bunch of points along that
+path&lt;/font&gt;.
+</code></p>
+
+<p>Now I just need a formula to explain&hellip;</p>
+]]></content>
+  </entry>
+  
+</feed>

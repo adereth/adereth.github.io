@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: d3 | adereth]]></title>
+  <link href="http://adereth.github.io/blog/categories/d3/atom.xml" rel="self"/>
+  <link href="http://adereth.github.io/"/>
+  <updated>2021-07-31T10:59:35-07:00</updated>
+  <id>http://adereth.github.io/</id>
+  <author>
+    <name><![CDATA[Matt Adereth]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Visualizing Girl Talk: Parsing with Clojure's Instaparse]]></title>
+    <link href="http://adereth.github.io/blog/2016/01/20/visualizing-girl-talk-with-clojure-and-d3-dot-js/"/>
+    <updated>2016-01-20T06:10:00-08:00</updated>
+    <id>http://adereth.github.io/blog/2016/01/20/visualizing-girl-talk-with-clojure-and-d3-dot-js</id>
+    <content type="html"><![CDATA[<p>Greg Gillis, also known as Girl Talk, is an impressive DJ who creates mega-mashups consisting of hundreds of samples.  His sample selections span 7 decades and dozens of genres.  Listening to his albums is a bit like having a concentrated dump of music history injected right into your brain.</p>
+
+<p><img src="/images/popculture.png" alt="Neo: &quot;I know pop culture&quot;" /></p>
+
+<p>I became a little obsessed with his work last year and I wanted a better way to experience his albums, so I created an annotated player using Clojure and d3 that shows relevant data and links about every track as it plays:</p>
+
+<p><a href="http://adereth.github.io/oneoff/girltalk-v2/"><img src="/images/girltalkplayer.png" alt="Image of player" /></a></p>
+
+<p>I have versions of this player for his two most recent albums:</p>
+
+<ul>
+<li><a href="http://adereth.github.io/oneoff/girltalk-v2/">All Day</a></li>
+<li><a href="http://adereth.github.io/oneoff/girltalk-v2/fta.html">Feed The Animals</a></li>
+</ul>
+
+
+<p>Unfortunately, they only really work on the desktop right now.</p>
+
+<h2>Parsing Track Data</h2>
+
+<p>I&rsquo;ve released <a href="http://github.com/adereth/girltalk-visualization">all the code</a> that I used to collect the data and to generate the visualizations, but in this post I&rsquo;m just going to talk about the first stage of the process: getting the details of which tracks were sampled at each time.</p>
+
+<p>There&rsquo;s an excellent (totally legal!) crowd-sourced wiki called <a href="http://illegal-tracklist.net/Tracklists/">Illegal Tracklist</a> that has information about most of the samples displayed like this:</p>
+
+<ol><li>"Oh No" - 5:39</li>
+<ul><li>0:03 - 2:08 <a class='urllink' href='http://en.wikipedia.org/wiki/Black%20Sabbath' rel='nofollow'>Black Sabbath</a> - "<a class='urllink' href='http://en.wikipedia.org/wiki/War%20Pigs' rel='nofollow'>War Pigs</a>"
+</li><li>0:13 - 0:15 <a class='urllink' href='http://en.wikipedia.org/wiki/Tupac_Shakur' rel='nofollow'>2Pac</a> featuring <a class='urllink' href='http://en.wikipedia.org/wiki/K-Ci%20&amp;%20JoJo' rel='nofollow'>K-Ci &amp; JoJo</a> - "<a class='urllink' href='http://en.wikipedia.org/wiki/How%20Do%20U%20Want%20It' rel='nofollow'>How Do U Want It</a>"
+</li><li>0:15 - 0:15 <a class='urllink' href='http://en.wikipedia.org/wiki/Jay-Z' rel='nofollow'>Jay-Z</a> - "<a class='urllink' href='http://en.wikipedia.org/wiki/99%20Problems' rel='nofollow'>99 Problems</a>"
+</li><li>0:20 - 2:02 <a class='urllink' href='http://en.wikipedia.org/wiki/Ludacris' rel='nofollow'>Ludacris</a> featuring <a class='urllink' href='http://en.wikipedia.org/wiki/Mystikal' rel='nofollow'>Mystikal</a> and <a class='urllink' href='http://en.wikipedia.org/wiki/I-20%20%28rapper%29' rel='nofollow'>I-20</a> - "<a class='urllink' href='http://en.wikipedia.org/wiki/Move%20Bitch' rel='nofollow'>Move Bitch</a>"
+</li>
+⋮
+<li>4:45 - 4:55 <a class='urllink' href='http://en.wikipedia.org/wiki/Trina' rel='nofollow'>Trina</a> featuring <a class='urllink' href='http://en.wikipedia.org/wiki/Killer%20Mike' rel='nofollow'>Killer Mike</a> - "Look Back at Me"
+</li><li>4:53 - 4:53 <a class='urllink' href='http://en.wikipedia.org/wiki/N.W.A' rel='nofollow'>N.W.A</a> - "Appetite for Destruction" (portion sampled samples "Get Me Back on Time, Engine #9" by <a class='urllink' href='http://en.wikipedia.org/wiki/Wilson_Pickett' rel='nofollow'>Wilson Pickett</a>)
+</li><li>4:56 - 5:39 <a class='urllink' href='http://en.wikipedia.org/wiki/Missy%20Elliott' rel='nofollow'>Missy Elliott</a> - "<a class='urllink' href='http://en.wikipedia.org/wiki/Get%20Ur%20Freak%20On' rel='nofollow'>Get Ur Freak On</a>"
+</li></ul>
+
+<li>"Let It Out" - 6:29</li>
+<ul><li>0:00 - 0:01 <a class='urllink' href='http://en.wikipedia.org/wiki/Ramones' rel='nofollow'>Ramones</a> - "<a class='urllink' href='http://en.wikipedia.org/wiki/Blitzkrieg%20Bop' rel='nofollow'>Blitzkrieg Bop</a>"
+</li><li>0:00 - 0:05 <a class='urllink' href='http://en.wikipedia.org/wiki/Missy%20Elliott' rel='nofollow'>Missy Elliott</a> - "<a class='urllink' href='http://en.wikipedia.org/wiki/Get%20Ur%20Freak%20On' rel='nofollow'>Get Ur Freak On</a>"
+</li><li>0:00 - 0:10 <a class='urllink' href='http://en.wikipedia.org/wiki/Busta%20Rhymes' rel='nofollow'>Busta Rhymes</a> featuring <a class='urllink' href='http://en.wikipedia.org/wiki/Sean%20Paul' rel='nofollow'>Sean Paul</a> and Spliff Star - "<a class='urllink' href='http://en.wikipedia.org/wiki/Make%20It%20Clap' rel='nofollow'>Make It Clap</a>"
+</li>
+⋮
+</ul>
+</ol>
+
+
+<p>At first, I used Enlive to suck down the HTML versions of the wiki pages, but I realized it might be cleaner to operate off the raw wiki markup which looks like this:</p>
+
+<p><code>
+!! 1. "Oh No" - 5:39
+* 0:03 - 2:08 [[http://en.wikipedia.org/wiki/Black%20Sabbath | Black Sabbath]] - "[[http://en.wikipedia.org/wiki/War%20Pigs | War Pigs]]"
+* 0:13 - 0:15 [[http://en.wikipedia.org/wiki/Tupac_Shakur | 2Pac]] featuring [[http://en.wikipedia.org/wiki/K-Ci%20&amp;%20JoJo | K-Ci &amp; JoJo]] - "[[http://en.wikipedia.org/wiki/How%20Do%20U%20Want%20It | How Do U Want It]]"
+* 0:15 - 0:15 [[http://en.wikipedia.org/wiki/Jay-Z | Jay-Z]] - "[[http://en.wikipedia.org/wiki/99%20Problems | 99 Problems]]"
+* 0:20 - 2:02 [[http://en.wikipedia.org/wiki/Ludacris | Ludacris]] featuring [[http://en.wikipedia.org/wiki/Mystikal | Mystikal]] and [[http://en.wikipedia.org/wiki/I-20%20%28rapper%29 | I-20]] - "[[http://en.wikipedia.org/wiki/Move%20Bitch | Move Bitch]]"
+* 0:20 - 0:54 JC featuring [[http://en.wikipedia.org/wiki/Yung%20Joc | Yung Joc]] - "Vote 4 Me"
+</code></p>
+
+<p>I wrote a few specialized functions to pull the details out of the strings and into a data structure, but it quickly became unwieldy and unreadable.  I then saw that this was a perfect opportunity to use <a href="https://github.com/Engelberg/instaparse">Instaparse</a>.  Instaparse is a library that makes it easy to build parsers in Clojure by writing context-free grammars.</p>
+
+<p>Here&rsquo;s the Instaparse grammar that I used that parses the Illegal Tracklists' markup format:</p>
+
+<p>`&ldquo;clojure
+wiki-line = title-track-line | sample-track-line | &lt;&rdquo;></p>
+
+<p>title-track-line = &lt;&lsquo;!! &rsquo;> track-number &lt;&lsquo;. &rsquo;> track-name &lt;&lsquo; &ndash; &rsquo;> track-time
+track-number = #&lsquo;\d+&rsquo;
+track-name = #&lsquo;[^&ndash;]+(?= &ndash; )&rsquo;
+track-time = time</p>
+
+<p>sample-track-line = &lt;&lsquo;<em> &rsquo;> start-time &lt;&lsquo; &ndash; &rsquo;> end-time &lt;&lsquo; &rsquo;> artist-name &lt;&lsquo; &ndash; &rsquo;> sample-name
+artist-name = (link | artist-plain-text)</em>
+artist-plain-text = #&lsquo;[^\[]+(?= &ndash; )&rsquo; | #&lsquo;[^\[]+(?=\[)&rsquo;</p>
+
+<p>sample-name = (link | sample-plain-text)<em>
+sample-plain-text = #&lsquo;[^\[]</em>&rsquo;</p>
+
+<p>link = &lt;&lsquo;[[&rsquo;> url &lt;&lsquo; | &rsquo;> text &lt;&lsquo;]]&rsquo;>
+url = #&lsquo;[^|]+(?= | )&rsquo;
+text = #&lsquo;[^]]*&rsquo;</p>
+
+<p>start-time = time
+end-time = time
+<time> = #&lsquo;\d+:\d+&rsquo;
+```</p>
+
+<p>The high level structure is practically self-documenting: each line in the wiki source is either a title track line, a sample track line, or a blank line and each type of line is pretty clearly broken down into named components that are separated by string literals to be ignored in the output.  It does, however, become a bit nasty when you get to the terminal rules that are defined as regular expressions.  Instaparse truly delivers on its tagline:</p>
+
+<blockquote><p>What if context-free grammars were as easy to use as regular expressions?</p></blockquote>
+
+<p>The only problem is that regular expressions <em>aren&rsquo;t</em> always easy to use, especially when you have to start worrying about not greedily matching the text that is going to be used by Instaparse.</p>
+
+<blockquote class="twitter-tweet" lang="en"><p>Some people, when confronted with a problem, think “I know, I&#39;ll use Instaparse.” Now they have three problems. <a href="https://twitter.com/hashtag/clojure?src=hash">#clojure</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/525670531396165632">October 24, 2014</a></blockquote>
+
+
+<script async src="http://adereth.github.io//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<p>Despite some of the pain of regular expressions and grammar debugging, Instaparse was awesome for this part of the project and I would definitely use it again.  I love the organization that it brought to the code and the structure I got out was very usable:</p>
+
+<p>```clojure
+({:tag :wiki-line,
+  :content
+  ({:tag :title-track-line,</p>
+
+<pre><code>:content
+({:tag :track-number, :content ("1")}
+ {:tag :track-name, :content ("\"Oh No\" ")}
+ {:tag :track-time, :content ("5:39")})})}
+</code></pre>
+
+<p> {:tag :wiki-line,
+  :content
+  ({:tag :sample-track-line,</p>
+
+<pre><code>:content
+({:tag :start-time, :content ("0:03")}
+ {:tag :end-time, :content ("2:08")}
+ {:tag :artist-name,
+  :content
+  ({:tag :link,
+    :content
+    ({:tag :url,
+      :content ("http://en.wikipedia.org/wiki/Black%20Sabbath")}
+     {:tag :text, :content ("Black Sabbath")})})}
+ {:tag :sample-name,
+  :content
+  ({:tag :sample-plain-text, :content ("\"")}
+   {:tag :link,
+    :content
+    ({:tag :url,
+      :content ("http://en.wikipedia.org/wiki/War%20Pigs")}
+     {:tag :text, :content ("War Pigs")})}
+   {:tag :sample-plain-text, :content ("\"")})})})}
+</code></pre>
+
+<p> {:tag :wiki-line,
+  :content
+  ({:tag :sample-track-line,</p>
+
+<pre><code>:content
+({:tag :start-time, :content ("0:13")}
+ {:tag :end-time, :content ("0:15")}
+ {:tag :artist-name,
+  :content
+  ({:tag :link,
+    :content
+    ({:tag :url,
+      :content ("http://en.wikipedia.org/wiki/Tupac_Shakur")}
+     {:tag :text, :content ("2Pac")})}
+   {:tag :artist-plain-text, :content (" featuring ")}
+   {:tag :link,
+    :content
+    ({:tag :url,
+      :content ("http://en.wikipedia.org/wiki/K-Ci%20&amp;%20JoJo")}
+     {:tag :text, :content ("K-Ci &amp; JoJo")})})}
+ {:tag :sample-name,
+  :content
+  ({:tag :sample-plain-text, :content ("\"")}
+   {:tag :link,
+    :content
+    ({:tag :url,
+      :content
+      ("http://en.wikipedia.org/wiki/How%20Do%20U%20Want%20It")}
+     {:tag :text, :content ("How Do U Want It")})}
+   {:tag :sample-plain-text, :content ("\"")})})})}
+   ...
+</code></pre>
+
+<p>```</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Presentation on The Mode Tree at Papers We Love Too]]></title>
+    <link href="http://adereth.github.io/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love/"/>
+    <updated>2015-04-06T20:10:00-07:00</updated>
+    <id>http://adereth.github.io/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love</id>
+    <content type="html"><![CDATA[<script src="http://d3js.org/d3.v2.js"></script>
+
+
+<div>
+<style type="text/css">
+
+.chart {
+  font-size: 10px;
+  margin-top: -40px;
+}
+
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2;
+  shape-rendering: crispEdges;
+}
+
+.area {
+  fill: indianred;
+  fill-opacity: 0.25;
+  stroke: #000;
+  stroke-opacity: 0.5;
+}
+
+.point {
+  fill: #126ED5;
+  fill-opacity: 0.75;
+  stroke: none;
+  stroke-width: 1
+  stroke-opacity: 0.5;
+}
+
+.kernelline {
+  fill: none;
+  stroke: #D04400;
+  stroke-width: 1;
+  stroke-opacity: 0.75;
+}
+
+.kdeline {
+  fill: none;
+  stroke: #CB17CE;
+  stroke-opacity: 0.75;
+  stroke-width: 4
+}
+
+.summedarea {
+  fill: steelblue;
+  fill-opacity: 0.75;
+  stroke: #000;
+  stroke-opacity: 0.5;
+}
+
+.bar rect {
+  fill: steelblue;
+  fill-opacity: 0.75;
+  shape-rendering: crispEdges;
+  stroke: #000;
+  stroke-opacity: 0.5;
+
+}
+
+.bar text {
+  fill: #fff;
+}
+
+.equation {
+  opacity: 0;
+}
+
+.kernelwidth {
+  stroke: #2DB15D;
+  stroke-width: 4;
+}
+
+.treeline {
+  fill: none;
+  stroke: #000;
+  stroke-opacity: 0.75;
+  stroke-width: 2
+}
+
+.treeconnector {
+  fill: none;
+  stroke: #999;
+  stroke-opacity: 0.75;
+  stroke-width: 2
+}
+
+</style>
+</div>
+
+
+<p>I recently gave a mini talk on <a href="http://adereth.github.io/oneoff/Mode%20Trees.pdf">The Mode Tree: A Tool for Visualization of Nonparametric Density Features</a> at <a href="http://www.meetup.com/papers-we-love-too/">Papers We Love Too</a> in San Francisco.  The talk is just the first 10 minutes:</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/T3Bt9Tn6P5c" frameborder="0" allowfullscreen></iframe>
+
+
+<p>I did the entire presentation as one huge sequence of animations using <a href="http://d3js.org/">D3.js</a>.  The Youtube video doesn&rsquo;t capture the glory that is SVG, so <a href="/oneoff/pwl-draft/scratch.html">I&rsquo;ve posted the slides</a>.</p>
+
+<p>I also finally got to apply the technique that I wrote about in my <a href="/blog/2013/11/29/colorful-equations/">Colorful Equations with MathJax post</a> from over a year ago, only instead of coloring explanatory text, the colors in the accompanying chart match:</p>
+
+<div style="font-size: 100%;">
+$$
+\definecolor{kernel}{RGB}{217,86,16}
+\definecolor{kde}{RGB}{203,23,206}
+\definecolor{point}{RGB}{18,110,213}
+\definecolor{width}{RGB}{45,177,93}
+\color{kde}\hat{f}_{\color{width}h}\color{black}(x) \color{black} = \frac{1}{n\color{width}h}\color{black}\sum\limits_{i=1}^n \color{kernel}K\color{black}(\frac{x-\color{point}X_i}{\color{width}h})
+$$
+</div>
+
+
+<div id='chart-1'></div>
+
+
+<script type='text/javascript'>
+var data = [
+{value: 13.1138}, {value: 10.6519}, {value: 20.5735}, {value: 7.89327}, {value: 9.02554}, {value: 20.8411}, {value: 8.84072}, {value: 10.6273}, {value: 13.5194}, {value: 17.9757}, {value: 10.1086}, {value: 8.68131}, {value: 7.16192}, {value: 19.9496}, {value: 8.77111}, {value: 19.5314}, {value: 9.40915}, {value: 12.8664}, {value: 23.1322}, {value: 13.5008}];
+
+function drawChart(data,chart,height) {
+$(chart).empty();
+var margin = {top: 50, right: 40, bottom: 40, left: 60};
+var width = $('.entry-content').width();
+var x = d3.scale.linear().domain([0, 30]).range([0, width - margin.left - margin.right]);
+
+           var xAxis = d3.svg.axis()
+                         .scale(x)
+                         .orient('bottom')
+                         .tickPadding(8)
+                         .ticks(8);
+
+           var svg = d3.select(chart).append('svg')
+                       .attr('width', width)
+                       .attr('height', height)
+                       .attr('class', 'chart')
+                       .append('g')
+                       .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+           svg.append("g")
+              .attr("class", "x axis")
+              .attr("transform", "translate(0," + (height - margin.top - margin.bottom) + ")")
+              .call(xAxis);
+
+           var y0 = height - margin.top - margin.bottom;
+
+
+               var points = svg.selectAll('.chart')
+                               .data(data)
+                           .enter().append('circle')
+                               .classed('point', true)
+                               .attr("id", function(d, i) { return "point" + i })
+                               .attr('cx', function(d, i) { return x(d.value) })
+                               .attr('cy', y0)
+                               .attr('r', 3.25);
+
+               var y = d3.scale.linear()
+                         .domain([0, 1])
+                         .range([height - margin.top - margin.bottom, 0]);
+
+               function subpoints(d, stddev) {
+                   return d3.range(d.value - 7, d.value + 7, 0.1).map(
+                       function (d2,i,a) {
+                           return {value: d2, height: gaussian(d2, d.value, stddev)};
+                       });
+               }
+
+               var widthLine = svg.append('path')
+                   .attr('class', 'kernelwidth')
+                   .attr("d", d3.svg.line()([[x(data[0].value - 1), y(0) + 2,],[x(data[0].value), y(0) + 2]]))
+                   .style('opacity', 0);
+
+               widthLine.transition().duration(1000).style('opacity', 1);
+
+var stddev = 1;
+
+           var scale = 0.5 / Math.sqrt(2 * Math.PI) / 2;
+           function gaussian(x, mean, sigma) {
+               var z = (x - mean) / sigma;
+               return scale * Math.exp(-0.5 * z * z) / sigma;
+           };
+
+
+               var kernels = data.sort(function(x,y){return x.value - y.value}).map(function(d, i) {
+                   var line = d3.svg.line()
+                                .x(function(d) { return x(d.value); })
+                                .y(function(d) { return y(d.height) });
+
+                   return svg.append('path')
+                             .attr('class', 'kernelline')
+                             .attr("d", line(subpoints(d, stddev)))
+                             .style('opacity', 1);
+
+               });
+
+                   var intermediateAreaPoints =
+                       d3.range(0, 30, 0.01).concat(data.map(function(x) {return x.value}))
+                                      .sort(function(a,b){return a-b})
+                                      .map(
+                                          function (x,i2,a) {
+                                              var y = 0;
+                                              //console.log(x)
+                                              data.forEach(function(d) {
+                                                  y += gaussian(x, d.value, stddev)
+                                              });
+                                              return {value: x, height: y};
+                                          }
+                                      );
+                   var line = d3.svg.line()
+                                .x(function(d) { return x(d.value); })
+                                .y(function(d) { return y(d.height); });
+
+
+        var summedArea = svg.append('path')
+            .attr('class', 'kdeline')
+                .attr("d", line(intermediateAreaPoints));
+
+
+
+}
+
+function drawChartWithResize(data, chart, height) {
+    drawChart(data, chart, height);
+        $(window).resize(function() {drawChart(data, chart, height); })
+};
+
+
+drawChartWithResize(data, '#chart-1', 300);
+
+
+</script>
+
+
+<p>Any questions or feedback on the presentation are welcome&hellip; thanks!</p>
+]]></content>
+  </entry>
+  
+</feed>

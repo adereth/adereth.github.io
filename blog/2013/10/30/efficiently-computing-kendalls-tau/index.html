@@ -1,0 +1,688 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Efficiently Computing Kendall's Tau - adereth</title>
+  <meta name="author" content="Matt Adereth">
+
+  
+  <meta name="description" content="Typically when people talk about correlation they are referring to the Pearson&rsquo;s product-moment coefficient: $$\rho_{X,Y}={E[(X-\mu_X)(Y-\mu_Y &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://adereth.github.io/blog/2013/10/30/efficiently-computing-kendalls-tau/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+   <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="adereth" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic|Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+<link href="//fonts.googleapis.com/css?family=Crimson+Text:400italic,400,600italic,600,700italic,700" rel="stylesheet" type="text/css">
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ TeX: { extensions: ["color.js"] }});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript"
+        src="http://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-44572622-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <!-- <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:adereth.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav> -->
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Efficiently Computing Kendall's Tau</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-30T21:45:00-07:00" pubdate data-updated="true">Oct 30<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Typically when people talk about correlation they are referring to the <a href="http://en.wikipedia.org/wiki/Pearson_product-moment_correlation_coefficient">Pearson&rsquo;s product-moment coefficient</a>:</p>
+
+<p>$$\rho_{X,Y}={E[(X-\mu_X)(Y-\mu_Y)] \over \sigma_X\sigma_Y}$$</p>
+
+<p>The Pearson coefficient is 1 if the datasets have a perfectly positive linear relationship and -1 if they have a perfectly negative linear relationship.  But what if our data has a clear positive relationship, but it&rsquo;s not linear?  Or what if our data isn&rsquo;t even numeric and doesn&rsquo;t have a meaningful way of computing the average, $\mu$, or standard deviation, $\sigma$?</p>
+
+<p>In these cases, Kendall&rsquo;s Tau is a useful way of measuring the correlation since it only requires that we have a <a href="http://en.wikipedia.org/wiki/Total_order">total ordering</a> for each of our datasets.  For each pair of observations, $(x_1, y_1)$ and $(x_2, y_2)$, we call the pair <em>concordant</em> if:
+$$x_1 &lt; x_2 \text{ and } y_1 &lt; y_2$$
+$$\text{or}$$
+$$x_1 > x_2 \text{ and } y_1 > y_2$$
+&hellip;and we call the pair <em>discordant</em> if:
+$$x_1 &lt; x_2 \text{ and } y_1 > y_2$$
+$$\text{or}$$
+$$x_1 > x_2 \text{ and } y_1 &lt; y_2$$
+If $x_1 = x_2 \text{ or } y_1 = y_2$, the pair is neither concordant nor discordant.</p>
+
+<p>Kendall&rsquo;s Tau is then defined as:
+$$\tau = \frac{n_c-n_d}{\frac{1}{2} n (n-1) }$$
+Where $n_c$ is the number of concordant pairs and $n_d$ is the number of discordant pairs.
+Since $n (n-1) / 2$ is the total number of pairs, this value ranges from -1 to 1.</p>
+
+<p>Unfortunately, this approach doesn&rsquo;t deal well with tied values.  Consider the following set of $(x,y)$ observations:
+$$(1,1), (1,1), (2,2), (3,3)$$
+There&rsquo;s a perfectly positive linear relationship between X and Y, but only 5 of the 6 pairs are concordant.  For this case we want to use the $\tau_B$ modified version:</p>
+
+<p>$$\tau_B = \frac{n_c-n_d}{\sqrt{(n_0-n_1)(n_0-n_2)}}$$</p>
+
+<p>&hellip;where:</p>
+
+<p>$$n_0 = n(n-1)/2$$
+$$n_1 = \text{Number of pairs with tied values in } X$$
+$$n_2 = \text{Number of pairs with tied values in } Y$$</p>
+
+<h2>Computing Naively</h2>
+
+<p>We can compute $\tau_B$ in $O(n^{2})$ by looking at every pair of observations and tallying the number of concordant, discordant, and tied pairs.  Once we have the tallies, we&rsquo;ll apply the formula:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">kendalls-tau-from-tallies</span>
+</span><span class='line'>  <span class="p">[{</span><span class="ss">:keys</span> <span class="p">[</span><span class="nv">concordant</span> <span class="nv">discordant</span> <span class="nv">pairs</span> <span class="nv">x-ties</span> <span class="nv">y-ties</span><span class="p">]}]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nb">- </span><span class="nv">concordant</span> <span class="nv">discordant</span><span class="p">)</span>
+</span><span class='line'>     <span class="p">(</span><span class="nf">Math/sqrt</span> <span class="p">(</span><span class="nb">* </span><span class="p">(</span><span class="nb">- </span><span class="nv">pairs</span> <span class="nv">x-ties</span><span class="p">)</span>
+</span><span class='line'>                   <span class="p">(</span><span class="nb">- </span><span class="nv">pairs</span> <span class="nv">y-ties</span><span class="p">)))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For a given pair of observations, we&rsquo;ll construct a map describing which tallies it will contribute to:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">kendall-relations</span> <span class="p">[[[</span><span class="nv">x1</span> <span class="nv">y1</span><span class="p">]</span> <span class="p">[</span><span class="nv">x2</span> <span class="nv">y2</span><span class="p">]]]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">cond</span>
+</span><span class='line'>   <span class="p">(</span><span class="nb">and </span><span class="p">(</span><span class="nb">= </span><span class="nv">x1</span> <span class="nv">x2</span><span class="p">)</span> <span class="p">(</span><span class="nb">= </span><span class="nv">y1</span> <span class="nv">y2</span><span class="p">))</span> <span class="p">{</span><span class="ss">:x-ties</span> <span class="mi">1</span> <span class="ss">:y-ties</span> <span class="mi">1</span><span class="p">}</span>
+</span><span class='line'>   <span class="p">(</span><span class="nb">= </span><span class="nv">x1</span> <span class="nv">x2</span><span class="p">)</span> <span class="p">{</span><span class="ss">:x-ties</span> <span class="mi">1</span><span class="p">}</span>
+</span><span class='line'>   <span class="p">(</span><span class="nb">= </span><span class="nv">y1</span> <span class="nv">y2</span><span class="p">)</span> <span class="p">{</span><span class="ss">:y-ties</span> <span class="mi">1</span><span class="p">}</span>
+</span><span class='line'>   <span class="p">(</span><span class="nb">or </span><span class="p">(</span><span class="nb">and </span><span class="p">(</span><span class="nb">&lt; </span><span class="nv">x1</span> <span class="nv">x2</span><span class="p">)</span> <span class="p">(</span><span class="nb">&lt; </span><span class="nv">y1</span> <span class="nv">y2</span><span class="p">))</span>
+</span><span class='line'>       <span class="p">(</span><span class="nb">and </span><span class="p">(</span><span class="nb">&gt; </span><span class="nv">x1</span> <span class="nv">x2</span><span class="p">)</span> <span class="p">(</span><span class="nb">&gt; </span><span class="nv">y1</span> <span class="nv">y2</span><span class="p">)))</span> <span class="p">{</span><span class="ss">:concordant</span> <span class="mi">1</span><span class="p">}</span>
+</span><span class='line'>   <span class="ss">:else</span> <span class="p">{</span><span class="ss">:discordant</span> <span class="mi">1</span><span class="p">}))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now we need a way of generating every pair:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">pairs</span> <span class="p">[[</span><span class="nv">o</span> <span class="o">&amp;</span> <span class="nv">more</span><span class="p">]]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">nil? </span><span class="nv">o</span><span class="p">)</span> <span class="nv">nil</span>
+</span><span class='line'>      <span class="p">(</span><span class="nb">concat </span><span class="p">(</span><span class="nb">map </span><span class="o">#</span><span class="p">(</span><span class="nb">vector </span><span class="nv">o</span> <span class="nv">%</span><span class="p">)</span> <span class="nv">more</span><span class="p">)</span>
+</span><span class='line'>              <span class="p">(</span><span class="nf">lazy-seq</span> <span class="p">(</span><span class="nf">pairs</span> <span class="nv">more</span><span class="p">)))))</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">;; (pairs [1 2 3 4])</span>
+</span><span class='line'><span class="c1">;; =&gt; ([1 2] [1 3] [1 4] [2 3] [2 4] [3 4])</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, we put it all together by computing the relations tally for each pair and combining them using <code>merge-with</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">naive-kendalls-tau</span> <span class="p">[</span><span class="nv">xs</span> <span class="nv">ys</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">observations</span> <span class="p">(</span><span class="nb">map vector </span><span class="nv">xs</span> <span class="nv">ys</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">relations</span> <span class="p">(</span><span class="nb">map </span><span class="nv">kendall-relations</span> <span class="p">(</span><span class="nf">pairs</span> <span class="nv">observations</span><span class="p">))</span>
+</span><span class='line'>        <span class="nv">tallies</span> <span class="p">(</span><span class="nb">reduce </span><span class="p">(</span><span class="nb">partial merge-with </span><span class="nv">+</span>
+</span><span class='line'>                                 <span class="p">{</span><span class="ss">:pairs</span> <span class="mi">1</span><span class="p">})</span>
+</span><span class='line'>                        <span class="p">{</span><span class="ss">:concordant</span> <span class="mi">0</span> <span class="ss">:discordant</span> <span class="mi">0</span>
+</span><span class='line'>                         <span class="ss">:x-ties</span> <span class="mi">0</span> <span class="ss">:y-ties</span> <span class="mi">0</span> <span class="ss">:pairs</span> <span class="mi">0</span><span class="p">}</span>
+</span><span class='line'>                        <span class="nv">relations</span><span class="p">)]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">kendalls-tau-from-tallies</span> <span class="nv">tallies</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Knight&rsquo;s Algorithm</h2>
+
+<p>In 1966, William R. Knight was a visiting statistician at the Fisheries Research Board of Canada.  He wrote:</p>
+
+<blockquote><p>The problem of calculating Kendall&rsquo;s tau arose while attempting to evaluate species associations in catches by the Canadian east coast offshore fishery.  Sample sizes ranging up to 400 were common, making manual calculations out of the question; indeed, an initial program using an asymptotically inefficient method proved expensively slow.</p></blockquote>
+
+<p>Necessity is the mother of invention, so he came up with a clever algorithm for computing Kendall&rsquo;s Tau in $O(n \log{n})$ which he published in his paper entitled &ldquo;<a href="http://www.jstor.org/stable/2282833">A Computer Method for Calculating Kendall&rsquo;s Tau with Ungrouped Data</a>&rdquo;.</p>
+
+<p>First, sort the observations by their $x$ values using your favorite $O(n \log{n})$ algorithm.  Next, sort <em>that</em> sorted list by the $y$ values using a slightly modified <a href="http://en.wikipedia.org/wiki/Merge_sort">merge sort</a> that keeps track of the size of the swaps it had to perform.</p>
+
+<p>Recall that merge sort works as follows:</p>
+
+<ol>
+<li>Divide the unsorted list into $n$ sublists, each containing 1 element (a list of 1 element is considered sorted).</li>
+<li>Repeatedly merge sublists to produce new sublists until there is only 1 sublist remaining. This will be the sorted list.</li>
+</ol>
+
+
+<p><img class="center" src="http://upload.wikimedia.org/wikipedia/commons/c/cc/Merge-sort-example-300px.gif" title="Merge Sort Animation" >
+<em>(description and animation from <a href="http://en.wikipedia.org/wiki/Merge_sort">Wikipedia</a>)</em></p>
+
+<p>The trick is performed when merging sublists.  The list was originally sorted by $x$ values, so whenever an element from the second sublist is smaller than the next element from the first sublist we know that the corresponding observation is discordant with however many elements remain in the first sublist.</p>
+
+<p>We can implement this modified merge sort by first handling the case of merging two sorted sequences:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">merge-two-sorted-seqs-and-count-discords</span>
+</span><span class='line'>  <span class="s">&quot;Takes a sequence containing two sorted sequences and merges them.  If an</span>
+</span><span class='line'><span class="s">element from the second sequence is less than the head of the first sequence, we</span>
+</span><span class='line'><span class="s">know that it was discordant with all the elements remaining in the first</span>
+</span><span class='line'><span class="s">sequence.  This is the insight that allows us to avoid the O(n^2) comparisons in</span>
+</span><span class='line'><span class="s">the naive algorithm.</span>
+</span><span class='line'>
+</span><span class='line'><span class="s">A tuple containing the count of discords and the merged sequence is returned.&quot;</span>
+</span><span class='line'>  <span class="p">[[</span><span class="nv">coll1</span> <span class="nv">coll2</span><span class="p">]]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">loop </span><span class="p">[</span><span class="nv">swaps</span> <span class="mi">0</span>
+</span><span class='line'>
+</span><span class='line'>         <span class="c1">;; Explicitly track the remaining counts to avoid doing a linear</span>
+</span><span class='line'>         <span class="c1">;; scan of the sequence each time, which would get us back to O(n^2)</span>
+</span><span class='line'>         <span class="nv">remaining-i</span> <span class="p">(</span><span class="nb">count </span><span class="nv">coll1</span><span class="p">)</span>
+</span><span class='line'>         <span class="nv">remaining-j</span> <span class="p">(</span><span class="nb">count </span><span class="nv">coll2</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>         <span class="p">[</span><span class="nv">i</span> <span class="o">&amp;</span> <span class="nv">rest-i</span> <span class="ss">:as</span> <span class="nv">all-i</span><span class="p">]</span> <span class="nv">coll1</span>
+</span><span class='line'>         <span class="p">[</span><span class="nv">j</span> <span class="o">&amp;</span> <span class="nv">rest-j</span> <span class="ss">:as</span> <span class="nv">all-j</span><span class="p">]</span> <span class="nv">coll2</span>
+</span><span class='line'>         <span class="nv">result</span> <span class="p">[]]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nf">cond</span>
+</span><span class='line'>     <span class="p">(</span><span class="nb">zero? </span><span class="nv">remaining-j</span><span class="p">)</span> <span class="p">[</span><span class="nv">swaps</span> <span class="p">(</span><span class="nb">concat </span><span class="nv">result</span> <span class="nv">all-i</span><span class="p">)]</span>
+</span><span class='line'>     <span class="p">(</span><span class="nb">zero? </span><span class="nv">remaining-i</span><span class="p">)</span> <span class="p">[</span><span class="nv">swaps</span> <span class="p">(</span><span class="nb">concat </span><span class="nv">result</span> <span class="nv">all-j</span><span class="p">)]</span>
+</span><span class='line'>     <span class="p">(</span><span class="nb">&lt;= </span><span class="nv">i</span> <span class="nv">j</span><span class="p">)</span> <span class="p">(</span><span class="nf">recur</span> <span class="nv">swaps</span>
+</span><span class='line'>                     <span class="p">(</span><span class="nb">dec </span><span class="nv">remaining-i</span><span class="p">)</span> <span class="nv">remaining-j</span>
+</span><span class='line'>                     <span class="nv">rest-i</span> <span class="nv">all-j</span> <span class="p">(</span><span class="nb">conj </span><span class="nv">result</span> <span class="nv">i</span><span class="p">))</span>
+</span><span class='line'>     <span class="ss">:j&gt;i</span> <span class="p">(</span><span class="nf">recur</span> <span class="p">(</span><span class="nb">+ </span><span class="nv">swaps</span> <span class="nv">remaining-i</span><span class="p">)</span>
+</span><span class='line'>                  <span class="nv">remaining-i</span> <span class="p">(</span><span class="nb">dec </span><span class="nv">remaining-j</span><span class="p">)</span>
+</span><span class='line'>                  <span class="nv">all-i</span> <span class="nv">rest-j</span> <span class="p">(</span><span class="nb">conj </span><span class="nv">result</span> <span class="nv">j</span><span class="p">)))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, we can do the full merge sort by applying that function to piece sizes that double until the whole collection is covered by a single sorted piece:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">merge-sort-and-count-discords</span>
+</span><span class='line'>  <span class="s">&quot;Returns a vector containing the number of discordant swaps and the sorted</span>
+</span><span class='line'><span class="s">collection.&quot;</span>
+</span><span class='line'>  <span class="p">[</span><span class="nv">coll</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">loop </span><span class="p">[</span><span class="nv">swaps</span> <span class="mi">0</span>
+</span><span class='line'>         <span class="nv">coll</span> <span class="nv">coll</span>
+</span><span class='line'>         <span class="nv">piece-size</span> <span class="mi">1</span><span class="p">]</span>
+</span><span class='line'>    <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">pieces</span> <span class="p">(</span><span class="nf">partition-all</span> <span class="nv">piece-size</span> <span class="nv">coll</span><span class="p">)</span>
+</span><span class='line'>          <span class="nv">piece-pairs</span> <span class="p">(</span><span class="nf">partition-all</span> <span class="mi">2</span> <span class="nv">pieces</span><span class="p">)]</span>
+</span><span class='line'>      <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">-&gt; </span><span class="nv">piece-pairs</span> <span class="nb">first </span><span class="nv">second</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">(</span><span class="k">let </span><span class="p">[[</span><span class="nv">new-swaps</span> <span class="nv">new-coll</span><span class="p">]</span>
+</span><span class='line'>              <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">piece-pairs</span>
+</span><span class='line'>                   <span class="p">(</span><span class="nb">map </span><span class="nv">merge-two-sorted-seqs-and-count-discords</span><span class="p">)</span>
+</span><span class='line'>                   <span class="p">(</span><span class="nb">reduce </span><span class="p">(</span><span class="k">fn </span><span class="p">[[</span><span class="nv">acc-s</span> <span class="nv">acc-c</span><span class="p">]</span> <span class="p">[</span><span class="nv">s</span> <span class="nv">c</span><span class="p">]]</span>
+</span><span class='line'>                             <span class="p">[(</span><span class="nb">+ </span><span class="nv">acc-s</span> <span class="nv">s</span><span class="p">)</span> <span class="p">(</span><span class="nb">concat </span><span class="nv">acc-c</span> <span class="nv">c</span><span class="p">)])</span>
+</span><span class='line'>                           <span class="p">[</span><span class="mi">0</span> <span class="p">[]]))]</span>
+</span><span class='line'>          <span class="p">(</span><span class="nf">recur</span> <span class="p">(</span><span class="nb">+ </span><span class="nv">swaps</span> <span class="nv">new-swaps</span><span class="p">)</span> <span class="nv">new-coll</span> <span class="p">(</span><span class="nb">* </span><span class="mi">2</span> <span class="nv">piece-size</span><span class="p">)))</span>
+</span><span class='line'>        <span class="p">[</span><span class="nv">swaps</span> <span class="nv">coll</span><span class="p">]))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The only thing we are missing now is the tallies of tied pairs.  We could use <a href="http://clojuredocs.org/clojure_core/clojure.core/frequencies"><code>clojure.core/frequencies</code></a>, but Knight&rsquo;s original paper alludes to a different way which takes advantage of the fact that at different stages of the algorithm we have the list sorted by $X$ and then $Y$.  Most implementations do something like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">tied-pair-count</span> <span class="p">[</span><span class="nv">sorted-coll</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="nf">-&gt;&gt;</span> <span class="nv">sorted-coll</span>
+</span><span class='line'>       <span class="p">(</span><span class="nf">partition-by</span> <span class="nv">identity</span><span class="p">)</span>
+</span><span class='line'>       <span class="p">(</span><span class="nb">map </span><span class="nv">count</span><span class="p">)</span>
+</span><span class='line'>       <span class="p">(</span><span class="nb">map </span><span class="o">#</span><span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nb">* </span><span class="nv">%</span> <span class="p">(</span><span class="nb">dec </span><span class="nv">%</span><span class="p">))</span> <span class="mi">2</span><span class="p">))</span>
+</span><span class='line'>       <span class="p">(</span><span class="nb">reduce </span><span class="nv">+</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now we have all the pieces, so we just have to put them together:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='clojure'><span class='line'><span class="p">(</span><span class="kd">defn </span><span class="nv">knights-kendalls-tau</span> <span class="p">[</span><span class="nv">xs</span> <span class="nv">ys</span><span class="p">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">observations</span> <span class="p">(</span><span class="nb">sort </span><span class="p">(</span><span class="nb">map vector </span><span class="nv">xs</span> <span class="nv">ys</span><span class="p">))</span>
+</span><span class='line'>        <span class="nv">n</span> <span class="p">(</span><span class="nb">count </span><span class="nv">observations</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">pair-count</span> <span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nb">* </span><span class="nv">n</span> <span class="p">(</span><span class="nb">dec </span><span class="nv">n</span><span class="p">))</span> <span class="mi">2</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">xy-pair-ties</span> <span class="p">(</span><span class="nf">tied-pair-count</span> <span class="nv">observations</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">x-pair-ties</span> <span class="p">(</span><span class="nf">tied-pair-count</span> <span class="p">(</span><span class="nb">map first </span><span class="nv">observations</span><span class="p">))</span>
+</span><span class='line'>        <span class="p">[</span><span class="nv">swaps</span> <span class="nv">sorted-ys</span><span class="p">]</span> <span class="p">(</span><span class="nf">merge-sort-and-count-discords</span>
+</span><span class='line'>                           <span class="p">(</span><span class="nb">map second </span><span class="nv">observations</span><span class="p">))</span>
+</span><span class='line'>        <span class="nv">y-pair-ties</span> <span class="p">(</span><span class="nf">tied-pair-count</span> <span class="nv">sorted-ys</span><span class="p">)</span>
+</span><span class='line'>        <span class="nv">concordant-minus-discordant</span> <span class="p">(</span><span class="nb">- </span><span class="nv">pair-count</span>
+</span><span class='line'>                                       <span class="nv">x-pair-ties</span>
+</span><span class='line'>                                       <span class="nv">y-pair-ties</span>
+</span><span class='line'>                                       <span class="p">(</span><span class="nb">- </span><span class="nv">xy-pair-ties</span><span class="p">)</span>
+</span><span class='line'>                                       <span class="p">(</span><span class="nb">* </span><span class="mi">2</span> <span class="nv">swaps</span><span class="p">))]</span>
+</span><span class='line'>    <span class="p">(</span><span class="nb">/ </span><span class="nv">concordant-minus-discordant</span>
+</span><span class='line'>       <span class="p">(</span><span class="nf">Math/sqrt</span> <span class="p">(</span><span class="nb">* </span><span class="p">(</span><span class="nb">- </span><span class="nv">pair-count</span> <span class="nv">x-pair-ties</span><span class="p">)</span>
+</span><span class='line'>                     <span class="p">(</span><span class="nb">- </span><span class="nv">pair-count</span> <span class="nv">y-pair-ties</span><span class="p">))))))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Conclusion</h2>
+
+<p>There are certainly many things I would write differently above if I was really trying for performance.  The goal here was to clearly illustrate the algorithm and maintain the asymptotic run-time characteristics.</p>
+
+<p>Also, I recently submitted <a href="https://issues.apache.org/jira/browse/MATH-814">a patch</a> to the Apache Commons Math library that contains an implementation of this in pure Java if that&rsquo;s your thing.</p>
+
+<p>I think this algorithm is a clever little gem and I really enjoyed learning it.  Deconstructing a familiar algorithm like merge sort and utilizing its internal operations for some other purpose is a neat approach that I&rsquo;ll definitely keep in my algorithmic toolbox.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Matt Adereth</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-30T21:45:00-07:00" pubdate data-updated="true">Oct 30<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/algorithms/'>algorithms</a>, <a class='category' href='/blog/categories/clojure/'>clojure</a>, <a class='category' href='/blog/categories/math/'>math</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://adereth.github.io/blog/2013/10/30/efficiently-computing-kendalls-tau/" data-via="adereth" data-counturl="http://adereth.github.io/blog/2013/10/30/efficiently-computing-kendalls-tau/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/10/13/unicode-math-0-dot-2-0-released/" title="Previous Post: unicode-math 0.2.0 released">&laquo; unicode-math 0.2.0 released</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/11/08/core-dot-matrix-plus-apache-commons-math/" title="Next Post: core.matrix + Apache Commons Math">core.matrix + Apache Commons Math &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <p>
+  <center><img src="/images/aleph.png"/></center>
+  <a href="http://adereth.github.io" alt="Home"><h1>Adereth's Blog</h1></a>
+
+  <ul id="recent_posts">
+      <li class="post">
+	<a href="http://adereth.github.io"><i class="fa fa-home fa-fw"></i> Home</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.github.io/about/"><i class="fa fa-user fa-fw"></i> About Me</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.github.io/atom.xml"><i class="fa fa-rss fa-fw"></i> Feed</a>
+      </li>
+  </ul>
+
+  <h1>Connect</h1>
+
+  <ul id="recent_posts">
+      <li class="post">
+	<a href="https://twitter.com/adereth"><i class="fa fa-twitter fa-fw"></i> Twitter</a>
+      </li>
+      <li class="post">
+	<a href="https://github.com/adereth"><i class="fa fa-github fa-fw"></i> GitHub</a>
+      </li>
+      <li class="post">
+	<a href="http://www.linkedin.com/in/adereth/"><i class="fa fa-linkedin fa-fw"></i> LinkedIn</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.tumblr.com/"><i class="fa fa-tumblr fa-fw"></i> Tumblr</a>
+      </li>
+  </ul>
+
+
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/01/03/distributed-black-box-optimization-talk-at-qconny/">Distributed Black-Box Optimization Talk at QCon</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/11/02/playing-with-wolfram-playing-cards/">Playing with Wolfram Playing Cards</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/12/06/writing-a-halite-bot-in-clojure/">Writing a Halite Bot in Clojure</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too/">Bag of Little Bootstraps Presentation at PWL SF</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/20/visualizing-girl-talk-with-clojure-and-d3-dot-js/">Visualizing Girl Talk: Parsing with Clojure's Instaparse</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/19/clojure-slash-conj-talk-on-3d-printing-keyboards/">Clojure/conj Talk on 3D Printing Keyboards</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love/">Presentation on The Mode Tree at Papers We Love Too</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/17/sa-profile-keys-on-a-kinesis-advantage/">SA Profile Keys on a Kinesis Advantage</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/02/poisonous-shapes/">Poisonous Shapes in Algebra and Graph Theory</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/12/silvermans-mode-detection-method-explained/">Silverman's Mode Estimation Method Explained</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/adereth">@adereth</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'adereth',
+            count: 10,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2021 - Matt Adereth -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = '1overn';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://adereth.github.io/blog/2013/10/30/efficiently-computing-kendalls-tau/';
+        var disqus_url = 'http://adereth.github.io/blog/2013/10/30/efficiently-computing-kendalls-tau/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

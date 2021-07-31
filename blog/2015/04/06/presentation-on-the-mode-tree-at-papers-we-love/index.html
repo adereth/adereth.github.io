@@ -1,0 +1,625 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Presentation on The Mode Tree at Papers We Love Too - adereth</title>
+  <meta name="author" content="Matt Adereth">
+
+  
+  <meta name="description" content=".chart { font-size: 10px; margin-top: -40px;
+} .axis path, .axis line { fill: none; stroke: #000; stroke-width: 2; shape-rendering: crispEdges;
+} . &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://adereth.github.io/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+   <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="adereth" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic|Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+<link href="//fonts.googleapis.com/css?family=Crimson+Text:400italic,400,600italic,600,700italic,700" rel="stylesheet" type="text/css">
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ TeX: { extensions: ["color.js"] }});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript"
+        src="http://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-44572622-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <!-- <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:adereth.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav> -->
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Presentation on the Mode Tree at Papers We Love Too</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-04-06T20:10:00-07:00" pubdate data-updated="true">Apr 6<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><script src="http://d3js.org/d3.v2.js"></script>
+
+
+<div>
+<style type="text/css">
+
+.chart {
+  font-size: 10px;
+  margin-top: -40px;
+}
+
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2;
+  shape-rendering: crispEdges;
+}
+
+.area {
+  fill: indianred;
+  fill-opacity: 0.25;
+  stroke: #000;
+  stroke-opacity: 0.5;
+}
+
+.point {
+  fill: #126ED5;
+  fill-opacity: 0.75;
+  stroke: none;
+  stroke-width: 1
+  stroke-opacity: 0.5;
+}
+
+.kernelline {
+  fill: none;
+  stroke: #D04400;
+  stroke-width: 1;
+  stroke-opacity: 0.75;
+}
+
+.kdeline {
+  fill: none;
+  stroke: #CB17CE;
+  stroke-opacity: 0.75;
+  stroke-width: 4
+}
+
+.summedarea {
+  fill: steelblue;
+  fill-opacity: 0.75;
+  stroke: #000;
+  stroke-opacity: 0.5;
+}
+
+.bar rect {
+  fill: steelblue;
+  fill-opacity: 0.75;
+  shape-rendering: crispEdges;
+  stroke: #000;
+  stroke-opacity: 0.5;
+
+}
+
+.bar text {
+  fill: #fff;
+}
+
+.equation {
+  opacity: 0;
+}
+
+.kernelwidth {
+  stroke: #2DB15D;
+  stroke-width: 4;
+}
+
+.treeline {
+  fill: none;
+  stroke: #000;
+  stroke-opacity: 0.75;
+  stroke-width: 2
+}
+
+.treeconnector {
+  fill: none;
+  stroke: #999;
+  stroke-opacity: 0.75;
+  stroke-width: 2
+}
+
+</style>
+</div>
+
+
+<p>I recently gave a mini talk on <a href="http://adereth.github.io/oneoff/Mode%20Trees.pdf">The Mode Tree: A Tool for Visualization of Nonparametric Density Features</a> at <a href="http://www.meetup.com/papers-we-love-too/">Papers We Love Too</a> in San Francisco.  The talk is just the first 10 minutes:</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/T3Bt9Tn6P5c" frameborder="0" allowfullscreen></iframe>
+
+
+<p>I did the entire presentation as one huge sequence of animations using <a href="http://d3js.org/">D3.js</a>.  The Youtube video doesn&rsquo;t capture the glory that is SVG, so <a href="/oneoff/pwl-draft/scratch.html">I&rsquo;ve posted the slides</a>.</p>
+
+<p>I also finally got to apply the technique that I wrote about in my <a href="/blog/2013/11/29/colorful-equations/">Colorful Equations with MathJax post</a> from over a year ago, only instead of coloring explanatory text, the colors in the accompanying chart match:</p>
+
+<div style="font-size: 100%;">
+$$
+\definecolor{kernel}{RGB}{217,86,16}
+\definecolor{kde}{RGB}{203,23,206}
+\definecolor{point}{RGB}{18,110,213}
+\definecolor{width}{RGB}{45,177,93}
+\color{kde}\hat{f}_{\color{width}h}\color{black}(x) \color{black} = \frac{1}{n\color{width}h}\color{black}\sum\limits_{i=1}^n \color{kernel}K\color{black}(\frac{x-\color{point}X_i}{\color{width}h})
+$$
+</div>
+
+
+<div id='chart-1'></div>
+
+
+<script type='text/javascript'>
+var data = [
+{value: 13.1138}, {value: 10.6519}, {value: 20.5735}, {value: 7.89327}, {value: 9.02554}, {value: 20.8411}, {value: 8.84072}, {value: 10.6273}, {value: 13.5194}, {value: 17.9757}, {value: 10.1086}, {value: 8.68131}, {value: 7.16192}, {value: 19.9496}, {value: 8.77111}, {value: 19.5314}, {value: 9.40915}, {value: 12.8664}, {value: 23.1322}, {value: 13.5008}];
+
+function drawChart(data,chart,height) {
+$(chart).empty();
+var margin = {top: 50, right: 40, bottom: 40, left: 60};
+var width = $('.entry-content').width();
+var x = d3.scale.linear().domain([0, 30]).range([0, width - margin.left - margin.right]);
+
+           var xAxis = d3.svg.axis()
+                         .scale(x)
+                         .orient('bottom')
+                         .tickPadding(8)
+                         .ticks(8);
+
+           var svg = d3.select(chart).append('svg')
+                       .attr('width', width)
+                       .attr('height', height)
+                       .attr('class', 'chart')
+                       .append('g')
+                       .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+           svg.append("g")
+              .attr("class", "x axis")
+              .attr("transform", "translate(0," + (height - margin.top - margin.bottom) + ")")
+              .call(xAxis);
+
+           var y0 = height - margin.top - margin.bottom;
+
+
+               var points = svg.selectAll('.chart')
+                               .data(data)
+                           .enter().append('circle')
+                               .classed('point', true)
+                               .attr("id", function(d, i) { return "point" + i })
+                               .attr('cx', function(d, i) { return x(d.value) })
+                               .attr('cy', y0)
+                               .attr('r', 3.25);
+
+               var y = d3.scale.linear()
+                         .domain([0, 1])
+                         .range([height - margin.top - margin.bottom, 0]);
+
+               function subpoints(d, stddev) {
+                   return d3.range(d.value - 7, d.value + 7, 0.1).map(
+                       function (d2,i,a) {
+                           return {value: d2, height: gaussian(d2, d.value, stddev)};
+                       });
+               }
+
+               var widthLine = svg.append('path')
+                   .attr('class', 'kernelwidth')
+                   .attr("d", d3.svg.line()([[x(data[0].value - 1), y(0) + 2,],[x(data[0].value), y(0) + 2]]))
+                   .style('opacity', 0);
+
+               widthLine.transition().duration(1000).style('opacity', 1);
+
+var stddev = 1;
+
+           var scale = 0.5 / Math.sqrt(2 * Math.PI) / 2;
+           function gaussian(x, mean, sigma) {
+               var z = (x - mean) / sigma;
+               return scale * Math.exp(-0.5 * z * z) / sigma;
+           };
+
+
+               var kernels = data.sort(function(x,y){return x.value - y.value}).map(function(d, i) {
+                   var line = d3.svg.line()
+                                .x(function(d) { return x(d.value); })
+                                .y(function(d) { return y(d.height) });
+
+                   return svg.append('path')
+                             .attr('class', 'kernelline')
+                             .attr("d", line(subpoints(d, stddev)))
+                             .style('opacity', 1);
+
+               });
+
+                   var intermediateAreaPoints =
+                       d3.range(0, 30, 0.01).concat(data.map(function(x) {return x.value}))
+                                      .sort(function(a,b){return a-b})
+                                      .map(
+                                          function (x,i2,a) {
+                                              var y = 0;
+                                              //console.log(x)
+                                              data.forEach(function(d) {
+                                                  y += gaussian(x, d.value, stddev)
+                                              });
+                                              return {value: x, height: y};
+                                          }
+                                      );
+                   var line = d3.svg.line()
+                                .x(function(d) { return x(d.value); })
+                                .y(function(d) { return y(d.height); });
+
+
+        var summedArea = svg.append('path')
+            .attr('class', 'kdeline')
+                .attr("d", line(intermediateAreaPoints));
+
+
+
+}
+
+function drawChartWithResize(data, chart, height) {
+    drawChart(data, chart, height);
+        $(window).resize(function() {drawChart(data, chart, height); })
+};
+
+
+drawChartWithResize(data, '#chart-1', 300);
+
+
+</script>
+
+
+<p>Any questions or feedback on the presentation are welcome&hellip; thanks!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Matt Adereth</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-04-06T20:10:00-07:00" pubdate data-updated="true">Apr 6<span>th</span>, 2015</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/algorithms/'>algorithms</a>, <a class='category' href='/blog/categories/d3/'>d3</a>, <a class='category' href='/blog/categories/latex/'>latex</a>, <a class='category' href='/blog/categories/math/'>math</a>, <a class='category' href='/blog/categories/talks/'>talks</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://adereth.github.io/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love/" data-via="adereth" data-counturl="http://adereth.github.io/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/02/17/sa-profile-keys-on-a-kinesis-advantage/" title="Previous Post: SA Profile Keys on a Kinesis Advantage">&laquo; SA Profile Keys on a Kinesis Advantage</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/11/19/clojure-slash-conj-talk-on-3d-printing-keyboards/" title="Next Post: Clojure/conj Talk on 3D Printing Keyboards">Clojure/conj Talk on 3D Printing Keyboards &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <p>
+  <center><img src="/images/aleph.png"/></center>
+  <a href="http://adereth.github.io" alt="Home"><h1>Adereth's Blog</h1></a>
+
+  <ul id="recent_posts">
+      <li class="post">
+	<a href="http://adereth.github.io"><i class="fa fa-home fa-fw"></i> Home</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.github.io/about/"><i class="fa fa-user fa-fw"></i> About Me</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.github.io/atom.xml"><i class="fa fa-rss fa-fw"></i> Feed</a>
+      </li>
+  </ul>
+
+  <h1>Connect</h1>
+
+  <ul id="recent_posts">
+      <li class="post">
+	<a href="https://twitter.com/adereth"><i class="fa fa-twitter fa-fw"></i> Twitter</a>
+      </li>
+      <li class="post">
+	<a href="https://github.com/adereth"><i class="fa fa-github fa-fw"></i> GitHub</a>
+      </li>
+      <li class="post">
+	<a href="http://www.linkedin.com/in/adereth/"><i class="fa fa-linkedin fa-fw"></i> LinkedIn</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.tumblr.com/"><i class="fa fa-tumblr fa-fw"></i> Tumblr</a>
+      </li>
+  </ul>
+
+
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/01/03/distributed-black-box-optimization-talk-at-qconny/">Distributed Black-Box Optimization Talk at QCon</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/11/02/playing-with-wolfram-playing-cards/">Playing with Wolfram Playing Cards</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/12/06/writing-a-halite-bot-in-clojure/">Writing a Halite Bot in Clojure</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too/">Bag of Little Bootstraps Presentation at PWL SF</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/20/visualizing-girl-talk-with-clojure-and-d3-dot-js/">Visualizing Girl Talk: Parsing with Clojure's Instaparse</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/19/clojure-slash-conj-talk-on-3d-printing-keyboards/">Clojure/conj Talk on 3D Printing Keyboards</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love/">Presentation on The Mode Tree at Papers We Love Too</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/17/sa-profile-keys-on-a-kinesis-advantage/">SA Profile Keys on a Kinesis Advantage</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/02/poisonous-shapes/">Poisonous Shapes in Algebra and Graph Theory</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/12/silvermans-mode-detection-method-explained/">Silverman's Mode Estimation Method Explained</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/adereth">@adereth</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'adereth',
+            count: 10,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2021 - Matt Adereth -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = '1overn';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://adereth.github.io/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love/';
+        var disqus_url = 'http://adereth.github.io/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

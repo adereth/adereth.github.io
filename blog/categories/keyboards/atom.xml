@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: keyboards | adereth]]></title>
+  <link href="http://adereth.github.io/blog/categories/keyboards/atom.xml" rel="self"/>
+  <link href="http://adereth.github.io/"/>
+  <updated>2021-07-31T10:59:35-07:00</updated>
+  <id>http://adereth.github.io/</id>
+  <author>
+    <name><![CDATA[Matt Adereth]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Clojure/conj Talk on 3D Printing Keyboards]]></title>
+    <link href="http://adereth.github.io/blog/2015/11/19/clojure-slash-conj-talk-on-3d-printing-keyboards/"/>
+    <updated>2015-11-19T15:05:00-08:00</updated>
+    <id>http://adereth.github.io/blog/2015/11/19/clojure-slash-conj-talk-on-3d-printing-keyboards</id>
+    <content type="html"><![CDATA[<p>I gave a talk on building an ergonomic keyboard using Clojure at <a href="http://clojure-conj.org/">Clojure/conj 2015</a>:</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/uk3A41U0iO4" frameborder="0" allowfullscreen></iframe>
+
+
+<p>Here&rsquo;s a complete list of the references from the talk, in order of appearance:</p>
+
+<ul>
+<li><a href="https://twitter.com/ftrain">@ftrain</a>&rsquo;s <a href="https://twitter.com/ftrain/status/577205992406065152">Tweet</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Typewriter">Typewriter (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Computer_keyboard">Computer keyboard (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Sholes_and_Glidden_typewriter">Sholes and Glidden typewriter (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Hansen_Writing_Ball">Hansen Writing Ball (WIkipedia)</a></li>
+<li><a href="http://www.malling-hansen.org/friedrich-nietzsche-and-his-typewriter-a-malling-hansen-writing-ball.html">Friedrich Nietzsche and his typewriter</a></li>
+<li><a href="https://en.wikipedia.org/wiki/E._Remington_and_Sons#Remington_Typewriter_Company">E. Remington and Sons (Wikipedia)</a></li>
+<li><a href="http://deskthority.net/wiki/Staggering">Staggering (Deskthority Wiki)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/QWERTY">QWERTY (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/IBM_Selectric_typewriter">IBM Selectric typewriter (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/IBM_2741">IBM 2741 (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/ADM-3A">ADM-3A (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Space-cadet_keyboard">Space-cadet keyboard (Wikipedia)</a></li>
+<li><a href="https://www.flickr.com/photos/obra/sets/72157635353286814/">Jesse Vincent&rsquo;s Space Cadet Keyboard Photo Album</a></li>
+<li><a href="http://www.maltron.com/">Maltron (Official Site)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Maltron">Maltron (Wikipedia)</a></li>
+<li><a href="http://www.amazon.com/Mothers-Daughters-Invention-Revised-Technology/dp/0813521971">Mother&rsquo;s and Daughters of Invention: Notes for a Revised History of Technology</a></li>
+<li><a href="http://www.kinesis-ergo.com/">Kinesis (Official Site)</a></li>
+<li><a href="https://www.pjrc.com/teensy/">Teensy USB Development Board</a></li>
+<li><a href="http://deskthority.net/">Deskthority</a></li>
+<li><a href="https://geekhack.org/">Geekhack</a></li>
+<li><a href="http://www.makerbot.com/">Makerbot</a></li>
+<li><a href="https://www.inventables.com/technologies/x-carve">X-Carve</a></li>
+<li><a href="http://ergodox.org/">ErgoDox (Official Site)</a></li>
+<li><a href="https://www.massdrop.com/buy/ergodox">ErgoDox (Massdrop)</a></li>
+<li><a href="/blog/2014/02/12/building-an-ergodox/">Sourcing and Building an ErgoDox Keyboard</a></li>
+<li><a href="http://atreus.technomancy.us/">Atreus</a></li>
+<li><a href="http://keyboard.io">Keyboard.io</a></li>
+<li><a href="http://www.openscad.org/">OpenSCAD</a></li>
+<li><a href="https://github.com/openscad/openscad/issues/522#issuecomment-27741699">OpenSCAD Namespace Issue (Github)</a></li>
+<li><a href="https://github.com/farrellm/scad-clj">scad-clj (Github)</a></li>
+<li><a href="/blog/2014/04/09/3d-printing-with-clojure/">3D Printing with Clojure</a></li>
+<li><a href="/blog/2014/05/29/custom-clojure-evaluation-keybindings-in-emacs/">Custom Clojure Evaluation Keybindings in Emacs</a></li>
+<li><a href="https://github.com/adereth/dactyl-cave">Dactyl Keyboard (Github)</a></li>
+<li><a href="https://www.shapeways.com/">Shapeways</a></li>
+<li><a href="https://www.shapeways.com/shops/bespokeys">Full Dactyl Keyboard (Shapeways)</a></li>
+<li><a href="http://www.smokingresistor.com/product/pyralux-lf9120r/">Pyralux LF9120R &ndash; Flexible PCB Material (Smoking Resistor)</a></li>
+<li><a href="https://github.com/benblazak/ergodox-firmware/blob/master/src/keyboard/ergodox/circuit-diagram.svg">ErgoDox Circuit Diagram (Github)</a></li>
+<li><a href="http://www.instructables.com/id/Is-the-best-PCB-etchant-in-every-kitchen-/">Is the best PCB etchant in every kitchen? (Instructables)</a></li>
+<li><a href="http://pimpmykeyboard.com/">Signature Plastics Keycap Shop</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[SA Profile Keys on a Kinesis Advantage]]></title>
+    <link href="http://adereth.github.io/blog/2015/02/17/sa-profile-keys-on-a-kinesis-advantage/"/>
+    <updated>2015-02-17T16:50:00-08:00</updated>
+    <id>http://adereth.github.io/blog/2015/02/17/sa-profile-keys-on-a-kinesis-advantage</id>
+    <content type="html"><![CDATA[<p>Despite <a href="http://adereth.github.io/blog/2014/02/12/building-an-ergodox/">investing</a> <a href="http://adereth.github.io/blog/2014/02/27/finishing-up-the-ergodox/">significant</a> <a href="https://github.com/adereth/ergodox-tent">time</a> into the Ergodox, I still prefer the <a href="http://www.amazon.com/gp/product/B000LVJ9W8/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B000LVJ9W8&amp;linkCode=as2&amp;tag=rkbd-ka-20&amp;linkId=L5XSWPMHWGHCMLFU">Kinesis Advantage</a>:</p>
+
+<p><a href="http://www.amazon.com/gp/product/B000LVJ9W8/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B000LVJ9W8&amp;linkCode=as2&amp;tag=rkbd-ka-20&amp;linkId=L5XSWPMHWGHCMLFU"><img src="/images/kinesis.jpg" alt="Kinesis Advantage" /></a></p>
+
+<p>I&rsquo;ve been (slowly) working on building my own dream keyboard, but in the meantime I make the occasional ridiculous tweak to my Kinesis.  This weekend I got 3 lbs. of reject keys from <a href="http://www.keycapsdirect.com/">Signature Plastics</a> and I was fortunate enough to get enough keycaps to try something that I&rsquo;ve been wanting to test for a while.</p>
+
+<h2>Kinesis Advantage with DSA keycaps</h2>
+
+<p>Almost a year ago, I saw <a href="http://sitr.us/">Jesse Hallett</a>&rsquo;s excellent post detailing his <a href="http://sitr.us/2014/05/19/kinesis-advantage-with-dsa-keycaps.html">Kinesis Advantage with DSA keycaps</a>.  His results were impressive:</p>
+
+<p><a href="http://sitr.us/2014/05/19/kinesis-advantage-with-dsa-keycaps.html"><img src="/images/kinesis-dsa.jpg" alt="Kinesis Advantage with DSA Keycaps" /></a></p>
+
+<p><em>Source: <a href="http://sitr.us/2014/05/19/kinesis-advantage-with-dsa-keycaps.html">Lesse Hallett&rsquo;s Blog</a></em></p>
+
+<p>DSA keycaps are low and uniform, with spherical tops:</p>
+
+<p><img src="/images/dsa.jpg" alt="DSA Keycap Profile" /></p>
+
+<p><em>Source: <a href="http://keycapsdirect.com/key-caps.php">Signature Plastics</a></em></p>
+
+<p>They are particularly well suited for non-standard keyboard layouts, like the ErgoDox or Kinesis Advantage, because most other keycaps have variable heights and angles that were designed for traditional staggered layouts on a plane.</p>
+
+<h2>SA keycaps</h2>
+
+<p>Personally, I&rsquo;m a big fan of the SA profile:</p>
+
+<p><img src="/images/sa.jpg" alt="SA Keycap Profile" /></p>
+
+<p>They&rsquo;re super tall and are usually manufactured with thick ABS plastic and given a smooth, high-gloss finish.  I&rsquo;m a bit of a retro-fetishist and these hit all the right spots.  It&rsquo;s no surprise that projects and group buys that use SA profile often have a retro theme:</p>
+
+<ul>
+<li><a href="http://deskthority.net/group-buys-f50/doubleshot-replacements-round-5-honey-sphericals-t6732.html">HONEY</a>, seeking to recreate a <a href="http://deskthority.net/resources/image/8881">classic Honeywell keyboard</a></li>
+<li><a href="http://www.pimpmykeyboard.com/deals/symbiosis/">Symbiosis</a>, seeking to recreate the <a href="http://en.wikipedia.org/wiki/Space-cadet_keyboard">Symbolics Space-cadet keyboard</a></li>
+<li><a href="http://www.pimpmykeyboard.com/deals/1976/">1976</a>, inspired by the colors of the 70&rsquo;s</li>
+</ul>
+
+
+<p>For this project I decided to go with all Row 3 profile SA keys in the two main key wells.  Row 3 is the home row on traditional layouts and the keycaps are completely symmetric, just like the DSA profile keys.  I was concerned about two main things:</p>
+
+<ol>
+<li>The curvature of the key well combined with the height might mean that the keys hit each other towards the top.</li>
+<li>Jesse ran into one spot in the corner of the keywell closest to the thumb clusters where the keycap hit the plastic.  This would almost certainly be a problem with the much larger SA keys.</li>
+</ol>
+
+
+<p>The easiest way to find out was to pop off all the keycaps:</p>
+
+<p><img src="/images/kinesis-bare.jpg" alt="Kinesis Advantage with Keycaps Removed" /></p>
+
+<p>&hellip;and to see what fit:</p>
+
+<p><img src="/images/kinesis-before-surgery.JPG" alt="Kinesis Advantage with Keycaps Removed" /></p>
+
+<p>Fortunately, the height was not an issue.  The angles are all perfect and the top of the keys form a relatively tight surface.  The smaller gaps between the tops combined with the extreme smoothness of the SA keycaps results in a nice effect where I&rsquo;m able to just glide my fingers across them without having to lift, similar to the feel of the modern Apple keyboards.</p>
+
+<p>Unfortunately, 3 keys at the bottom of each keywell wouldn&rsquo;t fit.  I busted out the Dremel and carved out a little from the bottom, making room for those beautiful fat caps:</p>
+
+<p><img src="/images/kinesis-hacked1.jpg" alt="Kinesis Advantage with Keycaps Removed" /></p>
+
+<p><img src="/images/kinesis-hacked2.jpg" alt="Kinesis Advantage with Keycaps Removed" /></p>
+
+<p>I used Row 1 keycaps for the 1x keys in the thumb clusters.  The extra height makes them not quite as difficult to reach:</p>
+
+<p><img src="/images/thumb-profile.jpg" alt="Kinesis Advantage with Keycaps Removed" /></p>
+
+<h2>Conclusion</h2>
+
+<p>Overall, I&rsquo;m pretty happy with how it turned out:</p>
+
+<p><img src="/images/kinesis-final.jpg" alt="Kinesis Advantage with Keycaps Removed" /></p>
+
+<p>It&rsquo;s a pleasure to type on and I&rsquo;m convinced that SA profile keys are going to be what I use when I eventually reach my final form.</p>
+
+<p>If you&rsquo;re interested in doing this yourself, you should know that it&rsquo;ll be difficult to source the 1.25x keys that are used on the sides of the Kinesis Advantage.  A lot of the keysets that are being sold for split layouts are targeting the Ergodox, which uses 1.5x keys on the side.  It does look like the <a href="http://www.pimpmykeyboard.com/deals/symbiosis/">Symbiosis group buy</a> includes enough 1.25x&rsquo;s in the main deal, but you&rsquo;d need to also buy the price Ergodox kit just to get those 4 2x&rsquo;s.  If you don&rsquo;t mind waiting an indefinite length of time, the <a href="http://deskthority.net/wiki/Round_5a">Round 5a group buy on Deskthority</a> is probably your best bet for getting exactly what you want.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Typing Qwerty on a Dvorak Keyboard]]></title>
+    <link href="http://adereth.github.io/blog/2014/08/14/typing-qwerty-on-a-dvorak-keyboard/"/>
+    <updated>2014-08-14T18:40:00-07:00</updated>
+    <id>http://adereth.github.io/blog/2014/08/14/typing-qwerty-on-a-dvorak-keyboard</id>
+    <content type="html"><![CDATA[<p><a href="https://twitter.com/thattommyhall">@thattommyhall</a> posted a fun question on Twitter:</p>
+
+<blockquote class="twitter-tweet" data-partner="tweetdeck"><p>If you type your name on a keyboard marked as qwerty but set to Dvorak and keep reinputting what comes out, will it ever say your name?</p>&mdash; !!!!!11111oneoneone (@thattommyhall) <a href="https://twitter.com/thattommyhall/statuses/494916131598393344">July 31, 2014</a></blockquote>
+
+
+<script async src="http://adereth.github.io//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<p>The best answer was &ldquo;yes because group theory&rdquo; and <a href="https://twitter.com/AnnaPawlicka">@AnnaPawlicka</a> demonstrated it was true for her name:</p>
+
+<blockquote class="twitter-tweet" lang="en"><p><a href="https://twitter.com/thattommyhall">@thattommyhall</a> Yes. I can confirm that. :) <a href="http://t.co/Vubkf1ltoK">pic.twitter.com/Vubkf1ltoK</a></p>&mdash; Anna Pawlicka (@AnnaPawlicka) <a href="https://twitter.com/AnnaPawlicka/statuses/494918999747350529">July 31, 2014</a></blockquote>
+
+
+<script async src="http://adereth.github.io//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<p>But is it really true?  And if so, how many iterations will it take to get the target string?  I turned to Mathematica&hellip;</p>
+
+<p><code>clojure
+qwerty =
+  {"-", "=",
+   "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "[", "]", "\\",
+   "a", "s", "d", "f", "g", "h", "j", "k", "l", ";", "'",
+   "z", "x", "c", "v", "b", "n", "m", ",", ".", "/"};
+dvorak =
+  {"[", "]",
+   "'", ",", ".", "p", "y", "f", "g", "c", "r", "l", "/", "=", "\\",
+   "a", "o", "e", "u", "i", "d", "h", "t", "n", "s", "-",
+   ";", "q", "j", "k", "x", "b", "m", "w", "v", "z"};
+</code></p>
+
+<p><code>clojure
+KeyGraph[from_, to_] :=
+ Graph[
+  MapThread[#1 -&gt; #2 &amp;, {from, to}],
+  VertexLabels -&gt; "Name", DirectedEdges -&gt; True]
+</code></p>
+
+<p>This allows us to visualize the mapping of keys from one layout to another:</p>
+
+<p><code>clojure
+KeyGraph[dvorak, qwerty]
+</code>
+<img src="/images/dvorak-qwerty.png" alt="Dvorak to Qwerty Graph" /></p>
+
+<p>There is a single directed edge going from each character to the one that will be displayed when you type it.  There are 3 keys that remain unchanged, 2 pairs of swapped keys, and 2 large cycles of keys.</p>
+
+<p>We can get these groups programmatically using the <a href="http://reference.wolfram.com/mathematica/ref/ConnectedComponents.html">ConnectedComponents function</a>:</p>
+
+<p><code>clojure
+TableForm @
+ Sort @
+  ConnectedComponents @
+   KeyGraph[dvorak, qwerty]
+</code></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Output </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'>\
+</span><span class='line'>a
+</span><span class='line'>m
+</span><span class='line'>] =
+</span><span class='line'>, w
+</span><span class='line'>. e y t f g u c i d h j k v
+</span><span class='line'>[ &amp;ndash; &amp;lsquo; q p r o l / s n ; z x b
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>It will take the length of the cycle the letter is in to get the letter we want.  For a given word, we won&rsquo;t get all the letters we want unless we&rsquo;ve iterated some multiple of the length of the cycles each letter is in.  Let&rsquo;s apply the Least Common Multiple function to see the worst case where there is a letter from each cycle:</p>
+
+<p><code>clojure
+LCM @@
+ Length /@
+  ConnectedComponents @
+   KeyGraph[dvorak, qwerty]
+</code>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Output </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'>210
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Looks like Anna got lucky that her name only consists of letters in a cycle of length 1 and 15.</p>
+
+<p>For fun, here&rsquo;s the graph we get if we use Colemak instead of Dvorak:</p>
+
+<p>```clojure
+colemak =
+  {&ldquo;&ndash;&rdquo;, &ldquo;=&rdquo;,
+   &ldquo;q&rdquo;, &ldquo;w&rdquo;, &ldquo;f&rdquo;, &ldquo;p&rdquo;, &ldquo;g&rdquo;, &ldquo;j&rdquo;, &ldquo;l&rdquo;, &ldquo;u&rdquo;, &ldquo;y&rdquo;, &ldquo;;&rdquo;, &ldquo;[&rdquo;, &ldquo;]&rdquo;, &ldquo;\&rdquo;,
+   &ldquo;a&rdquo;, &ldquo;r&rdquo;, &ldquo;s&rdquo;, &ldquo;t&rdquo;, &ldquo;d&rdquo;, &ldquo;h&rdquo;, &ldquo;n&rdquo;, &ldquo;e&rdquo;, &ldquo;i&rdquo;, &ldquo;o&rdquo;, &ldquo;&lsquo;&rdquo;,
+   &ldquo;z&rdquo;, &ldquo;x&rdquo;, &ldquo;c&rdquo;, &ldquo;v&rdquo;, &ldquo;b&rdquo;, &ldquo;k&rdquo;, &ldquo;m&rdquo;, &ldquo;,&rdquo;, &ldquo;.&rdquo;, &ldquo;/&rdquo;};</p>
+
+<p>KeyGraph[colemak, qwerty]
+```
+<img src="/images/colemak-qwerty.png" alt="Colemak to Qwerty Graph" /></p>
+
+<p>One cycle of length 14, one cycle of length 3, and the rest are just letters that map back to themselves.</p>
+
+<p><code>clojure
+LCM @@
+ Length /@
+  ConnectedComponents @
+   KeyGraph[colemak, qwerty]
+</code>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Output </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'>42
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[3D Printing with Clojure]]></title>
+    <link href="http://adereth.github.io/blog/2014/04/09/3d-printing-with-clojure/"/>
+    <updated>2014-04-09T07:02:00-07:00</updated>
+    <id>http://adereth.github.io/blog/2014/04/09/3d-printing-with-clojure</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve been doing some 3D printing for <a href="https://twitter.com/adereth/status/444145229109555200/photo/1">my next keyboard project</a> and I&rsquo;ve got a workflow that I&rsquo;m pretty happy with that I&rsquo;d like to share.</p>
+
+<p>When I first started trying to make models a month ago, I tried <a href="http://www.blender.org/">Blender</a>.  It&rsquo;s an amazing beast, but after a few hours of tutorials it was clear that it would take a while to get proficient with it.  Also, it is really designed for interactive modeling and I need something that I can programmatically tweak.</p>
+
+<h2>OpenSCAD</h2>
+
+<p><img src="/images/openscad.gif" alt="OpenSCAD Screenshot" /></p>
+
+<p>A couple of friends suggested <a href="http://www.openscad.org/">OpenSCAD</a>, which is touted as &ldquo;the programmers' solid 3D CAD modeler.&rdquo;  It provides a power set of primitive shapes and operations, but the language itself leaves a bit to be desired.  This isn&rsquo;t a beat-up-on-SCAD post, but a few of the things that irked me were:</p>
+
+<ul>
+<li>Strange function application syntax (parameters in parens after the function name with an expression or block following the closing paren)</li>
+<li>Unclear variable binding rules (multiple passes are made over the code and the results of changing a variable may affect things earlier in the code unexpectedly)</li>
+<li>No package/namespace management</li>
+<li>Multiple looping constructs that depend on what you are going to do with the results, not on how you want to loop</li>
+</ul>
+
+
+<h2>scad-clj</h2>
+
+<p>Fortunately, <a href="https://github.com/farrellm">Matt Farrell</a> has written <a href="https://github.com/farrellm/scad-clj">scad-clj</a>, an OpenSCAD DSL in Clojure.  It addresses every issue I had with OpenSCAD and lends itself to a really nice workflow with the Clojure REPL.</p>
+
+<p>To get started using it, add the dependency on <a href="https://clojars.org/scad-clj"><code>[scad-clj "0.1.0"]</code></a> to your <code>project.clj</code> and fire up your REPL.</p>
+
+<p>All of the functions for creating 3D models live in the <code>scad-clj.model</code> namespace.  There&rsquo;s no documentation yet, so in the beginning you&rsquo;ll have to look at the <a href="https://github.com/farrellm/scad-clj/blob/master/src/scad_clj/model.clj">source for <code>model.clj</code></a> and occassionally the <a href="http://www.openscad.org/documentation.html">OpenSCAD documentation</a>.  Fortunately, there really isn&rsquo;t much to learn and it&rsquo;s quite a revelation to discover that almost everything you&rsquo;ll want to do can be done with a handful of functions.</p>
+
+<p>Here&rsquo;s a simple model that showcases each of the primitive shapes:</p>
+
+<p><code>clojure
+(def primitives
+  (union
+   (cube 100 100 100)
+   (sphere 110)
+   (cylinder 10 150)))
+</code></p>
+
+<p>Evaluating this gives us a data structure that can be converted into an .scad file using <code>scad-clj.scad/write-scad</code> to generate a string and <code>spit</code>.</p>
+
+<p>```clojure
+(spit &ldquo;post-demo.scad&rdquo;</p>
+
+<pre><code>  (write-scad primitives))
+</code></pre>
+
+<p>```</p>
+
+<p>We&rsquo;re going to use OpenSCAD to view the results.  One feature of OpenSCAD that is super useful for this workflow is that it watches opened files and automatically refreshes the rendering when the file is updated.  This means that we can just re-evaluate our Clojure code and see the results immediately in another window:</p>
+
+<p><img src="/images/scad-primitives.png" alt="Primitives Screenshot" /></p>
+
+<p>scad-clj makes all new primitive shapes centered at the origin.  We can use the shape operator functions to move them around and deform them:</p>
+
+<p>```clojure
+(def primitives
+  (union
+   (&ndash;>> (cube 100 100 100)</p>
+
+<pre><code>    (rotate (/ Math/PI 4) [1 1 1])
+    (translate [150 0 0]))
+</code></pre>
+
+<p>   (&ndash;>> (sphere 70)</p>
+
+<pre><code>    (scale [1/2 1/2 2])
+    (translate [-150 0 0]))
+</code></pre>
+
+<p>   (cylinder 10 160)))
+```</p>
+
+<p><img src="/images/scad-operators.png" alt="Operator Screenshot" /></p>
+
+<p>I snuck <code>union</code> into those examples.  Shapes can also be combined using <code>intersection</code>, <code>difference</code>, and <code>hull</code>.  It&rsquo;s pretty incredible how much can be done with just these.  For example, here&rsquo;s the latest iteration of my keyboard design built using clj-scad:</p>
+
+<p><img src="/images/scad-keyboard.png" alt="Keyboard" /></p>
+
+<h2>3D Printing</h2>
+
+<p>Once your design is complete, you can use OpenSCAD to export it as an STL file which can then be imported to software like <a href="http://replicat.org/">ReplicatorG</a> or <a href="https://www.makerbot.com/makerware/">Makerware</a> for processing into an .x3g file that can be printed:</p>
+
+<p><img src="/images/printed.JPG" alt="Keyboard" /></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Finishing up the ErgoDox]]></title>
+    <link href="http://adereth.github.io/blog/2014/02/27/finishing-up-the-ergodox/"/>
+    <updated>2014-02-27T22:43:00-08:00</updated>
+    <id>http://adereth.github.io/blog/2014/02/27/finishing-up-the-ergodox</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve been busy with a few other keyboard projects since <a href="/blog/2014/02/12/building-an-ergodox/">my last post on my ErgoDox build</a>.  While working on those projects, I&rsquo;ve gotten some parts and done a few more tweaks to the ErgoDox that I&rsquo;d like to share.</p>
+
+<h2>PBT DSA Keycaps</h2>
+
+<p>The biggest improvement was switching the keycaps.  Originally I had used keycaps from <a href="http://www.wasdkeyboards.com/index.php/">WASD Keyboards</a> that were designed to be used with a normal keyboard.  Typical keyboards use keycaps that are very similar to DCS profile caps, which have different profiles for different rows:</p>
+
+<p><img src="/images/dcs.jpg" alt="DCS Keycap Profile" /></p>
+
+<p><em>Source: <a href="http://keycapsdirect.com/key-caps.php">Signature Plastics</a></em></p>
+
+<p>In contrast, DSA keycaps have concave spherical tops and are uniform in profile:</p>
+
+<p><img src="/images/dsa.jpg" alt="DSA Keycap Profile" /></p>
+
+<p>I had ordered a set of DSA keycaps from Signature Plastics for another project and decided to try them out on the ErgoDox:</p>
+
+<p><img src="/images/full-ergo-green.jpeg" alt="Full keyboard" /></p>
+
+<p>I was surprised with how much better these felt, particularly on the thumb cluster.  I now realize that a lot of my discomfort reaching the upper keys on the the thumb cluster came from their relatively high profile.</p>
+
+<p>The DSA keycaps are also made out of PBT plastic instead of ABS.  They have a nice textured feel and the plastic is supposed to be much more robust.  As I said in my last post, <a href="http://keyshop.pimpmykeyboard.com/product/dsa-pbt-blank-sets">Pimp My Keyboard shop has PBT DCA blank sets for the ErgoDox</a> for $43, which is a great deal and is definitely the way to go if you&rsquo;re sourcing your own parts.</p>
+
+<h2>TRRS Connector</h2>
+
+<p><a href="http://www.digikey.com/">DigiKey</a> finally got the <a href="http://www.digikey.com/product-detail/en/SJ-43514/CP-43514-ND/368146">TRRS connectors</a> in stock and sent them to me.  I was concerned that they wouldn&rsquo;t fit in my lower profile case, but a little Dremel action made it work:</p>
+
+<p><img src="/images/TRRS.jpeg" alt="TRRS Connector" /></p>
+
+<p>The keyboard didn&rsquo;t work after I added the connector.  It worked fine if I just had the right side plugged in, but as soon as I connected the left side, neither worked.  I took the whole thing apart and used an ohmmeter to test the 4 connections between the two halves.  It turned out that all of the connections were there, but there was a little resistance on one of them.  I resoldered it more thoroughly and everything worked fine.</p>
+
+<h2>Sanding</h2>
+
+<p>Finally, I did a little experimentation with wet sanding the sides to remove some of the burn marks from the paper during the laser cutting and to give a more even finish.  I used 400 grit sandpaper and made a little progress:</p>
+
+<p><img src="/images/corner-zoom.jpeg" alt="corner" /></p>
+
+<p>Acrylic dust is nasty stuff!  It didn&rsquo;t make as much of a difference as I hoped.  I&rsquo;m going to do a little more experimentation sanding with acetone to see if I can melt it smoothly and make the 5 layers of acrylic look like one piece.</p>
+
+<h2>Next Steps</h2>
+
+<p>My next project is going to involve a lot of acrylic bending, so I&rsquo;m probably going to also take a stab at cutting and bending a stand for the ErgoDox that tents it at a better angle.  Any suggestions are appreciated!</p>
+]]></content>
+  </entry>
+  
+</feed>

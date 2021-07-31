@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: talks | adereth]]></title>
+  <link href="http://adereth.github.io/blog/categories/talks/atom.xml" rel="self"/>
+  <link href="http://adereth.github.io/"/>
+  <updated>2021-07-31T10:59:35-07:00</updated>
+  <id>http://adereth.github.io/</id>
+  <author>
+    <name><![CDATA[Matt Adereth]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Distributed Black-Box Optimization Talk at QCon]]></title>
+    <link href="http://adereth.github.io/blog/2018/01/03/distributed-black-box-optimization-talk-at-qconny/"/>
+    <updated>2018-01-03T10:16:00-08:00</updated>
+    <id>http://adereth.github.io/blog/2018/01/03/distributed-black-box-optimization-talk-at-qconny</id>
+    <content type="html"><![CDATA[<p><img class="center" src="/images/720px-Himmelblau_function.svg.png">
+<em><a href="https://en.wikipedia.org/wiki/Himmelblau%27s_function">Himmelblau&rsquo;s Function</a>, a popular test function for black-box optimization</em></p>
+
+<p>I gave a talk on Distributed Black-Box Optimization at <a href="https://qconnewyork.com/">QCon NY 2017</a>.  The video and slides are available <a href="https://www.infoq.com/presentations/black-box-optimization">here</a>.</p>
+
+<p>For reference, here are all the papers that are mentioned in the talk in the order they are covered:</p>
+
+<p><font style="font-variant: small-caps">O. Alipourfard, H. H. Liu, J. Chen, S. Venkataraman, M. Yu1, M. Zhang</font> (2017) <a href="https://www.usenix.org/conference/nsdi17/technical-sessions/presentation/alipourfard">CherryPick: Adaptively Unearthing the Best Cloud Configurations for Big Data Analytics</a> <i>NSDI’17</i>.</p>
+
+<p><font style="font-variant: small-caps">J. A. Nelder  R. Mead</font> (1965) <a href="https://academic.oup.com/comjnl/article-abstract/7/4/308/354237">A Simplex Method for Function Minimization.</a> <i>The Computer Journal</i>, Vol. 7, Issue 4.</p>
+
+<p><font style="font-variant: small-caps">J. E. Dennis Jr., Torczon</font> (1991) <a href="http://citeseerx.ist.ps,%20V.u.edu/viewdoc/summary?doi=10.1.1.56.4600">Direct Search Methods on Parallel Machines.</a> <i>SIAM Journal on Optimization</i>, 1991 Vol. 1.</p>
+
+<p><font style="font-variant: small-caps">J. Mockus</font> (1989) <a href="http://www.springer.com/us/book/9789401068987">Bayesian Approach to Global Optimization.</a></p>
+
+<p><font style="font-variant: small-caps">J. Wang, S. C. Clark, E. Liu, P. I. Frazier</font> (2016) <a href="https://arxiv.org/abs/1602.05149">Parallel Bayesian Global Optimization of Expensive Functions.</a> <i>arXiv:1602.05149</i>.</p>
+
+<p><font style="font-variant: small-caps">K. Swersky, J. Snoek, R. P. Adams</font> (2014) <a href="https://arxiv.org/abs/1406.3896">Freeze-Thaw Bayesian Optimization.</a> <i>arXiv:1406.3896</i>.</p>
+
+<p><font style="font-variant: small-caps">V. Dalibard, M. Schaarschmidt, E. Yoneki</font> (2017) <a href="https://dl.acm.org/citation.cfm?doid=3038912.3052662">BOAT: Building Auto-Tuners with Structured Bayesian Optimization.</a> <i>Proceedings of the 26th International Conference on World Wide Web</i>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Bag of Little Bootstraps Presentation at PWL SF]]></title>
+    <link href="http://adereth.github.io/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too/"/>
+    <updated>2016-04-19T20:25:00-07:00</updated>
+    <id>http://adereth.github.io/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too</id>
+    <content type="html"><![CDATA[<p>I recently gave a talk on the Bag of Little Bootstraps algorithm at <a href="http://www.meetup.com/papers-we-love-too/">Papers We Love Too</a> in San Francisco:</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Wsly7pIuGsI" frameborder="0" allowfullscreen></iframe>
+
+
+<p>My part starts around 31:27, but you should watch the excellent mini talk at the beginning too!  For reference, here are all the papers that are mentioned in the talk:</p>
+
+<p><font style="font-variant: small-caps">Quenouille, M. H.</font> (1956) <a href="http://www.jstor.org/stable/2332914">Notes on Bias in Estimation.</a> <i>Biometrika</i>, Vol. 43, No. 3 / 4.</p>
+
+<p><font style="font-variant: small-caps">Jaeckel, L.</font> (1972) <a href="http://www.stat.washington.edu/people/fritz/Reports/InfinitesimalJackknife.pdf">The infinitesimal jackknife.</a> <i>Bell Laboratories Memorandum</i>, #MM 72-1215-11.</p>
+
+<p><font style="font-variant: small-caps">Miller, R. G.</font> (1974) <a href="http://www.stat.cmu.edu/~fienberg/Statistics36-756/jackknife.pdf">The jackknife: a review.</a> Biometrika 61 1-15.</p>
+
+<p><font style="font-variant: small-caps">Efron, B.</font> (1979) <a href="http://www.stat.cmu.edu/~fienberg/Statistics36-756/Efron1979.pdf">Bootstrap methods: Another look at the jackknife.</a> <i>Annals of Statistics</i>, 7(1):1-16.</p>
+
+<p><font style="font-variant: small-caps">Kleiner, A., Talwalkar, A., Sarkar, P., and Jordan, M. I.</font> (2012) <a href="http://arxiv.org/abs/1112.5016">A scalable bootstrap for massive data.</a></p>
+
+<p><font style="font-variant: small-caps">Kleiner, A., Talwalkar, A., Sarkar, P., and Jordan, M. I.</font> (2012) <a href="http://arxiv.org/abs/1206.6415">The big data bootstrap.</a></p>
+
+<p>Also, in case there&rsquo;s any confusion, I don&rsquo;t train Arabian horses.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Clojure/conj Talk on 3D Printing Keyboards]]></title>
+    <link href="http://adereth.github.io/blog/2015/11/19/clojure-slash-conj-talk-on-3d-printing-keyboards/"/>
+    <updated>2015-11-19T15:05:00-08:00</updated>
+    <id>http://adereth.github.io/blog/2015/11/19/clojure-slash-conj-talk-on-3d-printing-keyboards</id>
+    <content type="html"><![CDATA[<p>I gave a talk on building an ergonomic keyboard using Clojure at <a href="http://clojure-conj.org/">Clojure/conj 2015</a>:</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/uk3A41U0iO4" frameborder="0" allowfullscreen></iframe>
+
+
+<p>Here&rsquo;s a complete list of the references from the talk, in order of appearance:</p>
+
+<ul>
+<li><a href="https://twitter.com/ftrain">@ftrain</a>&rsquo;s <a href="https://twitter.com/ftrain/status/577205992406065152">Tweet</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Typewriter">Typewriter (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Computer_keyboard">Computer keyboard (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Sholes_and_Glidden_typewriter">Sholes and Glidden typewriter (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Hansen_Writing_Ball">Hansen Writing Ball (WIkipedia)</a></li>
+<li><a href="http://www.malling-hansen.org/friedrich-nietzsche-and-his-typewriter-a-malling-hansen-writing-ball.html">Friedrich Nietzsche and his typewriter</a></li>
+<li><a href="https://en.wikipedia.org/wiki/E._Remington_and_Sons#Remington_Typewriter_Company">E. Remington and Sons (Wikipedia)</a></li>
+<li><a href="http://deskthority.net/wiki/Staggering">Staggering (Deskthority Wiki)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/QWERTY">QWERTY (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/IBM_Selectric_typewriter">IBM Selectric typewriter (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/IBM_2741">IBM 2741 (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/ADM-3A">ADM-3A (Wikipedia)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Space-cadet_keyboard">Space-cadet keyboard (Wikipedia)</a></li>
+<li><a href="https://www.flickr.com/photos/obra/sets/72157635353286814/">Jesse Vincent&rsquo;s Space Cadet Keyboard Photo Album</a></li>
+<li><a href="http://www.maltron.com/">Maltron (Official Site)</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Maltron">Maltron (Wikipedia)</a></li>
+<li><a href="http://www.amazon.com/Mothers-Daughters-Invention-Revised-Technology/dp/0813521971">Mother&rsquo;s and Daughters of Invention: Notes for a Revised History of Technology</a></li>
+<li><a href="http://www.kinesis-ergo.com/">Kinesis (Official Site)</a></li>
+<li><a href="https://www.pjrc.com/teensy/">Teensy USB Development Board</a></li>
+<li><a href="http://deskthority.net/">Deskthority</a></li>
+<li><a href="https://geekhack.org/">Geekhack</a></li>
+<li><a href="http://www.makerbot.com/">Makerbot</a></li>
+<li><a href="https://www.inventables.com/technologies/x-carve">X-Carve</a></li>
+<li><a href="http://ergodox.org/">ErgoDox (Official Site)</a></li>
+<li><a href="https://www.massdrop.com/buy/ergodox">ErgoDox (Massdrop)</a></li>
+<li><a href="/blog/2014/02/12/building-an-ergodox/">Sourcing and Building an ErgoDox Keyboard</a></li>
+<li><a href="http://atreus.technomancy.us/">Atreus</a></li>
+<li><a href="http://keyboard.io">Keyboard.io</a></li>
+<li><a href="http://www.openscad.org/">OpenSCAD</a></li>
+<li><a href="https://github.com/openscad/openscad/issues/522#issuecomment-27741699">OpenSCAD Namespace Issue (Github)</a></li>
+<li><a href="https://github.com/farrellm/scad-clj">scad-clj (Github)</a></li>
+<li><a href="/blog/2014/04/09/3d-printing-with-clojure/">3D Printing with Clojure</a></li>
+<li><a href="/blog/2014/05/29/custom-clojure-evaluation-keybindings-in-emacs/">Custom Clojure Evaluation Keybindings in Emacs</a></li>
+<li><a href="https://github.com/adereth/dactyl-cave">Dactyl Keyboard (Github)</a></li>
+<li><a href="https://www.shapeways.com/">Shapeways</a></li>
+<li><a href="https://www.shapeways.com/shops/bespokeys">Full Dactyl Keyboard (Shapeways)</a></li>
+<li><a href="http://www.smokingresistor.com/product/pyralux-lf9120r/">Pyralux LF9120R &ndash; Flexible PCB Material (Smoking Resistor)</a></li>
+<li><a href="https://github.com/benblazak/ergodox-firmware/blob/master/src/keyboard/ergodox/circuit-diagram.svg">ErgoDox Circuit Diagram (Github)</a></li>
+<li><a href="http://www.instructables.com/id/Is-the-best-PCB-etchant-in-every-kitchen-/">Is the best PCB etchant in every kitchen? (Instructables)</a></li>
+<li><a href="http://pimpmykeyboard.com/">Signature Plastics Keycap Shop</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Presentation on The Mode Tree at Papers We Love Too]]></title>
+    <link href="http://adereth.github.io/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love/"/>
+    <updated>2015-04-06T20:10:00-07:00</updated>
+    <id>http://adereth.github.io/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love</id>
+    <content type="html"><![CDATA[<script src="http://d3js.org/d3.v2.js"></script>
+
+
+<div>
+<style type="text/css">
+
+.chart {
+  font-size: 10px;
+  margin-top: -40px;
+}
+
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2;
+  shape-rendering: crispEdges;
+}
+
+.area {
+  fill: indianred;
+  fill-opacity: 0.25;
+  stroke: #000;
+  stroke-opacity: 0.5;
+}
+
+.point {
+  fill: #126ED5;
+  fill-opacity: 0.75;
+  stroke: none;
+  stroke-width: 1
+  stroke-opacity: 0.5;
+}
+
+.kernelline {
+  fill: none;
+  stroke: #D04400;
+  stroke-width: 1;
+  stroke-opacity: 0.75;
+}
+
+.kdeline {
+  fill: none;
+  stroke: #CB17CE;
+  stroke-opacity: 0.75;
+  stroke-width: 4
+}
+
+.summedarea {
+  fill: steelblue;
+  fill-opacity: 0.75;
+  stroke: #000;
+  stroke-opacity: 0.5;
+}
+
+.bar rect {
+  fill: steelblue;
+  fill-opacity: 0.75;
+  shape-rendering: crispEdges;
+  stroke: #000;
+  stroke-opacity: 0.5;
+
+}
+
+.bar text {
+  fill: #fff;
+}
+
+.equation {
+  opacity: 0;
+}
+
+.kernelwidth {
+  stroke: #2DB15D;
+  stroke-width: 4;
+}
+
+.treeline {
+  fill: none;
+  stroke: #000;
+  stroke-opacity: 0.75;
+  stroke-width: 2
+}
+
+.treeconnector {
+  fill: none;
+  stroke: #999;
+  stroke-opacity: 0.75;
+  stroke-width: 2
+}
+
+</style>
+</div>
+
+
+<p>I recently gave a mini talk on <a href="http://adereth.github.io/oneoff/Mode%20Trees.pdf">The Mode Tree: A Tool for Visualization of Nonparametric Density Features</a> at <a href="http://www.meetup.com/papers-we-love-too/">Papers We Love Too</a> in San Francisco.  The talk is just the first 10 minutes:</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/T3Bt9Tn6P5c" frameborder="0" allowfullscreen></iframe>
+
+
+<p>I did the entire presentation as one huge sequence of animations using <a href="http://d3js.org/">D3.js</a>.  The Youtube video doesn&rsquo;t capture the glory that is SVG, so <a href="/oneoff/pwl-draft/scratch.html">I&rsquo;ve posted the slides</a>.</p>
+
+<p>I also finally got to apply the technique that I wrote about in my <a href="/blog/2013/11/29/colorful-equations/">Colorful Equations with MathJax post</a> from over a year ago, only instead of coloring explanatory text, the colors in the accompanying chart match:</p>
+
+<div style="font-size: 100%;">
+$$
+\definecolor{kernel}{RGB}{217,86,16}
+\definecolor{kde}{RGB}{203,23,206}
+\definecolor{point}{RGB}{18,110,213}
+\definecolor{width}{RGB}{45,177,93}
+\color{kde}\hat{f}_{\color{width}h}\color{black}(x) \color{black} = \frac{1}{n\color{width}h}\color{black}\sum\limits_{i=1}^n \color{kernel}K\color{black}(\frac{x-\color{point}X_i}{\color{width}h})
+$$
+</div>
+
+
+<div id='chart-1'></div>
+
+
+<script type='text/javascript'>
+var data = [
+{value: 13.1138}, {value: 10.6519}, {value: 20.5735}, {value: 7.89327}, {value: 9.02554}, {value: 20.8411}, {value: 8.84072}, {value: 10.6273}, {value: 13.5194}, {value: 17.9757}, {value: 10.1086}, {value: 8.68131}, {value: 7.16192}, {value: 19.9496}, {value: 8.77111}, {value: 19.5314}, {value: 9.40915}, {value: 12.8664}, {value: 23.1322}, {value: 13.5008}];
+
+function drawChart(data,chart,height) {
+$(chart).empty();
+var margin = {top: 50, right: 40, bottom: 40, left: 60};
+var width = $('.entry-content').width();
+var x = d3.scale.linear().domain([0, 30]).range([0, width - margin.left - margin.right]);
+
+           var xAxis = d3.svg.axis()
+                         .scale(x)
+                         .orient('bottom')
+                         .tickPadding(8)
+                         .ticks(8);
+
+           var svg = d3.select(chart).append('svg')
+                       .attr('width', width)
+                       .attr('height', height)
+                       .attr('class', 'chart')
+                       .append('g')
+                       .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+           svg.append("g")
+              .attr("class", "x axis")
+              .attr("transform", "translate(0," + (height - margin.top - margin.bottom) + ")")
+              .call(xAxis);
+
+           var y0 = height - margin.top - margin.bottom;
+
+
+               var points = svg.selectAll('.chart')
+                               .data(data)
+                           .enter().append('circle')
+                               .classed('point', true)
+                               .attr("id", function(d, i) { return "point" + i })
+                               .attr('cx', function(d, i) { return x(d.value) })
+                               .attr('cy', y0)
+                               .attr('r', 3.25);
+
+               var y = d3.scale.linear()
+                         .domain([0, 1])
+                         .range([height - margin.top - margin.bottom, 0]);
+
+               function subpoints(d, stddev) {
+                   return d3.range(d.value - 7, d.value + 7, 0.1).map(
+                       function (d2,i,a) {
+                           return {value: d2, height: gaussian(d2, d.value, stddev)};
+                       });
+               }
+
+               var widthLine = svg.append('path')
+                   .attr('class', 'kernelwidth')
+                   .attr("d", d3.svg.line()([[x(data[0].value - 1), y(0) + 2,],[x(data[0].value), y(0) + 2]]))
+                   .style('opacity', 0);
+
+               widthLine.transition().duration(1000).style('opacity', 1);
+
+var stddev = 1;
+
+           var scale = 0.5 / Math.sqrt(2 * Math.PI) / 2;
+           function gaussian(x, mean, sigma) {
+               var z = (x - mean) / sigma;
+               return scale * Math.exp(-0.5 * z * z) / sigma;
+           };
+
+
+               var kernels = data.sort(function(x,y){return x.value - y.value}).map(function(d, i) {
+                   var line = d3.svg.line()
+                                .x(function(d) { return x(d.value); })
+                                .y(function(d) { return y(d.height) });
+
+                   return svg.append('path')
+                             .attr('class', 'kernelline')
+                             .attr("d", line(subpoints(d, stddev)))
+                             .style('opacity', 1);
+
+               });
+
+                   var intermediateAreaPoints =
+                       d3.range(0, 30, 0.01).concat(data.map(function(x) {return x.value}))
+                                      .sort(function(a,b){return a-b})
+                                      .map(
+                                          function (x,i2,a) {
+                                              var y = 0;
+                                              //console.log(x)
+                                              data.forEach(function(d) {
+                                                  y += gaussian(x, d.value, stddev)
+                                              });
+                                              return {value: x, height: y};
+                                          }
+                                      );
+                   var line = d3.svg.line()
+                                .x(function(d) { return x(d.value); })
+                                .y(function(d) { return y(d.height); });
+
+
+        var summedArea = svg.append('path')
+            .attr('class', 'kdeline')
+                .attr("d", line(intermediateAreaPoints));
+
+
+
+}
+
+function drawChartWithResize(data, chart, height) {
+    drawChart(data, chart, height);
+        $(window).resize(function() {drawChart(data, chart, height); })
+};
+
+
+drawChartWithResize(data, '#chart-1', 300);
+
+
+</script>
+
+
+<p>Any questions or feedback on the presentation are welcome&hellip; thanks!</p>
+]]></content>
+  </entry>
+  
+</feed>

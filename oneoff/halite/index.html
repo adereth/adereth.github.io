@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+
+<style>
+
+body {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.area {
+  fill: steelblue;
+}
+
+
+.current {
+  stroke: #ddd;
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+  opacity: 0.5;
+}
+
+
+</style>
+<body>
+  <div id="gameArea">
+    <div id="dropZone" style="width: 500px; height: 500px; background-color: gray">
+      Drag .hlt here!
+    </div>
+  </div>
+  <div id="plots"></div>
+
+
+  <button type="button" class="btn btn-default btn-lg" id="play">
+    <span class="glyphicon glyphicon-play" id="play-icon" style="display:none"></span>
+    <span class="glyphicon glyphicon-pause" id="pause-icon"></span>
+  </button>
+  <br/>
+  <div style="width: 100px; height: 20px;">
+    <input id="speedSlider" type="range" min="0" max="1700" value="1300" steps="50"/>
+  </div>
+
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="hlt.js"></script>
+  <script src="showgame.js"></script>
+
+</body>

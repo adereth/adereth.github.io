@@ -1,0 +1,686 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Playing with Wolfram Playing Cards - adereth</title>
+  <meta name="author" content="Matt Adereth">
+
+  
+  <meta name="description" content="A few weeks ago, I knocked my favorite mug off the counter and it shattered. RIP: Like a good consumer, I immediately went to the Wolfram store to &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://adereth.github.io/blog/2017/11/02/playing-with-wolfram-playing-cards/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+   <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="adereth" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic|Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+<link href="//fonts.googleapis.com/css?family=Crimson+Text:400italic,400,600italic,600,700italic,700" rel="stylesheet" type="text/css">
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ TeX: { extensions: ["color.js"] }});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript"
+        src="http://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-44572622-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <!-- <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:adereth.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav> -->
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Playing With Wolfram Playing Cards</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2017-11-02T14:10:00-07:00" pubdate data-updated="true">Nov 2<span>nd</span>, 2017</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>A few weeks ago, I knocked my favorite mug off the counter and it shattered.  RIP:</p>
+
+<p><img src="/images/mug.jpg" alt="I Heart Mathematica Mug" /></p>
+
+<p>Like a good consumer, I immediately went to the <a href="https://store.wolfram.com/view/misc/">Wolfram store</a> to buy a replacement, but they no longer make it.  They did have a deck of playing cards which promised a unique illustration and generating code on each card.  How could I pass it up?</p>
+
+<p>The cards arrived a few days ago and they were way cooler than I imagined.  As I flipped through the deck, I realized a lot of the cards would be really interesting as starting points for animations.  I&rsquo;ve been going to town with them and posting to Twitter in an <a href="https://twitter.com/adereth/status/924409121033428992">epic thread</a>.</p>
+
+<p>I&rsquo;ll lay them out here grouped by concept&hellip; enjoy!</p>
+
+<h2>Just Rotating Squares</h2>
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">4♠️ <a href="https://t.co/5dM7m8Y22I">pic.twitter.com/5dM7m8Y22I</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924436924592304128?ref_src=twsrc%5Etfw">October 29, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/K0XqS4dldv">pic.twitter.com/K0XqS4dldv</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924437154054381568?ref_src=twsrc%5Etfw">October 29, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">A♦️ <a href="https://t.co/xkdKj1COEa">pic.twitter.com/xkdKj1COEa</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924773153921843200?ref_src=twsrc%5Etfw">October 29, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/CkfYKAaNsY">pic.twitter.com/CkfYKAaNsY</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924773351377137664?ref_src=twsrc%5Etfw">October 29, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<h2>Imaginary Numbers</h2>
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">2♦️ <a href="https://t.co/0ts8QGsWiD">pic.twitter.com/0ts8QGsWiD</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924828198369505280?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">Varying the exponent from 1/5 -&gt; 5. 3 on the card. <a href="https://t.co/REzLlOAUau">pic.twitter.com/REzLlOAUau</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924828552704401408?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">Jumping back to the 2♦️. Each (a,b) is a fixed color and is positioned at the complex coordinates of (a+bⅈ)ⁿ for n ∈ [½, 5] <a href="https://t.co/idbrCcCro7">pic.twitter.com/idbrCcCro7</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924842259744407552?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">A♠️ <a href="https://t.co/SxXAyZopE5">pic.twitter.com/SxXAyZopE5</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924440913044049922?ref_src=twsrc%5Etfw">October 29, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">ok, this one is expensive.  Just going to make a deeper version&#8230; <a href="https://t.co/UE6Z97cKo3">pic.twitter.com/UE6Z97cKo3</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924441133949665280?ref_src=twsrc%5Etfw">October 29, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">4♣️ (Another shockingly complex but structured one from time code) <a href="https://t.co/2odoWUtCAb">pic.twitter.com/2odoWUtCAb</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/926103944832598016?ref_src=twsrc%5Etfw">November 2, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">Here it is with more detail in DarkRainbow <a href="https://t.co/anX6X6kskO">pic.twitter.com/anX6X6kskO</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/926104171736055814?ref_src=twsrc%5Etfw">November 2, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">ZOOMING <a href="https://t.co/JtkmbcTJDd">pic.twitter.com/JtkmbcTJDd</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/926104884801298432?ref_src=twsrc%5Etfw">November 2, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">These playing cards are inspirational&#8230; starting with the 2♥️ <a href="https://t.co/2qMovSbPPw">pic.twitter.com/2qMovSbPPw</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924409121033428992?ref_src=twsrc%5Etfw">October 28, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">&#8230;and tweaking the Pi/6 value: <a href="https://t.co/7UkNEB4EN7">pic.twitter.com/7UkNEB4EN7</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924409333269409797?ref_src=twsrc%5Etfw">October 28, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">7♠️ <a href="https://t.co/scPwDCaPPD">pic.twitter.com/scPwDCaPPD</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924831970646835200?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">This one is just very surprising. The card doesn&#39;t capture the progression of the curve&#8230; <a href="https://t.co/hBPR35cxSN">pic.twitter.com/hBPR35cxSN</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924833015699615744?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<h2>Trigonometry</h2>
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">7♣️ <a href="https://t.co/CL3s9sMeT2">pic.twitter.com/CL3s9sMeT2</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/925930489977847808?ref_src=twsrc%5Etfw">November 2, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/ziMoWH7doA">pic.twitter.com/ziMoWH7doA</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/925930734036041728?ref_src=twsrc%5Etfw">November 2, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">10♦️ <a href="https://t.co/OQzC6gbwrD">pic.twitter.com/OQzC6gbwrD</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924412632706162688?ref_src=twsrc%5Etfw">October 28, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/En3lOG01bW">pic.twitter.com/En3lOG01bW</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924412789497643009?ref_src=twsrc%5Etfw">October 28, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">3♦️ <a href="https://t.co/ql5LSGuxGP">pic.twitter.com/ql5LSGuxGP</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924426032244965377?ref_src=twsrc%5Etfw">October 29, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/6NAzWTAUvE">pic.twitter.com/6NAzWTAUvE</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924426193369120769?ref_src=twsrc%5Etfw">October 29, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">8♣️ <a href="https://t.co/6jeVkd9yet">pic.twitter.com/6jeVkd9yet</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924692880114909184?ref_src=twsrc%5Etfw">October 29, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/SioTaVZ4Rd">pic.twitter.com/SioTaVZ4Rd</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924692980526546944?ref_src=twsrc%5Etfw">October 29, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<h2>Miscellaneous</h2>
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">4♥️ (Hot take: this is surprisingly bad code. Side effects? Unnecessary call to Image in the loop? Should be a single expression!) <a href="https://t.co/XsJUHM67El">pic.twitter.com/XsJUHM67El</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/925030749857652736?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">Anyway&#8230; here are the intermediate tranformations: <a href="https://t.co/Azq0CPU1rB">pic.twitter.com/Azq0CPU1rB</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/925031090250584064?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">Inverted is better <a href="https://t.co/vzP5MmLdE2">pic.twitter.com/vzP5MmLdE2</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/925032658941308928?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">9❤️, gotta cc <a href="https://twitter.com/KnitYak?ref_src=twsrc%5Etfw">@KnitYak</a> for this one <a href="https://t.co/cNoGJMbgZ4">pic.twitter.com/cNoGJMbgZ4</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924854571670761472?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/1DZWWQsb0J">pic.twitter.com/1DZWWQsb0J</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924854816722976768?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">10♣️ <a href="https://t.co/3OojtNlD6Z">pic.twitter.com/3OojtNlD6Z</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924827151362174976?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/G3qTuneuyv">pic.twitter.com/G3qTuneuyv</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924827305343516672?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">6♦️ <a href="https://t.co/ambOdlfJhT">pic.twitter.com/ambOdlfJhT</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924846505684475904?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/ZzhlPFsRTS">pic.twitter.com/ZzhlPFsRTS</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924846654410301441?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">3♣️ <a href="https://t.co/wrMuS4g2yz">pic.twitter.com/wrMuS4g2yz</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924851247475187713?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/Ra8pjtENp3">pic.twitter.com/Ra8pjtENp3</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924851443332399105?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">10♠️ <a href="https://t.co/93HolEaQNC">pic.twitter.com/93HolEaQNC</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924856311736442880?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">gooey <a href="https://t.co/jPgMhKhozw">pic.twitter.com/jPgMhKhozw</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924857405619429376?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">9♦️ <a href="https://t.co/0uA6FmjIUb">pic.twitter.com/0uA6FmjIUb</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924864434077515778?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/JmPdvoUyOZ">pic.twitter.com/JmPdvoUyOZ</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924864537911738368?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">3♥️ <a href="https://t.co/0eX4FL7NDZ">pic.twitter.com/0eX4FL7NDZ</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/925174812997070848?ref_src=twsrc%5Etfw">October 31, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/ZQ8b6o0ND2">pic.twitter.com/ZQ8b6o0ND2</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/925174978344976384?ref_src=twsrc%5Etfw">October 31, 2017</a></blockquote>
+
+
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<h2>Grand Finale</h2>
+
+<p>Thanks for making it this far!  Your reward is the K♣:</p>
+
+<p><img src="/images/wolfram.jpg" alt="King of Clubs" /></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Matt Adereth</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2017-11-02T14:10:00-07:00" pubdate data-updated="true">Nov 2<span>nd</span>, 2017</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/math/'>math</a>, <a class='category' href='/blog/categories/mathematica/'>mathematica</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://adereth.github.io/blog/2017/11/02/playing-with-wolfram-playing-cards/" data-via="adereth" data-counturl="http://adereth.github.io/blog/2017/11/02/playing-with-wolfram-playing-cards/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2016/12/06/writing-a-halite-bot-in-clojure/" title="Previous Post: Writing a Halite Bot in Clojure">&laquo; Writing a Halite Bot in Clojure</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2018/01/03/distributed-black-box-optimization-talk-at-qconny/" title="Next Post: Distributed Black-Box Optimization Talk at QCon">Distributed Black-Box Optimization Talk at QCon &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <p>
+  <center><img src="/images/aleph.png"/></center>
+  <a href="http://adereth.github.io" alt="Home"><h1>Adereth's Blog</h1></a>
+
+  <ul id="recent_posts">
+      <li class="post">
+	<a href="http://adereth.github.io"><i class="fa fa-home fa-fw"></i> Home</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.github.io/about/"><i class="fa fa-user fa-fw"></i> About Me</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.github.io/atom.xml"><i class="fa fa-rss fa-fw"></i> Feed</a>
+      </li>
+  </ul>
+
+  <h1>Connect</h1>
+
+  <ul id="recent_posts">
+      <li class="post">
+	<a href="https://twitter.com/adereth"><i class="fa fa-twitter fa-fw"></i> Twitter</a>
+      </li>
+      <li class="post">
+	<a href="https://github.com/adereth"><i class="fa fa-github fa-fw"></i> GitHub</a>
+      </li>
+      <li class="post">
+	<a href="http://www.linkedin.com/in/adereth/"><i class="fa fa-linkedin fa-fw"></i> LinkedIn</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.tumblr.com/"><i class="fa fa-tumblr fa-fw"></i> Tumblr</a>
+      </li>
+  </ul>
+
+
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/01/03/distributed-black-box-optimization-talk-at-qconny/">Distributed Black-Box Optimization Talk at QCon</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/11/02/playing-with-wolfram-playing-cards/">Playing with Wolfram Playing Cards</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/12/06/writing-a-halite-bot-in-clojure/">Writing a Halite Bot in Clojure</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too/">Bag of Little Bootstraps Presentation at PWL SF</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/20/visualizing-girl-talk-with-clojure-and-d3-dot-js/">Visualizing Girl Talk: Parsing with Clojure's Instaparse</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/19/clojure-slash-conj-talk-on-3d-printing-keyboards/">Clojure/conj Talk on 3D Printing Keyboards</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love/">Presentation on The Mode Tree at Papers We Love Too</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/17/sa-profile-keys-on-a-kinesis-advantage/">SA Profile Keys on a Kinesis Advantage</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/02/poisonous-shapes/">Poisonous Shapes in Algebra and Graph Theory</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/12/silvermans-mode-detection-method-explained/">Silverman's Mode Estimation Method Explained</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/adereth">@adereth</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'adereth',
+            count: 10,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2021 - Matt Adereth -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = '1overn';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://adereth.github.io/blog/2017/11/02/playing-with-wolfram-playing-cards/';
+        var disqus_url = 'http://adereth.github.io/blog/2017/11/02/playing-with-wolfram-playing-cards/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

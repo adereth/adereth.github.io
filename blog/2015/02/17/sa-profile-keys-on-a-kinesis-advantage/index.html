@@ -1,0 +1,461 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>SA Profile Keys on a Kinesis Advantage - adereth</title>
+  <meta name="author" content="Matt Adereth">
+
+  
+  <meta name="description" content="Despite investing significant time into the Ergodox, I still prefer the Kinesis Advantage: I&rsquo;ve been (slowly) working on building my own dream &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://adereth.github.io/blog/2015/02/17/sa-profile-keys-on-a-kinesis-advantage/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+   <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="adereth" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic|Source+Code+Pro:400,700' rel='stylesheet' type='text/css'>
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+<link href="//fonts.googleapis.com/css?family=Crimson+Text:400italic,400,600italic,600,700italic,700" rel="stylesheet" type="text/css">
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ TeX: { extensions: ["color.js"] }});
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript"
+        src="http://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-44572622-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+</hgroup>
+
+</header>
+  <!-- <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:adereth.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav> -->
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">SA Profile Keys on a Kinesis Advantage</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-02-17T16:50:00-08:00" pubdate data-updated="true">Feb 17<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Despite <a href="http://adereth.github.io/blog/2014/02/12/building-an-ergodox/">investing</a> <a href="http://adereth.github.io/blog/2014/02/27/finishing-up-the-ergodox/">significant</a> <a href="https://github.com/adereth/ergodox-tent">time</a> into the Ergodox, I still prefer the <a href="http://www.amazon.com/gp/product/B000LVJ9W8/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B000LVJ9W8&amp;linkCode=as2&amp;tag=rkbd-ka-20&amp;linkId=L5XSWPMHWGHCMLFU">Kinesis Advantage</a>:</p>
+
+<p><a href="http://www.amazon.com/gp/product/B000LVJ9W8/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=B000LVJ9W8&amp;linkCode=as2&amp;tag=rkbd-ka-20&amp;linkId=L5XSWPMHWGHCMLFU"><img src="/images/kinesis.jpg" alt="Kinesis Advantage" /></a></p>
+
+<p>I&rsquo;ve been (slowly) working on building my own dream keyboard, but in the meantime I make the occasional ridiculous tweak to my Kinesis.  This weekend I got 3 lbs. of reject keys from <a href="http://www.keycapsdirect.com/">Signature Plastics</a> and I was fortunate enough to get enough keycaps to try something that I&rsquo;ve been wanting to test for a while.</p>
+
+<h2>Kinesis Advantage with DSA keycaps</h2>
+
+<p>Almost a year ago, I saw <a href="http://sitr.us/">Jesse Hallett</a>&rsquo;s excellent post detailing his <a href="http://sitr.us/2014/05/19/kinesis-advantage-with-dsa-keycaps.html">Kinesis Advantage with DSA keycaps</a>.  His results were impressive:</p>
+
+<p><a href="http://sitr.us/2014/05/19/kinesis-advantage-with-dsa-keycaps.html"><img src="/images/kinesis-dsa.jpg" alt="Kinesis Advantage with DSA Keycaps" /></a></p>
+
+<p><em>Source: <a href="http://sitr.us/2014/05/19/kinesis-advantage-with-dsa-keycaps.html">Lesse Hallett&rsquo;s Blog</a></em></p>
+
+<p>DSA keycaps are low and uniform, with spherical tops:</p>
+
+<p><img src="/images/dsa.jpg" alt="DSA Keycap Profile" /></p>
+
+<p><em>Source: <a href="http://keycapsdirect.com/key-caps.php">Signature Plastics</a></em></p>
+
+<p>They are particularly well suited for non-standard keyboard layouts, like the ErgoDox or Kinesis Advantage, because most other keycaps have variable heights and angles that were designed for traditional staggered layouts on a plane.</p>
+
+<h2>SA keycaps</h2>
+
+<p>Personally, I&rsquo;m a big fan of the SA profile:</p>
+
+<p><img src="/images/sa.jpg" alt="SA Keycap Profile" /></p>
+
+<p>They&rsquo;re super tall and are usually manufactured with thick ABS plastic and given a smooth, high-gloss finish.  I&rsquo;m a bit of a retro-fetishist and these hit all the right spots.  It&rsquo;s no surprise that projects and group buys that use SA profile often have a retro theme:</p>
+
+<ul>
+<li><a href="http://deskthority.net/group-buys-f50/doubleshot-replacements-round-5-honey-sphericals-t6732.html">HONEY</a>, seeking to recreate a <a href="http://deskthority.net/resources/image/8881">classic Honeywell keyboard</a></li>
+<li><a href="http://www.pimpmykeyboard.com/deals/symbiosis/">Symbiosis</a>, seeking to recreate the <a href="http://en.wikipedia.org/wiki/Space-cadet_keyboard">Symbolics Space-cadet keyboard</a></li>
+<li><a href="http://www.pimpmykeyboard.com/deals/1976/">1976</a>, inspired by the colors of the 70&rsquo;s</li>
+</ul>
+
+
+<p>For this project I decided to go with all Row 3 profile SA keys in the two main key wells.  Row 3 is the home row on traditional layouts and the keycaps are completely symmetric, just like the DSA profile keys.  I was concerned about two main things:</p>
+
+<ol>
+<li>The curvature of the key well combined with the height might mean that the keys hit each other towards the top.</li>
+<li>Jesse ran into one spot in the corner of the keywell closest to the thumb clusters where the keycap hit the plastic.  This would almost certainly be a problem with the much larger SA keys.</li>
+</ol>
+
+
+<p>The easiest way to find out was to pop off all the keycaps:</p>
+
+<p><img src="/images/kinesis-bare.jpg" alt="Kinesis Advantage with Keycaps Removed" /></p>
+
+<p>&hellip;and to see what fit:</p>
+
+<p><img src="/images/kinesis-before-surgery.JPG" alt="Kinesis Advantage with Keycaps Removed" /></p>
+
+<p>Fortunately, the height was not an issue.  The angles are all perfect and the top of the keys form a relatively tight surface.  The smaller gaps between the tops combined with the extreme smoothness of the SA keycaps results in a nice effect where I&rsquo;m able to just glide my fingers across them without having to lift, similar to the feel of the modern Apple keyboards.</p>
+
+<p>Unfortunately, 3 keys at the bottom of each keywell wouldn&rsquo;t fit.  I busted out the Dremel and carved out a little from the bottom, making room for those beautiful fat caps:</p>
+
+<p><img src="/images/kinesis-hacked1.jpg" alt="Kinesis Advantage with Keycaps Removed" /></p>
+
+<p><img src="/images/kinesis-hacked2.jpg" alt="Kinesis Advantage with Keycaps Removed" /></p>
+
+<p>I used Row 1 keycaps for the 1x keys in the thumb clusters.  The extra height makes them not quite as difficult to reach:</p>
+
+<p><img src="/images/thumb-profile.jpg" alt="Kinesis Advantage with Keycaps Removed" /></p>
+
+<h2>Conclusion</h2>
+
+<p>Overall, I&rsquo;m pretty happy with how it turned out:</p>
+
+<p><img src="/images/kinesis-final.jpg" alt="Kinesis Advantage with Keycaps Removed" /></p>
+
+<p>It&rsquo;s a pleasure to type on and I&rsquo;m convinced that SA profile keys are going to be what I use when I eventually reach my final form.</p>
+
+<p>If you&rsquo;re interested in doing this yourself, you should know that it&rsquo;ll be difficult to source the 1.25x keys that are used on the sides of the Kinesis Advantage.  A lot of the keysets that are being sold for split layouts are targeting the Ergodox, which uses 1.5x keys on the side.  It does look like the <a href="http://www.pimpmykeyboard.com/deals/symbiosis/">Symbiosis group buy</a> includes enough 1.25x&rsquo;s in the main deal, but you&rsquo;d need to also buy the price Ergodox kit just to get those 4 2x&rsquo;s.  If you don&rsquo;t mind waiting an indefinite length of time, the <a href="http://deskthority.net/wiki/Round_5a">Round 5a group buy on Deskthority</a> is probably your best bet for getting exactly what you want.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Matt Adereth</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-02-17T16:50:00-08:00" pubdate data-updated="true">Feb 17<span>th</span>, 2015</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/keyboards/'>keyboards</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://adereth.github.io/blog/2015/02/17/sa-profile-keys-on-a-kinesis-advantage/" data-via="adereth" data-counturl="http://adereth.github.io/blog/2015/02/17/sa-profile-keys-on-a-kinesis-advantage/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/02/02/poisonous-shapes/" title="Previous Post: Poisonous Shapes in Algebra and Graph Theory">&laquo; Poisonous Shapes in Algebra and Graph Theory</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love/" title="Next Post: Presentation on The Mode Tree at Papers We Love Too">Presentation on The Mode Tree at Papers We Love Too &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <p>
+  <center><img src="/images/aleph.png"/></center>
+  <a href="http://adereth.github.io" alt="Home"><h1>Adereth's Blog</h1></a>
+
+  <ul id="recent_posts">
+      <li class="post">
+	<a href="http://adereth.github.io"><i class="fa fa-home fa-fw"></i> Home</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.github.io/about/"><i class="fa fa-user fa-fw"></i> About Me</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.github.io/atom.xml"><i class="fa fa-rss fa-fw"></i> Feed</a>
+      </li>
+  </ul>
+
+  <h1>Connect</h1>
+
+  <ul id="recent_posts">
+      <li class="post">
+	<a href="https://twitter.com/adereth"><i class="fa fa-twitter fa-fw"></i> Twitter</a>
+      </li>
+      <li class="post">
+	<a href="https://github.com/adereth"><i class="fa fa-github fa-fw"></i> GitHub</a>
+      </li>
+      <li class="post">
+	<a href="http://www.linkedin.com/in/adereth/"><i class="fa fa-linkedin fa-fw"></i> LinkedIn</a>
+      </li>
+      <li class="post">
+	<a href="http://adereth.tumblr.com/"><i class="fa fa-tumblr fa-fw"></i> Tumblr</a>
+      </li>
+  </ul>
+
+
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2018/01/03/distributed-black-box-optimization-talk-at-qconny/">Distributed Black-Box Optimization Talk at QCon</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/11/02/playing-with-wolfram-playing-cards/">Playing with Wolfram Playing Cards</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/12/06/writing-a-halite-bot-in-clojure/">Writing a Halite Bot in Clojure</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too/">Bag of Little Bootstraps Presentation at PWL SF</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/01/20/visualizing-girl-talk-with-clojure-and-d3-dot-js/">Visualizing Girl Talk: Parsing with Clojure's Instaparse</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/11/19/clojure-slash-conj-talk-on-3d-printing-keyboards/">Clojure/conj Talk on 3D Printing Keyboards</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love/">Presentation on The Mode Tree at Papers We Love Too</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/17/sa-profile-keys-on-a-kinesis-advantage/">SA Profile Keys on a Kinesis Advantage</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/02/poisonous-shapes/">Poisonous Shapes in Algebra and Graph Theory</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/12/silvermans-mode-detection-method-explained/">Silverman's Mode Estimation Method Explained</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/adereth">@adereth</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'adereth',
+            count: 10,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2021 - Matt Adereth -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = '1overn';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://adereth.github.io/blog/2015/02/17/sa-profile-keys-on-a-kinesis-advantage/';
+        var disqus_url = 'http://adereth.github.io/blog/2015/02/17/sa-profile-keys-on-a-kinesis-advantage/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

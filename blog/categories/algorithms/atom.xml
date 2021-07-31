@@ -1,0 +1,1027 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: algorithms | adereth]]></title>
+  <link href="http://adereth.github.io/blog/categories/algorithms/atom.xml" rel="self"/>
+  <link href="http://adereth.github.io/"/>
+  <updated>2021-07-31T10:59:35-07:00</updated>
+  <id>http://adereth.github.io/</id>
+  <author>
+    <name><![CDATA[Matt Adereth]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Distributed Black-Box Optimization Talk at QCon]]></title>
+    <link href="http://adereth.github.io/blog/2018/01/03/distributed-black-box-optimization-talk-at-qconny/"/>
+    <updated>2018-01-03T10:16:00-08:00</updated>
+    <id>http://adereth.github.io/blog/2018/01/03/distributed-black-box-optimization-talk-at-qconny</id>
+    <content type="html"><![CDATA[<p><img class="center" src="/images/720px-Himmelblau_function.svg.png">
+<em><a href="https://en.wikipedia.org/wiki/Himmelblau%27s_function">Himmelblau&rsquo;s Function</a>, a popular test function for black-box optimization</em></p>
+
+<p>I gave a talk on Distributed Black-Box Optimization at <a href="https://qconnewyork.com/">QCon NY 2017</a>.  The video and slides are available <a href="https://www.infoq.com/presentations/black-box-optimization">here</a>.</p>
+
+<p>For reference, here are all the papers that are mentioned in the talk in the order they are covered:</p>
+
+<p><font style="font-variant: small-caps">O. Alipourfard, H. H. Liu, J. Chen, S. Venkataraman, M. Yu1, M. Zhang</font> (2017) <a href="https://www.usenix.org/conference/nsdi17/technical-sessions/presentation/alipourfard">CherryPick: Adaptively Unearthing the Best Cloud Configurations for Big Data Analytics</a> <i>NSDI’17</i>.</p>
+
+<p><font style="font-variant: small-caps">J. A. Nelder  R. Mead</font> (1965) <a href="https://academic.oup.com/comjnl/article-abstract/7/4/308/354237">A Simplex Method for Function Minimization.</a> <i>The Computer Journal</i>, Vol. 7, Issue 4.</p>
+
+<p><font style="font-variant: small-caps">J. E. Dennis Jr., Torczon</font> (1991) <a href="http://citeseerx.ist.ps,%20V.u.edu/viewdoc/summary?doi=10.1.1.56.4600">Direct Search Methods on Parallel Machines.</a> <i>SIAM Journal on Optimization</i>, 1991 Vol. 1.</p>
+
+<p><font style="font-variant: small-caps">J. Mockus</font> (1989) <a href="http://www.springer.com/us/book/9789401068987">Bayesian Approach to Global Optimization.</a></p>
+
+<p><font style="font-variant: small-caps">J. Wang, S. C. Clark, E. Liu, P. I. Frazier</font> (2016) <a href="https://arxiv.org/abs/1602.05149">Parallel Bayesian Global Optimization of Expensive Functions.</a> <i>arXiv:1602.05149</i>.</p>
+
+<p><font style="font-variant: small-caps">K. Swersky, J. Snoek, R. P. Adams</font> (2014) <a href="https://arxiv.org/abs/1406.3896">Freeze-Thaw Bayesian Optimization.</a> <i>arXiv:1406.3896</i>.</p>
+
+<p><font style="font-variant: small-caps">V. Dalibard, M. Schaarschmidt, E. Yoneki</font> (2017) <a href="https://dl.acm.org/citation.cfm?doid=3038912.3052662">BOAT: Building Auto-Tuners with Structured Bayesian Optimization.</a> <i>Proceedings of the 26th International Conference on World Wide Web</i>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Bag of Little Bootstraps Presentation at PWL SF]]></title>
+    <link href="http://adereth.github.io/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too/"/>
+    <updated>2016-04-19T20:25:00-07:00</updated>
+    <id>http://adereth.github.io/blog/2016/04/19/presentation-on-the-bag-of-little-bootstraps-at-papers-we-love-too</id>
+    <content type="html"><![CDATA[<p>I recently gave a talk on the Bag of Little Bootstraps algorithm at <a href="http://www.meetup.com/papers-we-love-too/">Papers We Love Too</a> in San Francisco:</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Wsly7pIuGsI" frameborder="0" allowfullscreen></iframe>
+
+
+<p>My part starts around 31:27, but you should watch the excellent mini talk at the beginning too!  For reference, here are all the papers that are mentioned in the talk:</p>
+
+<p><font style="font-variant: small-caps">Quenouille, M. H.</font> (1956) <a href="http://www.jstor.org/stable/2332914">Notes on Bias in Estimation.</a> <i>Biometrika</i>, Vol. 43, No. 3 / 4.</p>
+
+<p><font style="font-variant: small-caps">Jaeckel, L.</font> (1972) <a href="http://www.stat.washington.edu/people/fritz/Reports/InfinitesimalJackknife.pdf">The infinitesimal jackknife.</a> <i>Bell Laboratories Memorandum</i>, #MM 72-1215-11.</p>
+
+<p><font style="font-variant: small-caps">Miller, R. G.</font> (1974) <a href="http://www.stat.cmu.edu/~fienberg/Statistics36-756/jackknife.pdf">The jackknife: a review.</a> Biometrika 61 1-15.</p>
+
+<p><font style="font-variant: small-caps">Efron, B.</font> (1979) <a href="http://www.stat.cmu.edu/~fienberg/Statistics36-756/Efron1979.pdf">Bootstrap methods: Another look at the jackknife.</a> <i>Annals of Statistics</i>, 7(1):1-16.</p>
+
+<p><font style="font-variant: small-caps">Kleiner, A., Talwalkar, A., Sarkar, P., and Jordan, M. I.</font> (2012) <a href="http://arxiv.org/abs/1112.5016">A scalable bootstrap for massive data.</a></p>
+
+<p><font style="font-variant: small-caps">Kleiner, A., Talwalkar, A., Sarkar, P., and Jordan, M. I.</font> (2012) <a href="http://arxiv.org/abs/1206.6415">The big data bootstrap.</a></p>
+
+<p>Also, in case there&rsquo;s any confusion, I don&rsquo;t train Arabian horses.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Presentation on The Mode Tree at Papers We Love Too]]></title>
+    <link href="http://adereth.github.io/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love/"/>
+    <updated>2015-04-06T20:10:00-07:00</updated>
+    <id>http://adereth.github.io/blog/2015/04/06/presentation-on-the-mode-tree-at-papers-we-love</id>
+    <content type="html"><![CDATA[<script src="http://d3js.org/d3.v2.js"></script>
+
+
+<div>
+<style type="text/css">
+
+.chart {
+  font-size: 10px;
+  margin-top: -40px;
+}
+
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2;
+  shape-rendering: crispEdges;
+}
+
+.area {
+  fill: indianred;
+  fill-opacity: 0.25;
+  stroke: #000;
+  stroke-opacity: 0.5;
+}
+
+.point {
+  fill: #126ED5;
+  fill-opacity: 0.75;
+  stroke: none;
+  stroke-width: 1
+  stroke-opacity: 0.5;
+}
+
+.kernelline {
+  fill: none;
+  stroke: #D04400;
+  stroke-width: 1;
+  stroke-opacity: 0.75;
+}
+
+.kdeline {
+  fill: none;
+  stroke: #CB17CE;
+  stroke-opacity: 0.75;
+  stroke-width: 4
+}
+
+.summedarea {
+  fill: steelblue;
+  fill-opacity: 0.75;
+  stroke: #000;
+  stroke-opacity: 0.5;
+}
+
+.bar rect {
+  fill: steelblue;
+  fill-opacity: 0.75;
+  shape-rendering: crispEdges;
+  stroke: #000;
+  stroke-opacity: 0.5;
+
+}
+
+.bar text {
+  fill: #fff;
+}
+
+.equation {
+  opacity: 0;
+}
+
+.kernelwidth {
+  stroke: #2DB15D;
+  stroke-width: 4;
+}
+
+.treeline {
+  fill: none;
+  stroke: #000;
+  stroke-opacity: 0.75;
+  stroke-width: 2
+}
+
+.treeconnector {
+  fill: none;
+  stroke: #999;
+  stroke-opacity: 0.75;
+  stroke-width: 2
+}
+
+</style>
+</div>
+
+
+<p>I recently gave a mini talk on <a href="http://adereth.github.io/oneoff/Mode%20Trees.pdf">The Mode Tree: A Tool for Visualization of Nonparametric Density Features</a> at <a href="http://www.meetup.com/papers-we-love-too/">Papers We Love Too</a> in San Francisco.  The talk is just the first 10 minutes:</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/T3Bt9Tn6P5c" frameborder="0" allowfullscreen></iframe>
+
+
+<p>I did the entire presentation as one huge sequence of animations using <a href="http://d3js.org/">D3.js</a>.  The Youtube video doesn&rsquo;t capture the glory that is SVG, so <a href="/oneoff/pwl-draft/scratch.html">I&rsquo;ve posted the slides</a>.</p>
+
+<p>I also finally got to apply the technique that I wrote about in my <a href="/blog/2013/11/29/colorful-equations/">Colorful Equations with MathJax post</a> from over a year ago, only instead of coloring explanatory text, the colors in the accompanying chart match:</p>
+
+<div style="font-size: 100%;">
+$$
+\definecolor{kernel}{RGB}{217,86,16}
+\definecolor{kde}{RGB}{203,23,206}
+\definecolor{point}{RGB}{18,110,213}
+\definecolor{width}{RGB}{45,177,93}
+\color{kde}\hat{f}_{\color{width}h}\color{black}(x) \color{black} = \frac{1}{n\color{width}h}\color{black}\sum\limits_{i=1}^n \color{kernel}K\color{black}(\frac{x-\color{point}X_i}{\color{width}h})
+$$
+</div>
+
+
+<div id='chart-1'></div>
+
+
+<script type='text/javascript'>
+var data = [
+{value: 13.1138}, {value: 10.6519}, {value: 20.5735}, {value: 7.89327}, {value: 9.02554}, {value: 20.8411}, {value: 8.84072}, {value: 10.6273}, {value: 13.5194}, {value: 17.9757}, {value: 10.1086}, {value: 8.68131}, {value: 7.16192}, {value: 19.9496}, {value: 8.77111}, {value: 19.5314}, {value: 9.40915}, {value: 12.8664}, {value: 23.1322}, {value: 13.5008}];
+
+function drawChart(data,chart,height) {
+$(chart).empty();
+var margin = {top: 50, right: 40, bottom: 40, left: 60};
+var width = $('.entry-content').width();
+var x = d3.scale.linear().domain([0, 30]).range([0, width - margin.left - margin.right]);
+
+           var xAxis = d3.svg.axis()
+                         .scale(x)
+                         .orient('bottom')
+                         .tickPadding(8)
+                         .ticks(8);
+
+           var svg = d3.select(chart).append('svg')
+                       .attr('width', width)
+                       .attr('height', height)
+                       .attr('class', 'chart')
+                       .append('g')
+                       .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+           svg.append("g")
+              .attr("class", "x axis")
+              .attr("transform", "translate(0," + (height - margin.top - margin.bottom) + ")")
+              .call(xAxis);
+
+           var y0 = height - margin.top - margin.bottom;
+
+
+               var points = svg.selectAll('.chart')
+                               .data(data)
+                           .enter().append('circle')
+                               .classed('point', true)
+                               .attr("id", function(d, i) { return "point" + i })
+                               .attr('cx', function(d, i) { return x(d.value) })
+                               .attr('cy', y0)
+                               .attr('r', 3.25);
+
+               var y = d3.scale.linear()
+                         .domain([0, 1])
+                         .range([height - margin.top - margin.bottom, 0]);
+
+               function subpoints(d, stddev) {
+                   return d3.range(d.value - 7, d.value + 7, 0.1).map(
+                       function (d2,i,a) {
+                           return {value: d2, height: gaussian(d2, d.value, stddev)};
+                       });
+               }
+
+               var widthLine = svg.append('path')
+                   .attr('class', 'kernelwidth')
+                   .attr("d", d3.svg.line()([[x(data[0].value - 1), y(0) + 2,],[x(data[0].value), y(0) + 2]]))
+                   .style('opacity', 0);
+
+               widthLine.transition().duration(1000).style('opacity', 1);
+
+var stddev = 1;
+
+           var scale = 0.5 / Math.sqrt(2 * Math.PI) / 2;
+           function gaussian(x, mean, sigma) {
+               var z = (x - mean) / sigma;
+               return scale * Math.exp(-0.5 * z * z) / sigma;
+           };
+
+
+               var kernels = data.sort(function(x,y){return x.value - y.value}).map(function(d, i) {
+                   var line = d3.svg.line()
+                                .x(function(d) { return x(d.value); })
+                                .y(function(d) { return y(d.height) });
+
+                   return svg.append('path')
+                             .attr('class', 'kernelline')
+                             .attr("d", line(subpoints(d, stddev)))
+                             .style('opacity', 1);
+
+               });
+
+                   var intermediateAreaPoints =
+                       d3.range(0, 30, 0.01).concat(data.map(function(x) {return x.value}))
+                                      .sort(function(a,b){return a-b})
+                                      .map(
+                                          function (x,i2,a) {
+                                              var y = 0;
+                                              //console.log(x)
+                                              data.forEach(function(d) {
+                                                  y += gaussian(x, d.value, stddev)
+                                              });
+                                              return {value: x, height: y};
+                                          }
+                                      );
+                   var line = d3.svg.line()
+                                .x(function(d) { return x(d.value); })
+                                .y(function(d) { return y(d.height); });
+
+
+        var summedArea = svg.append('path')
+            .attr('class', 'kdeline')
+                .attr("d", line(intermediateAreaPoints));
+
+
+
+}
+
+function drawChartWithResize(data, chart, height) {
+    drawChart(data, chart, height);
+        $(window).resize(function() {drawChart(data, chart, height); })
+};
+
+
+drawChartWithResize(data, '#chart-1', 300);
+
+
+</script>
+
+
+<p>Any questions or feedback on the presentation are welcome&hellip; thanks!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Silverman's Mode Estimation Method Explained]]></title>
+    <link href="http://adereth.github.io/blog/2014/10/12/silvermans-mode-detection-method-explained/"/>
+    <updated>2014-10-12T12:51:00-07:00</updated>
+    <id>http://adereth.github.io/blog/2014/10/12/silvermans-mode-detection-method-explained</id>
+    <content type="html"><![CDATA[<script src="http://d3js.org/d3.v2.js"></script>
+
+
+<div>
+  <style type="text/css">
+
+     .chart {
+       font-size: 10px;
+       margin-top: -40px;
+     }
+
+     .point {
+       fill: steelblue;
+       fill-opacity: 0.5;
+       stroke: black;
+       stroke-width: 1
+       stroke-opacity: 0.5;
+     }
+
+     .axis path, .axis line {
+       fill: none;
+       stroke: #000;
+       shape-rendering: crispEdges;
+     }
+
+     .area {
+       fill: steelblue;
+       fill-opacity: 0.25;
+       stroke: #000;
+       stroke-opacity: 0.5;
+     }
+
+     .summedarea {
+       fill: steelblue;
+       fill-opacity: 0.75;
+       stroke: #000;
+       stroke-opacity: 0.5;
+     }
+
+    .bar rect {
+        fill: steelblue;
+        fill-opacity: 0.75;
+        shape-rendering: crispEdges;
+        stroke: #000;
+        stroke-opacity: 0.5;
+
+    }
+
+    .bar text {
+        fill: #fff;
+    }
+
+
+  </style>
+</div>
+
+
+
+
+<!-- Global Variables and Handlers: -->
+
+
+<script type="text/javascript">
+
+  var margin = {top: 50, right: 40, bottom: 40, left: 60},
+      width = $('.entry-content').width();
+
+  $(window).resize(function() {
+    width = $('.entry-content').width();
+  });
+
+  function drawPoints(data, chart, height) {
+
+    $(chart).empty();
+
+    var x = d3.scale.linear()
+        .domain([0, d3.max(data, function(d) { return d.value}) + 5])
+        .range([0, width - margin.left - margin.right]);
+
+    var y = d3.scale.ordinal()
+        .domain(d3.range(data.length))
+        .rangeRoundBands([height - margin.top - margin.bottom, 0], 0.2);
+
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient('bottom')
+        .tickPadding(8)
+    .ticks(8);
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient('left')
+        .tickPadding(8)
+        .tickSize(0);
+
+    var svg = d3.select(chart).append('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .attr('class', 'chart')
+          .append('g')
+        .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+    svg.selectAll('.chart')
+        .data(data)
+        .enter().append('circle')
+        .attr('class', 'point')
+        .attr('cx', function(d, i) { return x(d.value) })
+        .attr('cy', 0)
+        .attr('r', 3);
+
+    svg.append('g')
+        .attr('class', 'x axis')
+        .call(xAxis);
+
+  }
+
+  function drawPointsWithResize(data, chart, height) {
+    drawPoints(data, chart, height);
+    $(window).resize(function() {drawPoints(data, chart, height); })
+  };
+
+
+     function drawOverlappingDistributions(data, chart, height) {
+
+       $(chart).empty();
+
+       var x = d3.scale.linear()
+                       .domain([0, d3.max(data, function(d) { return d.value}) + 5])
+                       .range([0, width - margin.left - margin.right]);
+
+       var y = d3.scale.linear()
+                       .domain([0, 0.5])
+                       .range([height - margin.top - margin.bottom, 0]);
+
+       var xAxis = d3.svg.axis()
+                         .scale(x)
+                         .orient('bottom')
+                         .tickPadding(8)
+                         .ticks(8);
+
+       var yAxis = d3.svg.axis()
+                         .scale(y)
+                         .orient('left')
+                         .tickPadding(8)
+                         .tickSize(0);
+
+       var svg = d3.select(chart).append('svg')
+                   .attr('width', width)
+                   .attr('height', height)
+                   .attr('class', 'chart')
+                   .append('g')
+                   .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+       var line = d3.svg.line()
+                        .x(function(d) {return x(d.q)})
+                        .y(function(d) {return y(d.p)})
+
+       var scale = 1 / Math.sqrt(2 * Math.PI);
+       function gaussian(x, mean, sigma) {
+         var z = (x - mean) / sigma;
+         return scale * Math.exp(-0.5 * z * z) / sigma;
+       };
+
+       function subpoints(d) {
+         return d3.range(d.value - 4, d.value + 4, 0.1).map(
+           function (d2,i,a) {
+             return {value: d2, height: gaussian(d2, d.value, 1)};
+           });
+       }
+
+       data.forEach(function(d) {
+
+         var area = d3.svg.area()
+                          .interpolate("monotone")
+                          .x(function(d) { return x(d.value); })
+                          .y0(y(0))
+                          .y1(function(d) { return y(d.height); });
+
+         svg.append('path')
+            .attr('class', 'area')
+            .attr("d", area(subpoints(d)))
+       });
+
+       svg.selectAll('.chart')
+          .data(data)
+          .enter().append('circle')
+          .attr('class', 'point')
+          .attr('cx', function(d, i) { return x(d.value) })
+          .attr('cy', y(0))
+          .attr('r', 3);
+
+       svg.append('g')
+          .attr('class', 'x axis')
+          .attr("transform", "translate(0," + (height - margin.top - margin.bottom) + ")")
+          .call(xAxis);
+
+     }
+
+     function drawOverlappingDistributionsWithResize(data, chart, height) {
+       drawOverlappingDistributions(data, chart, height);
+       $(window).resize(function() {drawOverlappingDistributions(data, chart, height); })
+     };
+
+
+     function drawSummedDistributions(data, chart, height, stddev) {
+
+       $(chart).empty();
+
+       var scale = 1 / Math.sqrt(2 * Math.PI);
+       function gaussian(x, mean, sigma) {
+         var z = (x - mean) / sigma;
+         return scale * Math.exp(-0.5 * z * z) / sigma;
+       };
+
+       var points = d3.range(0, 30, 0.01).concat(data.map(function(x) {return x.value}))
+       .sort(function(a,b){return a-b})
+                      .map(
+         function (x,i,a) {
+           var y = 0;
+           data.forEach(function(d) {
+             y += gaussian(x, d.value, stddev)
+           });
+           return {value: x, height: y};
+         }
+
+       );
+
+
+
+       var x = d3.scale.linear()
+                       .domain([0, d3.max(data, function(d) { return d.value}) + 5])
+                       .range([0, width - margin.left - margin.right]);
+
+       var y = d3.scale.linear()
+                       .domain([0, d3.max(points, function(d) { return d.height})])
+                       .range([height - margin.top - margin.bottom, 0]);
+
+       var xAxis = d3.svg.axis()
+                         .scale(x)
+                         .orient('bottom')
+                         .tickPadding(8)
+                         .ticks(8);
+
+       var yAxis = d3.svg.axis()
+                         .scale(y)
+                         .orient('left')
+                         .tickPadding(8)
+                         .tickSize(0);
+
+       var svg = d3.select(chart).append('svg')
+                   .attr('width', width)
+                   .attr('height', height)
+                   .attr('class', 'chart')
+                   .append('g')
+                   .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+       var line = d3.svg.line()
+                        .x(function(d) {return x(d.q)})
+                        .y(function(d) {return y(d.p)})
+
+       var area = d3.svg.area()
+                        .interpolate("monotone")
+                        .x(function(d) { return x(d.value); })
+                        .y0(y(0))
+                        .y1(function(d) { return y(d.height); });
+
+       svg.append('path')
+          .attr('class', 'summedarea')
+          .attr("d", area(points))
+
+       svg.selectAll('.chart')
+          .data(data)
+          .enter().append('circle')
+          .attr('class', 'point')
+          .attr('cx', function(d, i) { return x(d.value) })
+          .attr('cy', y(0))
+          .attr('r', 3);
+
+
+       svg.append('g')
+          .attr('class', 'x axis')
+          .attr("transform", "translate(0," + (height - margin.top - margin.bottom) + ")")
+          .call(xAxis);
+
+     }
+
+
+
+     function drawSummedDistributionsWithResize(data, chart, height, stddev) {
+       drawSummedDistributions(data, chart, height, stddev);
+       $(window).resize(function() {drawSummedDistributions(data, chart, height, stddev); })
+     };
+
+     function drawHistogram(data, chart, height) {
+
+       $(chart).empty();
+
+       var x = d3.scale.linear()
+                       .domain([0, 11])
+                       .range([0, width - margin.left - margin.right]);
+
+       var data = d3.layout.histogram()
+                           .bins(x.ticks(10))(data);
+
+       var y = d3.scale.linear()
+                       .domain([0, d3.max(data, function(d) { return d.y; })])
+                       .range([height - margin.top - margin.bottom, 0]);
+
+       var xAxis = d3.svg.axis()
+                         .scale(x)
+                         .orient('bottom')
+                         .tickPadding(8)
+                         .ticks(8);
+
+       var yAxis = d3.svg.axis()
+                         .scale(y)
+                         .orient('left')
+                         .tickPadding(8)
+                         .tickSize(0);
+
+       var svg = d3.select(chart).append('svg')
+                   .attr('width', width)
+                   .attr('height', height)
+                   .attr('class', 'chart')
+                   .append('g')
+                   .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+       var bar = svg.selectAll(".bar")
+                    .data(data)
+                    .enter().append("g")
+                    .attr("class", "bar")
+                    .attr("transform", function(d) { return "translate(" + x(d.x - 0.5) + "," + y(d.y) + ")"; });
+
+       bar.append("rect")
+          .attr("width", x(data[0].dx) - 3)
+          .attr("height", function(d) {
+            console.log(d + " " + y(d.y));
+            return height - y(d.y) - margin.bottom - margin.top; });
+
+       svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + (height - margin.top - margin.bottom) + ")")
+          .call(xAxis);
+
+       svg.append("g")
+          .attr("class", "y axis")
+          .call(yAxis);
+
+
+     }
+
+     function drawHistogramWithResize(data, chart, height) {
+       drawHistogram(data, chart, height);
+       $(window).resize(function() {drawHistogram(data, chart, height); })
+     };
+
+
+</script>
+
+
+<p>I started digging into the history of mode detection after watching <a href="http://aysy.lu/">Aysylu Greenberg</a>&rsquo;s <a href="http://youtu.be/XmImGiVuJno">Strange Loop talk on benchmarking</a>.  She pointed out that the usual benchmarking statistics fail to capture that our timings may actually be samples from multiple distributions, commonly caused by the fact that our systems are comprised of hierarchical caches.</p>
+
+<p>I thought it would be useful to add the detection of this to my favorite benchmarking tool, <a href="http://hugoduncan.org/">Hugo Duncan</a>&rsquo;s <a href="https://github.com/hugoduncan/criterium">Criterium</a>.  Not surprisingly, Hugo had already considered this and there&rsquo;s a note under the TODO section:</p>
+
+<p><code>
+Multimodal distribution detection.
+Use kernel density estimators?
+</code></p>
+
+<p>I hadn&rsquo;t heard of using kernel density estimation for multimodal distribution detection so I found the original paper, <a href="http://www.stat.washington.edu/wxs/Stat593-s03/Literature/silverman-81a.pdf">Using Kernel Density Estimates to Investigate Multimodality (Silverman, 1981)</a>.  The original paper is a dense 3 pages and my goal with this post is to restate Silverman&rsquo;s method in a more accessible way.  Please excuse anything that seems overly obvious or pedantic and feel encouraged to suggest any modifications that would make it clearer.</p>
+
+<h2>What is a mode?</h2>
+
+<p>The mode of a distribution is the value that has the highest probability of being observed.  Many of us were first exposed to the concept of a mode in a discrete setting.  We have a bunch of observations and the mode is just the observation value that occurs most frequently.  It&rsquo;s an elementary exercise in counting.  Unfortunately, this method of counting doesn&rsquo;t transfer well to observations sampled from a continuous distribution because we don&rsquo;t expect to ever observe the exact some value twice.</p>
+
+<p>What we&rsquo;re really doing when we count the observations in the discrete case is estimating the <a href="http://en.wikipedia.org/wiki/Probability_density_function">probability density function</a> (PDF) of the underlying distribution.  The value that has the highest probability of being observed is the one that is the global maximum of the PDF.  Looking at it this way, we can see that a necessary step for determining the mode in the continuous case is to first estimate the PDF of the underlying distribution.  We&rsquo;ll come back to how Silverman does this with a technique called kernel density estimation later.</p>
+
+<h2>What does it mean to be multimodal?</h2>
+
+<p>In the discrete case, we can see that there might be undeniable multiple modes because the counts for two elements might be the same.  For instance, if we observe:</p>
+
+<p>$$1,2,2,2,3,4,4,4,5$$</p>
+
+<p>Both 2 and 4 occur thrice, so we have no choice but to say they are both modes.  But perhaps we observe something like this:</p>
+
+<p>$$1,1,1,2,2,2,2,3,3,3,4,9,10,10$$</p>
+
+<p>The value 2 occurs more than anything else, so it&rsquo;s <em>the</em> mode.  But let&rsquo;s look at the histogram:</p>
+
+<div id='hist'></div>
+
+
+<script type='text/javascript'>
+drawHistogramWithResize([1,1,1,2,2,2,2,3,3,3,4,9,10,10], '#hist', 300);
+</script>
+
+
+<p>That pair of 10&rsquo;s are out there looking awfully interesting.  If these were benchmark timings, we might suspect there&rsquo;s a significant fraction of calls that go down some different execution path or fall back to a slower level of the cache hierarchy.  Counting alone isn&rsquo;t going to reveal the 10&rsquo;s because there are even more 1&rsquo;s and 3&rsquo;s.  Since they&rsquo;re nestled up right next to the 2&rsquo;s, we probably will assume that they are just part of the expected variance in performance of the same path that caused all those 2&rsquo;s.  <em>What we&rsquo;re really interested in is the local maxima of the PDF because they are the ones that indicate that our underlying distribution may actually be a mixture of several distributions.</em></p>
+
+<h2>Kernel density estimation</h2>
+
+<p>Imagine that we make 20 observations and see that they are distributed like this:</p>
+
+<div id='chart-1'></div>
+
+
+<script type='text/javascript'>
+
+  var data = [
+{value: 13.1138}, {value: 10.6519}, {value: 20.5735}, {value: 7.89327}, {value: 9.02554}, {value: 20.8411}, {value: 8.84072}, {value: 10.6273}, {value: 13.5194}, {value: 17.9757}, {value: 10.1086}, {value: 8.68131}, {value: 7.16192}, {value: 19.9496}, {value: 8.77111}, {value: 19.5314}, {value: 9.40915}, {value: 12.8664}, {value: 23.1322}, {value: 13.5008}];
+  drawPointsWithResize(data, '#chart-1', 90);
+</script>
+
+
+<p>We can estimate the underlying PDF by using what is called a <a href="http://en.wikipedia.org/wiki/Kernel_density_estimation">kernel density estimate</a>.  We replace each observation with some distribution, called the &ldquo;kernel,&rdquo; centered at the point.  Here&rsquo;s what it would look like using a normal distribution with standard deviation 1:</p>
+
+<div id='chart-2'></div>
+
+
+<script type='text/javascript'>
+    drawOverlappingDistributionsWithResize(data, '#chart-2', 200);
+</script>
+
+
+<p>If we sum up all these overlapping distributions, we get a reasonable estimate for the underlying continuous PDF:</p>
+
+<div id='chart-3'></div>
+
+
+<script type='text/javascript'>
+     drawSummedDistributionsWithResize(data, '#chart-3', 300, 1);
+</script>
+
+
+<p>Note that we made two interesting assumptions here:</p>
+
+<ol>
+<li><p>We replaced each point with a normal distribution.  Silverman&rsquo;s approach actually relies on some of the nice mathematical properties of the normal distribution, so that&rsquo;s what we use.</p></li>
+<li><p>We used a standard deviation of 1.  Each normal distribution is wholly specified by a mean and a standard deviation.  The mean is the observation we are replacing, but we had to pick some arbitrary standard deviation which defined the width of the kernel.</p></li>
+</ol>
+
+
+<p>In the case of the normal distribution, we could just vary the standard deviation to adjust the width, but there is a more general way of stretching the kernel for arbitrary distributions.  The kernel density estimate for observations $X_1,X_2,&hellip;,X_n$ using a kernel function $K$ is:</p>
+
+<p>$$\hat{f}(x)=\frac{1}{n}\sum\limits_{i=1}^n K(x-X_i)$$</p>
+
+<p>In our case above, $K$ is the PDF for the normal distribution with standard deviation 1.  We can stretch the kernel by a factor of $h$ like this:</p>
+
+<p>$$\hat{f}(x, h)=\frac{1}{nh}\sum\limits_{i=1}^n K(\frac{x-X_i}{h})$$</p>
+
+<p>Note that changing $h$ has the exact same effect as changing the standard deviation: it makes the kernel wider and shorter while maintaining an area of 1 under the curve.</p>
+
+<h2>Different kernel widths result in different mode counts</h2>
+
+<p>The width of the kernel is effectively a smoothing factor.  If we choose too large of a width, we just end up with one giant mound that is almost a perfect normal distribution.  Here&rsquo;s what it looks like if we use $h=5$:</p>
+
+<div id='chart-4'></div>
+
+
+<script type='text/javascript'>
+     drawSummedDistributionsWithResize(data, '#chart-4', 300, 5);
+</script>
+
+
+<p>Clearly, this has a single maxima.</p>
+
+<p>If we choose too small of a width, we get a very spiky and over-fit estimate of the PDF.  Here&rsquo;s what it looks like with $h = 0.1$:</p>
+
+<div id='chart-5'></div>
+
+
+<script type='text/javascript'>
+drawSummedDistributionsWithResize(data, '#chart-5', 300, 0.1);
+</script>
+
+
+<p>This PDF has a bunch of local maxima.  If we shrink the width small enough, we&rsquo;ll get $n$ maxima, where $n$ is the number of observations:</p>
+
+<div id='chart-6'></div>
+
+
+<script type='text/javascript'>
+drawSummedDistributionsWithResize(data, '#chart-6', 300, 0.005);
+</script>
+
+
+<p>The neat thing about using the normal distribution as our kernel is that it has the property that shrinking the width will only introduce new local maxima.  Silverman gives a proof of this at the end of Section 2 in the original paper.  This means that for every integer $k$, where $1&lt;k&lt;n$, we can find the minimum width $h_k$ such that the kernel density estimate has at most $k$ maxima.  Silverman calls these $h_k$ values &ldquo;critical widths.&rdquo;</p>
+
+<h2>Finding the critical widths</h2>
+
+<p>To actually find the critical widths, we need to look at the formula for the kernel density estimate.  The PDF for a plain old normal distribution with mean $\mu$ and standard deviation $\sigma$ is:</p>
+
+<p>$$f(x)=\frac{1}{\sigma\sqrt{2\pi}}\mathrm{e}^{&ndash;\frac{(x-\mu)^2}{2\sigma^2}}$$</p>
+
+<p>The kernel density estimate with standard deviation $\sigma=1$ for observations $X_1,X_2,&hellip;,X_n$ and width $h$ is:</p>
+
+<p>$$\hat{f}(x,h)=\frac{1}{nh}\sum\limits_{i=1}^n \frac{1}{\sqrt{2\pi}}\mathrm{e}^{&ndash;\frac{(x-X_i)^2}{2h^2}}$$</p>
+
+<p>For a given $h$, you can find all the local maxima of $\hat{f}$ using your favorite numerical methods.  Now we need to find the $h_k$ where new local maxima are introduced.  Because of a result that Silverman proved at the end of section 2 in the paper, we know we can use a binary search over a range of $h$ values to find the critical widths at which new maxima show up.</p>
+
+<h2>Picking which kernel width to use</h2>
+
+<p>This is the part of the original paper that I found to be the least clear.  It&rsquo;s pretty dense and makes a number of vague references to the application of techniques from other papers.</p>
+
+<p>We now have a kernel density estimate of the PDF for each number of modes between $1$ and $n$.  For each estimate, we&rsquo;re going to use a statistical test to determine the significance.  We want to be parsimonious in our claims that there are additional modes, so we pick the smallest $k$ such that the significance measure of $h_k$ meets some threshold.</p>
+
+<p><a href="http://en.wikipedia.org/wiki/Bootstrapping_(statistics)">Bootstrapping</a> is used to evaluate the accuracy of a statistical measure by computing that statistic on observations that are <a href="http://en.wikipedia.org/wiki/Resampling_(statistics)">resampled</a> from the original set of observations.</p>
+
+<p>Silverman used a <a href="http://en.wikipedia.org/wiki/Bootstrapping_(statistics)#Smooth_bootstrap">smoothed bootstrap procedure</a> to evaluate the significance.  Smoothed bootstrapping is bootstrapping with some noise added to the resampled observations.  First, we sample from the original set of observations, with replacement, to get $X_I(i)$.  Then we add noise to get our smoothed $y_i$ values:</p>
+
+<p>$$y_i=\frac{1}{\sqrt{1+h_k^2/\sigma^2}}(X_{I(i)}+h_k \epsilon_i)$$</p>
+
+<p>Where $\sigma$ is the standard deviation of $X_1,X_2,&hellip;,X_n$, $h_k$ is the critical width we are testing, and $\epsilon_i$ is a random value sampled from a normal distribution with mean 0 and standard deviation 1.</p>
+
+<p>Once we have these smoothed values, we compute the kernel density estimate of them using $h_k$ and count the modes.  If this kernel density estimate doesn&rsquo;t have more than $k$ modes, we take that as a sign that we have a good critical width.  We repeat this many times and use the fraction of simulations where we didn&rsquo;t find more than $k$ modes as the p-value.  In the paper, Silverman does 100 rounds of simulation.</p>
+
+<h2>Conclusion</h2>
+
+<p>Silverman&rsquo;s technique was a really important early step in multimodality detection and it has been thoroughly investigated and improved upon since 1981.  Google Scholar lists <a href="http://scholar.google.com/scholar?espv=2&amp;bav=on.2,or.r_cp.r_qf.&amp;bvm=bv.77161500,d.cGE&amp;ion=1&amp;biw=1680&amp;bih=938&amp;dpr=2&amp;um=1&amp;ie=UTF-8&amp;lr=&amp;cites=18163244822709704741">about 670 citations of this paper</a>.  If you&rsquo;re interested in learning more, one paper I found particularly helpful was <a href="http://www3.stat.sinica.edu.tw/statistica/oldpdf/A11n28.pdf">On the Calibration of Silverman&rsquo;s Test for Multimodality (Hall &amp; York, 2001)</a>.</p>
+
+<p>One of the biggest weaknesses in Silverman&rsquo;s technique is that the critical width is a global parameter, so it may run into trouble if our underlying distribution is a mixture of low and high variance component distributions.  For an actual implementation of mode detection in a benchmarking package, I&rsquo;d consider using something that doesn&rsquo;t have this issue, like the technique described in <a href="http://private.igf.edu.pl/~jnn/Literatura_tematu/Minnotte_1997.pdf">Nonparametric Testing of the Existence of Modes (Minnotte, 1997)</a>.</p>
+
+<p>I hope this is correct and helpful.  If I misinterpreted anything in the original paper, please let me know.  Thanks!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Computing the Remedian in Clojure]]></title>
+    <link href="http://adereth.github.io/blog/2014/09/29/computing-the-remedian-in-clojure/"/>
+    <updated>2014-09-29T09:03:00-07:00</updated>
+    <id>http://adereth.github.io/blog/2014/09/29/computing-the-remedian-in-clojure</id>
+    <content type="html"><![CDATA[<p>The remedian is an approximation of the <a href="http://en.wikipedia.org/wiki/Median">median</a> that can be computed using only $O(\log{n})$ storage.  The algorithm was originally presented in <a href="http://web.ipac.caltech.edu/staff/fmasci/home/statistics_refs/Remedian.pdf">The Remedian: A Robust Averaging Method for Large Data Sets by Rousseeuw and Bassett</a> (1990).  The core of it is on the first page:</p>
+
+<blockquote><p>Let us assume that $n = b^k$, where $b$ and $k$ are integers (the case where $n$ is not of this form will be treated in Sec. 7.  The <em>remedian</em> with base $b$ proceeds by computing medians of groups of $b$ observations, yielding $b^{k-1}$ estimates on which this procedure is iterated, and so on, until only a single estimate remains.  When implemented properly, this method merely needs $k$ arrays of size $b$ that are continuously reused.</p></blockquote>
+
+<p>The implementation of this part in Clojure is so nice that I just had to share.</p>
+
+<p>First, we need a vanilla implementation of the median function.  We&rsquo;re always going to be computing the median of sets of size $b$, where $b$ is relatively small, so there&rsquo;s no need to get fancy with a linear time algorithm.</p>
+
+<p>```clojure
+(defn median [coll]
+  (let [size (count coll)</p>
+
+<pre><code>    sorted (sort coll)]
+(if (odd? size)
+  (nth sorted (int (/ size 2)))
+  (/ (+ (nth sorted (int (/ size 2)))
+        (nth sorted (dec (int (/ size 2)))))
+     2))))
+</code></pre>
+
+<p>```</p>
+
+<p>Now we can implement the actual algorithm.  We group, compute the median of each group, and recur, with the base case being when we&rsquo;re left with a single element in the collection:</p>
+
+<p>```clojure
+(defn remedian [b coll]
+  (if (next coll)</p>
+
+<pre><code>(-&gt;&gt; coll
+     (partition-all b)
+     (map median)
+     (recur b))
+(first coll)))
+</code></pre>
+
+<p>```</p>
+
+<p>Because <code>partition-all</code> and <code>map</code> both operate on and return lazy sequences, we maintain the property of only using $O(b \log_{b}{n})$ memory at any point in time.</p>
+
+<p>While this implementation is simple and elegant, it only works if the size of the collection is a power of $b$.  If we don&rsquo;t have $n = b^k$ where $b$ and $k$ are integers, we&rsquo;ll over-weight the observations that get grouped into the last groups of size $&lt; b$.</p>
+
+<p>Section 7 of the original paper describes the weighting scheme you should use to compute the median if you&rsquo;re left with incomplete groupings:</p>
+
+<blockquote><p>How should we proceed when the sample size $n$ is less than $b^k$? The remedian algorithm then ends up with $n_1$ numbers in the first array, $n_2$ numbers in the second array, and $n_k$ numbers in the last array, such that $n = n_1 + n_{2}b + &hellip; + n_k b^{k-1}$.  For our final estimate we then compute a weighted median in which the $n_1$, numbers in the first array have weight 1, the $n_2$ numbers in the second array have weight $b$, and the $n_k$ numbers in the last array have weight $b^{k-1}$. This final computation does not need much storage because there are fewer than $bk$ numbers and they only have to be ranked in increasing order, after which their weights must be added until the sum is at least $n/2$.</p></blockquote>
+
+<p>It&rsquo;s a bit difficult to directly translate this to the recursive solution I gave above because in the final step we&rsquo;re going to do a computation on a mixture of values from the different recursive sequences.  Let&rsquo;s give it a shot.</p>
+
+<p>We need some way of bubbling up the incomplete groups for the final weighted median computation.  Instead of having each recursive sequence <em>always</em> compute the median of each group, we can add a check to see if the group is smaller than $b$ and, if so, just return the incomplete group:</p>
+
+<p>```clojure
+(defn remedian-with-leftovers [b coll]
+  (let [incomplete-group? #(or (&lt; (count %) b)</p>
+
+<pre><code>                           (seq? (last %)))]
+(loop [coll coll]
+  (if (next coll)
+    (-&gt;&gt; coll
+         (partition-all b)
+         (map #(if (incomplete-group? %) % (median %)))
+         (recur))
+    coll))))
+</code></pre>
+
+<p>```</p>
+
+<p>For example, if we were using the mutable array implementation proposed in the original paper to compute the remedian of <code>(range 26)</code> with $b = 3$, the final state of the arrays would be:</p>
+
+<table>
+<thead>
+<tr>
+<th>Array  </th>
+<th> $i_0$ </th>
+<th> $i_1$   </th>
+<th> $i_2$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0      </td>
+<td> 24 </td>
+<td> 25 </td>
+<td> <em>empty</em></td>
+</tr>
+<tr>
+<td>1      </td>
+<td> 19 </td>
+<td> 22 </td>
+<td> <em>empty</em></td>
+</tr>
+<tr>
+<td>2      </td>
+<td> 4  </td>
+<td> 13 </td>
+<td> <em>empty</em></td>
+</tr>
+</tbody>
+</table>
+
+
+<br/>
+
+
+<p>In our sequence based solution, the final sequence will be <code>((4 13 (19 22 (24 25))))</code>.</p>
+
+<p>Now, we need to convert these nested sequences into <code>[value weight]</code> pairs that could be fed into a weighted median function:</p>
+
+<p>```clojure
+(defn weight-leftovers [b nested-elements]
+  (loop [vw-pairs []</p>
+
+<pre><code>     nested-elements nested-elements
+     weight 1]
+(let [element (first nested-elements)]
+  (cond
+   (next nested-elements) (recur (conj vw-pairs [element weight])
+                                 (next nested-elements)
+                                 weight)
+   (seq? element) (recur vw-pairs
+                         element
+                         (/ weight b))
+   :else (conj vw-pairs [element weight])))))
+</code></pre>
+
+<p>```
+Instead of weighting the values in array $j$ with weight $b^{j-1}$, we&rsquo;re weighting it at $\frac{b^{j-1}}{b^{k}}$.  Dividing all the weights by a constant will give us the same result and this is slightly easier to compute recursively, as we can just start at 1 and divide by $b$ as we descend into each nested sequence.</p>
+
+<p>If we run this on the <code>(range 26)</code> with $b = 3$, we get:</p>
+
+<p>```clojure
+user> (&ndash;>> (range 26)</p>
+
+<pre><code>       (remedian-with-leftovers 3)
+       (weight-leftovers 3))
+</code></pre>
+
+<p>[[4 1/3] [13 1/3] [19 1/9] [22 1/9] [24 1/27] [25 1/27]]
+```</p>
+
+<p>Finally, we&rsquo;re going to need a weighted median function.  This operates on a collection of <code>[value weight]</code> pairs:</p>
+
+<p>```clojure
+(defn weighted-median [vw-pairs]
+  (let [total-weight (&ndash;>> vw-pairs</p>
+
+<pre><code>                      (map second)
+                      (reduce +))
+    middle-weight (/ total-weight 2)
+    sorted-pairs (sort-by first vw-pairs)
+    sorted-pairs-cum-weight (reductions (fn [[_ cum-weight] [v w]]
+                                          [v (+ cum-weight w)])
+                                        sorted-pairs)]
+(-&gt;&gt; sorted-pairs-cum-weight
+     (filter #(&lt;= middle-weight (second %)))
+     (ffirst))))
+</code></pre>
+
+<p>```</p>
+
+<p>We can put it all together and redefine the remedian function to deal with the case where $n$ isn&rsquo;t a power of $b$:</p>
+
+<p>```clojure
+(defn remedian [b coll]
+  (&ndash;>> coll</p>
+
+<pre><code>   (remedian-with-leftovers b)
+   (weight-leftovers b)
+   (weighted-median)))
+</code></pre>
+
+<p>```</p>
+
+<p>The remedian is fun, but in practice I prefer to use the approximate quantile methods that were invented a few years later and presented in <a href="http://www.cs.umd.edu/~samir/498/manku.pdf">Approximate Medians and other Quantiles in One Pass and with Limited Memory by Manku, Rajagopalan, and Lindsay</a> (1998).  There&rsquo;s a high-quality implementation you can use in Clojure via Java interop in Parallel Colt&rsquo;s <a href="http://incanter.org/docs/parallelcolt/api/cern/jet/stat/tdouble/quantile/DoubleQuantileFinderFactory.html">DoubleQuantileFinderFactory</a>.</p>
+]]></content>
+  </entry>
+  
+</feed>

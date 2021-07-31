@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: fonts | adereth]]></title>
+  <link href="http://adereth.github.io/blog/categories/fonts/atom.xml" rel="self"/>
+  <link href="http://adereth.github.io/"/>
+  <updated>2021-07-31T10:59:35-07:00</updated>
+  <id>http://adereth.github.io/</id>
+  <author>
+    <name><![CDATA[Matt Adereth]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Font Awesome Easter Egg]]></title>
+    <link href="http://adereth.github.io/blog/2013/12/15/font-awesome-easter-egg/"/>
+    <updated>2013-12-15T12:45:00-08:00</updated>
+    <id>http://adereth.github.io/blog/2013/12/15/font-awesome-easter-egg</id>
+    <content type="html"><![CDATA[<p><a href="http://fontawesome.io/">Font Awesome</a> is a gorgeous icon font designed to play nicely with Bootstrap.  I was playing around with it today and noticed the highly detailed <a href="http://fontawesome.io/icon/barcode/">fa-barcode</a> character:</p>
+
+<p><i class="fa fa-barcode"></i></p>
+
+<p>If we make it a little larger, we can see that it really looks like a legit barcode:</p>
+
+<p><i class="fa fa-barcode fa-5x"></i></p>
+
+<p>I scanned it with a barcode reader and it&rsquo;s the code for <code>FA</code>.</p>
+
+<p><i class="fa fa-trophy"></i> Font Awesome wins at detail.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Tweaking my favorite programming font]]></title>
+    <link href="http://adereth.github.io/blog/2011/02/02/tweaking-my-favorite-programming-font/"/>
+    <updated>2011-02-02T07:47:00-08:00</updated>
+    <id>http://adereth.github.io/blog/2011/02/02/tweaking-my-favorite-programming-font</id>
+    <content type="html"><![CDATA[<p>After trying out every monospaced font I could get my hands on, I decided that <a href="http://www.ms-studio.com/index.html">Mark Simonson</a>‘s <a href="http://www.ms-studio.com/FontSales/anonymouspro.html">Anonymous Pro</a> is the one for me:</p>
+
+<p><a href="http://www.ms-studio.com/FontSales/anonymouspro.html"><img src="http://www.marksimonson.com/assets/content/fonts/anonymouspro_banner.png" alt="Anonymous Pro Sample" /></a></p>
+
+<p>After using it in my IDE for months, I decided to start using it in my terminals. Unfortunately, this revealed a subtle flaw in the font.  Take a look:</p>
+
+<p><img src="/images/anonymous12.png" alt="terminal sample" /></p>
+
+<p>Notice anything?  Those forward slashes seem a bit too far to the right. While this wasn&rsquo;t a problem when writing code, it became a major eye sore when working with lots of paths in a terminal.</p>
+
+<p>One interesting thing is that this issue only shows up when using the font at 12pt without anti-aliasing. This is because Anonymous Pro is a <a href="http://en.wikipedia.org/wiki/TrueType">TrueType font</a>. TrueType is an <a href="http://en.wikipedia.org/wiki/Outline_font#Outline_fonts">outline font</a>, which means the designer draws each character by specifying vectors that define the shape.  By using vectors, the font can be scaled cleanly to any size. At smaller sizes, the scaling of the vector outline may result in an image that isn&rsquo;t as clear as desired. To give the font designer complete control of the display, TrueType fonts can also have bitmapped versions of each character for specific point sizes.</p>
+
+<p>Armed with this knowledge and a font editor (like <a href="http://fontforge.sourceforge.net/">FontForge</a>), we can crack open the .ttf and see exactly what&rsquo;s going on with the forward slash:</p>
+
+<p><img src="/images/slashbitmaporiginal.png" alt="original" /></p>
+
+<p>The green outline shows the vector representation of the character, while the dark squares show the pixels used in the bitmapped version. I think that the pixels should be shifted to the left by 1, so I went ahead and did it:</p>
+
+<p><img src="/images/slashbitmapmodified.png" alt="modified" /></p>
+
+<p>Now everything looks good in my terminal:</p>
+
+<p><img src="/images/anonymous12slashfixed.png" alt="fixed terminal" /></p>
+
+<p>I&rsquo;ve informed Mark Simonson of this and it looks like this fix may be available in the next version of Anonymous Pro.</p>
+
+<p>When you consider how many characters there are to define and the various point sizes, it&rsquo;s clear that designing a font is a monumental task. We should all be grateful that such talented designers are out there and that some of them are generous enough to provide such useful, beautiful fonts for free.</p>
+
+<p>On top of giving it away free, Mark Simonson has released Anonymous Pro under the <a href="http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&amp;id=OFL">SIL Open Font License</a>. This means that you can enjoy my trivial tweak with minimal effort, because I&rsquo;m allowed to redistribute my modified version. I&rsquo;d prefer to call it something like “Anonymous Pro with Shifted Slash” or something equally descriptive, but condition 3 of the OFL says that I need to use a different name.</p>
+
+<p>So, without further ado, I present <a href="https://s3.amazonaws.com/1overBlog/programming_fonts/NamelessAmateur.zip">Nameless Amateur</a>! As soon as the update of Anonymous Pro is available, I&rsquo;ll remove this link and direct people to the new version.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Iterating on Font Pair Comparisons]]></title>
+    <link href="http://adereth.github.io/blog/2011/01/31/Iterating-on-Font-Pair-Comparisons/"/>
+    <updated>2011-01-31T20:58:00-08:00</updated>
+    <id>http://adereth.github.io/blog/2011/01/31/Iterating-on-Font-Pair-Comparisons</id>
+    <content type="html"><![CDATA[<p>The previous post generated some great suggestions in the <a href="http://news.ycombinator.com/item?id=2147834">Hacker News discussion</a>.  I&rsquo;ve incorporated some of the feedback and here’s a summary of the changes:</p>
+
+<ul>
+<li>Changed the colors to improve contrast</li>
+<li>Fixed the issue with the operator symbols (Thanks MMA_Pope!)</li>
+<li>Increased the size of the characters and reduced the horizontal spacing</li>
+<li>Added additional fonts</li>
+</ul>
+
+
+<p>Here’s the current list of fonts included in the comparison:</p>
+
+<p><img src="/images/fontlist2.png" alt="Full font list" /></p>
+
+<p>Take a look at the new version:</p>
+
+<p><a href="/images/dejavusansmonodroidsansmono1.png"><img src="/images/dejavusansmonodroidsansmono1.png" alt="dejavusansmonodroidsansmono1.png" /></a>
+(Click for full size version)</p>
+
+<p>If you’re interested in seeing the results for every pair, you can <a href="https://s3.amazonaws.com/1overBlog/programming_fonts/AllFontComparisonsV2.zip">download them all</a>.</p>
+
+<p>The updated Mathematica code is available for <a href="https://s3.amazonaws.com/1overBlog/programming_fonts/PairCompareV2.nb">download</a>.</p>
+
+<p>I’m open to suggestions for future investigations… thanks!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Comparing Programming Font Pairs]]></title>
+    <link href="http://adereth.github.io/blog/2011/01/26/Comparing-Programming-Font-Pairs/"/>
+    <updated>2011-01-26T22:46:00-08:00</updated>
+    <id>http://adereth.github.io/blog/2011/01/26/Comparing-Programming-Font-Pairs</id>
+    <content type="html"><![CDATA[<p>I really like this visualization of the difference between Deja Vu Sans Mono and Apple Menlo:</p>
+
+<p><img src="http://typophile.com/files/menlovsdejavusansmono_6131.png" alt="Menlo vs. Deja Vu Sans Mono" /></p>
+
+<p>(Credit to <a href="http://www.down10.com">Jesse Burgheimer</a>)</p>
+
+<p>I decided to take a stab at programmatically generating a similar comparison for all the fonts I’ve been looking at.  <a href="/assets/paircompare.nb">Here’s the Mathematica code</a>.</p>
+
+<p><a href="images/dejavusansmonodroidsansmono.png"><img src="images/dejavusansmonodroidsansmono.png" alt="Menlo vs. Deja Vu Sans Mono in Mathematica" /></a>
+(Click for full size version)</p>
+
+<p>It was then easy to generate this for every pair of fonts:</p>
+
+<p><img src="/images/MapCompareFontPair.png" alt="CompareFontPair /@ Subsets[monospacedFonts, {2}]" /></p>
+
+<p>I went through them all and picked out the ones I thought were most interesting:</p>
+
+<p><a href="/images/consolasinconsolata.png"><img src="/images/consolasinconsolata.png" alt="consolasinconsolata" /></a>
+<a href="/images/dejavusansmonodroidsansmono.png"><img src="/images/dejavusansmonodroidsansmono.png" alt="dejavusansmonodroidsansmono" /></a>
+<a href="/images/dejavusansmonopanicsans.png"><img src="/images/dejavusansmonopanicsans.png" alt="dejavusansmonopanicsans" /></a>
+<a href="/images/droidsansmonoinconsolata.png"><img src="/images/droidsansmonoinconsolata.png" alt="droidsansmonoinconsolata" /></a>
+<a href="/images/envycoderterminus.png"><img src="/images/envycoderterminus.png" alt="envycoderterminus" /></a>
+<a href="/images/inconsolatamonofur.png"><img src="/images/inconsolatamonofur.png" alt="inconsolatamonofur" /></a></p>
+
+<p>If you’re interested in seeing the results for every pair, you can <a href="https://s3.amazonaws.com/1overBlog/programming_fonts/AllFontPairComparisons.zip">download them all</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Comparing Troublesome Groups]]></title>
+    <link href="http://adereth.github.io/blog/2011/01/26/Comparing-Troublesome-Groups/"/>
+    <updated>2011-01-26T10:47:00-08:00</updated>
+    <id>http://adereth.github.io/blog/2011/01/26/Comparing-Troublesome-Groups</id>
+    <content type="html"><![CDATA[<p>One of the comments on the <a href="http://www.reddit.com/r/programming/comments/f8nzc/programmatic_programming_font_comparison_101_vs/">reddit discussion</a> of my first post suggested looking at groups of characters that might be troublesome:
+<code>
+1l|i!
+`',;:.
+oO0Q
+(){}[]
+5S
+</code>
+As a quick test, I wrote something to compare every pair of characters in a list:</p>
+
+<p><img src="/images/tallskinnycode.png" alt="Mathematica code for comparing groups" /></p>
+
+<p>Click to see the full-sized result:</p>
+
+<p><a href="/images/tallskinnycomparison.png"><img src="/images/tallskinnycomparison.png" alt="Comparison results" /></a></p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>reveal.js - The HTML Presentation Framework</title>
+<link href='http://fonts.googleapis.com/css?family=Vollkorn:400italic,700italic,400,700' rel='stylesheet' type='text/css'>
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="reveal/css/reveal.css">
+		<link rel="stylesheet" href="reveal/css/theme/white.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="reveal/lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'reveal/css/print/pdf.css' : 'reveal/css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+                <script src="http://d3js.org/d3.v2.js"></script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+  <style type="text/css">
+
+     .chart {
+       font-size: 10px;
+       margin-top: -40px;
+     }
+
+     .point {
+       fill: steelblue;
+       fill-opacity: 0.5;
+       stroke: black;
+       stroke-width: 1
+       stroke-opacity: 0.5;
+     }
+
+     .axis path, .axis line {
+       fill: none;
+       stroke: #000;
+       shape-rendering: crispEdges;
+     }
+
+     .area {
+       fill: steelblue;
+       fill-opacity: 0.25;
+       stroke: #000;
+       stroke-opacity: 0.5;
+     }
+
+     .summedarea {
+       fill: steelblue;
+       fill-opacity: 0.75;
+       stroke: #000;
+       stroke-opacity: 0.5;
+     }
+
+    .bar rect {
+        fill: steelblue;
+        fill-opacity: 0.75;
+        shape-rendering: crispEdges;
+        stroke: #000;
+        stroke-opacity: 0.5;
+
+    }
+
+    .bar text {
+        fill: #fff;
+    }
+
+     .fadeIn{
+       animation-name: fadeIn;
+       -webkit-animation-name: fadeIn;
+
+       animation-duration: 0.25s;
+       -webkit-animation-duration: 0.25s;
+
+       animation-timing-function: ease-in-out;
+       -webkit-animation-timing-function: ease-in-out;
+
+       visibility: visible !important;
+     }
+
+     @keyframes fadeIn {
+       0% {
+	 transform: scale(0);
+	 opacity: 0.0;
+       }
+       60% {
+	 transform: scale(1.1);
+       }
+       80% {
+	 transform: scale(0.9);
+	 opacity: 1;
+       }
+       100% {
+	 transform: scale(1);
+	 opacity: 1;
+       }
+     }
+
+
+     @-webkit-keyframes fadeIn {
+       0% {
+	 -webkit-transform: scale(0);
+	 opacity: 0.0;
+       }
+       60% {
+	 -webkit-transform: scale(1.1);
+       }
+       80% {
+	 -webkit-transform: scale(0.9);
+	 opacity: 1;
+       }
+       100% {
+	 -webkit-transform: scale(1);
+	 opacity: 1;
+       }
+     }
+
+  </style>
+
+  <script type="text/javascript">
+      var data = [{value: 13.1138}, {value: 10.6519}, {value: 20.5735}, {value: 7.89327}, {value: 9.02554}, {value: 20.8411}, {value: 8.84072}, {value: 10.6273}, {value: 13.5194}, {value: 17.9757}, {value: 10.1086}, {value: 8.68131}, {value: 7.16192}, {value: 19.9496}, {value: 8.77111}, {value: 19.5314}, {value: 9.40915}, {value: 12.8664}, {value: 23.1322}, {value: 13.5008}];
+
+
+      var margin = {top: 50, right: 40, bottom: 40, left: 60},
+      width = 1024;
+
+      function drawPoints(data, chart, height) {
+
+      var x = d3.scale.linear()
+      .domain([0, d3.max(data, function(d) { return d.value}) + 5])
+      .range([0, width - margin.left - margin.right]);
+
+      var y = d3.scale.ordinal()
+      .domain(d3.range(data.length))
+      .rangeRoundBands([height - margin.top - margin.bottom, 0], 0.2);
+
+      var xAxis = d3.svg.axis()
+      .scale(x)
+      .orient('bottom')
+      .tickPadding(8)
+      .ticks(8);
+
+      var yAxis = d3.svg.axis()
+      .scale(y)
+      .orient('left')
+      .tickPadding(8)
+      .tickSize(0);
+
+      var svg = d3.select(chart).append('svg')
+      .attr('width', width)
+      .attr('height', height)
+      .attr('class', 'chart')
+      .append('g')
+      .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+
+      function pausecomp(millis)
+      {
+      var date = new Date();
+      var curDate = null;
+      do { curDate = new Date(); }
+      while(curDate-date < millis);
+      }
+
+      Reveal.addEventListener('somestate', function(){
+      svg.selectAll ('.chart')
+      .data(data)
+      .enter(). append('circle')
+      .classed('point fadeIn', true)
+      .attr('cx', function(d, i) { pausecomp(10); return x(d.value) })
+      .attr('cy', 0)
+      .attr('r', 3);})
+
+      svg.append('g')
+      .attr('class', 'x axis')
+      .call(xAxis);
+
+      }
+
+      function drawPointsWithResize(data, chart, height) {
+      drawPoints(data, chart, height);
+      $(window).resize(function() {drawPoints(data, chart, height); })
+      };
+
+  </script>
+
+  <div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>The Mode Tree</h1>
+					<h3>A Tool for Visualization of Nonparametric Density Features</h3>
+					<p>
+						Michael C. Minnotte & David W. Scott
+                                                <p/>
+						<small>Presented by <a href="http://adereth.githubiio">Matt Adereth</a> / <a href="http://twitter.com/adereth">@adereth</a></small>
+					</p>
+				</section>
+
+				<section>
+                                    <p id="chart-1"/>
+                                    <script type="text/javascript">
+                                     drawPoints(data, '#chart-1', 90);
+                                    </script>
+				</section>
+
+
+			</div>
+
+		</div>
+
+		<script src="reveal/lib/js/head.min.js"></script>
+		<script src="reveal/js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: false,
+				progress: false,
+				history: true,
+				center: true,
+
+				transition: 'fade', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'reveal/plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'reveal/plugin/zoom-js/zoom.js', async: true },
+					{ src: 'reveal/plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
