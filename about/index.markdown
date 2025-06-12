@@ -15,7 +15,7 @@ footer: true
 I work at [Two Sigma Investments](http://www.twosigma.com/) on a variety of projects that let me practice the computer science and math that I love.
 
 ## Colophon
-This site was generated using [Octopress](http://octopress.org/) and is hosted on [GitHub pages](http://pages.github.com/).  The theme is a tweaked version of [Oct2](https://github.com/bijumon/oct2).
+This site is generated using a custom static site generator written in Python. It converts Markdown to HTML, supports MathJax for mathematical notation, and generates RSS/Atom feeds. The clean, minimal design emphasizes readability and works well on both desktop and mobile devices.
 
 ## Disclaimer
 
