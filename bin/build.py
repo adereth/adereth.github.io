@@ -151,6 +151,9 @@ def process_blog_post(filepath, output_dir):
     # Fix escaped parentheses in URLs (common in Wikipedia links)
     markdown_content = re.sub(r'\\\)', ')', markdown_content)
     
+    # Convert Jekyll/Octopress img tags to markdown images
+    markdown_content = re.sub(r'{%\s*img\s+([^\s%]+)\s*%}', r'![](\1)', markdown_content)
+    
     # Convert markdown to HTML
     md = markdown.Markdown(extensions=['extra', 'codehilite'])
     html_content = md.convert(markdown_content)
@@ -200,6 +203,9 @@ def process_regular_page(filepath, base_dir):
     
     # Fix escaped parentheses in URLs (common in Wikipedia links)
     markdown_content = re.sub(r'\\\)', ')', markdown_content)
+    
+    # Convert Jekyll/Octopress img tags to markdown images
+    markdown_content = re.sub(r'{%\s*img\s+([^\s%]+)\s*%}', r'![](\1)', markdown_content)
     
     # Convert markdown to HTML
     md = markdown.Markdown(extensions=['extra', 'codehilite'])
