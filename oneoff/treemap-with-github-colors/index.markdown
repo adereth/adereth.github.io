@@ -1,0 +1,237 @@
+---
+layout: page
+title: "treemap with github colors"
+date: 2013-12-23 11:15
+footer: true
+---
+
+kbar13 suggested it might be cool to use GitHub's colors for each language in the treemap.  Fortunately, [doda/github-language-colors](https://github.com/doda/github-language-colors) has this mapping readily available, so it was easy to try...
+
+<script type="text/javascript" src="http://mbostock.github.com/d3/d3.min.js"></script>
+
+Here are the top 1000 repos, using stars for the size and language for the color:
+
+
+<!-- CSS Styles: -->
+<div>
+  <style type="text/css">
+.node {
+  border: solid 1px white;
+  font: 8px Lato;
+  line-height: 12px;
+  overflow: hidden;
+  position: absolute;
+  text-indent: 2px;
+}
+
+.tooltip{
+    display: inline;
+    position: relative;
+}
+
+.tooltip:hover:after{
+    background: #333;
+    background: rgba(0,0,0,.8);
+    border-radius: 5px;
+    bottom: 26px;
+    color: #fff;
+    content: attr(title);
+    left: 20%;
+    padding: 5px 15px;
+    position: absolute;
+    z-index: 98;
+    width: 220px;
+}
+
+.tooltip:hover:before{
+    border: solid;
+    border-color: #333 transparent;
+    border-width: 6px 6px 0 6px;
+    bottom: 20px;
+    content: "";
+    left: 50%;
+    position: absolute;
+    z-index: 99;
+}
+
+  </style>
+</div>
+<div id='tm'></div>
+
+<script type="text/javascript">
+
+//var color = d3.scale.category20();
+var color = {
+    "Arduino": "#bd79d1",
+    "Java": "#b07219",
+    "VHDL": "#543978",
+    "Scala": "#7dd3b0",
+    "Emacs Lisp": "#c065db",
+    "Delphi": "#b0ce4e",
+    "Ada": "#02f88c",
+    "VimL": "#199c4b",
+    "Perl": "#0298c3",
+    "Lua": "#fa1fa1",
+    "Rebol": "#358a5b",
+    "Verilog": "#848bf3",
+    "Factor": "#636746",
+    "Ioke": "#078193",
+    "R": "#198ce7",
+    "Erlang": "#949e0e",
+    "Nu": "#c9df40",
+    "AutoHotkey": "#6594b9",
+    "Clojure": "#db5855",
+    "Shell": "#5861ce",
+    "Assembly": "#a67219",
+    "Parrot": "#f3ca0a",
+    "C#": "#5a25a2",
+    "Turing": "#45f715",
+    "AppleScript": "#3581ba",
+    "Eiffel": "#946d57",
+    "Common Lisp": "#3fb68b",
+    "Dart": "#cccccc",
+    "SuperCollider": "#46390b",
+    "CoffeeScript": "#244776",
+    "XQuery": "#2700e2",
+    "Haskell": "#29b544",
+    "Racket": "#ae17ff",
+    "Elixir": "#6e4a7e",
+    "HaXe": "#346d51",
+    "Ruby": "#701516",
+    "Self": "#0579aa",
+    "Fantom": "#dbded5",
+    "Groovy": "#e69f56",
+    "C": "#555",
+    "JavaScript": "#f15501",
+    "D": "#fcd46d",
+    "ooc": "#b0b77e",
+    "C++": "#f34b7d",
+    "Dylan": "#3ebc27",
+    "Nimrod": "#37775b",
+    "Standard ML": "#dc566d",
+    "Objective-C": "#f15501",
+    "Nemerle": "#0d3c6e",
+    "Mirah": "#c7a938",
+    "Boo": "#d4bec1",
+    "Objective-J": "#ff0c5a",
+    "Rust": "#dea584",
+    "Prolog": "#74283c",
+    "Ecl": "#8a1267",
+    "Gosu": "#82937f",
+    "FORTRAN": "#4d41b1",
+    "ColdFusion": "#ed2cd6",
+    "OCaml": "#3be133",
+    "Fancy": "#7b9db4",
+    "Pure Data": "#f15501",
+    "Python": "#3581ba",
+    "Tcl": "#e4cc98",
+    "Arc": "#ca2afe",
+    "Puppet": "#cc5555",
+    "Io": "#a9188d",
+    "Max": "#ce279c",
+    "Go": "#8d04eb",
+    "ASP": "#6a40fd",
+    "Visual Basic": "#945db7",
+    "PHP": "#6e03c1",
+    "Scheme": "#1e4aec",
+    "Vala": "#3581ba",
+    "Smalltalk": "#596706",
+    "Matlab": "#bb92ac",
+    "C#": "#bb92af",
+    "CSS": "#000000"
+}
+
+var margin = {top: 10, right: 0, bottom: 10, left: 0},
+    width = $('.entry-title').width(),
+    height = 500;
+
+var treemap = d3.layout.treemap()
+    .size([width, height])
+    .sticky(true)
+    .value(function(d) { return d.Stars; });
+
+var div = d3.select("#tm").append("div")
+    .style("position", "relative")
+    .style("width", (width + margin.left + margin.right) + "px")
+    .style("height", (height + margin.top + margin.bottom) + "px")
+    .style("left", margin.left + "px")
+    .style("top", margin.top + "px");
+
+d3.csv("/data/top-1000-repos.20131219.csv", function(repos) {
+  treemap.nodes({"children": repos});
+
+  var node = div.datum(repos).selectAll(".node")
+    .data(treemap.nodes)
+    .enter()
+      .append("a")
+      .attr("href", function(d) { return d.children ? null : ("http://github.com/" + d.Repository); })
+      .attr("class", function(d) { return d.children ? null : "tooltip"; })
+      .attr("title", function(d) { return d.children ? null : "Repository: " + d.Repository + "\nLanguage: " + d.Language + "\nStars: " + d.Stars; })
+      .append("div")
+    .attr("class", "node")
+    .call(position)
+    .style("background", function(d) { return d.children ? null : color[d.Language]; });
+});
+
+function position() {
+  this.style("left", function(d) { return d.x + "px"; })
+      .style("top", function(d) { return d.y + "px"; })
+      .style("width", function(d) { return Math.max(0, d.dx - 1) + "px"; })
+      .style("height", function(d) { return Math.max(0, d.dy - 1) + "px"; });
+};
+
+</script>
+Here are the top 5000 grouped by language:
+
+<div id='tm2'></div>
+
+<script type="text/javascript">
+
+var treemap2 = d3.layout.treemap()
+    .size([width, height])
+    .sticky(true)
+    .value(function(d) {return d.children ? null : d.stargazers_count; });
+
+var div2 = d3.select("#tm2").append("div")
+    .style("position", "relative")
+    .style("width", (width + margin.left + margin.right) + "px")
+    .style("height", (height + margin.top + margin.bottom) + "px")
+    .style("left", margin.left + "px")
+    .style("top", margin.top + "px");
+
+d3.json("/data/lang-map.json", function(root) {
+  var node = div2.datum(root).selectAll(".node")
+      .data(treemap2.nodes)
+      .enter()
+      .append("a")
+      .attr("href", function(d) { return d.children ? null : ("http://github.com/" + d.user + "/" + d.name); })
+      .attr("class", function(d) { return d.children ? null : "tooltip"; })
+      .attr("title", function(d) { return d.children ? null : "Repository: " + d.user + "/" + d.name + "\nLanguage: " + d.language + "\nStars: " + d.stargazers_count; })
+
+      .append("div")
+      .attr("class", "node")
+      .call(position)
+      .style("background", function(d) { return d.children ? color[d.name] : null; });
+
+  d3.selectAll("input").on("change", function change() {
+    var value = this.value === "count"
+        ? function() { return 1; }
+        : function(d) { return d.size; };
+
+    node
+        .data(treemap.value(value).nodes)
+      .transition()
+        .duration(1500)
+        .call(position);
+  });
+});
+
+
+function position() {
+  this.style("left", function(d) { return d.x + "px"; })
+      .style("top", function(d) { return d.y + "px"; })
+      .style("width", function(d) { return Math.max(0, d.dx - 1) + "px"; })
+      .style("height", function(d) { return Math.max(0, d.dy - 1) + "px"; });
+};
+
+</script>

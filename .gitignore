@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.env
+
+# Editor
+*.swp
+*.swo
+*~
+.DS_Store
+.idea/
+.vscode/
+
+# Generated files
+blog/
+feed.xml
+atom.xml
+bin/posts_data.json
+
+# Generated HTML files (but not in oneoff directories)
+/*.html
+/about/*.html
+/*/index.html
+
+# Backup files
+*.markdown~
+*.html~
+
+# Keep oneoff directory as-is (has existing HTML files)
+!oneoff/

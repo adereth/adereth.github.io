@@ -1,0 +1,12 @@
+---
+layout: post
+title: 101 vs. lol
+date: 2011-01-24 12:07
+comments: true
+categories: fonts mathematica
+---
+One of the subtle details of fonts that programmers often care about is how easy it is to distinguish between O’s, 0′s, l’s, and 1′s.  Using Mathematica, we can programmatically generate the comparison for several of the most popular programming fonts:
+
+![101 Code](/images/101code.png)
+
+![1s and 0s](/images/1sand0s.png)

@@ -1,0 +1,156 @@
+---
+layout: post
+title: Playing with Wolfram Playing Cards
+date: 2017-11-02 14:10
+comments: true
+categories: math mathematica
+---
+A few weeks ago, I knocked my favorite mug off the counter and it shattered.  RIP:
+
+![I Heart Mathematica Mug](/images/mug.jpg)
+
+Like a good consumer, I immediately went to the [Wolfram store](https://store.wolfram.com/view/misc/) to buy a replacement, but they no longer make it.  They did have a deck of playing cards which promised a unique illustration and generating code on each card.  How could I pass it up?
+
+The cards arrived a few days ago and they were way cooler than I imagined.  As I flipped through the deck, I realized a lot of the cards would be really interesting as starting points for animations.  I've been going to town with them and posting to Twitter in an [epic thread](https://twitter.com/adereth/status/924409121033428992).
+
+I'll lay them out here grouped by concept... enjoy!
+
+## Just Rotating Squares
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">4♠️ <a href="https://t.co/5dM7m8Y22I">pic.twitter.com/5dM7m8Y22I</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924436924592304128?ref_src=twsrc%5Etfw">October 29, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/K0XqS4dldv">pic.twitter.com/K0XqS4dldv</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924437154054381568?ref_src=twsrc%5Etfw">October 29, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">A♦️ <a href="https://t.co/xkdKj1COEa">pic.twitter.com/xkdKj1COEa</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924773153921843200?ref_src=twsrc%5Etfw">October 29, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/CkfYKAaNsY">pic.twitter.com/CkfYKAaNsY</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924773351377137664?ref_src=twsrc%5Etfw">October 29, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+## Imaginary Numbers
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">2♦️ <a href="https://t.co/0ts8QGsWiD">pic.twitter.com/0ts8QGsWiD</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924828198369505280?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">Varying the exponent from 1/5 -&gt; 5. 3 on the card. <a href="https://t.co/REzLlOAUau">pic.twitter.com/REzLlOAUau</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924828552704401408?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">Jumping back to the 2♦️. Each (a,b) is a fixed color and is positioned at the complex coordinates of (a+bⅈ)ⁿ for n ∈ [½, 5] <a href="https://t.co/idbrCcCro7">pic.twitter.com/idbrCcCro7</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924842259744407552?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">A♠️ <a href="https://t.co/SxXAyZopE5">pic.twitter.com/SxXAyZopE5</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924440913044049922?ref_src=twsrc%5Etfw">October 29, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">ok, this one is expensive.  Just going to make a deeper version... <a href="https://t.co/UE6Z97cKo3">pic.twitter.com/UE6Z97cKo3</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924441133949665280?ref_src=twsrc%5Etfw">October 29, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">4♣️ (Another shockingly complex but structured one from time code) <a href="https://t.co/2odoWUtCAb">pic.twitter.com/2odoWUtCAb</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/926103944832598016?ref_src=twsrc%5Etfw">November 2, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">Here it is with more detail in DarkRainbow <a href="https://t.co/anX6X6kskO">pic.twitter.com/anX6X6kskO</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/926104171736055814?ref_src=twsrc%5Etfw">November 2, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">ZOOMING <a href="https://t.co/JtkmbcTJDd">pic.twitter.com/JtkmbcTJDd</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/926104884801298432?ref_src=twsrc%5Etfw">November 2, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">These playing cards are inspirational... starting with the 2♥️ <a href="https://t.co/2qMovSbPPw">pic.twitter.com/2qMovSbPPw</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924409121033428992?ref_src=twsrc%5Etfw">October 28, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">...and tweaking the Pi/6 value: <a href="https://t.co/7UkNEB4EN7">pic.twitter.com/7UkNEB4EN7</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924409333269409797?ref_src=twsrc%5Etfw">October 28, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">7♠️ <a href="https://t.co/scPwDCaPPD">pic.twitter.com/scPwDCaPPD</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924831970646835200?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">This one is just very surprising. The card doesn&#39;t capture the progression of the curve... <a href="https://t.co/hBPR35cxSN">pic.twitter.com/hBPR35cxSN</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924833015699615744?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+## Trigonometry
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">7♣️ <a href="https://t.co/CL3s9sMeT2">pic.twitter.com/CL3s9sMeT2</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/925930489977847808?ref_src=twsrc%5Etfw">November 2, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/ziMoWH7doA">pic.twitter.com/ziMoWH7doA</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/925930734036041728?ref_src=twsrc%5Etfw">November 2, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">10♦️ <a href="https://t.co/OQzC6gbwrD">pic.twitter.com/OQzC6gbwrD</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924412632706162688?ref_src=twsrc%5Etfw">October 28, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/En3lOG01bW">pic.twitter.com/En3lOG01bW</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924412789497643009?ref_src=twsrc%5Etfw">October 28, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">3♦️ <a href="https://t.co/ql5LSGuxGP">pic.twitter.com/ql5LSGuxGP</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924426032244965377?ref_src=twsrc%5Etfw">October 29, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/6NAzWTAUvE">pic.twitter.com/6NAzWTAUvE</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924426193369120769?ref_src=twsrc%5Etfw">October 29, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">8♣️ <a href="https://t.co/6jeVkd9yet">pic.twitter.com/6jeVkd9yet</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924692880114909184?ref_src=twsrc%5Etfw">October 29, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/SioTaVZ4Rd">pic.twitter.com/SioTaVZ4Rd</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924692980526546944?ref_src=twsrc%5Etfw">October 29, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+## Miscellaneous
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">4♥️ (Hot take: this is surprisingly bad code. Side effects? Unnecessary call to Image in the loop? Should be a single expression!) <a href="https://t.co/XsJUHM67El">pic.twitter.com/XsJUHM67El</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/925030749857652736?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">Anyway... here are the intermediate tranformations: <a href="https://t.co/Azq0CPU1rB">pic.twitter.com/Azq0CPU1rB</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/925031090250584064?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">Inverted is better <a href="https://t.co/vzP5MmLdE2">pic.twitter.com/vzP5MmLdE2</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/925032658941308928?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">9❤️, gotta cc <a href="https://twitter.com/KnitYak?ref_src=twsrc%5Etfw">@KnitYak</a> for this one <a href="https://t.co/cNoGJMbgZ4">pic.twitter.com/cNoGJMbgZ4</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924854571670761472?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/1DZWWQsb0J">pic.twitter.com/1DZWWQsb0J</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924854816722976768?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">10♣️ <a href="https://t.co/3OojtNlD6Z">pic.twitter.com/3OojtNlD6Z</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924827151362174976?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/G3qTuneuyv">pic.twitter.com/G3qTuneuyv</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924827305343516672?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">6♦️ <a href="https://t.co/ambOdlfJhT">pic.twitter.com/ambOdlfJhT</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924846505684475904?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/ZzhlPFsRTS">pic.twitter.com/ZzhlPFsRTS</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924846654410301441?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">3♣️ <a href="https://t.co/wrMuS4g2yz">pic.twitter.com/wrMuS4g2yz</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924851247475187713?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/Ra8pjtENp3">pic.twitter.com/Ra8pjtENp3</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924851443332399105?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">10♠️ <a href="https://t.co/93HolEaQNC">pic.twitter.com/93HolEaQNC</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924856311736442880?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">gooey <a href="https://t.co/jPgMhKhozw">pic.twitter.com/jPgMhKhozw</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924857405619429376?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">9♦️ <a href="https://t.co/0uA6FmjIUb">pic.twitter.com/0uA6FmjIUb</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924864434077515778?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/JmPdvoUyOZ">pic.twitter.com/JmPdvoUyOZ</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/924864537911738368?ref_src=twsrc%5Etfw">October 30, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr">3♥️ <a href="https://t.co/0eX4FL7NDZ">pic.twitter.com/0eX4FL7NDZ</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/925174812997070848?ref_src=twsrc%5Etfw">October 31, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="und" dir="ltr"><a href="https://t.co/ZQ8b6o0ND2">pic.twitter.com/ZQ8b6o0ND2</a></p>&mdash; Matt Adereth (@adereth) <a href="https://twitter.com/adereth/status/925174978344976384?ref_src=twsrc%5Etfw">October 31, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+## Grand Finale
+
+Thanks for making it this far!  Your reward is the K♣:
+
+![King of Clubs](/images/wolfram.jpg)
