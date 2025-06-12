@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contributing</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$']],
+        displayMath: [['$$', '$$']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/">Home</a>
+        <a href="/about/">About</a>
+        <a href="/feed.xml">RSS</a>
+    </nav>
+    <article>
+        <h1>Contributing</h1>
+        <h1>Contributing to MathJax</h1>
+<p>So you're interested in giving us a hand? That's awesome! We've put
+together some brief guidelines that should help you get started
+quickly and easily.</p>
+<p>There are lots and lots of ways to get involved, this document covers:</p>
+<ul>
+<li><a href="#raising-issues">raising issues</a><ul>
+<li><a href="#bug-reports">bug reports</a></li>
+<li><a href="#feature-requests">feature requests</a></li>
+<li><a href="#change-requests">change requests</a></li>
+</ul>
+</li>
+<li><a href="#working-on-MathJax-core">working on MathJax core</a><ul>
+<li><a href="#submitting-pull-requests">submitting pull requests</a></li>
+</ul>
+</li>
+<li><a href="#testing-and-quality-assurance">testing and quality assurance</a></li>
+<li><a href="#writing-documentation">writing documentation</a></li>
+<li><a href="#translation">translation</a></li>
+<li><a href="#conduct">Conduct</a></li>
+</ul>
+<h2>Reporting An Issue</h2>
+<p>If you're about to raise an issue because you think you've found a
+problem with MathJax, or you'd like to make a request for a new
+feature in the codebase, or any other reason… please read this first.</p>
+<p>The GitHub issue tracker is the preferred channel for <a href="#bug-reports">bug reports</a>,
+<a href="#feature-requests">feature requests</a>, <a href="#change-requests">change requests</a> and <a href="#submitting-pull-requests">submitting pull
+requests</a>, but please respect the following restrictions:</p>
+<ul>
+<li>
+<p>Please <strong>search for existing issues</strong>. Help us keep duplicate issues
+  to a minimum by checking to see if someone has already reported your
+  problem or requested your idea.</p>
+</li>
+<li>
+<p>Please <strong>do not</strong> use the issue tracker for personal support
+  requests (use <a href="https://groups.google.com/forum/#!forum/mathjax-users">the MathJax User Group</a>.</p>
+</li>
+<li>
+<p>Please <strong>be civil</strong>. Keep the discussion on topic and respect the
+  opinions of others. See also our <a href="#conduct">Conduct Guidelines</a></p>
+</li>
+</ul>
+<h3>Bug Reports</h3>
+<p>A bug is a <em>demonstrable problem</em> that is caused by the code in the repository.
+Good bug reports are extremely helpful - thank you!</p>
+<p>Guidelines for bug reports:</p>
+<ol>
+<li>
+<p><strong>Use the GitHub issue search</strong> &mdash; check if the issue has already been
+   reported.</p>
+</li>
+<li>
+<p><strong>Check if the issue has been fixed</strong> &mdash; try to reproduce it
+   using the latest <code>develop</code> or look for <a href="https://github.com/MathJax/MathJax/issues?&amp;page=1&amp;state=closed">closed issues in the
+   current milestone</a>.</p>
+</li>
+<li>
+<p><strong>Isolate the problem</strong> &mdash; ideally create a <a href="http://css-tricks.com/6263-reduced-test-cases/">reduced test
+   case</a> and a live example.</p>
+</li>
+<li>
+<p><strong>Include a screencast if relevant</strong> - Is your issue about a design
+   or front end feature or bug? The most helpful thing in the world is
+   if we can <em>see</em> what you're talking about. Use
+   <a href="http://www.cockos.com/licecap/">LICEcap</a> to quickly and easily
+   record a short screencast (24fps) and save it as an animated gif!
+   Embed it directly into your GitHub issue. Kapow.</p>
+</li>
+<li>
+<p>Use the Bug Report template below or <a href="https://github.com/MathJax/MathJax/issues/new?title=Bug%3A&amp;body=%23%23%23%20Issue%20Summary%0A%0A%23%23%23%20Steps%20to%20Reproduce%0A%0A1.%20This%20is%20the%20first%20step%0A%0AThis%20is%20a%20bug%20because...%0A%0A%23%23%23%20Technical%20details%0A%0A*%20MathJax%20Version%3A%20master%20-%20latest%20commit%3A%20%20INSERT%20COMMIT%20REF%0A*%20Client%20OS%3A%20%0A*%20Browser%3A%20%0A*%20">click this
+   link</a>
+   to start creating a bug report with the template automatically.</p>
+</li>
+</ol>
+<p>A good bug report shouldn't leave others needing to chase you up for
+more information. Be sure to include the details of your environment.</p>
+<p>Here is a <a href="https://github.com/mathjax/MathJax/issues/820">real example</a></p>
+<p>Template Example (<a href="https://github.com/MathJax/MathJax/issues/new?title=Bug%3A&amp;body=%23%23%23%20Issue%20Summary%0A%0A%23%23%23%20Steps%20to%20Reproduce%0A%0A1.%20This%20is%20the%20first%20step%0A%0AThis%20is%20a%20bug%20because...%0A%0A%23%23%23%20Technical%20details%0A%0A*%20MathJax%20Version%3A%20master%20-%20latest%20commit%3A%20%20INSERT%20COMMIT%20REF%0A*%20Client%20OS%3A%20%0A*%20Browser%3A%20%0A*%20">click to use</a>):</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">Short</span><span class="w"> </span><span class="nv">and</span><span class="w"> </span><span class="nv">descriptive</span><span class="w"> </span><span class="nv">example</span><span class="w"> </span><span class="nv">bug</span><span class="w"> </span><span class="nv">report</span><span class="w"> </span><span class="nv">title</span>
+
+###<span class="w"> </span><span class="nv">Issue</span><span class="w"> </span><span class="nv">Summary</span>
+
+<span class="nv">A</span><span class="w"> </span><span class="nv">summary</span><span class="w"> </span><span class="nv">of</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">issue</span><span class="w"> </span><span class="nv">and</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">browser</span><span class="o">/</span><span class="nv">OS</span><span class="w"> </span><span class="nv">environment</span><span class="w"> </span><span class="nv">in</span><span class="w"> </span><span class="nv">which</span><span class="w"> </span><span class="nv">it</span><span class="w"> </span><span class="nv">occurs</span>.<span class="w"> </span><span class="k">If</span>
+<span class="nv">suitable</span>,<span class="w"> </span><span class="k">include</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">steps</span><span class="w"> </span><span class="nv">required</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">reproduce</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">bug</span>.
+
+###<span class="w"> </span><span class="nv">Steps</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">Reproduce</span>
+
+<span class="mi">1</span>.<span class="w"> </span><span class="nv">This</span><span class="w"> </span><span class="nv">is</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">first</span><span class="w"> </span><span class="nv">step</span>
+<span class="mi">2</span>.<span class="w"> </span><span class="nv">This</span><span class="w"> </span><span class="nv">is</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">second</span><span class="w"> </span><span class="nv">step</span>
+<span class="mi">3</span>.<span class="w"> </span><span class="nv">Further</span><span class="w"> </span><span class="nv">steps</span>,<span class="w"> </span><span class="nv">etc</span>.
+
+<span class="nv">Any</span><span class="w"> </span><span class="nv">other</span><span class="w"> </span><span class="nv">information</span><span class="w"> </span><span class="nv">you</span><span class="w"> </span><span class="nv">want</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">share</span><span class="w"> </span><span class="nv">that</span><span class="w"> </span><span class="nv">is</span><span class="w"> </span><span class="nv">relevant</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">issue</span>
+<span class="nv">being</span><span class="w"> </span><span class="nv">reported</span>.<span class="w"> </span><span class="nv">Especially</span>,<span class="w"> </span><span class="nv">why</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="nv">you</span><span class="w"> </span><span class="nv">consider</span><span class="w"> </span><span class="nv">this</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">be</span><span class="w"> </span><span class="nv">a</span><span class="w"> </span><span class="nv">bug</span>?<span class="w"> </span><span class="nv">What</span>
+<span class="k">do</span><span class="w"> </span><span class="nv">you</span><span class="w"> </span><span class="nv">expect</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">happen</span><span class="w"> </span><span class="nv">instead</span>?
+
+###<span class="w"> </span><span class="nv">Technical</span><span class="w"> </span><span class="nv">details</span>:
+
+<span class="o">*</span><span class="w"> </span><span class="nv">MathJax</span><span class="w"> </span><span class="nv">Version</span>:<span class="w"> </span><span class="mi">2</span>.<span class="mi">3</span><span class="w"> </span><span class="ss">(</span><span class="nv">latest</span><span class="w"> </span><span class="nv">commit</span>:<span class="w"> </span><span class="nv">f3aaf3a2a3e964df2770dc4aaaa9c87ce5f47e2c</span><span class="ss">)</span>
+<span class="o">*</span><span class="w"> </span><span class="nv">Client</span><span class="w"> </span><span class="nv">OS</span>:<span class="w"> </span><span class="nv">Mac</span><span class="w"> </span><span class="nv">OS</span><span class="w"> </span><span class="nv">X</span><span class="w"> </span><span class="mi">10</span>.<span class="mi">8</span>.<span class="mi">4</span>
+<span class="o">*</span><span class="w"> </span><span class="nv">Browser</span>:<span class="w"> </span><span class="nv">Chrome</span><span class="w"> </span><span class="mi">29</span>.<span class="mi">0</span>.<span class="mi">1547</span>.<span class="mi">57</span>
+</code></pre></div>
+
+<h3>Feature Requests</h3>
+<p>Feature requests are welcome. Before you submit one be sure to have:</p>
+<ol>
+<li>Read the
+   <a href="https://github.com/mathjax/MathJax/wiki/Mathjax-roadmap">Roadmaps</a>,
+   <strong>use the GitHub search</strong> and check the feature hasn't already been
+   requested.</li>
+<li>Take a moment to think about whether your idea fits with the scope
+   and aims of the project, or if it might better fit being a <a href="https://github.com/mathjax/MathJax-third-party-extensions">custom
+   extension</a>.</li>
+<li>Remember, it's up to <em>you</em> to make a strong case to convince the
+   project's leaders of the merits of this feature. Please provide as
+   much detail and context as possible, this means explaining the use
+   case and why it is likely to be common.</li>
+<li>Clearly indicate whether this is a feature request for MathJax
+   core, input &amp; output jax, or extensions.</li>
+</ol>
+<h3>Change Requests</h3>
+<p>Change requests cover both architectural and functional changes to how
+MathJax works. If you have an idea for a new or different dependency,
+a refactor, or an improvement to a feature, etc - please be sure to:</p>
+<ol>
+<li><strong>Use the GitHub search</strong> and check someone else didn't get there first</li>
+<li>Take a moment to think about the best way to make a case for, and
+   explain what you're thinking. Are you sure this shouldn't really be
+   a <a href="#bug-reports">bug report</a> or a <a href="#feature-requests">feature
+   request</a>?  Is it really one idea or is it many?
+   What's the context? What problem are you solving? Why is what you
+   are suggesting better than what's already there? Does it fit with
+   the Roadmap?</li>
+</ol>
+<h3>Submitting Pull Requests</h3>
+<p>Pull requests are awesome. If you're looking to raise a PR for
+something which doesn't have an open issue, please think carefully
+about <a href="#raising-issues">raising an issue</a> which your PR can close,
+especially if you're fixing a bug. This makes it more likely that
+there will be enough information available for your PR to be properly
+tested and merged.</p>
+<h5>Need Help?</h5>
+<p>If you're not completely clear on how to submit / update / <em>do</em> Pull
+Requests, please check out our <a href="https://github.com/mathjax/MathJax/wiki/Source-control-policies">source control
+policies</a>. For
+more insights, chech the excellent in depth <a href="https://github.com/TryGhost/Ghost/wiki/Git-Workflow">Git Workflow
+guide</a> from
+Ghost, in particular</p>
+<ul>
+<li><a href="https://github.com/TryGhost/Ghost/wiki/Git-workflow#commit-messages">Ghost Workflow guide: commit messages</a></li>
+</ul>
+<h3>Testing and Quality Assurance</h3>
+<p>Never underestimate just how useful quality assurance is. If you're
+looking to get involved with the code base and don't know where to
+start, checking out and testing a pull request is one of the most
+useful things you could do.</p>
+<p>If you want to get involved with testing MathJax, there is a set of QA
+Documentation <a href="https://github.com/MathJax/MathJax-testing">in our testing
+framework</a>.</p>
+<p>Essentially though, <a href="#contribute-to-core">check out the latest develop
+branch</a>, take it for a spin, and if you find
+anything odd, please follow the <a href="#bug-reports">bug report guidelines</a>
+and let us know!</p>
+<h4>Checking out a Pull Request</h4>
+<p>These are some <a href="https://gist.github.com/piscisaureus/3342247">excellent
+instructions</a> on
+configuring your GitHub repository to allow you to checkout pull
+requests in the same way as branches:
+<a href="https://gist.github.com/piscisaureus/3342247">https://gist.github.com/piscisaureus/3342247</a>.</p>
+<h3>Documentation</h3>
+<p>MathJax's main documentation can be found at <a href="http://docs.mathjax.org">docs.mathjax.org</a>.</p>
+<p>The documentation is generated using
+<a href="http://sphinx-doc.org/">Sphinx-doc</a> and hosted on <a href="http://readthedocs.org">Read the
+docs</a>. The source of the docs is hosted in the
+<a href="http://github.com/mathjax/mathjax-docs">MathJax-Docs GitHub
+repository</a>.</p>
+<p>You can clone the repo and submit pull requests following the
+<a href="#pull-requests">pull-request</a> guidelines.</p>
+<h3>Translation</h3>
+<p>If you wish to add or update translations of MathJax, please do it on
+<a href="https://translatewiki.net/w/i.php?title=Special:Translate&amp;group=out-mathjax-0-all">TranslateWiki.net</a>
+(and while you're there you can help other open source projects,
+too!).</p>
+<p>For bug reports and other questions that don't fit on
+TranslateWiki.net, head over to the
+<a href="https://github.com/mathjax/MathJax-i18n">mathjax/mathjax-i18n</a>
+repository.</p>
+<h2 core="core">Working on MathJax Core</h2>
+<h3>Key Branches &amp; Tags</h3>
+<ul>
+<li><strong><a href="https://github.com/MathJax/MathJax/tree/develop">develop</a></strong> is
+  the development branch. All work on the next release is here. Do
+  <strong>NOT</strong> use this branch for a production site.</li>
+<li><strong><a href="https://github.com/MathJax/MathJax">master</a></strong> contains the latest
+  release of MathJax. This branch may be used in production.</li>
+</ul>
+<h1>Conduct</h1>
+<p>We are committed to providing a friendly, safe and welcoming environment for
+all, regardless of gender, sexual orientation, disability, ethnicity, religion,
+or similar personal characteristic.</p>
+<p>Please be kind and courteous. There's no need to be mean or rude.
+Respect that people have differences of opinion and that every design or
+implementation choice carries a trade-off and numerous costs. There is seldom
+a right answer, merely an optimal answer given a set of values and
+circumstances.</p>
+<p>Please keep unstructured critique to a minimum. If you have solid ideas you
+want to experiment with, make a fork and see how it works.</p>
+<p>We will exclude you from interaction if you insult, demean or harass anyone.
+That is not welcome behaviour. We interpret the term "harassment" as
+including the definition in the
+<a href="http://citizencodeofconduct.org/">Citizen Code of Conduct</a>;
+if you have any lack of clarity about what might be included in that concept,
+please read their definition. In particular, we don't tolerate behavior that
+excludes people in socially marginalized groups.</p>
+<p>Private harassment is also unacceptable. No matter who you are, if you feel
+you have been or are being harassed or made uncomfortable by a community
+member, please contact one of the channel ops or any of the
+<a href="https://github.com/MathJax/MathJax">MathJax</a> core team
+immediately. Whether you're a regular contributor or a newcomer, we care about
+making this community a safe place for you and we've got your back.</p>
+<p>Likewise any spamming, trolling, flaming, baiting or other attention-stealing
+behaviour is not welcome.</p>
+<p>We also suggest to read <a href="http://blog.discourse.org/2013/03/the-universal-rules-of-civilized-discourse/">discourse's
+rules</a></p>
+<h3>References</h3>
+<ul>
+<li>We heavily borrowed from -- thanks to Mozilla and Ghost!</li>
+<li>https://github.com/TryGhost/Ghost/blob/master/CONTRIBUTING.md</li>
+<li>https://github.com/mozilla/rust/wiki/Note-development-policy</li>
+<li>https://github.com/jden/CONTRIBUTING.md/blob/master/CONTRIBUTING.md</li>
+<li>http://blog.discourse.org/2013/03/the-universal-rules-of-civilized-discourse/</li>
+</ul>
+    </article>
+</body>
+</html>

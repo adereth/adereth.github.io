@@ -7,7 +7,7 @@ categories: mathematica keyboards math
 ---
 [@thattommyhall](https://twitter.com/thattommyhall) posted a fun question on Twitter:
 
-<blockquote class="twitter-tweet" data-partner="tweetdeck"><p>If you type your name on a keyboard marked as qwerty but set to Dvorak and keep reinputting what comes out, will it ever say your name?</p>&mdash; !!!!!11111oneoneone (@thattommyhall) <a href="https://twitter.com/thattommyhall/statuses/494916131598393344">July 31, 2014</a></blockquote>
+<blockquote><p>If you type your name on a keyboard marked as qwerty but set to Dvorak and keep reinputting what comes out, will it ever say your name?</p>&mdash; !!!!!11111oneoneone (@thattommyhall) <a href="https://twitter.com/thattommyhall/statuses/494916131598393344">July 31, 2014</a></blockquote>
 <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 The best answer was "yes because group theory" and [@AnnaPawlicka](https://twitter.com/AnnaPawlicka) demonstrated it was true for her name:

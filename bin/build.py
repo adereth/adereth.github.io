@@ -48,6 +48,11 @@ def parse_post_filename(filename):
 
 def create_html_page(title, content, layout='post'):
     """Create a basic HTML page"""
+    # Add home link at bottom only for blog posts
+    home_link = ''
+    if layout == 'post':
+        home_link = '\n    <footer class="post-footer">\n        <a href="/" class="home-link">← Back to Home</a>\n    </footer>'
+    
     html_template = """<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,6 +60,8 @@ def create_html_page(title, content, layout='post'):
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>
     <link rel="stylesheet" href="/style.css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
     window.MathJax = {{
       tex: {{
@@ -74,39 +81,26 @@ def create_html_page(title, content, layout='post'):
     <article>
         <h1>{title}</h1>
         {content}
-    </article>
+    </article>{home_link}
 </body>
 </html>"""
     
-    return html_template.format(title=title, content=content)
+    return html_template.format(title=title, content=content, home_link=home_link)
 
 def create_index_page(posts_data):
     """Create the main index page with all posts"""
     # Sort posts by date, newest first
     sorted_posts = sorted(posts_data, key=lambda x: x['date'], reverse=True)
     
-    # Group posts by year
-    posts_by_year = {}
-    for post in sorted_posts:
-        year = post['date'].year
-        if year not in posts_by_year:
-            posts_by_year[year] = []
-        posts_by_year[year].append(post)
-    
     # Build the HTML content
-    content_parts = []
+    content_parts = ['<ul class="post-list">']
     
-    for year in sorted(posts_by_year.keys(), reverse=True):
-        content_parts.append(f'<h2>{year}</h2>')
-        content_parts.append('<ul class="post-list">')
-        
-        for post in posts_by_year[year]:
-            date_str = post['date'].strftime('%B %d')
-            post_url = post['url']
-            content_parts.append(f'<li><span class="date">{date_str}</span> <a href="{post_url}">{post["title"]}</a></li>')
-        
-        content_parts.append('</ul>')
+    for post in sorted_posts:
+        date_str = post['date'].strftime('%B %d, %Y')
+        post_url = post['url']
+        content_parts.append(f'<li><a href="{post_url}">{post["title"]}</a> <span class="date">{date_str}</span></li>')
     
+    content_parts.append('</ul>')
     content = '\n'.join(content_parts)
     
     # Create the index page HTML
@@ -117,6 +111,7 @@ def create_index_page(posts_data):
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matt Adereth - Blog</title>
     <link rel="stylesheet" href="/style.css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 </head>
 <body>
     <nav class="nav">
@@ -148,8 +143,27 @@ def process_blog_post(filepath, output_dir):
     
     front_matter, markdown_content = extract_front_matter(content)
     
-    # Fix escaped parentheses in URLs (common in Wikipedia links)
-    markdown_content = re.sub(r'\\\)', ')', markdown_content)
+    # Fix escaped parentheses in URLs only
+    # This is a more targeted approach - only fix URLs that end with backslash-paren
+    lines = markdown_content.split('\n')
+    fixed_lines = []
+    
+    for line in lines:
+        # Only process lines that contain markdown links with escaped parens
+        if '](' in line and r'\(' in line:
+            # Find all markdown links in the line
+            def fix_url(match):
+                full_match = match.group(0)
+                # Replace \( and \) with ( and ) only in the URL part
+                fixed = full_match.replace(r'\(', '(').replace(r'\)', ')')
+                return fixed
+            
+            # More comprehensive regex that handles escaped parentheses
+            line = re.sub(r'\[[^\]]+\]\([^)\\]*(?:\\.[^)\\]*)*\)', fix_url, line)
+        
+        fixed_lines.append(line)
+    
+    markdown_content = '\n'.join(fixed_lines)
     
     # Convert Jekyll/Octopress img tags to markdown images
     markdown_content = re.sub(r'{%\s*img\s+([^\s%]+)\s*%}', r'![](\1)', markdown_content)
@@ -201,8 +215,27 @@ def process_regular_page(filepath, base_dir):
     
     front_matter, markdown_content = extract_front_matter(content)
     
-    # Fix escaped parentheses in URLs (common in Wikipedia links)
-    markdown_content = re.sub(r'\\\)', ')', markdown_content)
+    # Fix escaped parentheses in URLs only
+    # This is a more targeted approach - only fix URLs that end with backslash-paren
+    lines = markdown_content.split('\n')
+    fixed_lines = []
+    
+    for line in lines:
+        # Only process lines that contain markdown links with escaped parens
+        if '](' in line and r'\(' in line:
+            # Find all markdown links in the line
+            def fix_url(match):
+                full_match = match.group(0)
+                # Replace \( and \) with ( and ) only in the URL part
+                fixed = full_match.replace(r'\(', '(').replace(r'\)', ')')
+                return fixed
+            
+            # More comprehensive regex that handles escaped parentheses
+            line = re.sub(r'\[[^\]]+\]\([^)\\]*(?:\\.[^)\\]*)*\)', fix_url, line)
+        
+        fixed_lines.append(line)
+    
+    markdown_content = '\n'.join(fixed_lines)
     
     # Convert Jekyll/Octopress img tags to markdown images
     markdown_content = re.sub(r'{%\s*img\s+([^\s%]+)\s*%}', r'![](\1)', markdown_content)

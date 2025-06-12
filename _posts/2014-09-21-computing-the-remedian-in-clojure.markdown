@@ -7,7 +7,7 @@ categories: clojure algorithms math
 ---
 The remedian is an approximation of the [median](http://en.wikipedia.org/wiki/Median) that can be computed using only $O(\log{n})$ storage.  The algorithm was originally presented in [The Remedian: A Robust Averaging Method for Large Data Sets by Rousseeuw and Bassett](http://web.ipac.caltech.edu/staff/fmasci/home/statistics_refs/Remedian.pdf) (1990).  The core of it is on the first page:
 
-> Let us assume that $n = b\^k$, where $b$ and $k$ are integers (the case where $n$ is not of this form will be treated in Sec. 7.  The _remedian_ with base $b$ proceeds by computing medians of groups of $b$ observations, yielding $b^{k-1}$ estimates on which this procedure is iterated, and so on, until only a single estimate remains.  When implemented properly, this method merely needs $k$ arrays of size $b$ that are continuously reused.
+> Let us assume that $n = b^k$, where $b$ and $k$ are integers (the case where $n$ is not of this form will be treated in Sec. 7.  The _remedian_ with base $b$ proceeds by computing medians of groups of $b$ observations, yielding $b^{k-1}$ estimates on which this procedure is iterated, and so on, until only a single estimate remains.  When implemented properly, this method merely needs $k$ arrays of size $b$ that are continuously reused.
 
 The implementation of this part in Clojure is so nice that I just had to share.
 
@@ -42,7 +42,7 @@ While this implementation is simple and elegant, it only works if the size of th
 
 Section 7 of the original paper describes the weighting scheme you should use to compute the median if you're left with incomplete groupings:
 
-> How should we proceed when the sample size $n$ is less than $b\^k$? The remedian algorithm then ends up with $n_1$ numbers in the first array, $n_2$ numbers in the second array, and $n_k$ numbers in the last array, such that $n = n_1 + n_{2}b + ... + n_k b\^{k-1}$.  For our final estimate we then compute a weighted median in which the $n_1$, numbers in the first array have weight 1, the $n_2$ numbers in the second array have weight $b$, and the $n_k$ numbers in the last array have weight $b\^{k-1}$. This final computation does not need much storage because there are fewer than $bk$ numbers and they only have to be ranked in increasing order, after which their weights must be added until the sum is at least $n/2$.
+> How should we proceed when the sample size $n$ is less than $b^k$? The remedian algorithm then ends up with $n_1$ numbers in the first array, $n_2$ numbers in the second array, and $n_k$ numbers in the last array, such that $n = n_1 + n_{2}b + ... + n_k b^{k-1}$.  For our final estimate we then compute a weighted median in which the $n_1$, numbers in the first array have weight 1, the $n_2$ numbers in the second array have weight $b$, and the $n_k$ numbers in the last array have weight $b^{k-1}$. This final computation does not need much storage because there are fewer than $bk$ numbers and they only have to be ranked in increasing order, after which their weights must be added until the sum is at least $n/2$.
 
 It's a bit difficult to directly translate this to the recursive solution I gave above because in the final step we're going to do a computation on a mixture of values from the different recursive sequences.  Let's give it a shot.
 
@@ -68,7 +68,7 @@ Array  | $i_0$ | $i_1$   | $i_2$
 0      | 24 | 25 | _empty_
 1      | 19 | 22 | _empty_
 2      | 4  | 13 | _empty_
-<br/>
+
 In our sequence based solution, the final sequence will be `((4 13 (19 22 (24 25))))`.
 
 Now, we need to convert these nested sequences into `[value weight]` pairs that could be fed into a weighted median function:
@@ -88,7 +88,7 @@ Now, we need to convert these nested sequences into `[value weight]` pairs that 
                              (/ weight b))
        :else (conj vw-pairs [element weight])))))
 ```
-Instead of weighting the values in array $j$ with weight $b\^{j-1}$, we're weighting it at $\frac{b\^{j-1}}{b\^{k}}$.  Dividing all the weights by a constant will give us the same result and this is slightly easier to compute recursively, as we can just start at 1 and divide by $b$ as we descend into each nested sequence.
+Instead of weighting the values in array $j$ with weight $b^{j-1}$, we're weighting it at $\frac{b^{j-1}}{b^{k}}$.  Dividing all the weights by a constant will give us the same result and this is slightly easier to compute recursively, as we can just start at 1 and divide by $b$ as we descend into each nested sequence.
 
 If we run this on the `(range 26)` with $b = 3$, we get:
 

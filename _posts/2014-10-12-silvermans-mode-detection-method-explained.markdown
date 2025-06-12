@@ -63,10 +63,10 @@ categories: algorithms math
 <script type="text/javascript">
 
   var margin = {top: 50, right: 40, bottom: 40, left: 60},
-      width = $('.entry-content').width();
+      width = $('article').width() || 720;
 
   $(window).resize(function() {
-    width = $('.entry-content').width();
+    width = $('article').width() || 720;
   });
 
   function drawPoints(data, chart, height) {
