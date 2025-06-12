@@ -148,6 +148,9 @@ def process_blog_post(filepath, output_dir):
     
     front_matter, markdown_content = extract_front_matter(content)
     
+    # Fix escaped parentheses in URLs (common in Wikipedia links)
+    markdown_content = re.sub(r'\\\)', ')', markdown_content)
+    
     # Convert markdown to HTML
     md = markdown.Markdown(extensions=['extra', 'codehilite'])
     html_content = md.convert(markdown_content)
@@ -194,6 +197,9 @@ def process_regular_page(filepath, base_dir):
         content = f.read()
     
     front_matter, markdown_content = extract_front_matter(content)
+    
+    # Fix escaped parentheses in URLs (common in Wikipedia links)
+    markdown_content = re.sub(r'\\\)', ')', markdown_content)
     
     # Convert markdown to HTML
     md = markdown.Markdown(extensions=['extra', 'codehilite'])
