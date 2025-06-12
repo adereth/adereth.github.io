@@ -65,6 +65,100 @@ def create_html_page(title, content, layout='post'):
     
     return html_template.format(title=title, content=content)
 
+def create_index_page(posts_data):
+    """Create the main index page with all posts"""
+    # Sort posts by date, newest first
+    sorted_posts = sorted(posts_data, key=lambda x: x['date'], reverse=True)
+    
+    # Group posts by year
+    posts_by_year = {}
+    for post in sorted_posts:
+        year = post['date'].year
+        if year not in posts_by_year:
+            posts_by_year[year] = []
+        posts_by_year[year].append(post)
+    
+    # Build the HTML content
+    content_parts = []
+    
+    for year in sorted(posts_by_year.keys(), reverse=True):
+        content_parts.append(f'<h2>{year}</h2>')
+        content_parts.append('<ul>')
+        
+        for post in posts_by_year[year]:
+            date_str = post['date'].strftime('%B %d')
+            post_url = post['url']
+            content_parts.append(f'<li><span class="date">{date_str}</span> - <a href="{post_url}">{post["title"]}</a></li>')
+        
+        content_parts.append('</ul>')
+    
+    content = '\n'.join(content_parts)
+    
+    # Create the index page HTML
+    html = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matt Adereth - Blog</title>
+    <style>
+        body {{
+            font-family: Georgia, serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }}
+        h1 {{
+            color: #333;
+            border-bottom: 3px solid #333;
+            padding-bottom: 10px;
+        }}
+        h2 {{
+            color: #666;
+            margin-top: 30px;
+        }}
+        ul {{
+            list-style: none;
+            padding-left: 0;
+        }}
+        li {{
+            margin-bottom: 10px;
+        }}
+        .date {{
+            color: #999;
+            font-family: monospace;
+        }}
+        a {{
+            color: #0066cc;
+            text-decoration: none;
+        }}
+        a:hover {{
+            text-decoration: underline;
+        }}
+        .nav {{
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }}
+        .nav a {{
+            margin-right: 20px;
+        }}
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="/about/">About</a>
+        <a href="/feed.xml">RSS</a>
+        <a href="/atom.xml">Atom</a>
+    </div>
+    <h1>Matt Adereth</h1>
+    {content}
+</body>
+</html>"""
+    
+    return html.format(content=content)
+
 def process_blog_post(filepath, output_dir):
     """Process a blog post from _posts directory"""
     filename = os.path.basename(filepath)
@@ -193,6 +287,14 @@ def main():
     
     for filepath in other_markdown_files:
         process_regular_page(filepath, blog_dir)
+    
+    # Generate index.html
+    if posts_data:
+        index_html = create_index_page(posts_data)
+        index_file = os.path.join(blog_dir, 'index.html')
+        with open(index_file, 'w', encoding='utf-8') as f:
+            f.write(index_html)
+        print(f"\nGenerated: {index_file}")
     
     # Save posts data for feed generation
     import json
