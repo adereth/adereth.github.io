@@ -5,7 +5,7 @@ date: 2015-04-06 20:10
 comments: true
 categories: algorithms math d3 latex talks
 ---
-<script src="http://d3js.org/d3.v2.js"></script>
+<script src="https://d3js.org/d3.v2.js"></script>
 <div>
 <style type="text/css">
 
@@ -101,7 +101,7 @@ I recently gave a mini talk on [The Mode Tree: A Tool for Visualization of Nonpa
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/T3Bt9Tn6P5c" frameborder="0" allowfullscreen></iframe>
 
-I did the entire presentation as one huge sequence of animations using [D3.js](http://d3js.org/).  The Youtube video doesn't capture the glory that is SVG, so [I've posted the slides](/oneoff/pwl-draft/scratch.html).
+I did the entire presentation as one huge sequence of animations using [D3.js](https://d3js.org/).  The Youtube video doesn't capture the glory that is SVG, so [I've posted the slides](/oneoff/pwl-draft/scratch.html).
 
 I also finally got to apply the technique that I wrote about in my [Colorful Equations with MathJax post](/blog/2013/11/27/colorful-equations/) from over a year ago, only instead of coloring explanatory text, the colors in the accompanying chart match:
 

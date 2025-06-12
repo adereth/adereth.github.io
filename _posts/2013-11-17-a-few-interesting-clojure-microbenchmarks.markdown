@@ -5,7 +5,7 @@ date: 2013-11-22 7:50
 comments: true
 categories: clojure benchmarks
 ---
-<script src="http://d3js.org/d3.v2.js"></script>
+<script src="https://d3js.org/d3.v2.js"></script>
 <!--       font-family: Arial, sans-serif; "Menlo","Monaco","Andale Mono","lucida console","Courier New",monospace;-->
 <!-- CSS Styles: -->
 <div>

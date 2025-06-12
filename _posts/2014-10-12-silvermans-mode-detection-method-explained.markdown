@@ -5,7 +5,7 @@ date: 2014-10-12 12:51
 comments: true
 categories: algorithms math
 ---
-<script src="http://d3js.org/d3.v2.js"></script>
+<script src="https://d3js.org/d3.v2.js"></script>
 <div>
   <style type="text/css">
 
