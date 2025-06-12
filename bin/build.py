@@ -58,8 +58,8 @@ def create_html_page(title, content, layout='post'):
     <script>
     window.MathJax = {{
       tex: {{
-        inlineMath: [['$', '$'], ['\\(', '\\)']],
-        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        inlineMath: [['$', '$']],
+        displayMath: [['$$', '$$']]
       }}
     }};
     </script>
