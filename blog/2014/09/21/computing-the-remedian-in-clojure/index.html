@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computing the Remedian in Clojure</title>
+    <link rel="icon" type="image/png" href="/images/aleph.png">
+    <link rel="stylesheet" href="/style.css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$']],
+        displayMath: [['$$', '$$']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/">Home</a>
+        <a href="/about/">About</a>
+        <a href="/feed.xml">RSS</a>
+    </nav>
+    <article>
+        <div class="post-date">September 21, 2014</div>
+        <h1>Computing the Remedian in Clojure</h1>
+        <p>The remedian is an approximation of the <a href="http://en.wikipedia.org/wiki/Median">median</a> that can be computed using only $O(\log{n})$ storage.  The algorithm was originally presented in <a href="http://web.ipac.caltech.edu/staff/fmasci/home/statistics_refs/Remedian.pdf">The Remedian: A Robust Averaging Method for Large Data Sets by Rousseeuw and Bassett</a> (1990).  The core of it is on the first page:</p>
+<blockquote>
+<p>Let us assume that $n = b^k$, where $b$ and $k$ are integers (the case where $n$ is not of this form will be treated in Sec. 7.  The <em>remedian</em> with base $b$ proceeds by computing medians of groups of $b$ observations, yielding $b^{k-1}$ estimates on which this procedure is iterated, and so on, until only a single estimate remains.  When implemented properly, this method merely needs $k$ arrays of size $b$ that are continuously reused.</p>
+</blockquote>
+<p>The implementation of this part in Clojure is so nice that I just had to share.</p>
+<p>First, we need a vanilla implementation of the median function.  We're always going to be computing the median of sets of size $b$, where $b$ is relatively small, so there's no need to get fancy with a linear time algorithm.</p>
+<div class="codehilite"><pre><span></span><code><span class="p">(</span><span class="kd">defn </span><span class="nv">median</span><span class="w"> </span><span class="p">[</span><span class="nv">coll</span><span class="p">]</span>
+<span class="w">  </span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">size</span><span class="w"> </span><span class="p">(</span><span class="nb">count </span><span class="nv">coll</span><span class="p">)</span>
+<span class="w">        </span><span class="nv">sorted</span><span class="w"> </span><span class="p">(</span><span class="nb">sort </span><span class="nv">coll</span><span class="p">)]</span>
+<span class="w">    </span><span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">odd?</span><span class="w"> </span><span class="nv">size</span><span class="p">)</span>
+<span class="w">      </span><span class="p">(</span><span class="nb">nth </span><span class="nv">sorted</span><span class="w"> </span><span class="p">(</span><span class="nb">int </span><span class="p">(</span><span class="nb">/ </span><span class="nv">size</span><span class="w"> </span><span class="mi">2</span><span class="p">)))</span>
+<span class="w">      </span><span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nb">+ </span><span class="p">(</span><span class="nb">nth </span><span class="nv">sorted</span><span class="w"> </span><span class="p">(</span><span class="nb">int </span><span class="p">(</span><span class="nb">/ </span><span class="nv">size</span><span class="w"> </span><span class="mi">2</span><span class="p">)))</span>
+<span class="w">            </span><span class="p">(</span><span class="nb">nth </span><span class="nv">sorted</span><span class="w"> </span><span class="p">(</span><span class="nb">dec </span><span class="p">(</span><span class="nb">int </span><span class="p">(</span><span class="nb">/ </span><span class="nv">size</span><span class="w"> </span><span class="mi">2</span><span class="p">)))))</span>
+<span class="w">         </span><span class="mi">2</span><span class="p">))))</span>
+</code></pre></div>
+
+<p>Now we can implement the actual algorithm.  We group, compute the median of each group, and recur, with the base case being when we're left with a single element in the collection:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">(</span><span class="kd">defn </span><span class="nv">remedian</span><span class="w"> </span><span class="p">[</span><span class="nv">b</span><span class="w"> </span><span class="nv">coll</span><span class="p">]</span>
+<span class="w">  </span><span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">next </span><span class="nv">coll</span><span class="p">)</span>
+<span class="w">    </span><span class="p">(</span><span class="nf">-&gt;&gt;</span><span class="w"> </span><span class="nv">coll</span>
+<span class="w">         </span><span class="p">(</span><span class="nf">partition-all</span><span class="w"> </span><span class="nv">b</span><span class="p">)</span>
+<span class="w">         </span><span class="p">(</span><span class="nb">map </span><span class="nv">median</span><span class="p">)</span>
+<span class="w">         </span><span class="p">(</span><span class="nf">recur</span><span class="w"> </span><span class="nv">b</span><span class="p">))</span>
+<span class="w">    </span><span class="p">(</span><span class="nb">first </span><span class="nv">coll</span><span class="p">)))</span>
+</code></pre></div>
+
+<p>Because <code>partition-all</code> and <code>map</code> both operate on and return lazy sequences, we maintain the property of only using $O(b \log_{b}{n})$ memory at any point in time.</p>
+<p>While this implementation is simple and elegant, it only works if the size of the collection is a power of $b$.  If we don't have $n = b\^k$ where $b$ and $k$ are integers, we'll over-weight the observations that get grouped into the last groups of size $&lt; b$.</p>
+<p>Section 7 of the original paper describes the weighting scheme you should use to compute the median if you're left with incomplete groupings:</p>
+<blockquote>
+<p>How should we proceed when the sample size $n$ is less than $b^k$? The remedian algorithm then ends up with $n_1$ numbers in the first array, $n_2$ numbers in the second array, and $n_k$ numbers in the last array, such that $n = n_1 + n_{2}b + ... + n_k b^{k-1}$.  For our final estimate we then compute a weighted median in which the $n_1$, numbers in the first array have weight 1, the $n_2$ numbers in the second array have weight $b$, and the $n_k$ numbers in the last array have weight $b^{k-1}$. This final computation does not need much storage because there are fewer than $bk$ numbers and they only have to be ranked in increasing order, after which their weights must be added until the sum is at least $n/2$.</p>
+</blockquote>
+<p>It's a bit difficult to directly translate this to the recursive solution I gave above because in the final step we're going to do a computation on a mixture of values from the different recursive sequences.  Let's give it a shot.</p>
+<p>We need some way of bubbling up the incomplete groups for the final weighted median computation.  Instead of having each recursive sequence <em>always</em> compute the median of each group, we can add a check to see if the group is smaller than $b$ and, if so, just return the incomplete group:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">(</span><span class="kd">defn </span><span class="nv">remedian-with-leftovers</span><span class="w"> </span><span class="p">[</span><span class="nv">b</span><span class="w"> </span><span class="nv">coll</span><span class="p">]</span>
+<span class="w">  </span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">incomplete-group?</span><span class="w"> </span><span class="o">#</span><span class="p">(</span><span class="nb">or </span><span class="p">(</span><span class="nb">&lt; </span><span class="p">(</span><span class="nb">count </span><span class="nv">%</span><span class="p">)</span><span class="w"> </span><span class="nv">b</span><span class="p">)</span>
+<span class="w">                               </span><span class="p">(</span><span class="nb">seq? </span><span class="p">(</span><span class="nb">last </span><span class="nv">%</span><span class="p">)))]</span>
+<span class="w">    </span><span class="p">(</span><span class="k">loop </span><span class="p">[</span><span class="nv">coll</span><span class="w"> </span><span class="nv">coll</span><span class="p">]</span>
+<span class="w">      </span><span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">next </span><span class="nv">coll</span><span class="p">)</span>
+<span class="w">        </span><span class="p">(</span><span class="nf">-&gt;&gt;</span><span class="w"> </span><span class="nv">coll</span>
+<span class="w">             </span><span class="p">(</span><span class="nf">partition-all</span><span class="w"> </span><span class="nv">b</span><span class="p">)</span>
+<span class="w">             </span><span class="p">(</span><span class="nb">map </span><span class="o">#</span><span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">incomplete-group?</span><span class="w"> </span><span class="nv">%</span><span class="p">)</span><span class="w"> </span><span class="nv">%</span><span class="w"> </span><span class="p">(</span><span class="nf">median</span><span class="w"> </span><span class="nv">%</span><span class="p">)))</span>
+<span class="w">             </span><span class="p">(</span><span class="nf">recur</span><span class="p">))</span>
+<span class="w">        </span><span class="nv">coll</span><span class="p">))))</span>
+</code></pre></div>
+
+<p>For example, if we were using the mutable array implementation proposed in the original paper to compute the remedian of <code>(range 26)</code> with $b = 3$, the final state of the arrays would be:</p>
+<table>
+<thead>
+<tr>
+<th>Array</th>
+<th>$i_0$</th>
+<th>$i_1$</th>
+<th>$i_2$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>24</td>
+<td>25</td>
+<td><em>empty</em></td>
+</tr>
+<tr>
+<td>1</td>
+<td>19</td>
+<td>22</td>
+<td><em>empty</em></td>
+</tr>
+<tr>
+<td>2</td>
+<td>4</td>
+<td>13</td>
+<td><em>empty</em></td>
+</tr>
+</tbody>
+</table>
+<p>In our sequence based solution, the final sequence will be <code>((4 13 (19 22 (24 25))))</code>.</p>
+<p>Now, we need to convert these nested sequences into <code>[value weight]</code> pairs that could be fed into a weighted median function:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">(</span><span class="kd">defn </span><span class="nv">weight-leftovers</span><span class="w"> </span><span class="p">[</span><span class="nv">b</span><span class="w"> </span><span class="nv">nested-elements</span><span class="p">]</span>
+<span class="w">  </span><span class="p">(</span><span class="k">loop </span><span class="p">[</span><span class="nv">vw-pairs</span><span class="w"> </span><span class="p">[]</span>
+<span class="w">         </span><span class="nv">nested-elements</span><span class="w"> </span><span class="nv">nested-elements</span>
+<span class="w">         </span><span class="nv">weight</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span>
+<span class="w">    </span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">element</span><span class="w"> </span><span class="p">(</span><span class="nb">first </span><span class="nv">nested-elements</span><span class="p">)]</span>
+<span class="w">      </span><span class="p">(</span><span class="nf">cond</span>
+<span class="w">       </span><span class="p">(</span><span class="nb">next </span><span class="nv">nested-elements</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nf">recur</span><span class="w"> </span><span class="p">(</span><span class="nb">conj </span><span class="nv">vw-pairs</span><span class="w"> </span><span class="p">[</span><span class="nv">element</span><span class="w"> </span><span class="nv">weight</span><span class="p">])</span>
+<span class="w">                                     </span><span class="p">(</span><span class="nb">next </span><span class="nv">nested-elements</span><span class="p">)</span>
+<span class="w">                                     </span><span class="nv">weight</span><span class="p">)</span>
+<span class="w">       </span><span class="p">(</span><span class="nb">seq? </span><span class="nv">element</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nf">recur</span><span class="w"> </span><span class="nv">vw-pairs</span>
+<span class="w">                             </span><span class="nv">element</span>
+<span class="w">                             </span><span class="p">(</span><span class="nb">/ </span><span class="nv">weight</span><span class="w"> </span><span class="nv">b</span><span class="p">))</span>
+<span class="w">       </span><span class="ss">:else</span><span class="w"> </span><span class="p">(</span><span class="nb">conj </span><span class="nv">vw-pairs</span><span class="w"> </span><span class="p">[</span><span class="nv">element</span><span class="w"> </span><span class="nv">weight</span><span class="p">])))))</span>
+</code></pre></div>
+
+<p>Instead of weighting the values in array $j$ with weight $b^{j-1}$, we're weighting it at $\frac{b^{j-1}}{b^{k}}$.  Dividing all the weights by a constant will give us the same result and this is slightly easier to compute recursively, as we can just start at 1 and divide by $b$ as we descend into each nested sequence.</p>
+<p>If we run this on the <code>(range 26)</code> with $b = 3$, we get:</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">user&gt;</span><span class="w"> </span><span class="p">(</span><span class="nf">-&gt;&gt;</span><span class="w"> </span><span class="p">(</span><span class="nb">range </span><span class="mi">26</span><span class="p">)</span>
+<span class="w">           </span><span class="p">(</span><span class="nf">remedian-with-leftovers</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span>
+<span class="w">           </span><span class="p">(</span><span class="nf">weight-leftovers</span><span class="w"> </span><span class="mi">3</span><span class="p">))</span>
+<span class="p">[[</span><span class="mi">4</span><span class="w"> </span><span class="m">1/3</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">13</span><span class="w"> </span><span class="m">1/3</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">19</span><span class="w"> </span><span class="m">1/9</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">22</span><span class="w"> </span><span class="m">1/9</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">24</span><span class="w"> </span><span class="m">1/27</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">25</span><span class="w"> </span><span class="m">1/27</span><span class="p">]]</span>
+</code></pre></div>
+
+<p>Finally, we're going to need a weighted median function.  This operates on a collection of <code>[value weight]</code> pairs:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">(</span><span class="kd">defn </span><span class="nv">weighted-median</span><span class="w"> </span><span class="p">[</span><span class="nv">vw-pairs</span><span class="p">]</span>
+<span class="w">  </span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">total-weight</span><span class="w"> </span><span class="p">(</span><span class="nf">-&gt;&gt;</span><span class="w"> </span><span class="nv">vw-pairs</span>
+<span class="w">                          </span><span class="p">(</span><span class="nb">map </span><span class="nv">second</span><span class="p">)</span>
+<span class="w">                          </span><span class="p">(</span><span class="nb">reduce </span><span class="nv">+</span><span class="p">))</span>
+<span class="w">        </span><span class="nv">middle-weight</span><span class="w"> </span><span class="p">(</span><span class="nb">/ </span><span class="nv">total-weight</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span>
+<span class="w">        </span><span class="nv">sorted-pairs</span><span class="w"> </span><span class="p">(</span><span class="nb">sort-by first </span><span class="nv">vw-pairs</span><span class="p">)</span>
+<span class="w">        </span><span class="nv">sorted-pairs-cum-weight</span><span class="w"> </span><span class="p">(</span><span class="nf">reductions</span><span class="w"> </span><span class="p">(</span><span class="k">fn </span><span class="p">[[</span><span class="nv">_</span><span class="w"> </span><span class="nv">cum-weight</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="nv">v</span><span class="w"> </span><span class="nv">w</span><span class="p">]]</span>
+<span class="w">                                              </span><span class="p">[</span><span class="nv">v</span><span class="w"> </span><span class="p">(</span><span class="nb">+ </span><span class="nv">cum-weight</span><span class="w"> </span><span class="nv">w</span><span class="p">)])</span>
+<span class="w">                                            </span><span class="nv">sorted-pairs</span><span class="p">)]</span>
+<span class="w">    </span><span class="p">(</span><span class="nf">-&gt;&gt;</span><span class="w"> </span><span class="nv">sorted-pairs-cum-weight</span>
+<span class="w">         </span><span class="p">(</span><span class="nb">filter </span><span class="o">#</span><span class="p">(</span><span class="nb">&lt;= </span><span class="nv">middle-weight</span><span class="w"> </span><span class="p">(</span><span class="nb">second </span><span class="nv">%</span><span class="p">)))</span>
+<span class="w">         </span><span class="p">(</span><span class="nf">ffirst</span><span class="p">))))</span>
+</code></pre></div>
+
+<p>We can put it all together and redefine the remedian function to deal with the case where $n$ isn't a power of $b$:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">(</span><span class="kd">defn </span><span class="nv">remedian</span><span class="w"> </span><span class="p">[</span><span class="nv">b</span><span class="w"> </span><span class="nv">coll</span><span class="p">]</span>
+<span class="w">  </span><span class="p">(</span><span class="nf">-&gt;&gt;</span><span class="w"> </span><span class="nv">coll</span>
+<span class="w">       </span><span class="p">(</span><span class="nf">remedian-with-leftovers</span><span class="w"> </span><span class="nv">b</span><span class="p">)</span>
+<span class="w">       </span><span class="p">(</span><span class="nf">weight-leftovers</span><span class="w"> </span><span class="nv">b</span><span class="p">)</span>
+<span class="w">       </span><span class="p">(</span><span class="nf">weighted-median</span><span class="p">)))</span>
+</code></pre></div>
+
+<p>The remedian is fun, but in practice I prefer to use the approximate quantile methods that were invented a few years later and presented in <a href="http://www.cs.umd.edu/~samir/498/manku.pdf">Approximate Medians and other Quantiles in One Pass and with Limited Memory by Manku, Rajagopalan, and Lindsay</a> (1998).  There's a high-quality implementation you can use in Clojure via Java interop in Parallel Colt's <a href="http://incanter.org/docs/parallelcolt/api/cern/jet/stat/tdouble/quantile/DoubleQuantileFinderFactory.html">DoubleQuantileFinderFactory</a>.</p>
+    </article>
+    <footer class="post-footer">
+        <a href="/" class="home-link">← Back to Home</a>
+    </footer>
+</body>
+</html>

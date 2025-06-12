@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparing Troublesome Groups</title>
+    <link rel="icon" type="image/png" href="/images/aleph.png">
+    <link rel="stylesheet" href="/style.css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$']],
+        displayMath: [['$$', '$$']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/">Home</a>
+        <a href="/about/">About</a>
+        <a href="/feed.xml">RSS</a>
+    </nav>
+    <article>
+        <div class="post-date">January 26, 2011</div>
+        <h1>Comparing Troublesome Groups</h1>
+        <p>One of the comments on the <a href="http://www.reddit.com/r/programming/comments/f8nzc/programmatic_programming_font_comparison_101_vs/">reddit discussion</a> of my first post suggested looking at groups of characters that might be troublesome:</p>
+<div class="codehilite"><pre><span></span><code><span class="mf">1</span><span class="n">l</span><span class="err">|</span><span class="n">i</span><span class="err">!</span>
+<span class="err">`&#39;</span><span class="p">,;:</span><span class="mf">.</span>
+<span class="n">oO0Q</span>
+<span class="p">()</span><span class="err">{}[]</span>
+<span class="mf">5</span><span class="n">S</span>
+</code></pre></div>
+
+<p>As a quick test, I wrote something to compare every pair of characters in a list:</p>
+<p><img alt="Mathematica code for comparing groups" src="/images/tallskinnycode.png" /></p>
+<p>Click to see the full-sized result:</p>
+<p><a href="/images/tallskinnycomparison.png"><img alt="Comparison results" src="/images/tallskinnycomparison.png" /></a></p>
+    </article>
+    <footer class="post-footer">
+        <a href="/" class="home-link">← Back to Home</a>
+    </footer>
+</body>
+</html>

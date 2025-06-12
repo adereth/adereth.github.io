@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>java.awt.Shape's Insidious Insideness</title>
+    <link rel="icon" type="image/png" href="/images/aleph.png">
+    <link rel="stylesheet" href="/style.css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$']],
+        displayMath: [['$$', '$$']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/">Home</a>
+        <a href="/about/">About</a>
+        <a href="/feed.xml">RSS</a>
+    </nav>
+    <article>
+        <div class="post-date">April 21, 2014</div>
+        <h1>java.awt.Shape's Insidious Insideness</h1>
+        <p>I recently added text support to the <a href="https://github.com/farrellm/scad-clj">scad-clj</a> 3D modeling library and encountered an interesting bug:</p>
+<p><img alt="Poorly rendered 4" src="/images/bad4.png" /></p>
+<p>See that 4?  No hole!  Why?!?  All the other holes are there...</p>
+<h2>Shape Outlines</h2>
+<p>First, let's look at how you get the outline of some text in a font in Java:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">FontRenderContext</span><span class="w"> </span><span class="n">frc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">FontRenderContext</span><span class="o">(</span>
+<span class="w">          </span><span class="kc">null</span><span class="o">,</span>
+<span class="w">          </span><span class="n">RenderingHints</span><span class="o">.</span><span class="na">VALUE_TEXT_ANTIALIAS_DEFAULT</span><span class="o">,</span>
+<span class="w">          </span><span class="n">RenderingHints</span><span class="o">.</span><span class="na">VALUE_FRACTIONALMETRICS_DEFAULT</span><span class="o">);</span>
+<span class="n">Font</span><span class="w"> </span><span class="n">font</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Font</span><span class="o">(</span><span class="s2">&quot;Andale Mono&quot;</span><span class="o">,</span><span class="w"> </span><span class="n">Font</span><span class="o">.</span><span class="na">PLAIN</span><span class="o">,</span><span class="w"> </span><span class="mi">12</span><span class="o">);</span>
+<span class="n">String</span><span class="w"> </span><span class="n">myText</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;1234567890&quot;</span><span class="o">;</span>
+<span class="n">PathIterator</span><span class="w"> </span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">font</span>
+<span class="w">         </span><span class="o">.</span><span class="na">createGlyphVector</span><span class="o">(</span><span class="n">frc</span><span class="o">,</span><span class="w"> </span><span class="n">myText</span><span class="o">)</span>
+<span class="w">         </span><span class="o">.</span><span class="na">getOutline</span><span class="o">()</span>
+<span class="w">         </span><span class="o">.</span><span class="na">getPathIterator</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span><span class="w"> </span><span class="mf">0.01d</span><span class="o">);</span>
+</code></pre></div>
+
+<p>We end up with a <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/geom/PathIterator.html"><code>PathIterator</code></a> that traces along the outline of the character.  This code uses the version of <code>getPathIterator</code> that specifies "flatness", which means that we get back a path strictly made up of straight line segments that approximate the curves.</p>
+<p>Characters that are made from a single filled polygon are relatively easy; there is a single path and the bounded area is what gets filled:</p>
+<p><img alt="12357" src="/images/one-path.png" /></p>
+<p>The complexity comes when the path crosses over itself or if it is discontinuous and contains multiple outlines:</p>
+<p><img alt="46890" src="/images/multiple-parts.png" /></p>
+<p>The <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/geom/PathIterator.html">JavaDocs for PathIterator</a> explain a bit about how to actually determine what is inside the path.  All of the fill areas are determined using the <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/geom/PathIterator.html#WIND_EVEN_ODD"><code>WIND_EVEN_ODD</code> rule</a>: <em>a point is in the fill area if it is contained by an odd number of paths.</em></p>
+<p>For example, the dotted zero is made up of three paths:</p>
+<ol>
+<li>The outline of the outside of the oval</li>
+<li>The outline of the inside of the oval</li>
+<li>The outline of the dot</li>
+</ol>
+<p>The points inside #1 but outside #2 are in 1 area and the points inside #3 are inside 3 areas.</p>
+<h2>Counting Areas</h2>
+<p>For each path, we need to count how many other paths contain it.  One way is to use <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/geom/Path2D.Double.html"><code>java.awt.geom.Path2D.Double</code></a> to make a Shape and then use the <code>contains(double x, double y)</code> method to see if any of the points from the other paths are in it.</p>
+<p>I incorrectly assumed that each Shape contained at least one of the points that define it's outline.  It usually does, which is why all the other holes were properly rendered, but it doesn't for some shapes, including triangles in certain orientations!</p>
+<p>The <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/Shape.html">JavaDoc for Shape</a> says that a point is considered to lie inside a Shape if and only if:</p>
+<ol>
+<li>It lies completely inside the Shape boundary or</li>
+<li>It lies exactly on the Shape boundary and the space immediately adjacent to the point in the increasing X direction is entirely inside the boundary or</li>
+<li>It lies exactly on a horizontal boundary segment and the space immediately adjacent to the point in the increasing Y direction is inside the boundary.</li>
+</ol>
+<p>The three points defining the triangle that form the hole in 4 don't meet any of these criteria, so instead of counting as being in 2 paths (itself and the outer outline), it was counted as being in 1.  The fix was to explicitly define a path as containing itself.</p>
+    </article>
+    <footer class="post-footer">
+        <a href="/" class="home-link">← Back to Home</a>
+    </footer>
+</body>
+</html>

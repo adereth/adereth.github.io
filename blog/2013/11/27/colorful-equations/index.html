@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colorful Equations with MathJax</title>
+    <link rel="icon" type="image/png" href="/images/aleph.png">
+    <link rel="stylesheet" href="/style.css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$']],
+        displayMath: [['$$', '$$']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/">Home</a>
+        <a href="/about/">About</a>
+        <a href="/feed.xml">RSS</a>
+    </nav>
+    <article>
+        <div class="post-date">November 27, 2013</div>
+        <h1>Colorful Equations with MathJax</h1>
+        <p><a href="http://www.altdevblogaday.com/author/stuart-riffle/">Stuart Riffle</a> wrote up <a href="http://www.altdevblogaday.com/2011/05/17/understanding-the-fourier-transform/">a great explanation of the Fourier transform</a>.  There are a number of great visualizations in his post, but the climax is his explanation of the inverse discrete Fourier transform formula:</p>
+<p><img alt="Image" src="/images/DerivedDFT.png" /></p>
+<p>What a brilliant representation!  My first thought was that more equations should have such elegant explanations that focus on the comprehension of the reader.  I'd love to be able to produce such clear explanations in this style, so I did a little experimenting with Octopress and <a href="http://www.mathjax.org/">MathJax</a> to see how easy it would be.</p>
+<p>It turns out to only require a few minor yak trimmings to get something nice:</p>
+<div style="font-size: 150%;">
+$$
+\definecolor{energy}{RGB}{114,0,172}
+\definecolor{freq}{RGB}{45,177,93}
+\definecolor{spin}{RGB}{251,0,29}
+\definecolor{signal}{RGB}{18,110,213}
+\definecolor{circle}{RGB}{217,86,16}
+\definecolor{average}{RGB}{203,23,206}
+\color{energy} X_{\color{freq} k} \color{black} =
+\color{average} \frac{1}{N} \sum_{n=0}^{N-1}
+\color{signal}x_n \color{spin}
+e^{\mathrm{i} \color{circle} 2\pi \color{freq}k \color{average} \frac{n}{N}}
+$$
+</div>
+
+<blockquote>
+<p>To find <font color="#7200AC">the energy</font> <font color="2DB15D">at a particular frequency</font>, <font color="#FB001D">spin</font> <font color="#126ED5">your signal</font> <font color="#D04400">around a circle</font> <font color="2DB15D">at that frequency</font>, and <font color="#CB17CE">average a bunch of points along that path</font>.</p>
+</blockquote>
+<p>By using MathJax instead of including a .png we get some nice benefits:</p>
+<ol>
+<li>Accessibility via screen readers</li>
+<li>Scalable renderings that look awesome on Retina displays</li>
+<li>$\LaTeX$ source that is accessible by the audience (right click on the formula)</li>
+<li>Simplified page-build process and source management</li>
+</ol>
+<p>There are <a href="http://www.google.com/search?q=octopress%20mathjax">a bunch of guides on setting up MathJax with Octopress</a>, but I didn't mess with any of them because the <a href="https://github.com/bijumon/oct2">oct2 theme</a> ships with an alternative <code>head.html</code> that is preconfigured to support it.</p>
+<p>The only tweak I made was to load the <a href="http://docs.mathjax.org/en/latest/tex.html#color">Color extension for MathJax</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/x-mathjax-config&quot;</span><span class="p">&gt;</span>
+<span class="w">  </span><span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">Config</span><span class="p">({</span><span class="w"> </span><span class="nx">TeX</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">extensions</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;color.js&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">}});</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</code></pre></div>
+
+<p>After adding that, I was able to use the <code>\definecolor</code> and <code>\color</code> directives just like I would in a paper:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">\definecolor</span><span class="nb">{</span>energy<span class="nb">}{</span>RGB<span class="nb">}{</span>114,0,172<span class="nb">}</span>
+<span class="k">\definecolor</span><span class="nb">{</span>freq<span class="nb">}{</span>RGB<span class="nb">}{</span>45,177,93<span class="nb">}</span>
+<span class="k">\definecolor</span><span class="nb">{</span>spin<span class="nb">}{</span>RGB<span class="nb">}{</span>251,0,29<span class="nb">}</span>
+<span class="k">\definecolor</span><span class="nb">{</span>signal<span class="nb">}{</span>RGB<span class="nb">}{</span>18,110,213<span class="nb">}</span>
+<span class="k">\definecolor</span><span class="nb">{</span>circle<span class="nb">}{</span>RGB<span class="nb">}{</span>217,86,16<span class="nb">}</span>
+<span class="k">\definecolor</span><span class="nb">{</span>average<span class="nb">}{</span>RGB<span class="nb">}{</span>203,23,206<span class="nb">}</span>
+<span class="k">\color</span><span class="nb">{</span>energy<span class="nb">}</span> X<span class="nb">_{</span><span class="k">\color</span><span class="nb">{</span>freq<span class="nb">}</span> k<span class="nb">}</span> <span class="k">\color</span><span class="nb">{</span>black<span class="nb">}</span> =
+<span class="k">\color</span><span class="nb">{</span>average<span class="nb">}</span> <span class="k">\frac</span><span class="nb">{</span>1<span class="nb">}{</span>N<span class="nb">}</span> <span class="k">\sum</span><span class="nb">_{</span>n=0<span class="nb">}^{</span>N-1<span class="nb">}</span>
+<span class="k">\color</span><span class="nb">{</span>signal<span class="nb">}</span>x<span class="nb">_</span>n <span class="k">\color</span><span class="nb">{</span>spin<span class="nb">}</span>
+e<span class="nb">^{</span><span class="k">\mathrm</span><span class="nb">{</span>i<span class="nb">}</span> <span class="k">\color</span><span class="nb">{</span>circle<span class="nb">}</span> 2<span class="k">\pi</span> <span class="k">\color</span><span class="nb">{</span>freq<span class="nb">}</span>k
+<span class="k">\color</span><span class="nb">{</span>average<span class="nb">}</span> <span class="k">\frac</span><span class="nb">{</span>n<span class="nb">}{</span>N<span class="nb">}}</span>
+</code></pre></div>
+
+<p>There were a couple issues:</p>
+<ol>
+<li>As mentioned in several of the guides, the default markdown processor for Octopress will interfere with the <code>_</code> and <code>^</code> in your TeX.  I had originally worked around this by escaping them.  At the end, I wrapped the whole expression in a <code>&lt;div&gt;</code> to make the font larger, which had the side-effect of eliminating the need for escaping.</li>
+<li>MathJax's <code>\definecolor</code> doesn't seem to support the <code>HTML</code> color space, which lets you specify colors in hex codes.  I ended up manually converting the colors back and forth between decimal and hexidecimal for the prose below the equation:</li>
+</ol>
+<div class="codehilite"><pre><span></span><code>To find <span class="p">&lt;</span><span class="nt">font</span> <span class="na">color</span><span class="o">=</span><span class="s">&quot;#7200AC&quot;</span><span class="p">&gt;</span>the energy<span class="p">&lt;/</span><span class="nt">font</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">font</span> <span class="na">color</span><span class="o">=</span><span class="s">&quot;2DB15D&quot;</span><span class="p">&gt;</span>at a particular frequency<span class="p">&lt;/</span><span class="nt">font</span><span class="p">&gt;</span>,
+<span class="p">&lt;</span><span class="nt">font</span> <span class="na">color</span><span class="o">=</span><span class="s">&quot;#FB001D&quot;</span><span class="p">&gt;</span>spin<span class="p">&lt;/</span><span class="nt">font</span><span class="p">&gt;</span> <span class="p">&lt;</span><span class="nt">font</span> <span class="na">color</span><span class="o">=</span><span class="s">&quot;#126ED5&quot;</span><span class="p">&gt;</span>your
+signal<span class="p">&lt;/</span><span class="nt">font</span><span class="p">&gt;</span> <span class="p">&lt;</span><span class="nt">font</span> <span class="na">color</span><span class="o">=</span><span class="s">&quot;#D04400&quot;</span><span class="p">&gt;</span>around a circle<span class="p">&lt;/</span><span class="nt">font</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">font</span> <span class="na">color</span><span class="o">=</span><span class="s">&quot;2DB15D&quot;</span><span class="p">&gt;</span>at that frequency<span class="p">&lt;/</span><span class="nt">font</span><span class="p">&gt;</span>, and
+<span class="p">&lt;</span><span class="nt">font</span> <span class="na">color</span><span class="o">=</span><span class="s">&quot;#CB17CE&quot;</span><span class="p">&gt;</span>average a bunch of points along that
+path<span class="p">&lt;/</span><span class="nt">font</span><span class="p">&gt;</span>.
+</code></pre></div>
+
+<p>Now I just need a formula to explain...</p>
+    </article>
+    <footer class="post-footer">
+        <a href="/" class="home-link">← Back to Home</a>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Efficiently Computing Kendall's Tau</title>
+    <link rel="icon" type="image/png" href="/images/aleph.png">
+    <link rel="stylesheet" href="/style.css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$']],
+        displayMath: [['$$', '$$']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/">Home</a>
+        <a href="/about/">About</a>
+        <a href="/feed.xml">RSS</a>
+    </nav>
+    <article>
+        <div class="post-date">October 29, 2013</div>
+        <h1>Efficiently Computing Kendall's Tau</h1>
+        <p>Typically when people talk about correlation they are referring to the <a href="http://en.wikipedia.org/wiki/Pearson_product-moment_correlation_coefficient">Pearson's product-moment coefficient</a>:</p>
+<p>$$\rho_{X,Y}={E[(X-\mu_X)(Y-\mu_Y)] \over \sigma_X\sigma_Y}$$</p>
+<p>The Pearson coefficient is 1 if the datasets have a perfectly positive linear relationship and -1 if they have a perfectly negative linear relationship.  But what if our data has a clear positive relationship, but it's not linear?  Or what if our data isn't even numeric and doesn't have a meaningful way of computing the average, $\mu$, or standard deviation, $\sigma$?</p>
+<p>In these cases, Kendall's Tau is a useful way of measuring the correlation since it only requires that we have a <a href="http://en.wikipedia.org/wiki/Total_order">total ordering</a> for each of our datasets.  For each pair of observations, $(x_1, y_1)$ and $(x_2, y_2)$, we call the pair <em>concordant</em> if:
+$$x_1 &lt; x_2 \text{ and } y_1 &lt; y_2$$
+$$\text{or}$$
+$$x_1 &gt; x_2 \text{ and } y_1 &gt; y_2$$
+...and we call the pair <em>discordant</em> if:
+$$x_1 &lt; x_2 \text{ and } y_1 &gt; y_2$$
+$$\text{or}$$
+$$x_1 &gt; x_2 \text{ and } y_1 &lt; y_2$$
+If $x_1 = x_2 \text{ or } y_1 = y_2$, the pair is neither concordant nor discordant.</p>
+<p>Kendall's Tau is then defined as:
+$$\tau = \frac{n_c-n_d}{\frac{1}{2} n (n-1) }$$
+Where $n_c$ is the number of concordant pairs and $n_d$ is the number of discordant pairs.
+Since $n (n-1) / 2$ is the total number of pairs, this value ranges from -1 to 1.</p>
+<p>Unfortunately, this approach doesn't deal well with tied values.  Consider the following set of $(x,y)$ observations:
+$$(1,1), (1,1), (2,2), (3,3)$$
+There's a perfectly positive linear relationship between X and Y, but only 5 of the 6 pairs are concordant.  For this case we want to use the $\tau_B$ modified version:</p>
+<p>$$\tau_B = \frac{n_c-n_d}{\sqrt{(n_0-n_1)(n_0-n_2)}}$$</p>
+<p>...where:</p>
+<p>$$n_0 = n(n-1)/2$$
+$$n_1 = \text{Number of pairs with tied values in } X$$
+$$n_2 = \text{Number of pairs with tied values in } Y$$</p>
+<h2>Computing Naively</h2>
+<p>We can compute $\tau_B$ in $O(n^{2})$ by looking at every pair of observations and tallying the number of concordant, discordant, and tied pairs.  Once we have the tallies, we'll apply the formula:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">(</span><span class="kd">defn </span><span class="nv">kendalls-tau-from-tallies</span>
+<span class="w">  </span><span class="p">[{</span><span class="ss">:keys</span><span class="w"> </span><span class="p">[</span><span class="nv">concordant</span><span class="w"> </span><span class="nv">discordant</span><span class="w"> </span><span class="nv">pairs</span><span class="w"> </span><span class="nv">x-ties</span><span class="w"> </span><span class="nv">y-ties</span><span class="p">]}]</span>
+<span class="w">  </span><span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nb">- </span><span class="nv">concordant</span><span class="w"> </span><span class="nv">discordant</span><span class="p">)</span>
+<span class="w">     </span><span class="p">(</span><span class="nf">Math/sqrt</span><span class="w"> </span><span class="p">(</span><span class="nb">* </span><span class="p">(</span><span class="nb">- </span><span class="nv">pairs</span><span class="w"> </span><span class="nv">x-ties</span><span class="p">)</span>
+<span class="w">                   </span><span class="p">(</span><span class="nb">- </span><span class="nv">pairs</span><span class="w"> </span><span class="nv">y-ties</span><span class="p">)))))</span>
+</code></pre></div>
+
+<p>For a given pair of observations, we'll construct a map describing which tallies it will contribute to:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">(</span><span class="kd">defn </span><span class="nv">kendall-relations</span><span class="w"> </span><span class="p">[[[</span><span class="nv">x1</span><span class="w"> </span><span class="nv">y1</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="nv">x2</span><span class="w"> </span><span class="nv">y2</span><span class="p">]]]</span>
+<span class="w">  </span><span class="p">(</span><span class="nf">cond</span>
+<span class="w">   </span><span class="p">(</span><span class="nb">and </span><span class="p">(</span><span class="nb">= </span><span class="nv">x1</span><span class="w"> </span><span class="nv">x2</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nb">= </span><span class="nv">y1</span><span class="w"> </span><span class="nv">y2</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="ss">:x-ties</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="ss">:y-ties</span><span class="w"> </span><span class="mi">1</span><span class="p">}</span>
+<span class="w">   </span><span class="p">(</span><span class="nb">= </span><span class="nv">x1</span><span class="w"> </span><span class="nv">x2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="ss">:x-ties</span><span class="w"> </span><span class="mi">1</span><span class="p">}</span>
+<span class="w">   </span><span class="p">(</span><span class="nb">= </span><span class="nv">y1</span><span class="w"> </span><span class="nv">y2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="ss">:y-ties</span><span class="w"> </span><span class="mi">1</span><span class="p">}</span>
+<span class="w">   </span><span class="p">(</span><span class="nb">or </span><span class="p">(</span><span class="nb">and </span><span class="p">(</span><span class="nb">&lt; </span><span class="nv">x1</span><span class="w"> </span><span class="nv">x2</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nb">&lt; </span><span class="nv">y1</span><span class="w"> </span><span class="nv">y2</span><span class="p">))</span>
+<span class="w">       </span><span class="p">(</span><span class="nb">and </span><span class="p">(</span><span class="nb">&gt; </span><span class="nv">x1</span><span class="w"> </span><span class="nv">x2</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nb">&gt; </span><span class="nv">y1</span><span class="w"> </span><span class="nv">y2</span><span class="p">)))</span><span class="w"> </span><span class="p">{</span><span class="ss">:concordant</span><span class="w"> </span><span class="mi">1</span><span class="p">}</span>
+<span class="w">   </span><span class="ss">:else</span><span class="w"> </span><span class="p">{</span><span class="ss">:discordant</span><span class="w"> </span><span class="mi">1</span><span class="p">}))</span>
+</code></pre></div>
+
+<p>Now we need a way of generating every pair:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">(</span><span class="kd">defn </span><span class="nv">pairs</span><span class="w"> </span><span class="p">[[</span><span class="nv">o</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="nv">more</span><span class="p">]]</span>
+<span class="w">  </span><span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">nil? </span><span class="nv">o</span><span class="p">)</span><span class="w"> </span><span class="nv">nil</span>
+<span class="w">      </span><span class="p">(</span><span class="nb">concat </span><span class="p">(</span><span class="nb">map </span><span class="o">#</span><span class="p">(</span><span class="nb">vector </span><span class="nv">o</span><span class="w"> </span><span class="nv">%</span><span class="p">)</span><span class="w"> </span><span class="nv">more</span><span class="p">)</span>
+<span class="w">              </span><span class="p">(</span><span class="nf">lazy-seq</span><span class="w"> </span><span class="p">(</span><span class="nf">pairs</span><span class="w"> </span><span class="nv">more</span><span class="p">)))))</span>
+
+<span class="c1">;; (pairs [1 2 3 4])</span>
+<span class="c1">;; =&gt; ([1 2] [1 3] [1 4] [2 3] [2 4] [3 4])</span>
+</code></pre></div>
+
+<p>Finally, we put it all together by computing the relations tally for each pair and combining them using <code>merge-with</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">(</span><span class="kd">defn </span><span class="nv">naive-kendalls-tau</span><span class="w"> </span><span class="p">[</span><span class="nv">xs</span><span class="w"> </span><span class="nv">ys</span><span class="p">]</span>
+<span class="w">  </span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">observations</span><span class="w"> </span><span class="p">(</span><span class="nb">map vector </span><span class="nv">xs</span><span class="w"> </span><span class="nv">ys</span><span class="p">)</span>
+<span class="w">        </span><span class="nv">relations</span><span class="w"> </span><span class="p">(</span><span class="nb">map </span><span class="nv">kendall-relations</span><span class="w"> </span><span class="p">(</span><span class="nf">pairs</span><span class="w"> </span><span class="nv">observations</span><span class="p">))</span>
+<span class="w">        </span><span class="nv">tallies</span><span class="w"> </span><span class="p">(</span><span class="nb">reduce </span><span class="p">(</span><span class="nb">partial merge-with </span><span class="nv">+</span>
+<span class="w">                                 </span><span class="p">{</span><span class="ss">:pairs</span><span class="w"> </span><span class="mi">1</span><span class="p">})</span>
+<span class="w">                        </span><span class="p">{</span><span class="ss">:concordant</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="ss">:discordant</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">                         </span><span class="ss">:x-ties</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="ss">:y-ties</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="ss">:pairs</span><span class="w"> </span><span class="mi">0</span><span class="p">}</span>
+<span class="w">                        </span><span class="nv">relations</span><span class="p">)]</span>
+<span class="w">    </span><span class="p">(</span><span class="nf">kendalls-tau-from-tallies</span><span class="w"> </span><span class="nv">tallies</span><span class="p">)))</span>
+</code></pre></div>
+
+<h2>Knight's Algorithm</h2>
+<p>In 1966, William R. Knight was a visiting statistician at the Fisheries Research Board of Canada.  He wrote:</p>
+<blockquote>
+<p>The problem of calculating Kendall's tau arose while attempting to evaluate species associations in catches by the Canadian east coast offshore fishery.  Sample sizes ranging up to 400 were common, making manual calculations out of the question; indeed, an initial program using an asymptotically inefficient method proved expensively slow.</p>
+</blockquote>
+<p>Necessity is the mother of invention, so he came up with a clever algorithm for computing Kendall's Tau in $O(n \log{n})$ which he published in his paper entitled "<a href="http://www.jstor.org/stable/2282833">A Computer Method for Calculating Kendall's Tau with Ungrouped Data</a>".</p>
+<p>First, sort the observations by their $x$ values using your favorite $O(n \log{n})$ algorithm.  Next, sort <em>that</em> sorted list by the $y$ values using a slightly modified <a href="http://en.wikipedia.org/wiki/Merge_sort">merge sort</a> that keeps track of the size of the swaps it had to perform.</p>
+<p>Recall that merge sort works as follows:</p>
+<ol>
+<li>Divide the unsorted list into $n$ sublists, each containing 1 element (a list of 1 element is considered sorted).</li>
+<li>Repeatedly merge sublists to produce new sublists until there is only 1 sublist remaining. This will be the sorted list.</li>
+</ol>
+<p><img alt="Image" src="http://upload.wikimedia.org/wikipedia/commons/c/cc/Merge-sort-example-300px.gif" />
+<em>(description and animation from <a href="http://en.wikipedia.org/wiki/Merge_sort">Wikipedia</a>)</em></p>
+<p>The trick is performed when merging sublists.  The list was originally sorted by $x$ values, so whenever an element from the second sublist is smaller than the next element from the first sublist we know that the corresponding observation is discordant with however many elements remain in the first sublist.</p>
+<p>We can implement this modified merge sort by first handling the case of merging two sorted sequences:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">(</span><span class="kd">defn </span><span class="nv">merge-two-sorted-seqs-and-count-discords</span>
+<span class="w">  </span><span class="s">&quot;Takes a sequence containing two sorted sequences and merges them.  If an</span>
+<span class="s">element from the second sequence is less than the head of the first sequence, we</span>
+<span class="s">know that it was discordant with all the elements remaining in the first</span>
+<span class="s">sequence.  This is the insight that allows us to avoid the O(n^2) comparisons in</span>
+<span class="s">the naive algorithm.</span>
+
+<span class="s">A tuple containing the count of discords and the merged sequence is returned.&quot;</span>
+<span class="w">  </span><span class="p">[[</span><span class="nv">coll1</span><span class="w"> </span><span class="nv">coll2</span><span class="p">]]</span>
+<span class="w">  </span><span class="p">(</span><span class="k">loop </span><span class="p">[</span><span class="nv">swaps</span><span class="w"> </span><span class="mi">0</span>
+
+<span class="w">         </span><span class="c1">;; Explicitly track the remaining counts to avoid doing a linear</span>
+<span class="w">         </span><span class="c1">;; scan of the sequence each time, which would get us back to O(n^2)</span>
+<span class="w">         </span><span class="nv">remaining-i</span><span class="w"> </span><span class="p">(</span><span class="nb">count </span><span class="nv">coll1</span><span class="p">)</span>
+<span class="w">         </span><span class="nv">remaining-j</span><span class="w"> </span><span class="p">(</span><span class="nb">count </span><span class="nv">coll2</span><span class="p">)</span>
+
+<span class="w">         </span><span class="p">[</span><span class="nv">i</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="nv">rest-i</span><span class="w"> </span><span class="ss">:as</span><span class="w"> </span><span class="nv">all-i</span><span class="p">]</span><span class="w"> </span><span class="nv">coll1</span>
+<span class="w">         </span><span class="p">[</span><span class="nv">j</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="nv">rest-j</span><span class="w"> </span><span class="ss">:as</span><span class="w"> </span><span class="nv">all-j</span><span class="p">]</span><span class="w"> </span><span class="nv">coll2</span>
+<span class="w">         </span><span class="nv">result</span><span class="w"> </span><span class="p">[]]</span>
+<span class="w">    </span><span class="p">(</span><span class="nf">cond</span>
+<span class="w">     </span><span class="p">(</span><span class="nb">zero? </span><span class="nv">remaining-j</span><span class="p">)</span><span class="w"> </span><span class="p">[</span><span class="nv">swaps</span><span class="w"> </span><span class="p">(</span><span class="nb">concat </span><span class="nv">result</span><span class="w"> </span><span class="nv">all-i</span><span class="p">)]</span>
+<span class="w">     </span><span class="p">(</span><span class="nb">zero? </span><span class="nv">remaining-i</span><span class="p">)</span><span class="w"> </span><span class="p">[</span><span class="nv">swaps</span><span class="w"> </span><span class="p">(</span><span class="nb">concat </span><span class="nv">result</span><span class="w"> </span><span class="nv">all-j</span><span class="p">)]</span>
+<span class="w">     </span><span class="p">(</span><span class="nb">&lt;= </span><span class="nv">i</span><span class="w"> </span><span class="nv">j</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nf">recur</span><span class="w"> </span><span class="nv">swaps</span>
+<span class="w">                     </span><span class="p">(</span><span class="nb">dec </span><span class="nv">remaining-i</span><span class="p">)</span><span class="w"> </span><span class="nv">remaining-j</span>
+<span class="w">                     </span><span class="nv">rest-i</span><span class="w"> </span><span class="nv">all-j</span><span class="w"> </span><span class="p">(</span><span class="nb">conj </span><span class="nv">result</span><span class="w"> </span><span class="nv">i</span><span class="p">))</span>
+<span class="w">     </span><span class="ss">:j&gt;i</span><span class="w"> </span><span class="p">(</span><span class="nf">recur</span><span class="w"> </span><span class="p">(</span><span class="nb">+ </span><span class="nv">swaps</span><span class="w"> </span><span class="nv">remaining-i</span><span class="p">)</span>
+<span class="w">                  </span><span class="nv">remaining-i</span><span class="w"> </span><span class="p">(</span><span class="nb">dec </span><span class="nv">remaining-j</span><span class="p">)</span>
+<span class="w">                  </span><span class="nv">all-i</span><span class="w"> </span><span class="nv">rest-j</span><span class="w"> </span><span class="p">(</span><span class="nb">conj </span><span class="nv">result</span><span class="w"> </span><span class="nv">j</span><span class="p">)))))</span>
+</code></pre></div>
+
+<p>Now, we can do the full merge sort by applying that function to piece sizes that double until the whole collection is covered by a single sorted piece:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">(</span><span class="kd">defn </span><span class="nv">merge-sort-and-count-discords</span>
+<span class="w">  </span><span class="s">&quot;Returns a vector containing the number of discordant swaps and the sorted</span>
+<span class="s">collection.&quot;</span>
+<span class="w">  </span><span class="p">[</span><span class="nv">coll</span><span class="p">]</span>
+<span class="w">  </span><span class="p">(</span><span class="k">loop </span><span class="p">[</span><span class="nv">swaps</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">         </span><span class="nv">coll</span><span class="w"> </span><span class="nv">coll</span>
+<span class="w">         </span><span class="nv">piece-size</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span>
+<span class="w">    </span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">pieces</span><span class="w"> </span><span class="p">(</span><span class="nf">partition-all</span><span class="w"> </span><span class="nv">piece-size</span><span class="w"> </span><span class="nv">coll</span><span class="p">)</span>
+<span class="w">          </span><span class="nv">piece-pairs</span><span class="w"> </span><span class="p">(</span><span class="nf">partition-all</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="nv">pieces</span><span class="p">)]</span>
+<span class="w">      </span><span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">-&gt; </span><span class="nv">piece-pairs</span><span class="w"> </span><span class="nb">first </span><span class="nv">second</span><span class="p">)</span>
+<span class="w">        </span><span class="p">(</span><span class="k">let </span><span class="p">[[</span><span class="nv">new-swaps</span><span class="w"> </span><span class="nv">new-coll</span><span class="p">]</span>
+<span class="w">              </span><span class="p">(</span><span class="nf">-&gt;&gt;</span><span class="w"> </span><span class="nv">piece-pairs</span>
+<span class="w">                   </span><span class="p">(</span><span class="nb">map </span><span class="nv">merge-two-sorted-seqs-and-count-discords</span><span class="p">)</span>
+<span class="w">                   </span><span class="p">(</span><span class="nb">reduce </span><span class="p">(</span><span class="k">fn </span><span class="p">[[</span><span class="nv">acc-s</span><span class="w"> </span><span class="nv">acc-c</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="nv">s</span><span class="w"> </span><span class="nv">c</span><span class="p">]]</span>
+<span class="w">                             </span><span class="p">[(</span><span class="nb">+ </span><span class="nv">acc-s</span><span class="w"> </span><span class="nv">s</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nb">concat </span><span class="nv">acc-c</span><span class="w"> </span><span class="nv">c</span><span class="p">)])</span>
+<span class="w">                           </span><span class="p">[</span><span class="mi">0</span><span class="w"> </span><span class="p">[]]))]</span>
+<span class="w">          </span><span class="p">(</span><span class="nf">recur</span><span class="w"> </span><span class="p">(</span><span class="nb">+ </span><span class="nv">swaps</span><span class="w"> </span><span class="nv">new-swaps</span><span class="p">)</span><span class="w"> </span><span class="nv">new-coll</span><span class="w"> </span><span class="p">(</span><span class="nb">* </span><span class="mi">2</span><span class="w"> </span><span class="nv">piece-size</span><span class="p">)))</span>
+<span class="w">        </span><span class="p">[</span><span class="nv">swaps</span><span class="w"> </span><span class="nv">coll</span><span class="p">]))))</span>
+</code></pre></div>
+
+<p>The only thing we are missing now is the tallies of tied pairs.  We could use <a href="http://clojuredocs.org/clojure_core/clojure.core/frequencies"><code>clojure.core/frequencies</code></a>, but Knight's original paper alludes to a different way which takes advantage of the fact that at different stages of the algorithm we have the list sorted by $X$ and then $Y$.  Most implementations do something like:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">(</span><span class="kd">defn </span><span class="nv">tied-pair-count</span><span class="w"> </span><span class="p">[</span><span class="nv">sorted-coll</span><span class="p">]</span>
+<span class="w">  </span><span class="p">(</span><span class="nf">-&gt;&gt;</span><span class="w"> </span><span class="nv">sorted-coll</span>
+<span class="w">       </span><span class="p">(</span><span class="nf">partition-by</span><span class="w"> </span><span class="nv">identity</span><span class="p">)</span>
+<span class="w">       </span><span class="p">(</span><span class="nb">map </span><span class="nv">count</span><span class="p">)</span>
+<span class="w">       </span><span class="p">(</span><span class="nb">map </span><span class="o">#</span><span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nb">* </span><span class="nv">%</span><span class="w"> </span><span class="p">(</span><span class="nb">dec </span><span class="nv">%</span><span class="p">))</span><span class="w"> </span><span class="mi">2</span><span class="p">))</span>
+<span class="w">       </span><span class="p">(</span><span class="nb">reduce </span><span class="nv">+</span><span class="p">)))</span>
+</code></pre></div>
+
+<p>Now we have all the pieces, so we just have to put them together:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">(</span><span class="kd">defn </span><span class="nv">knights-kendalls-tau</span><span class="w"> </span><span class="p">[</span><span class="nv">xs</span><span class="w"> </span><span class="nv">ys</span><span class="p">]</span>
+<span class="w">  </span><span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">observations</span><span class="w"> </span><span class="p">(</span><span class="nb">sort </span><span class="p">(</span><span class="nb">map vector </span><span class="nv">xs</span><span class="w"> </span><span class="nv">ys</span><span class="p">))</span>
+<span class="w">        </span><span class="nv">n</span><span class="w"> </span><span class="p">(</span><span class="nb">count </span><span class="nv">observations</span><span class="p">)</span>
+<span class="w">        </span><span class="nv">pair-count</span><span class="w"> </span><span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nb">* </span><span class="nv">n</span><span class="w"> </span><span class="p">(</span><span class="nb">dec </span><span class="nv">n</span><span class="p">))</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span>
+<span class="w">        </span><span class="nv">xy-pair-ties</span><span class="w"> </span><span class="p">(</span><span class="nf">tied-pair-count</span><span class="w"> </span><span class="nv">observations</span><span class="p">)</span>
+<span class="w">        </span><span class="nv">x-pair-ties</span><span class="w"> </span><span class="p">(</span><span class="nf">tied-pair-count</span><span class="w"> </span><span class="p">(</span><span class="nb">map first </span><span class="nv">observations</span><span class="p">))</span>
+<span class="w">        </span><span class="p">[</span><span class="nv">swaps</span><span class="w"> </span><span class="nv">sorted-ys</span><span class="p">]</span><span class="w"> </span><span class="p">(</span><span class="nf">merge-sort-and-count-discords</span>
+<span class="w">                           </span><span class="p">(</span><span class="nb">map second </span><span class="nv">observations</span><span class="p">))</span>
+<span class="w">        </span><span class="nv">y-pair-ties</span><span class="w"> </span><span class="p">(</span><span class="nf">tied-pair-count</span><span class="w"> </span><span class="nv">sorted-ys</span><span class="p">)</span>
+<span class="w">        </span><span class="nv">concordant-minus-discordant</span><span class="w"> </span><span class="p">(</span><span class="nb">- </span><span class="nv">pair-count</span>
+<span class="w">                                       </span><span class="nv">x-pair-ties</span>
+<span class="w">                                       </span><span class="nv">y-pair-ties</span>
+<span class="w">                                       </span><span class="p">(</span><span class="nb">- </span><span class="nv">xy-pair-ties</span><span class="p">)</span>
+<span class="w">                                       </span><span class="p">(</span><span class="nb">* </span><span class="mi">2</span><span class="w"> </span><span class="nv">swaps</span><span class="p">))]</span>
+<span class="w">    </span><span class="p">(</span><span class="nb">/ </span><span class="nv">concordant-minus-discordant</span>
+<span class="w">       </span><span class="p">(</span><span class="nf">Math/sqrt</span><span class="w"> </span><span class="p">(</span><span class="nb">* </span><span class="p">(</span><span class="nb">- </span><span class="nv">pair-count</span><span class="w"> </span><span class="nv">x-pair-ties</span><span class="p">)</span>
+<span class="w">                     </span><span class="p">(</span><span class="nb">- </span><span class="nv">pair-count</span><span class="w"> </span><span class="nv">y-pair-ties</span><span class="p">))))))</span>
+</code></pre></div>
+
+<h2>Conclusion</h2>
+<p>There are certainly many things I would write differently above if I was really trying for performance.  The goal here was to clearly illustrate the algorithm and maintain the asymptotic run-time characteristics.</p>
+<p>Also, I recently submitted <a href="https://issues.apache.org/jira/browse/MATH-814">a patch</a> to the Apache Commons Math library that contains an implementation of this in pure Java if that's your thing.</p>
+<p>I think this algorithm is a clever little gem and I really enjoyed learning it.  Deconstructing a familiar algorithm like merge sort and utilizing its internal operations for some other purpose is a neat approach that I'll definitely keep in my algorithmic toolbox.</p>
+    </article>
+    <footer class="post-footer">
+        <a href="/" class="home-link">← Back to Home</a>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>unicode-math 0.2.0 released</title>
+    <link rel="icon" type="image/png" href="/images/aleph.png">
+    <link rel="stylesheet" href="/style.css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$']],
+        displayMath: [['$$', '$$']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/">Home</a>
+        <a href="/about/">About</a>
+        <a href="/feed.xml">RSS</a>
+    </nav>
+    <article>
+        <div class="post-date">October 13, 2013</div>
+        <h1>unicode-math 0.2.0 released</h1>
+        <p>I just deployed a new version of <a href="https://github.com/adereth/unicode-math">unicode-math</a> to Clojars.  It's a silly toy project that implements as many of <a href="http://symbolcodes.tlt.psu.edu/bylanguage/mathchart.html">Unicode's math symbols</a> as possible in Clojure.  If you <code>use</code> it, you can write things like:</p>
+<p><a href="http://mathworld.wolfram.com/BinetsFibonacciNumberFormula.html">Binet's Fibonacci Number Formula</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">(</span><span class="kd">defn </span><span class="nv">binet-fib</span><span class="w"> </span><span class="p">[</span><span class="nv">n</span><span class="p">]</span>
+<span class="w">  </span><span class="p">(</span><span class="nb">/ </span><span class="p">(</span><span class="nb">- </span><span class="p">(</span><span class="nf">ⁿ</span><span class="w"> </span><span class="nv">φ</span><span class="w"> </span><span class="nv">n</span><span class="p">)</span>
+<span class="w">        </span><span class="p">(</span><span class="nf">ⁿ</span><span class="w"> </span><span class="p">(</span><span class="nb">- </span><span class="nv">φ</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nb">- </span><span class="nv">n</span><span class="p">)))</span>
+<span class="w">     </span><span class="p">(</span><span class="err">√</span><span class="w"> </span><span class="mi">5</span><span class="p">)))</span>
+</code></pre></div>
+
+<p><a href="http://mathworld.wolfram.com/deMorgansLaws.html">de Morgan's Laws</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">(</span><span class="nb">assert </span><span class="p">(</span><span class="err">∀</span><span class="w"> </span><span class="p">[</span><span class="nv">p</span><span class="w"> </span><span class="p">[</span><span class="nv">true</span><span class="w"> </span><span class="nv">false</span><span class="p">]</span><span class="w"> </span><span class="nv">q</span><span class="w"> </span><span class="p">[</span><span class="nv">true</span><span class="w"> </span><span class="nv">false</span><span class="p">]]</span>
+<span class="w">             </span><span class="p">(</span><span class="nb">= </span><span class="p">(</span><span class="err">¬</span><span class="w"> </span><span class="p">(</span><span class="err">∧</span><span class="w"> </span><span class="nv">p</span><span class="w"> </span><span class="nv">q</span><span class="p">))</span>
+<span class="w">                </span><span class="p">(</span><span class="err">∨</span><span class="w"> </span><span class="p">(</span><span class="err">¬</span><span class="w"> </span><span class="nv">p</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="err">¬</span><span class="w"> </span><span class="nv">q</span><span class="p">)))))</span>
+</code></pre></div>
+
+<p><a href="http://mathworld.wolfram.com/Inclusion-ExclusionPrinciple.html">Inclusion-Exclusion Principle</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">(</span><span class="nb">assert </span><span class="p">(</span><span class="nb">= </span><span class="p">(</span><span class="nb">count </span><span class="p">(</span><span class="err">∪</span><span class="w"> </span><span class="nv">A</span><span class="w"> </span><span class="nv">B</span><span class="p">))</span>
+<span class="w">           </span><span class="p">(</span><span class="nb">+ </span><span class="p">(</span><span class="nb">count </span><span class="nv">A</span><span class="p">)</span>
+<span class="w">              </span><span class="p">(</span><span class="nb">count </span><span class="nv">B</span><span class="p">)</span>
+<span class="w">              </span><span class="p">(</span><span class="nb">- </span><span class="p">(</span><span class="nb">count </span><span class="p">(</span><span class="err">∩</span><span class="w"> </span><span class="nv">A</span><span class="w"> </span><span class="nv">B</span><span class="p">))))))</span>
+</code></pre></div>
+
+<p>Instructions for use are on the <a href="https://github.com/adereth/unicode-math">project's Github page</a>.  The full list of implemented symbols is in <a href="https://github.com/adereth/unicode-math/blob/master/src/unicode_math/core.clj">src/unicode_math/core.clj</a>.</p>
+    </article>
+    <footer class="post-footer">
+        <a href="/" class="home-link">← Back to Home</a>
+    </footer>
+</body>
+</html>

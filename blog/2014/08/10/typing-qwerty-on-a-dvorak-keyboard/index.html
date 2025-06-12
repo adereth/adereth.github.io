@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Qwerty on a Dvorak Keyboard</title>
+    <link rel="icon" type="image/png" href="/images/aleph.png">
+    <link rel="stylesheet" href="/style.css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$']],
+        displayMath: [['$$', '$$']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/">Home</a>
+        <a href="/about/">About</a>
+        <a href="/feed.xml">RSS</a>
+    </nav>
+    <article>
+        <div class="post-date">August 10, 2014</div>
+        <h1>Typing Qwerty on a Dvorak Keyboard</h1>
+        <p><a href="https://twitter.com/thattommyhall">@thattommyhall</a> posted a fun question on Twitter:</p>
+<blockquote><p>If you type your name on a keyboard marked as qwerty but set to Dvorak and keep reinputting what comes out, will it ever say your name?</p>&mdash; !!!!!11111oneoneone (@thattommyhall) <a href="https://twitter.com/thattommyhall/statuses/494916131598393344">July 31, 2014</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<p>The best answer was "yes because group theory" and <a href="https://twitter.com/AnnaPawlicka">@AnnaPawlicka</a> demonstrated it was true for her name:</p>
+<blockquote class="twitter-tweet" lang="en"><p><a href="https://twitter.com/thattommyhall">@thattommyhall</a> Yes. I can confirm that. :) <a href="http://t.co/Vubkf1ltoK">pic.twitter.com/Vubkf1ltoK</a></p>&mdash; Anna Pawlicka (@AnnaPawlicka) <a href="https://twitter.com/AnnaPawlicka/statuses/494918999747350529">July 31, 2014</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<p>But is it really true?  And if so, how many iterations will it take to get the target string?  I turned to Mathematica...</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">qwerty</span><span class="w"> </span><span class="nv">=</span>
+<span class="w">  </span><span class="p">{</span><span class="s">&quot;-&quot;</span>,<span class="w"> </span><span class="s">&quot;=&quot;</span>,
+<span class="w">   </span><span class="s">&quot;q&quot;</span>,<span class="w"> </span><span class="s">&quot;w&quot;</span>,<span class="w"> </span><span class="s">&quot;e&quot;</span>,<span class="w"> </span><span class="s">&quot;r&quot;</span>,<span class="w"> </span><span class="s">&quot;t&quot;</span>,<span class="w"> </span><span class="s">&quot;y&quot;</span>,<span class="w"> </span><span class="s">&quot;u&quot;</span>,<span class="w"> </span><span class="s">&quot;i&quot;</span>,<span class="w"> </span><span class="s">&quot;o&quot;</span>,<span class="w"> </span><span class="s">&quot;p&quot;</span>,<span class="w"> </span><span class="s">&quot;[&quot;</span>,<span class="w"> </span><span class="s">&quot;]&quot;</span>,<span class="w"> </span><span class="s">&quot;\\&quot;</span>,
+<span class="w">   </span><span class="s">&quot;a&quot;</span>,<span class="w"> </span><span class="s">&quot;s&quot;</span>,<span class="w"> </span><span class="s">&quot;d&quot;</span>,<span class="w"> </span><span class="s">&quot;f&quot;</span>,<span class="w"> </span><span class="s">&quot;g&quot;</span>,<span class="w"> </span><span class="s">&quot;h&quot;</span>,<span class="w"> </span><span class="s">&quot;j&quot;</span>,<span class="w"> </span><span class="s">&quot;k&quot;</span>,<span class="w"> </span><span class="s">&quot;l&quot;</span>,<span class="w"> </span><span class="s">&quot;;&quot;</span>,<span class="w"> </span><span class="s">&quot;&#39;&quot;</span>,
+<span class="w">   </span><span class="s">&quot;z&quot;</span>,<span class="w"> </span><span class="s">&quot;x&quot;</span>,<span class="w"> </span><span class="s">&quot;c&quot;</span>,<span class="w"> </span><span class="s">&quot;v&quot;</span>,<span class="w"> </span><span class="s">&quot;b&quot;</span>,<span class="w"> </span><span class="s">&quot;n&quot;</span>,<span class="w"> </span><span class="s">&quot;m&quot;</span>,<span class="w"> </span><span class="s">&quot;,&quot;</span>,<span class="w"> </span><span class="s">&quot;.&quot;</span>,<span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p">}</span><span class="c1">;</span>
+<span class="nv">dvorak</span><span class="w"> </span><span class="nv">=</span>
+<span class="w">  </span><span class="p">{</span><span class="s">&quot;[&quot;</span>,<span class="w"> </span><span class="s">&quot;]&quot;</span>,
+<span class="w">   </span><span class="s">&quot;&#39;&quot;</span>,<span class="w"> </span><span class="s">&quot;,&quot;</span>,<span class="w"> </span><span class="s">&quot;.&quot;</span>,<span class="w"> </span><span class="s">&quot;p&quot;</span>,<span class="w"> </span><span class="s">&quot;y&quot;</span>,<span class="w"> </span><span class="s">&quot;f&quot;</span>,<span class="w"> </span><span class="s">&quot;g&quot;</span>,<span class="w"> </span><span class="s">&quot;c&quot;</span>,<span class="w"> </span><span class="s">&quot;r&quot;</span>,<span class="w"> </span><span class="s">&quot;l&quot;</span>,<span class="w"> </span><span class="s">&quot;/&quot;</span>,<span class="w"> </span><span class="s">&quot;=&quot;</span>,<span class="w"> </span><span class="s">&quot;\\&quot;</span>,
+<span class="w">   </span><span class="s">&quot;a&quot;</span>,<span class="w"> </span><span class="s">&quot;o&quot;</span>,<span class="w"> </span><span class="s">&quot;e&quot;</span>,<span class="w"> </span><span class="s">&quot;u&quot;</span>,<span class="w"> </span><span class="s">&quot;i&quot;</span>,<span class="w"> </span><span class="s">&quot;d&quot;</span>,<span class="w"> </span><span class="s">&quot;h&quot;</span>,<span class="w"> </span><span class="s">&quot;t&quot;</span>,<span class="w"> </span><span class="s">&quot;n&quot;</span>,<span class="w"> </span><span class="s">&quot;s&quot;</span>,<span class="w"> </span><span class="s">&quot;-&quot;</span>,
+<span class="w">   </span><span class="s">&quot;;&quot;</span>,<span class="w"> </span><span class="s">&quot;q&quot;</span>,<span class="w"> </span><span class="s">&quot;j&quot;</span>,<span class="w"> </span><span class="s">&quot;k&quot;</span>,<span class="w"> </span><span class="s">&quot;x&quot;</span>,<span class="w"> </span><span class="s">&quot;b&quot;</span>,<span class="w"> </span><span class="s">&quot;m&quot;</span>,<span class="w"> </span><span class="s">&quot;w&quot;</span>,<span class="w"> </span><span class="s">&quot;v&quot;</span>,<span class="w"> </span><span class="s">&quot;z&quot;</span><span class="p">}</span><span class="c1">;</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="nv">KeyGraph</span><span class="p">[</span><span class="nv">from_</span>,<span class="w"> </span><span class="nv">to_</span><span class="p">]</span><span class="w"> </span><span class="ss">:=</span>
+<span class="w"> </span><span class="nv">Graph</span><span class="p">[</span>
+<span class="w">  </span><span class="nv">MapThread</span><span class="p">[</span><span class="o">#</span><span class="mi">1</span><span class="w"> </span><span class="nb">-&gt; </span><span class="o">#</span><span class="mi">2</span><span class="w"> </span><span class="o">&amp;</span>,<span class="w"> </span><span class="p">{</span><span class="nv">from</span>,<span class="w"> </span><span class="nv">to</span><span class="p">}]</span>,
+<span class="w">  </span><span class="nv">VertexLabels</span><span class="w"> </span><span class="nb">-&gt; </span><span class="s">&quot;Name&quot;</span>,<span class="w"> </span><span class="nv">DirectedEdges</span><span class="w"> </span><span class="nb">-&gt; </span><span class="nv">True</span><span class="p">]</span>
+</code></pre></div>
+
+<p>This allows us to visualize the mapping of keys from one layout to another:</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">KeyGraph</span><span class="p">[</span><span class="nv">dvorak</span>,<span class="w"> </span><span class="nv">qwerty</span><span class="p">]</span>
+</code></pre></div>
+
+<p><img alt="Dvorak to Qwerty Graph" src="/images/dvorak-qwerty.png" /></p>
+<p>There is a single directed edge going from each character to the one that will be displayed when you type it.  There are 3 keys that remain unchanged, 2 pairs of swapped keys, and 2 large cycles of keys.</p>
+<p>We can get these groups programmatically using the <a href="http://reference.wolfram.com/mathematica/ref/ConnectedComponents.html">ConnectedComponents function</a>:</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">TableForm</span><span class="w"> </span><span class="o">@</span>
+<span class="w"> </span><span class="nv">Sort</span><span class="w"> </span><span class="o">@</span>
+<span class="w">  </span><span class="nv">ConnectedComponents</span><span class="w"> </span><span class="o">@</span>
+<span class="w">   </span><span class="nv">KeyGraph</span><span class="p">[</span><span class="nv">dvorak</span>,<span class="w"> </span><span class="nv">qwerty</span><span class="p">]</span>
+</code></pre></div>
+
+<p><code>Output lang:text %}
+\
+a
+m
+] =
+, w
+. e y t f g u c i d h j k v
+[ - ' q p r o l / s n ; z x b</code> %}</p>
+<p>It will take the length of the cycle the letter is in to get the letter we want.  For a given word, we won't get all the letters we want unless we've iterated some multiple of the length of the cycles each letter is in.  Let's apply the Least Common Multiple function to see the worst case where there is a letter from each cycle:</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">LCM</span><span class="w"> </span><span class="o">@@</span>
+<span class="w"> </span><span class="nv">Length</span><span class="w"> </span><span class="nv">/</span><span class="o">@</span>
+<span class="w">  </span><span class="nv">ConnectedComponents</span><span class="w"> </span><span class="o">@</span>
+<span class="w">   </span><span class="nv">KeyGraph</span><span class="p">[</span><span class="nv">dvorak</span>,<span class="w"> </span><span class="nv">qwerty</span><span class="p">]</span>
+</code></pre></div>
+
+<p><code>Output lang:text %}
+210</code> %}</p>
+<p>Looks like Anna got lucky that her name only consists of letters in a cycle of length 1 and 15.</p>
+<p>For fun, here's the graph we get if we use Colemak instead of Dvorak:</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">colemak</span><span class="w"> </span><span class="nv">=</span>
+<span class="w">  </span><span class="p">{</span><span class="s">&quot;-&quot;</span>,<span class="w"> </span><span class="s">&quot;=&quot;</span>,
+<span class="w">   </span><span class="s">&quot;q&quot;</span>,<span class="w"> </span><span class="s">&quot;w&quot;</span>,<span class="w"> </span><span class="s">&quot;f&quot;</span>,<span class="w"> </span><span class="s">&quot;p&quot;</span>,<span class="w"> </span><span class="s">&quot;g&quot;</span>,<span class="w"> </span><span class="s">&quot;j&quot;</span>,<span class="w"> </span><span class="s">&quot;l&quot;</span>,<span class="w"> </span><span class="s">&quot;u&quot;</span>,<span class="w"> </span><span class="s">&quot;y&quot;</span>,<span class="w"> </span><span class="s">&quot;;&quot;</span>,<span class="w"> </span><span class="s">&quot;[&quot;</span>,<span class="w"> </span><span class="s">&quot;]&quot;</span>,<span class="w"> </span><span class="s">&quot;\\&quot;</span>,
+<span class="w">   </span><span class="s">&quot;a&quot;</span>,<span class="w"> </span><span class="s">&quot;r&quot;</span>,<span class="w"> </span><span class="s">&quot;s&quot;</span>,<span class="w"> </span><span class="s">&quot;t&quot;</span>,<span class="w"> </span><span class="s">&quot;d&quot;</span>,<span class="w"> </span><span class="s">&quot;h&quot;</span>,<span class="w"> </span><span class="s">&quot;n&quot;</span>,<span class="w"> </span><span class="s">&quot;e&quot;</span>,<span class="w"> </span><span class="s">&quot;i&quot;</span>,<span class="w"> </span><span class="s">&quot;o&quot;</span>,<span class="w"> </span><span class="s">&quot;&#39;&quot;</span>,
+<span class="w">   </span><span class="s">&quot;z&quot;</span>,<span class="w"> </span><span class="s">&quot;x&quot;</span>,<span class="w"> </span><span class="s">&quot;c&quot;</span>,<span class="w"> </span><span class="s">&quot;v&quot;</span>,<span class="w"> </span><span class="s">&quot;b&quot;</span>,<span class="w"> </span><span class="s">&quot;k&quot;</span>,<span class="w"> </span><span class="s">&quot;m&quot;</span>,<span class="w"> </span><span class="s">&quot;,&quot;</span>,<span class="w"> </span><span class="s">&quot;.&quot;</span>,<span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p">}</span><span class="c1">;</span>
+
+<span class="nv">KeyGraph</span><span class="p">[</span><span class="nv">colemak</span>,<span class="w"> </span><span class="nv">qwerty</span><span class="p">]</span>
+</code></pre></div>
+
+<p><img alt="Colemak to Qwerty Graph" src="/images/colemak-qwerty.png" /></p>
+<p>One cycle of length 14, one cycle of length 3, and the rest are just letters that map back to themselves.</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">LCM</span><span class="w"> </span><span class="o">@@</span>
+<span class="w"> </span><span class="nv">Length</span><span class="w"> </span><span class="nv">/</span><span class="o">@</span>
+<span class="w">  </span><span class="nv">ConnectedComponents</span><span class="w"> </span><span class="o">@</span>
+<span class="w">   </span><span class="nv">KeyGraph</span><span class="p">[</span><span class="nv">colemak</span>,<span class="w"> </span><span class="nv">qwerty</span><span class="p">]</span>
+</code></pre></div>
+
+<p><code>Output lang:text %}
+42</code> %}</p>
+    </article>
+    <footer class="post-footer">
+        <a href="/" class="home-link">← Back to Home</a>
+    </footer>
+</body>
+</html>

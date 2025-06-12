@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Where LISP Fits</title>
+    <link rel="icon" type="image/png" href="/images/aleph.png">
+    <link rel="stylesheet" href="/style.css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$']],
+        displayMath: [['$$', '$$']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/">Home</a>
+        <a href="/about/">About</a>
+        <a href="/feed.xml">RSS</a>
+    </nav>
+    <article>
+        <div class="post-date">February 03, 2014</div>
+        <h1>Where LISP Fits</h1>
+        <p>There are a lot of great essays about the power and joy of LISP.  I had read a bunch of them, but none convinced me to actually put the energy in to make it over those parentheses-shaped speed bumps.  A part of me always wanted to, mostly because I'm convinced that our inevitable robot overlords will have to be programs that write programs and everything I had heard made me think that this would likely be done in a LISP.  It just makes sense to be prepared.</p>
+<p>Almost two years ago, a coworker showed me some gorgeous code that used Clojure's <a href="http://clojuredocs.org/clojure_core/clojure.core/-%3E">thrush macro</a> and I fell in love.  I found myself jonesing for <code>C-x C-e</code> whenever I tried going back to Java.  I devoured <a href="http://www.amazon.com/gp/product/1934356867/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1934356867&amp;linkCode=as2&amp;tag=adereth-20">Programming Clojure</a>, then <a href="http://www.amazon.com/gp/product/1935182641/ref=as_li_ss_tl?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=1935182641&amp;linkCode=as2&amp;tag=adereth-20">The Joy of Clojure</a>.  In search of a purer hit, I turned to the source: <a href="http://www-formal.stanford.edu/jmc/recursive.pdf">McCarthy's original paper on LISP</a>.  After reading it, I realized what someone could have told me that would have convinced me to invest the time 12 years earlier.</p>
+<p>There's a lot of interesting stuff in that paper, but what really struck me was that it felt like it fit into a theoretical framework that I thought I already knew reasonably well.  This post isn't about the power of LISP, which has been covered by others better than I could.  Rather, it's about where LISP fits in the world of computation.</p>
+<p><em>None of what I'm about to say is novel or rigorous.  I'm pretty sure that all the novel and rigorous stuff around this topic is 50 - 75 years old, but I just wasn't exposed to it as directly as I'm going to try and lay out.</em></p>
+<h2>The Automaton Model of Computation</h2>
+<p>One of my favorite classes in school was <a href="http://www.cs.cmu.edu/~lblum/flac/index.htm">15-453: Formal Languages, Automata, and Computation</a>, which used <a href="http://www.amazon.com/gp/product/113318779X/ref=as_li_ss_il?ie=UTF8&amp;camp=1789&amp;creative=390957&amp;creativeASIN=113318779X&amp;linkCode=as2&amp;tag=adereth-20">Sipser's Introduction to the Theory of Computation</a>:</p>
+<p><a href="http://www.amazon.com/gp/product/113318779X/ref=as_li_ss_il?ie=UTF8&camp=1789&creative=390957&creativeASIN=113318779X&linkCode=as2&tag=adereth-20"><img src="/images/sipser.jpg" width="250"></a></p>
+<p>One aspect that I really enjoyed was that there was a narrative; we started with Finite State Automata (FSA), analyzed the additional power of Pushdown Automata (PDA), and saw it culminate in Turing Machines (TM).  Each of these models look very similar and have a natural connection: <em>they are each just state machines with different types of external memory.</em></p>
+<p>The tape in the Turing Machine can be viewed as two stacks, with one stack representing everything to the left of the current position and the other stack as the current position and everything to the right.  With this model, we can view the computational hierarchy (FSA -&gt; PDA -&gt; TM) as just state machines with 0, 1, or 2 stacks.  I think it's quite an elegant representation and it makes the progression seem quite natural.</p>
+<p>A key insight along the journey is that these machines are equivalent in power to other useful systems.  A sizable section in the chapter on Finite State Automata is dedicated to their equivalence with Regular Expressions (RegEx).  Context Free Grammars (CFG) are actually introduced <em>before</em> Pushdown Automata.  But when we get to Turing Machines, there's nothing but a couple paragraphs in a section called "Equivalence with Other Models", which says: </p>
+<blockquote>
+<p>Many [languages], such as Pascal and LISP, look quite different from one another in style and structure.  Can some algorithm be programmed in one of them and not the others?  Of course not -- we can compile LISP into Pascal and Pascal into LISP, which means that the two languages describe <em>exactly</em> the same class of algorithms.  So do all other reasonable programming languages.</p>
+</blockquote>
+<p>The book and class leave it at that and proceed onto the limits of computability, which is the real point of the material.  But there's a natural question that isn't presented in the book and which I never thought to ask:</p>
+<p><center>
+Finite State Automata <i class="fa fa-arrows-h"></i> Regular Expressions<br>
+Pushdown Automata <i class="fa fa-arrows-h"></i> Context Free Grammars<br>
+Turing Machines <i class="fa fa-arrows-h"></i> ?
+</center>
+<br>
+While we know that there are many models that equal Turing Machines, we could also construct other models that equal FSAs or PDAs.  Why are RegExs and CFGs used as the parallel models of computation?  With the machine model, we were able to just add a stack to move up at each level - is there a natural connection between RegExs and CFGs that we extrapolate to find their next level that is Turing equivalent?</p>
+<h2>The Chomsky-Schützenberger Hierarchy</h2>
+<p>It turns out that the answers to these questions were well covered in the 1950's by the <a href="http://en.wikipedia.org/wiki/Chomsky_hierarchy#The_hierarchy">Chomsky-Schützenberger Hierarchy of Formal Grammars</a>.</p>
+<p>The left-hand side of the relations above are the automaton-based models and the right-hand side are the language-based models.  The language models are all implemented as production rules, where some symbols are converted to other symbols.  The different levels of computation just have different restrictions on what kind of replacements rules are allowed.</p>
+<p>For instance RegExs are all rules of the form $A \to a$ and $A \to aB$, where the uppercase letters are <a href="http://en.wikipedia.org/wiki/Terminal_and_nonterminal_symbols">non-terminal symbols</a> and the lowercase are terminal.  In CFGs, some of the restrictions on the right-hand side are lifted.  Allowing terminals to appear on the left-hand side lets us make rules that are conditional on what has already been replaced, which appropriately gets called "Context Sensitive Grammars."  Finally, when all the rules are lifted, we get Recursively Enumerable languages, which are Turing equivalent.  The <a href="http://en.wikipedia.org/wiki/Chomsky_hierarchy#The_hierarchy">Wikipedia page</a> for the hierarchy and the respective levels is a good source for learning more.</p>
+<p>When you look at the definition of LISP in McCarthy's paper, it's much closer to being an applied version of Chomsky's style than Turing's.  This isn't surprising, given that they were contemporaries at MIT.  In McCarthy's <a href="http://www-formal.stanford.edu/jmc/history/lisp/node3.html#SECTION00030000000000000000">History of Lisp</a>, he expicitly states that making a usable version of this other side was his goal:</p>
+<blockquote>
+<p>These simplifications made LISP into a way of describing computable functions much neater than the Turing machines or the general recursive definitions used in recursive function theory.  The fact that Turing machines constitute an awkward programming language doesn't much bother recursive function theorists, because they almost never have any reason to write particular recursive definitions, since the theory concerns recursive functions in general.  They often have reason to prove that recursive functions with specific properties exist, but this can be done by an informal argument without having to write them down explicitly.  In the early days of computing, some people developed programming languages based on Turing machines; perhaps it seemed more scientific.  Anyway, I decided to write a paper describing LISP both as a programming language and as a formalism for doing recursive function theory.</p>
+</blockquote>
+<p>Here we have it straight from the source.  McCarthy was trying to capture the power of recursive definitions in a usable form.  Just like the automata theorists, once the linguists theorist hit Turing completeness, they focused on the limits instead of the usage.</p>
+<p>Theoreticians are more interested in the equality of the systems than the usability, but as practitioners we know that it matters that some problems are more readily solvable in different representations.  Sometimes it's more appropriate to use a RegEx and sometimes an FSA is better suited, even though you could apply either.  While nobody is busting out the Turing Machine to tackle real-world problems, some of our languages are more influenced by one side or the other.</p>
+<h2>Turing Machines Considered Harmful</h2>
+<p>If you track back the imperative/functional divide to Turing Machines and Chomsky's forms, some of the roots are showing.  Turing Machines are conducive to a couple things that are considered harmful in larger systems: GOTO-based<sup><a href="http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html">1</a></sup> and mutation-centric<sup><a href="https://www.google.com/search?q=mutable+state+considered+harmful">2</a></sup> thinking.  In a lot of cases, we're finding that the languages influenced by the language-side are better suited for our problems.  Paul Graham <a href="http://www.paulgraham.com/diff.html">argues</a> that the popular languages have been steadily evolving towards the LISPy side.</p>
+<p>Anyway, this is a connection that I wish I had been shown at the peak of my interest in automata theory because it would have gotten me a lot more excited about LISP sooner.  I think it's interesting to look at LISP as something that has the same theoretical underpinnings as these other tools (RegEx and CFG) that we already acknowledged as vital.</p>
+<p><em>Thanks to <a href="http://jliszka.github.io/">Jason Liszka</a> and my colleagues at <a href="http://www.twosigma.com">Two Sigma</a> for help with this post!</em></p>
+    </article>
+    <footer class="post-footer">
+        <a href="/" class="home-link">← Back to Home</a>
+    </footer>
+</body>
+</html>

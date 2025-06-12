@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Printing with Clojure</title>
+    <link rel="icon" type="image/png" href="/images/aleph.png">
+    <link rel="stylesheet" href="/style.css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$']],
+        displayMath: [['$$', '$$']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/">Home</a>
+        <a href="/about/">About</a>
+        <a href="/feed.xml">RSS</a>
+    </nav>
+    <article>
+        <div class="post-date">March 14, 2014</div>
+        <h1>3D Printing with Clojure</h1>
+        <p>I've been doing some 3D printing for <a href="https://twitter.com/adereth/status/444145229109555200/photo/1">my next keyboard project</a> and I've got a workflow that I'm pretty happy with that I'd like to share.</p>
+<p>When I first started trying to make models a month ago, I tried <a href="http://www.blender.org/">Blender</a>.  It's an amazing beast, but after a few hours of tutorials it was clear that it would take a while to get proficient with it.  Also, it is really designed for interactive modeling and I need something that I can programmatically tweak.</p>
+<h2>OpenSCAD</h2>
+<p><img alt="OpenSCAD Screenshot" src="/images/openscad.gif" /></p>
+<p>A couple of friends suggested <a href="http://www.openscad.org/">OpenSCAD</a>, which is touted as "the programmers' solid 3D CAD modeler."  It provides a power set of primitive shapes and operations, but the language itself leaves a bit to be desired.  This isn't a beat-up-on-SCAD post, but a few of the things that irked me were:</p>
+<ul>
+<li>Strange function application syntax (parameters in parens after the function name with an expression or block following the closing paren)</li>
+<li>Unclear variable binding rules (multiple passes are made over the code and the results of changing a variable may affect things earlier in the code unexpectedly)</li>
+<li>No package/namespace management</li>
+<li>Multiple looping constructs that depend on what you are going to do with the results, not on how you want to loop</li>
+</ul>
+<h2>scad-clj</h2>
+<p>Fortunately, <a href="https://github.com/farrellm">Matt Farrell</a> has written <a href="https://github.com/farrellm/scad-clj">scad-clj</a>, an OpenSCAD DSL in Clojure.  It addresses every issue I had with OpenSCAD and lends itself to a really nice workflow with the Clojure REPL.</p>
+<p>To get started using it, add the dependency on <a href="https://clojars.org/scad-clj"><code>[scad-clj "0.1.0"]</code></a> to your <code>project.clj</code> and fire up your REPL.</p>
+<p>All of the functions for creating 3D models live in the <code>scad-clj.model</code> namespace.  There's no documentation yet, so in the beginning you'll have to look at the <a href="https://github.com/farrellm/scad-clj/blob/master/src/scad_clj/model.clj">source for <code>model.clj</code></a> and occassionally the <a href="http://www.openscad.org/documentation.html">OpenSCAD documentation</a>.  Fortunately, there really isn't much to learn and it's quite a revelation to discover that almost everything you'll want to do can be done with a handful of functions.</p>
+<p>Here's a simple model that showcases each of the primitive shapes:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">(</span><span class="k">def </span><span class="nv">primitives</span>
+<span class="w">  </span><span class="p">(</span><span class="nf">union</span>
+<span class="w">   </span><span class="p">(</span><span class="nf">cube</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="mi">100</span><span class="p">)</span>
+<span class="w">   </span><span class="p">(</span><span class="nf">sphere</span><span class="w"> </span><span class="mi">110</span><span class="p">)</span>
+<span class="w">   </span><span class="p">(</span><span class="nf">cylinder</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="mi">150</span><span class="p">)))</span>
+</code></pre></div>
+
+<p>Evaluating this gives us a data structure that can be converted into an .scad file using <code>scad-clj.scad/write-scad</code> to generate a string and <code>spit</code>.</p>
+<div class="codehilite"><pre><span></span><code><span class="p">(</span><span class="nf">spit</span><span class="w"> </span><span class="s">&quot;post-demo.scad&quot;</span>
+<span class="w">      </span><span class="p">(</span><span class="nf">write-scad</span><span class="w"> </span><span class="nv">primitives</span><span class="p">))</span>
+</code></pre></div>
+
+<p>We're going to use OpenSCAD to view the results.  One feature of OpenSCAD that is super useful for this workflow is that it watches opened files and automatically refreshes the rendering when the file is updated.  This means that we can just re-evaluate our Clojure code and see the results immediately in another window:</p>
+<p><img alt="Primitives Screenshot" src="/images/scad-primitives.png" /></p>
+<p>scad-clj makes all new primitive shapes centered at the origin.  We can use the shape operator functions to move them around and deform them:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">(</span><span class="k">def </span><span class="nv">primitives</span>
+<span class="w">  </span><span class="p">(</span><span class="nf">union</span>
+<span class="w">   </span><span class="p">(</span><span class="nf">-&gt;&gt;</span><span class="w"> </span><span class="p">(</span><span class="nf">cube</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="mi">100</span><span class="p">)</span>
+<span class="w">        </span><span class="p">(</span><span class="nf">rotate</span><span class="w"> </span><span class="p">(</span><span class="nb">/ </span><span class="nv">Math/PI</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">1</span><span class="p">])</span>
+<span class="w">        </span><span class="p">(</span><span class="nf">translate</span><span class="w"> </span><span class="p">[</span><span class="mi">150</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="p">]))</span>
+<span class="w">   </span><span class="p">(</span><span class="nf">-&gt;&gt;</span><span class="w"> </span><span class="p">(</span><span class="nf">sphere</span><span class="w"> </span><span class="mi">70</span><span class="p">)</span>
+<span class="w">        </span><span class="p">(</span><span class="nf">scale</span><span class="w"> </span><span class="p">[</span><span class="m">1/2</span><span class="w"> </span><span class="m">1/2</span><span class="w"> </span><span class="mi">2</span><span class="p">])</span>
+<span class="w">        </span><span class="p">(</span><span class="nf">translate</span><span class="w"> </span><span class="p">[</span><span class="mi">-150</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="p">]))</span>
+<span class="w">   </span><span class="p">(</span><span class="nf">cylinder</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="mi">160</span><span class="p">)))</span>
+</code></pre></div>
+
+<p><img alt="Operator Screenshot" src="/images/scad-operators.png" /></p>
+<p>I snuck <code>union</code> into those examples.  Shapes can also be combined using <code>intersection</code>, <code>difference</code>, and <code>hull</code>.  It's pretty incredible how much can be done with just these.  For example, here's the latest iteration of my keyboard design built using clj-scad:</p>
+<p><img alt="Keyboard" src="/images/scad-keyboard.png" /></p>
+<h2>3D Printing</h2>
+<p>Once your design is complete, you can use OpenSCAD to export it as an STL file which can then be imported to software like <a href="http://replicat.org/">ReplicatorG</a> or <a href="https://www.makerbot.com/makerware/">Makerware</a> for processing into an .x3g file that can be printed:</p>
+<p><img alt="Keyboard" src="/images/printed.JPG" /></p>
+    </article>
+    <footer class="post-footer">
+        <a href="/" class="home-link">← Back to Home</a>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparing Programming Font Pairs</title>
+    <link rel="icon" type="image/png" href="/images/aleph.png">
+    <link rel="stylesheet" href="/style.css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$']],
+        displayMath: [['$$', '$$']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/">Home</a>
+        <a href="/about/">About</a>
+        <a href="/feed.xml">RSS</a>
+    </nav>
+    <article>
+        <div class="post-date">January 26, 2011</div>
+        <h1>Comparing Programming Font Pairs</h1>
+        <p>I really like this visualization of the difference between Deja Vu Sans Mono and Apple Menlo:</p>
+<p><img alt="Menlo vs. Deja Vu Sans Mono" src="http://typophile.com/files/menlovsdejavusansmono_6131.png" /></p>
+<p>(Credit to <a href="http://www.down10.com">Jesse Burgheimer</a>)</p>
+<p>I decided to take a stab at programmatically generating a similar comparison for all the fonts I’ve been looking at.  <a href="/assets/paircompare.nb">Here’s the Mathematica code</a>.</p>
+<p><a href="images/dejavusansmonodroidsansmono.png"><img alt="Menlo vs. Deja Vu Sans Mono in Mathematica" src="images/dejavusansmonodroidsansmono.png" /></a>
+(Click for full size version)</p>
+<p>It was then easy to generate this for every pair of fonts:</p>
+<p><img alt="CompareFontPair /@ Subsets[monospacedFonts, {2}]" src="/images/MapCompareFontPair.png" /></p>
+<p>I went through them all and picked out the ones I thought were most interesting:</p>
+<p><a href="/images/consolasinconsolata.png"><img alt="consolasinconsolata" src="/images/consolasinconsolata.png" /></a>
+<a href="/images/dejavusansmonodroidsansmono.png"><img alt="dejavusansmonodroidsansmono" src="/images/dejavusansmonodroidsansmono.png" /></a>
+<a href="/images/dejavusansmonopanicsans.png"><img alt="dejavusansmonopanicsans" src="/images/dejavusansmonopanicsans.png" /></a>
+<a href="/images/droidsansmonoinconsolata.png"><img alt="droidsansmonoinconsolata" src="/images/droidsansmonoinconsolata.png" /></a>
+<a href="/images/envycoderterminus.png"><img alt="envycoderterminus" src="/images/envycoderterminus.png" /></a>
+<a href="/images/inconsolatamonofur.png"><img alt="inconsolatamonofur" src="/images/inconsolatamonofur.png" /></a></p>
+<p>If you’re interested in seeing the results for every pair, you can <a href="https://s3.amazonaws.com/1overBlog/programming_fonts/AllFontPairComparisons.zip">download them all</a>.</p>
+    </article>
+    <footer class="post-footer">
+        <a href="/" class="home-link">← Back to Home</a>
+    </footer>
+</body>
+</html>
