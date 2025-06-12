@@ -54,9 +54,15 @@ def create_html_page(title, content, layout='post'):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>
+    <link rel="stylesheet" href="/style.css">
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
+    <nav class="nav">
+        <a href="/">Home</a>
+        <a href="/about/">About</a>
+        <a href="/feed.xml">RSS</a>
+    </nav>
     <article>
         <h1>{title}</h1>
         {content}
@@ -84,12 +90,12 @@ def create_index_page(posts_data):
     
     for year in sorted(posts_by_year.keys(), reverse=True):
         content_parts.append(f'<h2>{year}</h2>')
-        content_parts.append('<ul>')
+        content_parts.append('<ul class="post-list">')
         
         for post in posts_by_year[year]:
             date_str = post['date'].strftime('%B %d')
             post_url = post['url']
-            content_parts.append(f'<li><span class="date">{date_str}</span> - <a href="{post_url}">{post["title"]}</a></li>')
+            content_parts.append(f'<li><span class="date">{date_str}</span> <a href="{post_url}">{post["title"]}</a></li>')
         
         content_parts.append('</ul>')
     
@@ -102,59 +108,18 @@ def create_index_page(posts_data):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matt Adereth - Blog</title>
-    <style>
-        body {{
-            font-family: Georgia, serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            line-height: 1.6;
-        }}
-        h1 {{
-            color: #333;
-            border-bottom: 3px solid #333;
-            padding-bottom: 10px;
-        }}
-        h2 {{
-            color: #666;
-            margin-top: 30px;
-        }}
-        ul {{
-            list-style: none;
-            padding-left: 0;
-        }}
-        li {{
-            margin-bottom: 10px;
-        }}
-        .date {{
-            color: #999;
-            font-family: monospace;
-        }}
-        a {{
-            color: #0066cc;
-            text-decoration: none;
-        }}
-        a:hover {{
-            text-decoration: underline;
-        }}
-        .nav {{
-            margin-bottom: 30px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #ddd;
-        }}
-        .nav a {{
-            margin-right: 20px;
-        }}
-    </style>
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <div class="nav">
+    <nav class="nav">
+        <a href="/">Home</a>
         <a href="/about/">About</a>
         <a href="/feed.xml">RSS</a>
-        <a href="/atom.xml">Atom</a>
+    </nav>
+    <div class="container">
+        <h1>Matt Adereth</h1>
+        {content}
     </div>
-    <h1>Matt Adereth</h1>
-    {content}
 </body>
 </html>"""
     
