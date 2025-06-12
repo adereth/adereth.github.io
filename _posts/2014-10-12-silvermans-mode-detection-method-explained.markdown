@@ -474,9 +474,9 @@ This is the part of the original paper that I found to be the least clear.  It's
 
 We now have a kernel density estimate of the PDF for each number of modes between $1$ and $n$.  For each estimate, we're going to use a statistical test to determine the significance.  We want to be parsimonious in our claims that there are additional modes, so we pick the smallest $k$ such that the significance measure of $h_k$ meets some threshold.
 
-[Bootstrapping](http://en.wikipedia.org/wiki/Bootstrapping_(statistics\)) is used to evaluate the accuracy of a statistical measure by computing that statistic on observations that are [resampled](http://en.wikipedia.org/wiki/Resampling_(statistics\)) from the original set of observations.
+[Bootstrapping](http://en.wikipedia.org/wiki/Bootstrapping_%28statistics%29) is used to evaluate the accuracy of a statistical measure by computing that statistic on observations that are [resampled](http://en.wikipedia.org/wiki/Resampling_%28statistics%29) from the original set of observations.
 
-Silverman used a [smoothed bootstrap procedure](http://en.wikipedia.org/wiki/Bootstrapping_(statistics\)#Smooth_bootstrap) to evaluate the significance.  Smoothed bootstrapping is bootstrapping with some noise added to the resampled observations.  First, we sample from the original set of observations, with replacement, to get $X_I(i)$.  Then we add noise to get our smoothed $y_i$ values:
+Silverman used a [smoothed bootstrap procedure](http://en.wikipedia.org/wiki/Bootstrapping_%28statistics%29#Smooth_bootstrap) to evaluate the significance.  Smoothed bootstrapping is bootstrapping with some noise added to the resampled observations.  First, we sample from the original set of observations, with replacement, to get $X_I(i)$.  Then we add noise to get our smoothed $y_i$ values:
 
 $$y_i=\frac{1}{\sqrt{1+h_k^2/\sigma^2}}(X_{I(i)}+h_k \epsilon_i)$$
 

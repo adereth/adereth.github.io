@@ -104,7 +104,7 @@ I stumbled upon an interesting property about lattices that reminded me of somet
 
 
 ## Distributive Lattices
-First, let's start with the mathy [definition of a lattice given by Wikipedia](http://en.wikipedia.org/wiki/Lattice_(order\)):
+First, let's start with the mathy [definition of a lattice given by Wikipedia](http://en.wikipedia.org/wiki/Lattice_%28order%29):
 
 > If $(L, \leq)$ is a partially ordered set, and $S \subseteq L$ is an arbitrary subset, then an element $u \in L$ is said to be an *upper bound* of $S$ if $s \leq u$ for each $s \in S$. A set may have many upper bounds, or none at all. An upper bound $u$ of $S$ is said to be its *least upper bound*, or join, or supremum, if $u \leq x$ for each upper bound $x$ of $S$.  A set need not have a least upper bound, but it cannot have more than one. Dually, $l \in L$ is said to be a *lower bound* of $S$ if $l \leq s$ for each $s \in S$. A lower bound $l$ of $S$ is said to be its *greatest lower bound*, or meet, or infimum, if $x \leq l$ for each lower bound $x$ of $S$. A set may have many lower bounds, or none at all, but can have at most one greatest lower bound.
 
