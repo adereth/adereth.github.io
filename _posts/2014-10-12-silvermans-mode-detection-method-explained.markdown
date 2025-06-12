@@ -423,11 +423,11 @@ Note that we made two interesting assumptions here:
 
 In the case of the normal distribution, we could just vary the standard deviation to adjust the width, but there is a more general way of stretching the kernel for arbitrary distributions.  The kernel density estimate for observations $X_1,X_2,...,X_n$ using a kernel function $K$ is:
 
-$$\hat{f}(x)=\frac{1}{n}\sum\limits_{i=1}\^n K(x-X_i)$$
+$$\hat{f}(x)=\frac{1}{n}\sum\limits_{i=1}^n K(x-X_i)$$
 
 In our case above, $K$ is the PDF for the normal distribution with standard deviation 1.  We can stretch the kernel by a factor of $h$ like this:
 
-$$\hat{f}(x, h)=\frac{1}{nh}\sum\limits_{i=1}\^n K(\frac{x-X_i}{h})$$
+$$\hat{f}(x, h)=\frac{1}{nh}\sum\limits_{i=1}^n K(\frac{x-X_i}{h})$$
 
 Note that changing $h$ has the exact same effect as changing the standard deviation: it makes the kernel wider and shorter while maintaining an area of 1 under the curve.
 
@@ -461,11 +461,11 @@ The neat thing about using the normal distribution as our kernel is that it has 
 ## Finding the critical widths
 To actually find the critical widths, we need to look at the formula for the kernel density estimate.  The PDF for a plain old normal distribution with mean $\mu$ and standard deviation $\sigma$ is:
 
-$$f(x)=\frac{1}{\sigma\sqrt{2\pi}}\mathrm{e}\^{-\frac{(x-\mu)\^2}{2\sigma\^2}}$$
+$$f(x)=\frac{1}{\sigma\sqrt{2\pi}}\mathrm{e}^{-\frac{(x-\mu)^2}{2\sigma^2}}$$
 
 The kernel density estimate with standard deviation $\sigma=1$ for observations $X_1,X_2,...,X_n$ and width $h$ is:
 
-$$\hat{f}(x,h)=\frac{1}{nh}\sum\limits_{i=1}\^n \frac{1}{\sqrt{2\pi}}\mathrm{e}\^{-\frac{(x-X_i)\^2}{2h\^2}}$$
+$$\hat{f}(x,h)=\frac{1}{nh}\sum\limits_{i=1}^n \frac{1}{\sqrt{2\pi}}\mathrm{e}^{-\frac{(x-X_i)^2}{2h^2}}$$
 
 For a given $h$, you can find all the local maxima of $\hat{f}$ using your favorite numerical methods.  Now we need to find the $h_k$ where new local maxima are introduced.  Because of a result that Silverman proved at the end of section 2 in the paper, we know we can use a binary search over a range of $h$ values to find the critical widths at which new maxima show up.
 
@@ -478,7 +478,7 @@ We now have a kernel density estimate of the PDF for each number of modes betwee
 
 Silverman used a [smoothed bootstrap procedure](http://en.wikipedia.org/wiki/Bootstrapping_(statistics\)#Smooth_bootstrap) to evaluate the significance.  Smoothed bootstrapping is bootstrapping with some noise added to the resampled observations.  First, we sample from the original set of observations, with replacement, to get $X_I(i)$.  Then we add noise to get our smoothed $y_i$ values:
 
-$$y_i=\frac{1}{\sqrt{1+h_k\^2/\sigma\^2}}(X_{I(i)}+h_k \epsilon_i)$$
+$$y_i=\frac{1}{\sqrt{1+h_k^2/\sigma^2}}(X_{I(i)}+h_k \epsilon_i)$$
 
 Where $\sigma$ is the standard deviation of $X_1,X_2,...,X_n$, $h_k$ is the critical width we are testing, and $\epsilon_i$ is a random value sampled from a normal distribution with mean 0 and standard deviation 1.
 

@@ -46,12 +46,18 @@ def parse_post_filename(filename):
         }
     return None
 
-def create_html_page(title, content, layout='post'):
+def create_html_page(title, content, layout='post', date=None):
     """Create a basic HTML page"""
     # Add home link at bottom only for blog posts
     home_link = ''
     if layout == 'post':
         home_link = '\n    <footer class="post-footer">\n        <a href="/" class="home-link">← Back to Home</a>\n    </footer>'
+    
+    # Add date for blog posts
+    date_html = ''
+    if layout == 'post' and date:
+        date_str = date.strftime('%B %d, %Y')
+        date_html = f'<div class="post-date">{date_str}</div>\n        '
     
     html_template = """<!DOCTYPE html>
 <html lang="en">
@@ -59,6 +65,7 @@ def create_html_page(title, content, layout='post'):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>
+    <link rel="icon" type="image/png" href="/images/aleph.png">
     <link rel="stylesheet" href="/style.css">
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -79,13 +86,13 @@ def create_html_page(title, content, layout='post'):
         <a href="/feed.xml">RSS</a>
     </nav>
     <article>
-        <h1>{title}</h1>
+        {date_html}<h1>{title}</h1>
         {content}
     </article>{home_link}
 </body>
 </html>"""
     
-    return html_template.format(title=title, content=content, home_link=home_link)
+    return html_template.format(title=title, content=content, home_link=home_link, date_html=date_html)
 
 def create_index_page(posts_data):
     """Create the main index page with all posts"""
@@ -110,6 +117,7 @@ def create_index_page(posts_data):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matt Adereth - Blog</title>
+    <link rel="icon" type="image/png" href="/images/aleph.png">
     <link rel="stylesheet" href="/style.css">
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 </head>
@@ -186,7 +194,7 @@ def process_blog_post(filepath, output_dir):
     os.makedirs(output_path, exist_ok=True)
     
     # Generate HTML
-    html = create_html_page(title, html_content, front_matter.get('layout', 'post'))
+    html = create_html_page(title, html_content, front_matter.get('layout', 'post'), post_info['date'])
     
     # Write output file
     output_file = os.path.join(output_path, 'index.html')

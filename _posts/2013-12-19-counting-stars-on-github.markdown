@@ -5,7 +5,7 @@ date: 2013-12-23 08:10
 comments: true
 categories: github data clojure
 ---
-<script type="text/javascript" src="http://mbostock.github.com/d3/d3.min.js"></script>
+<script src="https://d3js.org/d3.v3.min.js"></script>
 
 I've been working on a nerd ethnography project with the [GitHub API](http://developer.github.com/v3/).  There's so much fun data to play with there that it's inevitable that I'll get a little distracted...
 
@@ -173,7 +173,7 @@ Here are the top 1000 repos, using stars for the size and language for the color
 var color = d3.scale.category20();
 
 var margin = {top: 10, right: 0, bottom: 10, left: 0},
-    width = $('.entry-content').width(),
+    width = $('article').width() || 720,
     height = 500;
 
 var treemap = d3.layout.treemap()

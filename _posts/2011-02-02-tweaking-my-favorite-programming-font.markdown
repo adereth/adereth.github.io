@@ -7,7 +7,7 @@ categories: fonts
 ---
 After trying out every monospaced font I could get my hands on, I decided that [Mark Simonson](http://www.ms-studio.com/index.html)‘s [Anonymous Pro](http://www.ms-studio.com/FontSales/anonymouspro.html) is the one for me:
 
-[![Anonymous Pro Sample](http://www.marksimonson.com/assets/content/fonts/anonymouspro_banner.png)](http://www.ms-studio.com/FontSales/anonymouspro.html)
+[![Anonymous Pro Sample](https://www.marksimonson.com/_astro/AnonymousPro_banner_sample_2240.DCj59yNa_2t2WzF.webp)](http://www.ms-studio.com/FontSales/anonymouspro.html)
 
 After using it in my IDE for months, I decided to start using it in my terminals. Unfortunately, this revealed a subtle flaw in the font.  Take a look:
 

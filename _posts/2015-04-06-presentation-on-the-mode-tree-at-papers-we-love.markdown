@@ -103,7 +103,7 @@ I recently gave a mini talk on [The Mode Tree: A Tool for Visualization of Nonpa
 
 I did the entire presentation as one huge sequence of animations using [D3.js](http://d3js.org/).  The Youtube video doesn't capture the glory that is SVG, so [I've posted the slides](/oneoff/pwl-draft/scratch.html).
 
-I also finally got to apply the technique that I wrote about in my [Colorful Equations with MathJax post](/blog/2013/11/29/colorful-equations/) from over a year ago, only instead of coloring explanatory text, the colors in the accompanying chart match:
+I also finally got to apply the technique that I wrote about in my [Colorful Equations with MathJax post](/blog/2013/11/27/colorful-equations/) from over a year ago, only instead of coloring explanatory text, the colors in the accompanying chart match:
 
 <div style="font-size: 100%;">
 $$
@@ -122,7 +122,7 @@ var data = [
 function drawChart(data,chart,height) {
 $(chart).empty();
 var margin = {top: 50, right: 40, bottom: 40, left: 60};
-var width = $('.entry-content').width();
+var width = $('article').width() || 720;
 var x = d3.scale.linear().domain([0, 30]).range([0, width - margin.left - margin.right]);
 
            var xAxis = d3.svg.axis()

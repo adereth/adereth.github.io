@@ -23,7 +23,7 @@ It's another nice example because it contains terms that can't be represented pr
 
 Let's start by computing the sum with infinite precision.  Clojure's [`Ratio`](https://github.com/clojure/clojure/blob/229bf8fe9a751e4f48bb2b7ea57e27ebc43d26ae/src/jvm/clojure/lang/Ratio.java) class represents values internally using [`BigInteger`](http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html) to separately store the numerator and denominator.  The summation happens using the grade-school style of making the denominators match and summing the numerators, so we have the exact running sum throughout.  At the very end, we convert the number to a floating point double:
 
-``` Infinite Precision lang:clojure %}
+```clojure
 (def harmonic-ratios (map / (rest (range))))
 
 (take 6 harmonic-ratios)
@@ -31,13 +31,13 @@ Let's start by computing the sum with infinite precision.  Clojure's [`Ratio`](h
 
 (->> harmonic-ratios (take 10000) (reduce +) double)
 ;; 9.787606036044382
-``` %}
+```
 
 For the first 10,000 elements, we'll see numerical differences starting at the 14th decimal place, so just focus on the *last two digits* in the results.
 
 As expected, we see a slightly different result if we compute the sum of doubles:
 
-``` Double Precision lang:clojure %}
+```clojure
 (def harmonic-doubles (map double harmonic-ratios))
 
 (take 6 harmonic-doubles)
@@ -45,11 +45,11 @@ As expected, we see a slightly different result if we compute the sum of doubles
 
 (->> harmonic-doubles (take 10000) (reduce +))
 ;; 9.787606036044348 (48 vs. 82 with infinite precision)
-``` %}
+```
 
 One approach that will get more accurate results is to use an arbitrary precision representation of the numbers, like [`BigDecimal`](http://docs.oracle.com/javase/7/docs/api/java/math/BigDecimal.html).  If we naively try to convert `harmonic-ratios` to `BigDecimal`, we get an `ArithmeticException` as soon as we hit 1/3:
 
-``` Converting Fractions to BigDecimals lang:clojure %}
+```clojure
 (bigdec 1)
 ;; 1M
 
@@ -58,11 +58,11 @@ One approach that will get more accurate results is to use an arbitrary precisio
 
 (bigdec 1/3)
 ;; java.lang.ArithmeticException: Non-terminating decimal expansion; no exact representable decimal result.
-``` %}
+```
 
 We need to explicitly set the precision that we want using a [`MathContext`](http://docs.oracle.com/javase/7/docs/api/java/math/MathContext.html).  Let's use 32 decimal places for good measure:
 
-``` 32 Decimal Place Precision lang:clojure %}
+```clojure
 (defn inverse-bigdec [n]
   (let [context (java.math.MathContext. 32)]
     (.divide (bigdec 1) (bigdec n) context)))
@@ -74,11 +74,11 @@ We need to explicitly set the precision that we want using a [`MathContext`](htt
 
 (->> harmonic-bigdecs (take 10000) (reduce +) double)
 ;; 9.787606036044382 (perfectly matches infinite precision result)
-``` %}
+```
 
 Now, let's see how [Kahan Summation algorithm](https://en.wikipedia.org/wiki/Kahan_summation_algorithm) performs on doubles:
 
-``` Double Precision with Kahan Summation lang:clojure %}
+```clojure
 (defn kahan-sum [coll]
   (loop [[x & xs] coll sum 0.0 carry 0.0]
     (if-not x sum
@@ -87,16 +87,16 @@ Now, let's see how [Kahan Summation algorithm](https://en.wikipedia.org/wiki/Kah
 
 (->> harmonic-doubles (take 10000) kahan-sum)
 ;; 9.787606036044382 (perfectly matches infinite precision result)
-``` %}
+```
 
 Everything but vanilla summation of doubles has given us the same answer!
 
 To be fair to doubles, we are summing them in what intuitively is a poor order.  The smallest values are being added to the largest intermediate sums, preventing their low-order bits from accumulating.  We can try to remedy this by reversing the order:
 
-``` Double Precision Reversed lang:clojure %}
+```clojure
 (->> harmonic-doubles (take 10000) reverse (reduce +))
 ;; 9.787606036044386
-``` %}
+```
 
 Well, that's different.  This is the first time we're seeing the floating point noise lead to something larger than the infinite precision answer.
 
