@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JCE3PGK5NB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-JCE3PGK5NB');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude</title>
+    <link rel="icon" type="image/png" href="/images/aleph.png">
+    <link rel="stylesheet" href="/style.css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$']],
+        displayMath: [['$$', '$$']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/">Home</a>
+        <a href="/about/">About</a>
+        <a href="/feed.xml">RSS</a>
+    </nav>
+    <article>
+        <h1>Claude</h1>
+        <h1>CLAUDE.md</h1>
+<p>This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.</p>
+<h2>Project Overview</h2>
+<p>This is a personal blog and static site generator for Matt Adereth's technical blog. The site contains articles about programming, mathematics, and hardware projects. It uses a custom Python-based static site generator rather than Jekyll.</p>
+<h2>Build Commands</h2>
+<h3>Generate Site</h3>
+<div class="codehilite"><pre><span></span><code>python<span class="w"> </span>bin/build.py
+</code></pre></div>
+
+<p>This processes all markdown files from <code>_posts/</code> and converts them to HTML, creating the blog structure under <code>/blog/</code>. It also generates an index page and saves post metadata to <code>bin/posts_data.json</code>.</p>
+<h3>Generate RSS/Atom Feeds</h3>
+<div class="codehilite"><pre><span></span><code>python<span class="w"> </span>bin/generate_feed.py
+</code></pre></div>
+
+<p>This generates <code>feed.xml</code> (RSS) and <code>atom.xml</code> (Atom) feeds from the post data created by build.py.</p>
+<h3>Full Build Process</h3>
+<div class="codehilite"><pre><span></span><code>python<span class="w"> </span>bin/build.py<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>python<span class="w"> </span>bin/generate_feed.py
+</code></pre></div>
+
+<h2>Architecture</h2>
+<h3>Static Site Generator (<code>bin/build.py</code>)</h3>
+<ul>
+<li><strong>Front Matter Parser</strong>: Extracts YAML metadata from markdown files</li>
+<li><strong>Post Processor</strong>: Converts Jekyll-style posts (YYYY-MM-DD-title.markdown) to HTML</li>
+<li><strong>URL Structure</strong>: Creates URLs as <code>/blog/YYYY/MM/DD/slug/index.html</code></li>
+<li><strong>Index Generator</strong>: Creates main index page with chronological post listing</li>
+<li><strong>Markdown Processing</strong>: Uses Python markdown with codehilite extension</li>
+<li><strong>MathJax Support</strong>: Configured for LaTeX math rendering (both inline <code>$</code> and display <code>$$</code>)</li>
+</ul>
+<h3>Feed Generator (<code>bin/generate_feed.py</code>)</h3>
+<ul>
+<li>Generates both RSS 2.0 and Atom 1.0 feeds</li>
+<li>Reads from <code>bin/posts_data.json</code> created by build.py</li>
+<li>Includes 20 most recent posts in feeds</li>
+</ul>
+<h3>Content Structure</h3>
+<ul>
+<li><code>_posts/</code>: Jekyll-style blog posts with YAML front matter</li>
+<li><code>about/</code>: About page content</li>
+<li><code>images/</code>: Static images and assets</li>
+<li><code>font/</code>: Font Awesome web fonts</li>
+<li><code>data/</code>: JSON data files for visualizations</li>
+<li><code>oneoff/</code>: Interactive demos and experiments (Girl Talk visualizations, etc.)</li>
+<li><code>/blog/</code>: Generated HTML output for blog posts</li>
+</ul>
+<h3>Styling</h3>
+<ul>
+<li>Uses Lato font from Google Fonts</li>
+<li>Responsive design with max-width 720px content area</li>
+<li>Custom noise texture background</li>
+<li>Drop cap styling for first paragraph</li>
+<li>Code highlighting via codehilite</li>
+</ul>
+<h2>Important Patterns</h2>
+<h3>URL Escaping Issue</h3>
+<p>The build script specifically handles escaped parentheses in markdown URLs (common from Jekyll/Octopress migration):
+- Converts <code>\(</code> and <code>\)</code> to <code>(</code> and <code>)</code> in markdown links
+- Only processes lines containing markdown links to avoid breaking LaTeX</p>
+<h3>Jekyll/Octopress Compatibility</h3>
+<ul>
+<li>Converts <code>{% img %}</code> tags to markdown image syntax</li>
+<li>Processes YAML front matter from Jekyll posts</li>
+<li>Maintains Jekyll-style post naming convention</li>
+</ul>
+<h3>GitHub Pages Deployment</h3>
+<ul>
+<li><code>.nojekyll</code> file present to bypass Jekyll processing</li>
+<li>Site is served directly as static HTML</li>
+</ul>
+    </article>
+</body>
+</html>
