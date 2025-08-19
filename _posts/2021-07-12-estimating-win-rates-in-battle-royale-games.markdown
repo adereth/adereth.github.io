@@ -9,7 +9,7 @@ categories: gaming math simulation
 
 For the past year, I've been completely obsessed with [Apex Legends](https://www.ea.com/games/apex-legends), a [battle royale](https://en.wikipedia.org/wiki/Battle_royale_game) game that pits 20 teams of 3 players against each other in a shrinking map. Teams fight and eliminate each other until a single team is left standing.
 
-I've watched my win rate for each competitive season of the game and wondered what a reasonable win rate for an average player might be. There are a bunch of factors to consider and the more I thought about the more I realized I'd need to turn to simulation understand how the factors would interact with each other. I'm going to share my thinking and results and I'd love to hear what else should be considered.
+I've watched my win rate for each competitive season of the game and wondered what a reasonable win rate for an average player might be. There are a bunch of factors to consider and the more I thought about it the more I realized I'd need to turn to simulation understand how the factors would interact with each other. I'm going to share my thinking and results and I'd love to hear what else should be considered.
 
 # Initial Expectations
 
@@ -17,7 +17,7 @@ In a simple world where all players are of equal skill, you'd expect the win rat
 
 Not all players are equal, of course! We might expect that an average-skilled player will have a win rate significantly below 0.05, since you have to beat *everyone* and it's very likely there will be better players present in each match.
 
-Since it's an elimation style game, worse players will return to the queue of players for the next game at a much faster rate than better players. We would then expect to see the distribution of players in each game to not be the same as the overall population distribution. Worse players will be overrepresented in each game, possibly driving the win rate for average-skilled players up.
+Since it's an elimination style game, worse players will return to the queue of players for the next game at a much faster rate than better players. We would then expect to see the distribution of players in each game to not be the same as the overall population distribution. Worse players will be overrepresented in each game, possibly driving the win rate for average-skilled players up.
 
 Another important consideration is that it's a team game and the teams are totally random if we assume everyone is [solo-queueing](https://www.urbandictionary.com/define.php?term=Solo%20queue). This could have an averaging effect on each team's aggregate skill, pushing the expected win rate closer to 0.05. We'll also see that the choice of aggregation function will have a big impact on the expected win rate of best and worst players.
 
@@ -54,7 +54,7 @@ Before we jump into simulating Apex Legends, which has the complexity of figurin
 
 ![Image](/images/tetris-99.jpeg)
 
-The idea is basically the same and the same simulator defined above can easily be used to explore win rate dynamics here. In Tetris 99, there are 99 players playing Tetris simulatenously. When a player clears multiple lines, they can have junk pieces randomly dropped on any of the other players. Again, the last player standing wins.
+The idea is basically the same and the same simulator defined above can easily be used to explore win rate dynamics here. In Tetris 99, there are 99 players playing Tetris simultaneously. When a player clears multiple lines, they can have junk pieces randomly dropped on any of the other players. Again, the last player standing wins.
 
 ![Image](/images/tetris-99-gameplay.jpg)
 
@@ -160,7 +160,7 @@ This is the first simulation that gives us a win rate plot that doesn't look lin
 
 ![Image](/images/br-apex-min-wr.png)
 
-As expected, a player with no chance of winning always loses. It becomes interesting when we look at the win rate of higher skilled players, which starts to flatten around the median since it becomes increasingly likely that there's a worse player on the team. Being above average doesn't really confer a significan benefit in this model.
+As expected, a player with no chance of winning always loses. It becomes interesting when we look at the win rate of higher skilled players, which starts to flatten around the median since it becomes increasingly likely that there's a worse player on the team. Being above average doesn't really confer a significant benefit in this model.
 
 It's also worth noting that model using the min aggregation function also results in a PDF of player distributions that looks similar to the single-player Tetris 99 model:
 
@@ -191,7 +191,7 @@ And here's the distribution of players in new games when using the max aggregati
 
 ![Image](/images/br-apex-max-pdf.png)
 
-While it decreses slowly like in the mean aggregation model, it's interesting to note that it's relatively flat for the bottom quatile of players and has a negative 2nd derivative instead of positive like before.
+While it decreases slowly like in the mean aggregation model, it's interesting to note that it's relatively flat for the bottom quartile of players and has a negative 2nd derivative instead of positive like before.
 
 # Conclusion
 
@@ -219,9 +219,9 @@ Despite its simplifications, this simulation reveals several important insights 
 
 2. **Team aggregation functions have dramatic effects**: The choice between mean, min, or max aggregation fundamentally changes the relationship between individual skill and win rate. Games where carrying is possible (max aggregation) advantage top players, while games limited by the weakest link (min aggregation) compress skill expression.
 
-3. **Average players can win more than expected**: In team-based battle royales with mean skill aggregation, even below-average players maintain reasonable win rates due to the chance of being paired with stronger teammates. The baseline shifts from 5% to around 3.4% even for the weakest players.
+3. **Below average players can win more than expected**: In team-based battle royales with mean skill aggregation or carry-dynamics, even below-average players maintain reasonable win rates due to the chance of being paired with stronger teammates.
 
-4. **Win rate curves are often non-linear**: Depending on the aggregation function, the relationship between skill and win rate can be linear, logarithmic, or even flat across large skill ranges. This has important implications for how rewarding games feel at different skill levels.
+4. **Win rate curves are often non-linear**: Depending on the aggregation function, the relationship between skill and win rate can be surprisingly flat across large skill ranges. This has important implications for how rewarding games feel at different skill levels.
 
 5. **Population size affects competitive dynamics**: Larger player populations lead to more pronounced queue effects, as the contrast between active game composition and overall population becomes more significant.
 
